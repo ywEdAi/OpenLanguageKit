@@ -1,0 +1,390 @@
+{
+ "repo": "https://github.com/edu-ai-builders/language-learning-asset-library",
+ "license": "MIT",
+ "assets": [
+  {
+   "id": "c02-chunk-harvest",
+   "code": "C02",
+   "zh": "语块采集",
+   "en": "Chunk Harvest",
+   "group": "词汇与语块",
+   "open": "assets/representation/c02-chunk-harvest/c02-chunk-harvest-living-abroad.html"
+  },
+  {
+   "id": "c04-usage-judge",
+   "code": "C04",
+   "zh": "用法裁判",
+   "en": "Usage Judge",
+   "group": "词汇与语块",
+   "open": "assets/representation/c04-usage-judge/c04-usage-judge-suggest.html"
+  },
+  {
+   "id": "c05-collocation-field",
+   "code": "C05",
+   "zh": "搭配网",
+   "en": "Collocation Field",
+   "group": "词汇与语块",
+   "open": "assets/representation/c05-collocation-field/c05-collocation-field-pressure.html"
+  },
+  {
+   "id": "c06-thematic-cluster",
+   "code": "C06",
+   "zh": "场景词群",
+   "en": "Thematic Cluster",
+   "group": "词汇与语块",
+   "open": "assets/representation/c06-thematic-cluster/c06-thematic-cluster-seeing-a-doctor.html"
+  },
+  {
+   "id": "c12-recall-first",
+   "code": "C12",
+   "zh": "先回想，再对照",
+   "en": "Recall First",
+   "group": "词汇与语块",
+   "open": "assets/representation/c12-recall-first/c12-recall-first-week-3-mixed.html"
+  },
+  {
+   "id": "c13-structured-input",
+   "code": "C13",
+   "zh": "意义靠形式",
+   "en": "Structured Input",
+   "group": "语法",
+   "open": "assets/representation/c13-structured-input/c13-structured-input-past-endings.html"
+  },
+  {
+   "id": "c14-tense-as-choice",
+   "code": "C14",
+   "zh": "时态是选择",
+   "en": "Tense as Choice",
+   "group": "语法",
+   "open": "assets/representation/c14-tense-as-choice/c14-tense-as-choice-perfect-vs-past.html"
+  },
+  {
+   "id": "c15-given-or-new",
+   "code": "C15",
+   "zh": "冠词的信息状态",
+   "en": "Given or New",
+   "group": "语法",
+   "open": "assets/representation/c15-given-or-new/c15-given-or-new-flat-above-bakery.html"
+  },
+  {
+   "id": "c16-sentence-combining",
+   "code": "C16",
+   "zh": "把短句接起来",
+   "en": "Sentence Combining",
+   "group": "语法",
+   "open": "assets/representation/c16-sentence-combining/c16-sentence-combining-choppy-drafts.html"
+  },
+  {
+   "id": "c17-strength-ladder",
+   "code": "C17",
+   "zh": "话说到哪一格",
+   "en": "Strength Ladder",
+   "group": "语法",
+   "open": "assets/representation/c17-strength-ladder/c17-strength-ladder-emails-and-guesses.html"
+  },
+  {
+   "id": "c18-where-it-attaches",
+   "code": "C18",
+   "zh": "挂在哪儿",
+   "en": "Where It Attaches",
+   "group": "语法",
+   "open": "assets/representation/c18-where-it-attaches/c18-where-it-attaches-same-words-new-meaning.html"
+  },
+  {
+   "id": "c19-pack-and-unpack",
+   "code": "C19",
+   "zh": "打包和拆包",
+   "en": "Pack and Unpack",
+   "group": "语法",
+   "open": "assets/representation/c19-pack-and-unpack/c19-pack-and-unpack-pack-or-not.html"
+  },
+  {
+   "id": "c20-why-passive",
+   "code": "C20",
+   "zh": "主语链",
+   "en": "Why Passive",
+   "group": "语法",
+   "open": "assets/representation/c20-why-passive/c20-why-passive-subject-chain.html"
+  },
+  {
+   "id": "c21-parallel",
+   "code": "C21",
+   "zh": "形状要对齐",
+   "en": "Parallel",
+   "group": "语法",
+   "open": "assets/representation/c21-parallel/c21-parallel-shape-bars.html"
+  },
+  {
+   "id": "c22-find-the-subject",
+   "code": "C22",
+   "zh": "把挡路的折起来",
+   "en": "Find the Subject",
+   "group": "语法",
+   "open": "assets/representation/c22-find-the-subject/c22-find-the-subject-fold-the-noise.html"
+  },
+  {
+   "id": "c23-anaphora-arcs",
+   "code": "C23",
+   "zh": "它指的是谁",
+   "en": "Anaphora Arcs",
+   "group": "阅读",
+   "open": "assets/representation/c23-anaphora-arcs/c23-anaphora-arcs-tool-library.html"
+  },
+  {
+   "id": "c24-same-thing-renamed",
+   "code": "C24",
+   "zh": "换个说法还是同一件事",
+   "en": "Same Thing Renamed",
+   "group": "阅读",
+   "open": "assets/representation/c24-same-thing-renamed/c24-same-thing-renamed-tool-library-2.html"
+  },
+  {
+   "id": "c25-what-each-paragraph-does",
+   "code": "C25",
+   "zh": "每段在干什么",
+   "en": "What Each Paragraph Does",
+   "group": "阅读",
+   "open": "assets/representation/c25-what-each-paragraph-does/c25-what-each-paragraph-does-lend-more-than-books.html"
+  },
+  {
+   "id": "c26-coverage-gate",
+   "code": "C26",
+   "zh": "哪些词挡住了你",
+   "en": "Coverage Gate",
+   "group": "阅读",
+   "open": "assets/representation/c26-coverage-gate/c26-coverage-gate-why-bread-goes-hard.html"
+  },
+  {
+   "id": "c27-three-encounters",
+   "code": "C27",
+   "zh": "同一个词碰三次",
+   "en": "Three Encounters",
+   "group": "阅读",
+   "open": "assets/representation/c27-three-encounters/c27-three-encounters-guess-from-context.html"
+  },
+  {
+   "id": "c28-word-shape",
+   "code": "C28",
+   "zh": "把长词切开",
+   "en": "Word Shape",
+   "group": "阅读",
+   "open": "assets/representation/c28-word-shape/c28-word-shape-cut-the-long-word.html"
+  },
+  {
+   "id": "c29-strip-to-skeleton",
+   "code": "C29",
+   "zh": "削到骨架",
+   "en": "Strip to Skeleton",
+   "group": "阅读",
+   "open": "assets/representation/c29-strip-to-skeleton/c29-strip-to-skeleton-strip-the-long-sentence.html"
+  },
+  {
+   "id": "c30-chunk-breaks",
+   "code": "C30",
+   "zh": "把句子断成块",
+   "en": "Chunk Breaks",
+   "group": "阅读",
+   "open": "assets/representation/c30-chunk-breaks/c30-chunk-breaks-read-in-chunks.html"
+  },
+  {
+   "id": "c31-whose-voice",
+   "code": "C31",
+   "zh": "这一句是谁在说",
+   "en": "Whose Voice",
+   "group": "阅读",
+   "open": "assets/representation/c31-whose-voice/c31-whose-voice-who-says-so.html"
+  },
+  {
+   "id": "c32-shape-of-the-piece",
+   "code": "C32",
+   "zh": "文章的形状",
+   "en": "Shape of the Piece",
+   "group": "阅读",
+   "open": "assets/representation/c32-shape-of-the-piece/c32-shape-of-the-piece-four-shapes.html"
+  },
+  {
+   "id": "c33-which-way-next",
+   "code": "C33",
+   "zh": "下一句往哪拐",
+   "en": "Which Way Next",
+   "group": "阅读",
+   "open": "assets/representation/c33-which-way-next/c33-which-way-next-guess-the-turn.html"
+  },
+  {
+   "id": "c34-how-sure-is-he",
+   "code": "C34",
+   "zh": "他有多确定",
+   "en": "How Sure Is He",
+   "group": "阅读",
+   "open": "assets/representation/c34-how-sure-is-he/c34-how-sure-is-he-how-far-will-he-go.html"
+  },
+  {
+   "id": "c35-tense-shifts",
+   "code": "C35",
+   "zh": "时态在换挡",
+   "en": "Tense Shifts",
+   "group": "阅读",
+   "open": "assets/representation/c35-tense-shifts/c35-tense-shifts-the-cinema-on-bridge-street.html"
+  },
+  {
+   "id": "c36-one-fix-at-a-time",
+   "code": "C36",
+   "zh": "一次只改一件事",
+   "en": "One Fix at a Time",
+   "group": "写作",
+   "open": "assets/representation/c36-one-fix-at-a-time/c36-one-fix-at-a-time-the-film-club-notice.html"
+  },
+  {
+   "id": "c37-mind-the-gap",
+   "code": "C37",
+   "zh": "注意到差距",
+   "en": "Mind the Gap",
+   "group": "写作",
+   "open": "assets/representation/c37-mind-the-gap/c37-mind-the-gap-the-club-notice-again.html"
+  },
+  {
+   "id": "c38-grow-a-sentence",
+   "code": "C38",
+   "zh": "把一句话养成一段",
+   "en": "Grow a Sentence",
+   "group": "写作",
+   "open": "assets/representation/c38-grow-a-sentence/c38-grow-a-sentence-let-students-choose-seats.html"
+  },
+  {
+   "id": "c39-does-it-hang",
+   "code": "C39",
+   "zh": "这一条挂得住吗",
+   "en": "Does It Hang",
+   "group": "写作",
+   "open": "assets/representation/c39-does-it-hang/c39-does-it-hang-the-library-is-too-noisy.html"
+  },
+  {
+   "id": "c40-cut-to-the-bone",
+   "code": "C40",
+   "zh": "删到只剩必要的",
+   "en": "Cut to the Bone",
+   "group": "写作",
+   "open": "assets/representation/c40-cut-to-the-bone/c40-cut-to-the-bone-ten-more-minutes-for-lunch.html"
+  },
+  {
+   "id": "c42-who-is-it-for",
+   "code": "C42",
+   "zh": "写给谁看",
+   "en": "Who Is It For",
+   "group": "写作",
+   "open": "assets/representation/c42-who-is-it-for/c42-who-is-it-for-saturday-run-is-off.html"
+  },
+  {
+   "id": "c44-one-thing-per-sentence",
+   "code": "C44",
+   "zh": "一句话别塞两件事",
+   "en": "One Thing per Sentence",
+   "group": "写作",
+   "open": "assets/representation/c44-one-thing-per-sentence/c44-one-thing-per-sentence-the-bike-club.html"
+  },
+  {
+   "id": "c45-take-it-in-turns",
+   "code": "C45",
+   "zh": "接力写",
+   "en": "Take It in Turns",
+   "group": "写作",
+   "open": "assets/representation/c45-take-it-in-turns/c45-take-it-in-turns-one-day-a-week-without-homework.html"
+  },
+  {
+   "id": "c46-describe-a-change",
+   "code": "C46",
+   "zh": "描述一个变化",
+   "en": "Describe a Change",
+   "group": "写作",
+   "open": "assets/representation/c46-describe-a-change/c46-describe-a-change-who-turns-up-at-film-club.html"
+  },
+  {
+   "id": "c47-what-you-heard",
+   "code": "C47",
+   "zh": "你听到的和它写的",
+   "en": "What You Heard",
+   "group": "听力",
+   "open": "assets/representation/c47-what-you-heard/c47-what-you-heard-why-i-stopped-driving-in.html"
+  },
+  {
+   "id": "c48-five-boxes-only",
+   "code": "C48",
+   "zh": "只给五个格子",
+   "en": "Five Boxes Only",
+   "group": "听力",
+   "open": "assets/representation/c48-five-boxes-only/c48-five-boxes-only-five-boxes-driving.html"
+  },
+  {
+   "id": "c49-place-your-bet",
+   "code": "C49",
+   "zh": "押一下下一句",
+   "en": "Place Your Bet",
+   "group": "听力",
+   "open": "assets/representation/c49-place-your-bet/c49-place-your-bet-place-your-bet-library.html"
+  },
+  {
+   "id": "c50-the-one-you-missed",
+   "code": "C50",
+   "zh": "跳过去的那一句",
+   "en": "The One You Missed",
+   "group": "听力",
+   "open": "assets/representation/c50-the-one-you-missed/c50-the-one-you-missed-the-one-you-missed-driving.html"
+  },
+  {
+   "id": "c51-numbers-and-dates",
+   "code": "C51",
+   "zh": "数字和日期",
+   "en": "Numbers and Dates",
+   "group": "听力",
+   "open": "assets/representation/c51-numbers-and-dates/c51-numbers-and-dates-numbers-library-closure.html"
+  },
+  {
+   "id": "c53-point-to-the-second",
+   "code": "C53",
+   "zh": "点到那一秒",
+   "en": "Point to the Second",
+   "group": "听力",
+   "open": "assets/representation/c53-point-to-the-second/c53-point-to-the-second-point-to-the-second-library.html"
+  },
+  {
+   "id": "c55-say-it-then-look",
+   "code": "C55",
+   "zh": "说出来再看一遍",
+   "en": "Say It, Then Look",
+   "group": "口语",
+   "open": "assets/representation/c55-say-it-then-look/c55-say-it-then-look-say-it-then-look-commute.html"
+  },
+  {
+   "id": "c56-follow-his-rhythm",
+   "code": "C56",
+   "zh": "跟着他的节奏",
+   "en": "Follow His Rhythm",
+   "group": "口语",
+   "open": "assets/representation/c56-follow-his-rhythm/c56-follow-his-rhythm-follow-his-rhythm-library.html"
+  },
+  {
+   "id": "c57-carry-it-across",
+   "code": "C57",
+   "zh": "借他的话说我的事",
+   "en": "Carry It Across",
+   "group": "口语",
+   "open": "assets/representation/c57-carry-it-across/c57-carry-it-across-carry-it-across-library.html"
+  },
+  {
+   "id": "c58-ask-it-out",
+   "code": "C58",
+   "zh": "问出来",
+   "en": "Ask It Out",
+   "group": "口语",
+   "open": "assets/representation/c58-ask-it-out/c58-ask-it-out-ask-it-out-room-booking.html"
+  },
+  {
+   "id": "c59-say-the-relation",
+   "code": "C59",
+   "zh": "说出这条关系",
+   "en": "Say the Relation",
+   "group": "外语思维",
+   "open": "assets/representation/c59-say-the-relation/c59-say-the-relation-say-the-relation-city-trees.html"
+  }
+ ]
+}

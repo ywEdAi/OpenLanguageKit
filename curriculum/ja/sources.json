@@ -1,0 +1,1616 @@
+{
+ "schemaVersion": 2,
+ "language": "ja",
+ "sources": [
+  {
+   "id": "src:ja:tufs-index",
+   "title": "TUFS 日本語文法 ステップ一覧",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/steplist.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "逐项核对目录中的 95 个步骤及其实际卡片链接。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-scope",
+   "title": "TUFS 日本語文法模块使用范围",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "模块面向初级学习后的复习整理，24 周与 48 回课程；不声称完整中高级语法。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:jlpt-faq",
+   "title": "JLPT 官方 FAQ",
+   "url": "https://www.jlpt.jp/e/faq/index.html",
+   "authority": "assessment_body",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对 Test Content Specifications 不再发布与不考会话、写作的说明。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:jlpt-levels",
+   "title": "JLPT N1–N5 能力描述",
+   "url": "https://www.jlpt.jp/e/about/levelsummary.html",
+   "authority": "assessment_body",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对各级整体阅读与听力能力描述；该来源未给逐项语法等级。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:jf-cando",
+   "title": "JF Standard 与 Can-do",
+   "url": "https://www.kyozai.jpf.go.jp/kyozai/help/about/jfscando/en/render.do",
+   "authority": "official_framework",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对语言知识支撑接受、产出、互动，以及 A1–C2 Can-do 的含义。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:irodori-resources",
+   "title": "Irodori 付属教材・資料",
+   "url": "https://www.irodori.jpf.go.jp/resources.html",
+   "authority": "official_framework",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "确认四册资料、合集语法笔记与官方文型 Excel 清单入口，未解析 Excel 全表。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:irodori-grammar",
+   "title": "Irodori 合集语法笔记",
+   "url": "https://www.irodori.jpf.go.jp/assets/data/Grammar_all.pdf",
+   "authority": "official_framework",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对初级2第7课受身形、第10课人作主语的受身、第11课持有者受身；不声明已逐页核对245页。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:irodori-a2b1",
+   "title": "Irodori 初中级 A2/B1",
+   "url": "https://www.irodori.jpf.go.jp/pre-intermediate/pdf.html",
+   "authority": "official_framework",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对初中级教材的 A2/B1 标注与18课目录；不把教材册级自动分配给语法点。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-sound-index",
+   "title": "TUFS 日语发音 实践篇目录",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/pmod/practical/",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对实际发音教学目录；本版选取19个单元，不宣称全目录覆盖。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-kana",
+   "title": "TUFS かな・カナの書き方",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/basic/",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对平假名、片假名、浊音半浊音、拗音以及书写与音声入口。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-conversation",
+   "title": "TUFS 学習者用会话模块目录",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/dmod/lp/",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对交流功能目录；未逐个播放视频，功能节点均标目录级核验。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:jf-adversative",
+   "title": "JF 文法を楽しく · 表現意図 -逆接-",
+   "url": "https://www.jpf.go.jp/j/project/japanese/teach/tsushin/grammar/201703.html",
+   "authority": "official_framework",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开文章并核对相关标题、形式和使用限制。分级为编辑推定，原文未标 JLPT N 级。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:jf-reason",
+   "title": "JF 文法を楽しく · 表現意図 -理由-",
+   "url": "https://www.jpf.go.jp/j/project/japanese/teach/tsushin/grammar/201612.html",
+   "authority": "official_framework",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开文章并核对相关标题、形式和使用限制。分级为编辑推定，原文未标 JLPT N 级。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:jf-time2",
+   "title": "JF 文法を楽しく · 表現意図 -とき(2)-",
+   "url": "https://www.jpf.go.jp/j/project/japanese/teach/tsushin/grammar/201609.html",
+   "authority": "official_framework",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开文章并核对相关标题、形式和使用限制。分级为编辑推定，原文未标 JLPT N 级。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:jf-time1",
+   "title": "JF 文法を楽しく · 表現意図 -とき(1)-",
+   "url": "https://www.jpf.go.jp/j/project/japanese/teach/tsushin/grammar/201606.html",
+   "authority": "official_framework",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开文章并核对相关标题、形式和使用限制。分级为编辑推定，原文未标 JLPT N 级。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:jf-command",
+   "title": "JF 文法を楽しく · 表現意図 -指示・命令・禁止-",
+   "url": "https://www.jpf.go.jp/j/project/japanese/teach/tsushin/grammar/201603.html",
+   "authority": "official_framework",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开文章并核对相关标题、形式和使用限制。分级为编辑推定，原文未标 JLPT N 级。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:jf-advice",
+   "title": "JF 文法を楽しく · 表現意図 -助言-",
+   "url": "https://www.jpf.go.jp/j/project/japanese/teach/tsushin/grammar/201512.html",
+   "authority": "official_framework",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开文章并核对相关标题、形式和使用限制。分级为编辑推定，原文未标 JLPT N 级。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:jf-obligation",
+   "title": "JF 文法を楽しく · 表現意図 -義務-",
+   "url": "https://www.jpf.go.jp/j/project/japanese/teach/tsushin/grammar/201509.html",
+   "authority": "official_framework",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开文章并核对相关标题、形式和使用限制。分级为编辑推定，原文未标 JLPT N 级。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:jf-wish",
+   "title": "JF 文法を楽しく · 表現意図 -願望-",
+   "url": "https://www.jpf.go.jp/j/project/japanese/teach/tsushin/grammar/201507.html",
+   "authority": "official_framework",
+   "accessStatus": "checked_index",
+   "checkedOn": "2026-11-07",
+   "scope": "核对官方文章入口、标题与文章主题；本版没有逐项整理该文的全部形式与使用限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:jf-intention",
+   "title": "JF 文法を楽しく · 表現意図 -意志-",
+   "url": "https://www.jpf.go.jp/j/project/japanese/teach/tsushin/grammar/201503.html",
+   "authority": "official_framework",
+   "accessStatus": "checked_index",
+   "checkedOn": "2026-11-07",
+   "scope": "核对官方文章入口、标题与文章主题；本版没有逐项整理该文的全部形式与使用限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:jf-passive",
+   "title": "JF 文法を楽しく · 受身文",
+   "url": "https://www.jpf.go.jp/j/project/japanese/teach/tsushin/grammar/201407.html",
+   "authority": "official_framework",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开文章并核对相关标题、形式和使用限制。分级为编辑推定，原文未标 JLPT N 级。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:jf-mono1",
+   "title": "JF 文法を楽しく · もの(1)",
+   "url": "https://www.jpf.go.jp/j/project/japanese/teach/tsushin/grammar/201206.html",
+   "authority": "official_framework",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开文章并核对相关标题、形式和使用限制。分级为编辑推定，原文未标 JLPT N 级。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:jf-mono2",
+   "title": "JF 文法を楽しく · もの(2)",
+   "url": "https://www.jpf.go.jp/j/project/japanese/teach/tsushin/grammar/201209.html",
+   "authority": "official_framework",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开文章并核对相关标题、形式和使用限制。分级为编辑推定，原文未标 JLPT N 级。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:jf-instant",
+   "title": "JF 文法を楽しく · とたん(に)とや否や",
+   "url": "https://www.jpf.go.jp/j/project/japanese/teach/tsushin/grammar/200906.html",
+   "authority": "official_framework",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开文章并核对相关标题、形式和使用限制。分级为编辑推定，原文未标 JLPT N 级。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:jf-causative",
+   "title": "JF Bangkok あきこと友だち6 文法解説",
+   "url": "https://ba.jpf.go.jp/wp-content/uploads/2022/03/Akiko6_bunpoo382002.pdf",
+   "authority": "official_framework",
+   "accessStatus": "checked_index",
+   "checkedOn": "2026-11-07",
+   "scope": "核对使役形表、强制/许可及感情诱发的用法；检索片段支持，未核对整册。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:jf-causative-passive",
+   "title": "JF 教科書を作ろう · 使役受身形",
+   "url": "https://www.kyozai.jpf.go.jp/kyozai/material/BMA00076/ja/render.do",
+   "authority": "official_framework",
+   "accessStatus": "checked_index",
+   "checkedOn": "2026-11-07",
+   "scope": "检索结果核对形式标题及活用说明，正文未逐段核验。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:marugoto-b1",
+   "title": "Marugoto 中级1 教师资源",
+   "url": "https://marugoto.jpf.go.jp/assets/docs/teacher/resource/intermediate1/intermediate1_teaching_topic.pdf",
+   "authority": "official_framework",
+   "accessStatus": "checked_index",
+   "checkedOn": "2026-11-07",
+   "scope": "检索到使役受身与对话回应教学点；未核对整册。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-001",
+   "title": "TUFS 日本語文法 · Nです／Nではありません",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/001.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-002",
+   "title": "TUFS 日本語文法 · NはNです",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/002.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-003",
+   "title": "TUFS 日本語文法 · Nですか",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/003.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-004",
+   "title": "TUFS 日本語文法 · Nでした／Nではありませんでした",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/004.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-005",
+   "title": "TUFS 日本語文法 · Nがあります／います",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/005.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-006",
+   "title": "TUFS 日本語文法 · NにNがあります／います",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/006.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-007",
+   "title": "TUFS 日本語文法 · Nの上／下／中／前／後",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/007.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-008",
+   "title": "TUFS 日本語文法 · NのN",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/008.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-009",
+   "title": "TUFS 日本語文法 · AいN",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/009.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-010",
+   "title": "TUFS 日本語文法 · NAなN",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/010.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-011",
+   "title": "TUFS 日本語文法 · これ／それ／あれ",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/011.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-012",
+   "title": "TUFS 日本語文法 · ここ／そこ／あそこ",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/012.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-013",
+   "title": "TUFS 日本語文法 · このN／そのN／あのN",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/013.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-014",
+   "title": "TUFS 日本語文法 · どれ／どこ／どのN",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/014.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-015",
+   "title": "TUFS 日本語文法 · 数詞（1）",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/015.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-016",
+   "title": "TUFS 日本語文法 · 数詞（2）",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/016.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-017",
+   "title": "TUFS 日本語文法 · 助数詞",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/017.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-018",
+   "title": "TUFS 日本語文法 · ～時",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/018.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-019",
+   "title": "TUFS 日本語文法 · ○○分・半",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/019.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-020",
+   "title": "TUFS 日本語文法 · 昨日・今日など",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/020.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-021",
+   "title": "TUFS 日本語文法 · 毎日・毎週など",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/021.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-022",
+   "title": "TUFS 日本語文法 · 月・日付・曜日",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/022.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-023",
+   "title": "TUFS 日本語文法 · Vます／Vません",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/023.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-024",
+   "title": "TUFS 日本語文法 · Vますか",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/024.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-025",
+   "title": "TUFS 日本語文法 · Vました/Vませんでした",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/025.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-026",
+   "title": "TUFS 日本語文法 · NへVます",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/026.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-027",
+   "title": "TUFS 日本語文法 · NをVます",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/027.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-028",
+   "title": "TUFS 日本語文法 · NにNをＶます",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/028.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-029",
+   "title": "TUFS 日本語文法 · 時＋Vます",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/029.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-030",
+   "title": "TUFS 日本語文法 · Aいです／Aくありません／Aくないです",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/030.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-031",
+   "title": "TUFS 日本語文法 · Aいですか",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/031.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-032",
+   "title": "TUFS 日本語文法 · Aかったです／Aくありませんでした／Aくなかったです",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/032.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-034",
+   "title": "TUFS 日本語文法 · とても・あまり",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/034.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-035",
+   "title": "TUFS 日本語文法 · イ形容詞とナ形容詞",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/035.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-036",
+   "title": "TUFS 日本語文法 · NAです／NAではありません",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/036.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-037",
+   "title": "TUFS 日本語文法 · N１はN２がAい／NAです",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/037.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-038",
+   "title": "TUFS 日本語文法 · 普通形の体系",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/038.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-039",
+   "title": "TUFS 日本語文法 · 動詞の３種類",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/039.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-040",
+   "title": "TUFS 日本語文法 · 形容詞の普通形",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/040.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-041",
+   "title": "TUFS 日本語文法 · 名詞述語の普通形",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/041.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-042",
+   "title": "TUFS 日本語文法 · 普通形と丁寧形",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/042.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-043",
+   "title": "TUFS 日本語文法 · Vて（て形）",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/043.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-044",
+   "title": "TUFS 日本語文法 · Vています（進行）／Vていません",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/044.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-045",
+   "title": "TUFS 日本語文法 · Vています（状態）",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/045.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-046",
+   "title": "TUFS 日本語文法 · Vてあります",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/046.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-047",
+   "title": "TUFS 日本語文法 · NとN",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/047.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-048",
+   "title": "TUFS 日本語文法 · NやN",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/048.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-049",
+   "title": "TUFS 日本語文法 · AくてA・NAでNA・NでN",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/049.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-050",
+   "title": "TUFS 日本語文法 · Vたり、Vたりします",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/050.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-051",
+   "title": "TUFS 日本語文法 · VてVます",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/051.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-052",
+   "title": "TUFS 日本語文法 · 助詞とは",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/052.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-053",
+   "title": "TUFS 日本語文法 · 格助詞",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/053.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-054",
+   "title": "TUFS 日本語文法 · Nをください／Nをお願いします",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/054.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-055",
+   "title": "TUFS 日本語文法 · Nを(数)ください／お願いします",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/055.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-056",
+   "title": "TUFS 日本語文法 · Vてください",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/056.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-057",
+   "title": "TUFS 日本語文法 · Vてくださいませんか",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/057.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-058",
+   "title": "TUFS 日本語文法 · Vてもいいです",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/058.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-059",
+   "title": "TUFS 日本語文法 · Vてはいけません／Vてはだめです",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/059.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-060",
+   "title": "TUFS 日本語文法 · Vないでください",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/060.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-061",
+   "title": "TUFS 日本語文法 · Nでもいいです／Nではだめです",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/061.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-062",
+   "title": "TUFS 日本語文法 · Vませんか",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/062.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-063",
+   "title": "TUFS 日本語文法 · Vましょう",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/063.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-064",
+   "title": "TUFS 日本語文法 · 誘いの受け方、断り方",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/064.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-065",
+   "title": "TUFS 日本語文法 · 意志形",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/065.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-066",
+   "title": "TUFS 日本語文法 · Vようと思います／Vようと思っています",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/066.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-067",
+   "title": "TUFS 日本語文法 · Vたいです／Vたくありません",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/067.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-068",
+   "title": "TUFS 日本語文法 · Vたかったです／Vたくありませんでした",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/068.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-069",
+   "title": "TUFS 日本語文法 · Nがほしいです／Nがほしくありません",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/069.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-070",
+   "title": "TUFS 日本語文法 · Nがすきです／Nがすきではありません／Nがきらいです",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/070.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-071",
+   "title": "TUFS 日本語文法 · こわい・悲しい・うれしい、など",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/071.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-072",
+   "title": "TUFS 日本語文法 · Vことができます／できません",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/072.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-073",
+   "title": "TUFS 日本語文法 · Ｎができます／できません",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/073.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-074",
+   "title": "TUFS 日本語文法 · 可能形",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/074.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-075",
+   "title": "TUFS 日本語文法 · ～でしょう",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/075.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-076",
+   "title": "TUFS 日本語文法 · ～かもしれません・～にちがいありません",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/076.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-077",
+   "title": "TUFS 日本語文法 · ～と思います",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/077.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-078",
+   "title": "TUFS 日本語文法 · 名詞の修飾の復習",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/078.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-079",
+   "title": "TUFS 日本語文法 · V＋N",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/079.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-080",
+   "title": "TUFS 日本語文法 · Vこと・Vの",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/080.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-081",
+   "title": "TUFS 日本語文法 · 理由",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/081.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-082",
+   "title": "TUFS 日本語文法 · 逆接",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/082.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-083",
+   "title": "TUFS 日本語文法 · 条件",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/083.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-084",
+   "title": "TUFS 日本語文法 · 譲歩",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/084.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-085",
+   "title": "TUFS 日本語文法 · やりもらい",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/085.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-086",
+   "title": "TUFS 日本語文法 · Vてあげます",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/086.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-087",
+   "title": "TUFS 日本語文法 · Vていきます／Vてきます",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/087.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-088",
+   "title": "TUFS 日本語文法 · Vておきます／Vてみます",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/088.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-089",
+   "title": "TUFS 日本語文法 · スタイルとは",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/089.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-090",
+   "title": "TUFS 日本語文法 · 普通体",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/090.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-091",
+   "title": "TUFS 日本語文法 · 丁寧体",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/091.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-092",
+   "title": "TUFS 日本語文法 · 敬語",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/092.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-093",
+   "title": "TUFS 日本語文法 · ～とき",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/093.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-094",
+   "title": "TUFS 日本語文法 · 接続助詞",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/094.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-095",
+   "title": "TUFS 日本語文法 · 副助詞",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/095.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-096",
+   "title": "TUFS 日本語文法 · 終助詞",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/card/096.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开官方卡片，核对该形式标题及可见表格/例句；未声称逐条核验扩展解说的全部限制。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:sound-tsu",
+   "title": "TUFS 発音 · 1　サバイバルのためにこれだけは 1.1.1　「つ」",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/pmod/practical/01-01-01.php",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开该发音教学页并核对标题与练习说明；没有试听或测量音频表现。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:sound-r",
+   "title": "TUFS 発音 · 1　サバイバルのためにこれだけは 1.2.1　ラ行音",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/pmod/practical/01-02-01.php",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开该发音教学页并核对标题与练习说明；没有试听或测量音频表现。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:sound-z",
+   "title": "TUFS 発音 · 1　サバイバルのためにこれだけは 1.3.1　ザ行音",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/pmod/practical/01-03-01.php",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开该发音教学页并核对标题与练习说明；没有试听或测量音频表现。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:sound-pb",
+   "title": "TUFS 発音 · 1　サバイバルのためにこれだけは 1.4.1　清濁p, b",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/pmod/practical/01-04-01.php",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开该发音教学页并核对标题与练习说明；没有试听或测量音频表现。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:sound-td",
+   "title": "TUFS 発音 · 1　サバイバルのためにこれだけは 1.5.1　清濁t, d",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/pmod/practical/01-05-01.php",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开该发音教学页并核对标题与练习说明；没有试听或测量音频表现。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:sound-kg",
+   "title": "TUFS 発音 · 1　サバイバルのためにこれだけは 1.6.1　清濁k, g",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/pmod/practical/01-06-01.php",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开该发音教学页并核对标题与练习说明；没有试听或测量音频表现。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:sound-vowels",
+   "title": "TUFS 発音 · 1　サバイバルのためにこれだけは 1.7.1　母音",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/pmod/practical/01-07-01.php",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开该发音教学页并核对标题与练习说明；没有试听或测量音频表现。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:sound-pitch",
+   "title": "TUFS 発音 · 1　サバイバルのためにこれだけは 1.8.1　アクセント基礎",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/pmod/practical/01-08-01.php",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开该发音教学页并核对标题与练习说明；没有试听或测量音频表现。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:sound-intonation",
+   "title": "TUFS 発音 · 1　サバイバルのためにこれだけは 1.9.1　イントネーション基礎",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/pmod/practical/01-09-01.php",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开该发音教学页并核对标题与练习说明；没有试听或测量音频表现。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:sound-mora",
+   "title": "TUFS 発音 · 1　サバイバルのためにこれだけは 1.10.1　拍感覚基礎",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/pmod/practical/01-10-01.php",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开该发音教学页并核对标题与练习说明；没有试听或测量音频表现。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:sound-yoon",
+   "title": "TUFS 発音 · 1　サバイバルのためにこれだけは 1.11.1　拗音（拍感覚含む)",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/pmod/practical/01-11-01.php",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开该发音教学页并核对标题与练习说明；没有试听或测量音频表现。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:sound-sokuon",
+   "title": "TUFS 発音 · 2　円滑なコミュニケーションのために 2.1.1　拍感覚（促音）",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/pmod/practical/02-01-01.php",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开该发音教学页并核对标题与练习说明；没有试听或测量音频表现。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:sound-long",
+   "title": "TUFS 発音 · 2　円滑なコミュニケーションのために 2.2.1　拍感覚（長音）",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/pmod/practical/02-02-01.php",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开该发音教学页并核对标题与练习说明；没有试听或测量音频表现。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:sound-nasal-consonant",
+   "title": "TUFS 発音 · 2　円滑なコミュニケーションのために 2.3.1　拍感覚（撥音－子音前）",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/pmod/practical/02-03-01.php",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开该发音教学页并核对标题与练习说明；没有试听或测量音频表现。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:sound-nasal-other",
+   "title": "TUFS 発音 · 2　円滑なコミュニケーションのために 2.4.1　拍感覚（撥音－母音前、半母音前、摩擦音前、語末）",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/pmod/practical/02-04-01.php",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开该发音教学页并核对标题与练习说明；没有试听或测量音频表现。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:sound-loan-accent",
+   "title": "TUFS 発音 · 2　円滑なコミュニケーションのために 2.6.1　アクセント（外来語）",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/pmod/practical/02-06-01.php",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开该发音教学页并核对标题与练习说明；没有试听或测量音频表现。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:sound-compound-accent",
+   "title": "TUFS 発音 · 2　円滑なコミュニケーションのために 2.7.1　アクセント（複合名詞）",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/pmod/practical/02-07-01.php",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开该发音教学页并核对标题与练习说明；没有试听或测量音频表现。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:sound-rendaku",
+   "title": "TUFS 発音 · 2　円滑なコミュニケーションのために 2.10.1　連濁",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/pmod/practical/02-10-01.php",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开该发音教学页并核对标题与练习说明；没有试听或测量音频表现。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:sound-devoice",
+   "title": "TUFS 発音 · 2　円滑なコミュニケーションのために 2.11.1　無声化母音の聞き取り",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/pmod/practical/02-11-01.php",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已打开该发音教学页并核对标题与练习说明；没有试听或测量音频表现。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:jf-backnumber",
+   "title": "JF 文法を楽しく バックナンバー",
+   "url": "https://www.jpf.go.jp/j/project/japanese/teach/tsushin/grammar/backnumber.html",
+   "authority": "official_framework",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对相关文章的标题和日期目录；本版选取相关文章，不声称覆盖全部历年文章。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-explanation-053",
+   "title": "TUFS 日本語文法 解説 · 格助詞",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/explanation/053.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已核对下列节点所引解说小节及可见例句；未复制其例句，也未完成该页全部练习。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-explanation-083",
+   "title": "TUFS 日本語文法 解説 · 条件",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/explanation/083.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已核对下列节点所引解说小节及可见例句；未复制其例句，也未完成该页全部练习。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-explanation-085",
+   "title": "TUFS 日本語文法 解説 · やりもらい",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/explanation/085.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已核对下列节点所引解说小节及可见例句；未复制其例句，也未完成该页全部练习。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-explanation-086",
+   "title": "TUFS 日本語文法 解説 · Vてあげます",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/explanation/086.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已核对下列节点所引解说小节及可见例句；未复制其例句，也未完成该页全部练习。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-explanation-092",
+   "title": "TUFS 日本語文法 解説 · 敬語",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/explanation/092.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已核对下列节点所引解说小节及可见例句；未复制其例句，也未完成该页全部练习。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-explanation-095",
+   "title": "TUFS 日本語文法 解説 · 副助詞",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/explanation/095.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已核对下列节点所引解说小节及可见例句；未复制其例句，也未完成该页全部练习。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja:tufs-explanation-096",
+   "title": "TUFS 日本語文法 解説 · 終助詞",
+   "url": "https://www.coelang.tufs.ac.jp/mt/ja/gmod/contents/explanation/096.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "已核对下列节点所引解说小节及可见例句；未复制其例句，也未完成该页全部练习。",
+   "licenseNote": "仅记录框架事实与来源链接；本图谱说明和例句原创，未复制来源的完整教学内容。"
+  },
+  {
+   "id": "src:ja-advanced:reverse",
+   "title": "国際交流基金 日本語教育通信 文法を楽しく 表現意図 -逆接-",
+   "url": "https://www.jpf.go.jp/j/project/japanese/teach/tsushin/grammar/201703.html",
+   "authority": "government",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "第2节「部分的に言い直す表現」及比较表；核对正文解释。只选择此补充片中的新用法，不声称整篇或N1库存穷尽。",
+   "licenseNote": "保留链接、常见形式名称和可定位的章节事实；中文教学说明、日语例句与评估标准原创，不导入原文例句或习题。"
+  },
+  {
+   "id": "src:ja-advanced:koto",
+   "title": "国際交流基金 日本語教育通信 文法を楽しく 「こと」（２）",
+   "url": "https://www.jpf.go.jp/j/project/japanese/teach/tsushin/grammar/201203.html",
+   "authority": "government",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "第1节2）感叹、第2节言い換え、第3节従属節的各条目；核对正文解释。只选择此补充片中的新用法，不声称整篇或N1库存穷尽。",
+   "licenseNote": "保留链接、常见形式名称和可定位的章节事实；中文教学说明、日语例句与评估标准原创，不导入原文例句或习题。"
+  },
+  {
+   "id": "src:ja-advanced:tokoro1",
+   "title": "国際交流基金 日本語教育通信 文法を楽しく 「ところ」（１）",
+   "url": "https://www.jpf.go.jp/j/project/japanese/teach/tsushin/grammar/201106.html",
+   "authority": "government",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "导入例(10)–(15)及第1节「～ところで、～ところに、～ところを」；核对正文解释。只选择此补充片中的新用法，不声称整篇或N1库存穷尽。",
+   "licenseNote": "保留链接、常见形式名称和可定位的章节事实；中文教学说明、日语例句与评估标准原创，不导入原文例句或习题。"
+  },
+  {
+   "id": "src:ja-advanced:tokoro2",
+   "title": "国際交流基金 日本語教育通信 文法を楽しく 「ところ」（２）",
+   "url": "https://www.jpf.go.jp/j/project/japanese/teach/tsushin/grammar/201109.html",
+   "authority": "government",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "第1节「～ところを」の他の二つの用法及第2节「～ところで」のもう一つの用法；核对正文解释。只选择此补充片中的新用法，不声称整篇或N1库存穷尽。",
+   "licenseNote": "保留链接、常见形式名称和可定位的章节事实；中文教学说明、日语例句与评估标准原创，不导入原文例句或习题。"
+  },
+  {
+   "id": "src:ja-advanced:tsumori",
+   "title": "国際交流基金 日本語教育通信 文法を楽しく つもり（２）",
+   "url": "https://www.jpf.go.jp/j/project/japanese/teach/tsushin/grammar/201303.html",
+   "authority": "government",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "第1–3节，含意志过去、信念过去及意志否定；核对正文解释。只选择此补充片中的新用法，不声称整篇或N1库存穷尽。",
+   "licenseNote": "保留链接、常见形式名称和可定位的章节事实；中文教学说明、日语例句与评估标准原创，不导入原文例句或习题。"
+  },
+  {
+   "id": "src:ja-advanced:jiu-n1-2024",
+   "title": "城西国際大学 2024年度 日本語（言語知識）シラバス",
+   "url": "https://jiu-unipa.jiu.ac.jp/slResult/2024/japanese/syllabusHtml/SyllabusHtml.2024.1.1H1J.2024.100370103.html",
+   "authority": "university",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对授業の到達目標、授業計画第1–11回的功能主题和文法课程条目。它证明大学N1课程采用的学习范围，不直接解释各文型。",
+   "licenseNote": "引用公开课程的功能主题与少量常见形式名称作差距索引；不导入所用教材、原题、解释或例句。"
+  },
+  {
+   "id": "src:ja:irodori-s",
+   "title": "国際交流基金『いろどり 生活の日本語』入門 · 課の一覧",
+   "url": "https://www.irodori.jpf.go.jp/starter/pdf.html",
+   "authority": "official_framework",
+   "accessStatus": "checked_index",
+   "checkedOn": "2026-11-08",
+   "scope": "读取了入門各课标题与话题（JP 与 EN 页面）。本页未显示 CEFR 级别；按 Irodori 整体定位（入門=A1）记录，待核对。未打开 Can-do チェック PDF 与内容一覧 PDF。",
+   "licenseNote": "只登记课号、课题与话题名；说明、例句与掌握标准原创。"
+  },
+  {
+   "id": "src:ja:irodori-e1",
+   "title": "国際交流基金『いろどり 生活の日本語』初級1 · 課の一覧",
+   "url": "https://www.irodori.jpf.go.jp/elementary01/pdf.html",
+   "authority": "official_framework",
+   "accessStatus": "checked_index",
+   "checkedOn": "2026-11-08",
+   "scope": "读取了初級1各课标题与话题（JP 与 EN 页面）。未打开 Can-do チェック PDF 与内容一覧 PDF。",
+   "licenseNote": "只登记课号、课题与话题名；说明、例句与掌握标准原创。"
+  },
+  {
+   "id": "src:ja:irodori-e2",
+   "title": "国際交流基金『いろどり 生活の日本語』初級2 · 課の一覧",
+   "url": "https://www.irodori.jpf.go.jp/elementary02/pdf.html",
+   "authority": "official_framework",
+   "accessStatus": "checked_index",
+   "checkedOn": "2026-11-08",
+   "scope": "读取了初級2各课标题与话题（JP 与 EN 页面）。未打开 Can-do チェック PDF 与内容一覧 PDF。",
+   "licenseNote": "只登记课号、课题与话题名；说明、例句与掌握标准原创。"
+  },
+  {
+   "id": "src:ja:irodori-pi",
+   "title": "国際交流基金『いろどり 生活の日本語』初中級 · 課の一覧",
+   "url": "https://www.irodori.jpf.go.jp/pre-intermediate/pdf.html",
+   "authority": "official_framework",
+   "accessStatus": "checked_index",
+   "checkedOn": "2026-11-08",
+   "scope": "读取了初中級各课标题与话题（JP 与 EN 页面）。页面标注初中級（A2/B1），本库按下限 A2 记为框架位置。未打开 Can-do チェック PDF 与内容一覧 PDF。",
+   "licenseNote": "只登记课号、课题与话题名；说明、例句与掌握标准原创。"
+  },
+  {
+   "id": "src:ja:cefr-2001",
+   "title": "Council of Europe (2001) CEFR",
+   "url": "https://www.coe.int/en/web/common-european-framework-reference-languages",
+   "authority": "official_framework",
+   "accessStatus": "unavailable",
+   "checkedOn": "2026-11-08",
+   "scope": "官方页面返回 403，未取得正文；仅作为补充类别（主题、功能、语言能力组成）的结构参照，章节号待核对。",
+   "licenseNote": "只引用类别名称与章节号。"
+  },
+  {
+   "id": "src:ja:joyo-kanji-2010",
+   "title": "文化庁「常用漢字表」（2010 年内閣告示）",
+   "url": "https://www.bunka.go.jp/kokugo_nihongo/sisaku/joho/joho/kijun/naikaku/kanji/",
+   "authority": "official_framework",
+   "accessStatus": "unavailable",
+   "checkedOn": "2026-11-08",
+   "scope": "本轮未访问；只用于\"常用汉字 2136 字\"这一范围。分级汉字数为编辑性估计（旧 JLPT 出题基准的通行数字，非现行官方清单）。",
+   "licenseNote": "不复制字表。"
+  }
+ ]
+}

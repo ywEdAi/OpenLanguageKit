@@ -1,0 +1,53 @@
+{
+  "note": "Design references from primitive families and planning rules to the learning-sciences graph (pedagogy/graph.json). basis is always design_inference: these links say which research idea a design choice leans on, not that the choice has been shown to work. Read each node's evidenceStatus and limitations in pedagogy/graph.json before citing it.",
+  "basis": "design_inference",
+  "families": {
+    "perceive": [
+      { "ped": "ped:attention", "note": "先让学习者把注意放到一个可听出的差异上，再要求产出" },
+      { "ped": "ped:noticing-hypothesis", "note": "对立卡和轮廓线把容易被忽略的声音差异摆到眼前" }
+    ],
+    "decode": [
+      { "ped": "ped:explicit-instruction", "note": "音形对应规则先明示，再在词里用" },
+      { "ped": "ped:retrieval-practice", "note": "遮住回想、听音找字都要求从记忆里取出来" },
+      { "ped": "ped:proceduralization", "note": "从逐个拼到整词认读，支持逐步撤掉" }
+    ],
+    "lexis": [
+      { "ped": "ped:comprehensible-input", "note": "词在场景和语块里出现，先懂再用" },
+      { "ped": "ped:retrieval-practice", "note": "先回想再对照" },
+      { "ped": "ped:spaced-practice", "note": "学过的词隔一段时间再出现" }
+    ],
+    "form": [
+      { "ped": "ped:noticing-hypothesis", "note": "对立形式并排，让学习者看见形式和意思的对应" },
+      { "ped": "ped:explicit-instruction", "note": "规律摆出来，学习者动手判断" },
+      { "ped": "ped:corrective-feedback", "note": "回应落在载体上，指出哪里和目标不一样" }
+    ],
+    "structure": [
+      { "ped": "ped:explicit-instruction", "note": "句子和篇章结构画出来，再让学习者改" },
+      { "ped": "ped:scaffolding", "note": "结构支架按表现撤掉" }
+    ],
+    "listen": [
+      { "ped": "ped:comprehensible-input", "note": "听的材料略高于现有水平，任务先于文字" },
+      { "ped": "ped:input-hypothesis", "note": "只作为设计来源；i+1 不是可以直接测量的难度单位" }
+    ],
+    "interact": [
+      { "ped": "ped:interaction-hypothesis", "note": "回合里要有听不懂、要澄清的时刻" },
+      { "ped": "ped:negotiated-interaction", "note": "预先写好的分支包含修复和请求重复" }
+    ],
+    "produce": [
+      { "ped": "ped:output-hypothesis", "note": "自己说或写，暴露出说不出来的地方" },
+      { "ped": "ped:pushed-output", "note": "产出有明确的表达要求，并保留修改痕迹" },
+      { "ped": "ped:corrective-feedback", "note": "修改针对自己的稿子，不是另做一份练习" }
+    ],
+    "transfer": [
+      { "ped": "ped:transfer", "note": "换一个场景再用；一次迁移尝试不等于长期保持" }
+    ]
+  },
+  "planning": [
+    { "rule": "agenda.review", "ped": "ped:spaced-practice", "note": "每周日程把上一周的知识点排进回访" },
+    { "rule": "agenda.review", "ped": "ped:spacing-effect", "note": "间隔多长最合适取决于要保持多久，这里的一周间隔只是规划默认值" },
+    { "rule": "evidence.first-attempt", "ped": "ped:testing-effect", "note": "第一次作答要在提示之前保存；先取出来再看答案" },
+    { "rule": "scaffold.fade", "ped": "ped:scaffolding", "note": "提示由轻到重，连续独立完成后撤掉" },
+    { "rule": "scaffold.fade", "ped": "ped:zpd", "note": "只作为理论来源；没有个体的最近发展区测量" },
+    { "rule": "path.order", "ped": "ped:skill-acquisition", "note": "先懂规则，再在练习里变熟；顺序来自课程编排，不是实证的先修关系" }
+  ]
+}

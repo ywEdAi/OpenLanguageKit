@@ -1,0 +1,19 @@
+{
+  "note": "Hand-written from each track's `learner` text in curriculum/<lang>/tracks.json. Used only to rank tracks for a learner profile; it never changes a track. ages: 5-7 | 8-12 | 13-17 | adult. start: zero = no prior study assumed, some = the track assumes an earlier level.",
+  "tracks": {
+    "young-early": { "ages": ["5-7"], "start": "zero" },
+    "young-primary": { "ages": ["8-12"], "start": "zero" },
+    "teen": { "ages": ["13-17"], "start": "some" },
+    "adult-everyday": { "ages": ["adult"], "start": "zero" },
+    "adult-work": { "ages": ["adult"], "start": "some" },
+    "academic": { "ages": ["13-17", "adult"], "start": "some" },
+    "ja-life": { "ages": ["adult"], "start": "zero" },
+    "ja-hobby": { "ages": ["8-12", "13-17", "adult"], "start": "zero" },
+    "ja-exam-study": { "ages": ["13-17", "adult"], "start": "some" },
+    "ja-business": { "ages": ["adult"], "start": "some" },
+    "zh-adult-beginner": { "ages": ["13-17", "adult"], "start": "zero" },
+    "zh-heritage-kids": { "ages": ["5-7", "8-12"], "start": "zero" },
+    "zh-business": { "ages": ["adult"], "start": "some" },
+    "zh-academic": { "ages": ["adult"], "start": "some" }
+  }
+}

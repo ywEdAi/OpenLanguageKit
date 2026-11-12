@@ -1,0 +1,3251 @@
+{
+ "lang": "zh",
+ "map": [
+  {
+   "kc": "kt:zh-pinyin-initials-finals",
+   "uses": [
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "primary",
+     "binding": "对立集合 b/p、d/t、g/k 送气对立及 z/zh、j/q/x、ü/u；检查听辨并让对方辨出"
+    },
+    {
+     "primitive": "prim:sound-spelling-blend",
+     "role": "support",
+     "binding": "声母＋韵母逐个对应拼合成音节，再听音写出拼音"
+    },
+    {
+     "primitive": "prim:oral-sound-play",
+     "role": "support",
+     "binding": "儿童先不看拼音：拍音节、换声母（妈→爸）建立音节意识"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-pinyin-tones",
+   "uses": [
+    {
+     "primitive": "prim:contour-match",
+     "role": "primary",
+     "binding": "四声＋轻声的音高轮廓；先选轮廓再说，检查 mā/má/mǎ/mà 可被辨出"
+    },
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "support",
+     "binding": "二声/三声最易混；用 mǎi/mài、shuǐjiǎo/shuìjiào 等最小对立听辨"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-pinyin-spelling",
+   "uses": [
+    {
+     "primitive": "prim:sound-spelling-blend",
+     "role": "primary",
+     "binding": "规则 y/w 改写、j q x 后 ü 去点、iou→iu、标调位置；听音写出规范拼音"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 yu/yü、liú/lióu、标在 i 还是 u 上等拼写是否规范"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-fn-greetings",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "你好/早上好/再见 的回合；对象分同学、老师、长辈，检查回应能接上"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "你好/您好、老师好 的对象选择；儿童课堂场景可做角色扮演"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-fn-thanks-apologies",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "谢谢—不客气、对不起—没关系 两对回合；检查回应与触发配对正确"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "轻重程度：不好意思/对不起/太感谢了 按场合与亲疏选择"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-str-repair-basic",
+   "uses": [
+    {
+     "primitive": "prim:repair-and-backchannel",
+     "role": "primary",
+     "binding": "困难时刻是语速快或声调听不清，检查“请再说一遍／慢一点”"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "没听懂时插入 请再说一遍/请慢一点儿说/…是什么意思，检查对话能继续"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "必须靠请求重复才能拿到电话号码或时间，记录修复请求"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-fn-classroom-language",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "课堂回合：……用中文怎么说？我不懂、老师我有问题；儿童课堂指令为主"
+    },
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "support",
+     "binding": "听 请打开书、看黑板、跟我读 做动作，动作即理解证据"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-shi-sentence",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "A 是 B 只连名词；检查不说 *我是高、*他是忙（英语 be 迁移）"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 我是学生/*我是很累/*今天是冷 归到“形容词前多用是”类别"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-ma-question",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "句末 吗 把陈述变是非问；回答用重复动词 是/不是，而非 yes/no"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "一问一答回合：你是老师吗？—不是，我是学生"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-bu-negation",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 不 vs 没：不否定意愿/习惯/现在，没否定已发生；检查 不 的位置在动词前"
+    },
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "support",
+     "binding": "配合 不 在四声前变 bú，听辨 bù qù / bú shì"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-personal-pronouns",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "们 表复数、您 表尊称；他/她/它 同音只看字形区分"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "你/您 按长辈、老师、同学选择"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-wh-questions",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "疑问词留在原位不前移：你叫什么？*什么你叫？检查答句换掉疑问词即成"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 怎么（方式/原因）、怎么样（评价）、为什么（原因）按问意选择"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-jiao-xing",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 姓（只接姓）/叫（接全名或名）；检查 *我姓王明、您贵姓 的回答"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "互问姓名回合：您贵姓？—我姓王，叫王明"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-lex-personal-info",
+   "uses": [
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "primary",
+     "binding": "国名＋人、职业词；先由图/国旗调出 美国人、医生，再揭示"
+    },
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "support",
+     "binding": "收集 我是……人、我在……工作 等自我信息语块"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-fn-self-introduction",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "姓名、国籍、职业、认识你很高兴 的完整自我介绍回合"
+    },
+    {
+     "primitive": "prim:carry-across",
+     "role": "support",
+     "binding": "把自我介绍搬到自己的真实信息上，检查哪些句子需换词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-tone-sandhi",
+   "uses": [
+    {
+     "primitive": "prim:contour-match",
+     "role": "primary",
+     "binding": "三声＋三声→二声、不/一 在四声前变二声；先标变调轮廓再说"
+    },
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "support",
+     "binding": "听辨 不是 bú shì vs 不买 bù mǎi、一个 yí ge vs 一天 yì tiān"
+    },
+    {
+     "primitive": "prim:rhythm-shadow",
+     "role": "support",
+     "binding": "跟读 你好、很好、不客气 等短语，在语流中标出变调与轻重"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-demonstratives",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "这/那 近远、这儿/那儿 地点；配图按远近判断，并注意 这＋量词＋名词"
+    },
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "support",
+     "binding": "听 这是书、那儿有门 在画面上点对应的近/远物体"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-de-possessive",
+   "uses": [
+    {
+     "primitive": "prim:attach-position",
+     "role": "primary",
+     "binding": "的 连接修饰语与名词且修饰语在前；检查 我的书、亲属/单位可省 的（我妈妈）"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 我妈妈/我的妈妈/*我的的书/中国茶 能否省 的"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-numerals",
+   "uses": [
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "primary",
+     "binding": "一到九十九的组合规律；先说出数字再揭示，含 十一、二十"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 二/两：数数与序号用二，量词前用两，检查 两个/*二个"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-measure-words-basic",
+   "uses": [
+    {
+     "primitive": "prim:classifier-match",
+     "role": "primary",
+     "binding": "个/本/张/杯/口 按书类、平面、容器、家庭人数归类；检查数＋量＋名语序"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 *三书、*一个书、一本书 归到“漏量词/错量词”类别"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-hanzi-strokes",
+   "uses": [
+    {
+     "primitive": "prim:character-anatomy",
+     "role": "primary",
+     "binding": "横竖撇点折及先横后竖、先上后下等笔顺；检查按笔顺写出常用字"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "先自己写字，再与笔顺动画对照标出笔顺差异"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-hanzi-components",
+   "uses": [
+    {
+     "primitive": "prim:character-anatomy",
+     "role": "primary",
+     "binding": "偏旁 氵亻口木 表义、声旁表音；用部件猜 河/你/吃 的意义类别"
+    },
+    {
+     "primitive": "prim:word-shape-split",
+     "role": "support",
+     "binding": "带出一族同部件字：氵→河 海 洗 汉，验证义类"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-hanzi-l1",
+   "uses": [
+    {
+     "primitive": "prim:oral-to-print",
+     "role": "primary",
+     "binding": "一级约 300 字；从已会说的 人口大小妈妈 出发直接连到字形；华裔儿童不经拼音"
+    },
+    {
+     "primitive": "prim:reading-aid-fade",
+     "role": "support",
+     "binding": "成人线：同篇材料拼音逐字撤除，区分有/无拼音读对"
+    },
+    {
+     "primitive": "prim:character-anatomy",
+     "role": "support",
+     "binding": "形近字 人/入、大/太 的部件区分与书写"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-time-expressions",
+   "uses": [
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "primary",
+     "binding": "点/分/半/刻、月/号/星期 的组合；先说出时刻再揭示"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "听取钟点与日期填入格子，复盘 星期/月份数字错误"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-time-word-order",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "槽位 主语—时间—地点—动词，时间地点从大到小；检查 *我学习在家明天"
+    },
+    {
+     "primitive": "prim:carry-across",
+     "role": "support",
+     "binding": "把自己的一天按槽位重排说出"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-nominal-predicate",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "日期、年龄、价格可直接作谓语不加 是；检查 今天星期三、他二十岁"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 他是二十岁/他二十岁/*他不二十岁 的边界（否定须加 不是）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-money-prices",
+   "uses": [
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "primary",
+     "binding": "块/毛、元/角 的价格数字；听价格填格子，复盘 二/两 与 毛 的错误"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "问价回合：这个多少钱？—十五块"
+    },
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "support",
+     "binding": "在菜单或价签上找到某物的价格"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-ji-duoshao",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 几（预期小于十，需量词）/多少（不限，可省量词）按预期数量选"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "问出对方家几口人、班上多少学生才能填表"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-you-sentence",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "有 表领有（我有）与存在（地点＋有＋物）；检查不说 *在桌子上有"
+    },
+    {
+     "primitive": "prim:role-marking",
+     "role": "support",
+     "binding": "存在句中地点作主语，物在宾语；和 在 句角色对调"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-mei-negation",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 没有/不有：有 只能用 没 否定；检查 *不有、我没有姐姐"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 *不有、没有、没 的口语省略用例"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-zai-location",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "在 作动词（书在桌子上）与介词（在家吃饭）；场景图连物体与位置"
+    },
+    {
+     "primitive": "prim:slot-order",
+     "role": "support",
+     "binding": "介词短语 在＋地点 放在动词前；检查 *我吃饭在家"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-locatives",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "上/下/里/外/前/后/旁边 加在名词后表位置；检查 *在桌子、桌子上"
+    },
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "support",
+     "binding": "听 把猫放在桌子下面 在画面上摆放；适合儿童"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-lex-family",
+   "uses": [
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "primary",
+     "binding": "爸爸 妈妈 哥哥 姐姐 等，凭家谱图调出称谓再揭示"
+    },
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "support",
+     "binding": "介绍自己家：几口人、都有谁、做什么；儿童可画全家福"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-verb-predicate",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "主—谓—宾 基本槽位与英语同；检查宾语不前移、动词不变形"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "动词无人称/时态变化，靠时间词判断时间"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-lex-daily-verbs",
+   "uses": [
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "primary",
+     "binding": "吃喝看听说去来 等，从动作图调出动词及常见宾语"
+    },
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "support",
+     "binding": "收集 动＋宾 搭配：喝茶、看书、听音乐、说汉语"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-adverbs-basic",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "也/都/很/常常 放在主语后、动词前；检查 *也我去、*我们是都学生"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "都 总括前面的复数主语，也 与前句同类；依靠位置判断"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-transport-zuo",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "槽位 坐/骑/开＋工具＋去＋地点；检查 *我去公司坐地铁"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 坐（车船飞机）/骑（自行车马）/开（自己驾驶）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-fn-daily-routine",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "从起床到睡觉走一遍，每步调出 时间＋动作，再换周末走向"
+    },
+    {
+     "primitive": "prim:grow-text",
+     "role": "support",
+     "binding": "从 我每天七点起床 扩展成一段日常描述"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-xihuan",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "喜欢 后可接名词或动词短语；检查 我喜欢喝茶 而非 *我喜欢茶喝"
+    },
+    {
+     "primitive": "prim:carry-across",
+     "role": "support",
+     "binding": "说出自己真实喜欢/不喜欢的三件事"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-xiang-yao",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 想（愿望、委婉）/要（打算、要求、更坚定）；否定都用 不想"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "点单与计划对话中选择 我想…/我要…"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-hui-ability",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "会（学会的技能）与 能/可以 对立；检查 我会说汉语、*我能说汉语（技能）"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 会游泳/能游一千米 等各句是否得体"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-neng-keyi",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 会/能/可以：条件能力、许可；检查 这儿可以拍照吗 与否定 不能"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 不可以/不能/不会 在许可与能力否定中的边界"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-lex-food-drink",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "饭馆从坐下到点菜走一遍，调出 米饭 面条 茶 等词"
+    },
+    {
+     "primitive": "prim:classifier-match",
+     "role": "support",
+     "binding": "一碗面、一杯茶、一瓶水 的容器量词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-fn-ordering",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "点餐/购物回合：我要这个、来一碗面、还要别的吗？—不要了"
+    },
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "support",
+     "binding": "在真实菜单上找到菜名与价格完成点单"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-adjective-predicate",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "形容词直接作谓语不加 是，很 常是语法上的占位；检查 *他是高"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 他很高/他高/*他是高 并区分不带 很 时的对比义"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-lex-common-adjectives",
+   "uses": [
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "primary",
+     "binding": "大小多少冷热贵便宜 成对反义词，看图先说再揭示"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 多/少 作定语的限制：*多人、很多人"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-le-modal-basic",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "句末 了 表新情况出现；时间轴上标出变化前后，如 下雨了、我饿了"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "有无 了 的句对：下雨/下雨了，判断是否表变化"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-ne-ba-particles",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 呢（反问对方、追问）/吧（建议、推测确认）/吗；按意图选"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "你呢？我们走吧 在对话回合中接续"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-fn-describe-things",
+   "uses": [
+    {
+     "primitive": "prim:picture-describe",
+     "role": "primary",
+     "binding": "看房间/城市图说 很大、很干净，核对说到的元素与评价"
+    },
+    {
+     "primitive": "prim:grow-text",
+     "role": "support",
+     "binding": "从一句评价扩展成一段描述"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-imperatives",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 请…/别…/不要… 与语气轻重；检查否定祈使用 别 而非 不"
+    },
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "support",
+     "binding": "听 请坐、别说话 做动作；适合儿童课堂"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-affirmative-negative-question",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "规则 V不V、是不是、双音节 喜不喜欢；用于新动词，检查不再加 吗"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 *你去不去吗、*你很好不好 的边界"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-haishi-question",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 还是（问句选择）/或者（陈述）；本处检查 A还是B 问句不加 吗"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "你喝茶还是咖啡？的选择回合"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-fn-invite-suggest",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "邀请—接受/婉拒回合：一起去吧、好啊、对不起我有事；分支随回应变"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "婉拒的得体：直接 不去 vs 下次吧/我有事"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-lian-dong",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "连动 V1＋地点＋V2：去图书馆看书；检查目的动作在后"
+    },
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "support",
+     "binding": "两短句 我去图书馆、我看书 合成连动句"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-listen-basic",
+   "uses": [
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "primary",
+     "binding": "慢速指令与短对话，听后在画面上点选/摆放；儿童适用"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "从短对话中记下时间、数字、价格"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-read-basic",
+   "uses": [
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "primary",
+     "binding": "在菜单、告示、标牌上找到任务所需一条，拼音辅助"
+    },
+    {
+     "primitive": "prim:reading-aid-fade",
+     "role": "support",
+     "binding": "同一短句拼音逐字撤除，区分有/无拼音读对"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-write-basic",
+   "uses": [
+    {
+     "primitive": "prim:template-write",
+     "role": "primary",
+     "binding": "简单表格（姓名、国籍、电话、日期），检查日期按年月日、汉字书写"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "抄写与填表：先独立写字与表格，再对照范字标出错笔"
+    },
+    {
+     "primitive": "prim:character-anatomy",
+     "role": "support",
+     "binding": "书写时按部件与笔顺纠正"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-orth-punctuation",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "裁判 ，。、？！ 的用例，尤其顿号 、 与英文逗号的区别"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "自己给段落加标点再与原文对照"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-le-perfective",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "动词后 了 标完成而非过去时；检查 *我昨天是了学生、宾语带数量词"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 V了O 与句末 了；单纯 我买了书 句子不完整的感知"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 习惯性过去、状态动词 *我以前常常去了 的边界"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-mei-you-past",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 不/没：完成否定用 没（有）且去掉 了；检查 *没来了、*不来了（过去）"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴上标出未发生的事件再选否定"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-guo-experience",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "过 表曾有经历、了 表某次完成；时间轴上比较 我去过北京/我去了北京"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 过/了 按“是否强调经历”选择，否定 没去过"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-shi-de",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 是…的 与 了：已知发生、焦点在时间/地点/方式时用是…的"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "判断句子焦点：你是怎么来的？问方式而非是否来"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-fn-past-experience",
+   "uses": [
+    {
+     "primitive": "prim:sequence-retell",
+     "role": "primary",
+     "binding": "排出周末经历的图片顺序，再用 了/过/先…然后 复述"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "先讲自己的经历，再对照范例标出漏用 了 处"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-zhengzai",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "正在/在/呢 表进行；时间轴标出说话时进行的动作"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 *他正在知道、*我在是学生 等非动作动词边界"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-zhe-durative",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "着 表状态持续（门开着）与伴随方式（笑着说）；区分动作进行 正在"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 门开着/门在开/门开了 按状态、进行、变化选择"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-describe-picture",
+   "uses": [
+    {
+     "primitive": "prim:picture-describe",
+     "role": "primary",
+     "binding": "看图用 着/在/有 描述人和物的状态，核对元素、位置与数量"
+    },
+    {
+     "primitive": "prim:grow-text",
+     "role": "support",
+     "binding": "从一句状态描述扩展成整幅画的描述"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-bi-comparison",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "槽位 A比B＋形容词＋差量；检查 *他比我很高、他比我高一点儿"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "否定对立 没有…那么 vs 不比（不比含反驳义）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-yiyang",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "槽位 A跟B一样＋形容词；检查 *我一样跟你大、否定 不一样"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 跟…一样/比/没有…那么 三种比较按结果选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-superlative-zui",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "最 在形容词/心理动词前表最高级；检查 *便宜最、*最很便宜"
+    },
+    {
+     "primitive": "prim:carry-across",
+     "role": "support",
+     "binding": "用 最 说自己最喜欢/最难忘的事物"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-fn-shopping",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "比较—讲价—付款回合：能便宜一点儿吗？分支随卖方回应"
+    },
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "support",
+     "binding": "在价签与促销单上找到折扣（打八折）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-result-complements",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 看/看见/看懂、写/写完/写好；按结果是否达成选补语"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴区分动作本身与动作结果，否定 没看懂"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-degree-complement-de",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "槽位 V＋O＋V得＋评价（说汉语说得很好）；检查 *他说汉语得好"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "得 后评价已发生/习惯的动作，与状语 很快地说 区分"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-duration-complement",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "时量在动词后：学了两年、等了半个小时；检查 *我两年学汉语"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴上画出持续段，区分 学了两年 与 两年前学的"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-frequency-complement",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "次/遍 在动词后，代词宾语时在次数前：去过两次、见过他一次"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 次（次数）/遍（从头到尾）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-directional-simple",
+   "uses": [
+    {
+     "primitive": "prim:viewpoint-direction",
+     "role": "primary",
+     "binding": "来/去 以说话人位置为参照；先定说话人在门里还是门外再选 进来/进去"
+    },
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "support",
+     "binding": "听 拿过来、拿过去 在画面上拖动物体"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-directional-compound",
+   "uses": [
+    {
+     "primitive": "prim:viewpoint-direction",
+     "role": "primary",
+     "binding": "上下进出回过起＋来/去：先定路径再定说话人参照点，如 走下来/走下去"
+    },
+    {
+     "primitive": "prim:slot-order",
+     "role": "support",
+     "binding": "宾语位置：走进教室来、拿出来一本书 的槽位规则"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-cong-dao-li",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "从（起点）/到（终点）/离（距离参照）/往向（方向）；场景图连角色"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 *学校从我家很近 等 离/从 混用"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-dui-gei-gen",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "对（对象态度）/给（接受者）/跟和（同伴）/为（受益）；检查介宾在动词前"
+    },
+    {
+     "primitive": "prim:slot-order",
+     "role": "support",
+     "binding": "检查 *我打电话给妈妈 与 给妈妈打电话 的位置偏好"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-fn-directions",
+   "uses": [
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "primary",
+     "binding": "听指路 一直往前走、到路口往右拐 在地图上画路线"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "问路回合：请问…怎么走？分支随指路人回答"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "地图缺目的地位置，必须问出才能到达"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-lex-transport-places",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "在城市里走一遍：地铁站—银行—超市—医院，每处调出地点词"
+    },
+    {
+     "primitive": "prim:word-shape-split",
+     "role": "support",
+     "binding": "站/馆/店/院 一族地点语素：车站 地铁站、图书馆 饭馆"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-yinwei-suoyi",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "两句按因果接成 因为…所以…，也可只用一个；检查 *因为…, so 迁移"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在 因为… 后预测结果句方向"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-suiran-danshi",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "虽然…但是/可是 成对使用（英语 although 不配 but）；检查漏 但是"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在 虽然 后预测转折"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-ruguo-jiu",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "假设复句 如果…就…，就 在后句主语后；检查 *就我不去"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在 如果 后押结果方向"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-xian-zai",
+   "uses": [
+    {
+     "primitive": "prim:sequence-retell",
+     "role": "primary",
+     "binding": "按 先…再…然后…最后 复述过程图片顺序"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 再（未来的下一步）/又/然后"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-huozhe-haishi",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 或者（陈述句）/还是（疑问句或 不知道…还是…）；检查陈述误用还是"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 我想知道你去还是不去 等嵌入问句边界"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-lex-weather",
+   "uses": [
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "primary",
+     "binding": "晴阴雨风雪与四季，看天气图先说再揭示"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "听天气预报记下气温与天气"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-lex-body-health",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "看病场景走一遍：挂号—说症状—拿药，调出身体与症状词"
+    },
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "support",
+     "binding": "看人体图先说出部位名称再揭示"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-youdianr-yidianr",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 有点儿＋形容词（不如意）/形容词＋一点儿（比较、请求）"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 *一点儿贵、*有点儿好 等边界"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-fn-symptoms",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "医患回合：哪儿不舒服？—我头疼，有点儿发烧；分支随医生追问"
+    },
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "support",
+     "binding": "从挂号到取药走一遍并换个病情再走"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-hanzi-l2",
+   "uses": [
+    {
+     "primitive": "prim:reading-aid-fade",
+     "role": "primary",
+     "binding": "二级累计约 600 字；短文拼音逐字撤除，区分有/无注音读对"
+    },
+    {
+     "primitive": "prim:character-anatomy",
+     "role": "support",
+     "binding": "以形声字声旁、义旁辅助记忆新字"
+    },
+    {
+     "primitive": "prim:word-shape-split",
+     "role": "support",
+     "binding": "以已知字组新词，扩大字—词网络"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-morphemes-compounds",
+   "uses": [
+    {
+     "primitive": "prim:word-shape-split",
+     "role": "primary",
+     "binding": "电＋脑、学＋生 切语素验证义，再带出 电话 电视 电影 一族"
+    },
+    {
+     "primitive": "prim:context-guess",
+     "role": "support",
+     "binding": "在句中用语素义猜新合成词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-lex-l2-core",
+   "uses": [
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "primary",
+     "binding": "二级累计约 1200 词，按话题先回想再揭示并记录"
+    },
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "support",
+     "binding": "从课文收集高频搭配与语块"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-listen-l2",
+   "uses": [
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "primary",
+     "binding": "日常对话与通知中记下时间、地点、价格等关键信息"
+    },
+    {
+     "primitive": "prim:transcript-diff",
+     "role": "support",
+     "binding": "写下听到的句子再与原文对齐，找漏听的虚词与变调"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-read-l2",
+   "uses": [
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "primary",
+     "binding": "在便条、通知、短文中找到完成任务需要的信息"
+    },
+    {
+     "primitive": "prim:context-guess",
+     "role": "support",
+     "binding": "遇到生词决定查还是跳"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-write-messages",
+   "uses": [
+    {
+     "primitive": "prim:template-write",
+     "role": "primary",
+     "binding": "便条、短信模板，检查称呼、事由、落款与时间"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "先写便条/微信消息，再对照范例比较格式与语气"
+    },
+    {
+     "primitive": "prim:ime-convert",
+     "role": "support",
+     "binding": "用拼音输入法打消息，在候选中选对同音字（在/再、的/得）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-pinyin-erhua",
+   "uses": [
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "primary",
+     "binding": "儿化 vs 非儿化、轻声 vs 原调：东西 dōngxī/dōngxi、一点儿"
+    },
+    {
+     "primitive": "prim:contour-match",
+     "role": "support",
+     "binding": "轻声音节的音高随前字变化，标出轮廓再读"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-v-zai-dao-gei",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "V＋在（终点位置）/到（到达点）/给（接受者）；检查 住在北京、交给老师"
+    },
+    {
+     "primitive": "prim:slot-order",
+     "role": "support",
+     "binding": "对比 在北京住 与 住在北京 的位置和语义差别"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-ba-sentence",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "槽位 S＋把＋O＋V＋其他成分；检查 *我把饭吃、否定 没 放在 把 前"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 把字句/普通 SVO：强调对确指对象的处置结果时用 把"
+    },
+    {
+     "primitive": "prim:role-marking",
+     "role": "support",
+     "binding": "把 的宾语是确指受事，场景图标出受事与结果"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-ba-placement",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "把＋物＋放在/送到/翻译成 的终点角色，此时必须用 把"
+    },
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "support",
+     "binding": "听 把书放在桌子上 在画面上拖物到位"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-fn-instructions",
+   "uses": [
+    {
+     "primitive": "prim:sequence-retell",
+     "role": "primary",
+     "binding": "把做菜/操作步骤排序，再用 先…把…然后 复述"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "边问边讲的操作说明回合：下一步呢？"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-bei-passive",
+   "uses": [
+    {
+     "primitive": "prim:viewpoint-direction",
+     "role": "primary",
+     "binding": "被 句站在受影响者一方叙事，多表不如意；施事可省 被偷了"
+    },
+    {
+     "primitive": "prim:role-marking",
+     "role": "support",
+     "binding": "场景图标出受事与施事，把 与 被 互换验证角色"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 被字句/主动/意念被动 按叙事视角与是否不如意选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-notional-passive",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "无标记被动 饭做好了；靠语义判断主语是受事，检查不滥加 被"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 饭做好了/饭被做好了 的自然度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-jianyu-causative",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "兼语 让/叫/使/请＋人＋V；场景图中兼语既是受使者又是施事"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 让（允许/使）/叫（口语）/使（书面，接形容词）/请"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-potential-complements",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 V得/不C 与 能/不能：听不懂（能力不及）vs 不能听（不允许）"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "把可能式规则用于新动补：做完→做得完/做不完"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-directional-extended",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "起来（开始/回忆/评价）、下去（继续）、出来（辨识）引申义，靠语境判断"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 想起来/想出来、看起来/看出来"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-yinggai-bixu",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "应该/得děi/必须 义务强度排上梯子，否定端 不用/不必；检查 *不必须"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 *不必须、不应该 等否定边界"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-keneng-dagai",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "也许/可能/大概/一定 确定度梯子；按证据强弱选一格"
+    },
+    {
+     "primitive": "prim:source-stance",
+     "role": "support",
+     "binding": "判断说话人有多确定，点出确定度词位置"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-yao-le",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "要…了/快…了/就要…了 在时间轴上标“即将”；检查 快…了 不与具体时间连用"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 *明天快下雨了、明天就要考试了"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-fn-advice",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "提建议回合：你最好…/你应该…/要不…，分支随对方接受或拒绝"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "给朋友 vs 给上级的建议强度与委婉度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-existential-sentences",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "槽位 处所＋V着/了＋数量＋名词；检查 *一本书在桌子上放着 与非确指宾语"
+    },
+    {
+     "primitive": "prim:picture-describe",
+     "role": "support",
+     "binding": "看图用存现句描述房间布置，核对位置与数量"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-de-relative",
+   "uses": [
+    {
+     "primitive": "prim:attach-position",
+     "role": "primary",
+     "binding": "关系从句在名词前：我昨天买的书；检查英语后置 *书我昨天买的"
+    },
+    {
+     "primitive": "prim:strip-skeleton",
+     "role": "support",
+     "binding": "折叠 的 字定语找出中心名词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-de-di-de",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "的（定语＋名词）/地（状语＋动词）/得（动词＋补语）按位置选"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 *认真的学习、*跑的快 归到“位置错用”类别；华裔儿童高频错误"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-topic-comment",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "话题槽位前置已知宾语：这本书我看过；检查确指与话题位置"
+    },
+    {
+     "primitive": "prim:reference-chain",
+     "role": "support",
+     "binding": "话题链中后续小句省略主语，补出所指"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-phrase-types",
+   "uses": [
+    {
+     "primitive": "prim:strip-skeleton",
+     "role": "primary",
+     "binding": "偏正、动宾、动补、主谓、联合、介宾 六种；切出短语并标类型"
+    },
+    {
+     "primitive": "prim:slot-order",
+     "role": "support",
+     "binding": "各类短语内部语序：很漂亮/*漂亮很、洗干净"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-budan-erqie",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "递进复句 不但…而且…；检查主语相同时 不但 在主语后"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在 不但 后预测递进方向"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-zhiyao-jiu",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "只要…就（充分）/只有…才（必要）：后句须配 就/才；检查 *只有努力，就能"
+    },
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "support",
+     "binding": "把条件与结果两句接成复句"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-weile",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "目的 为了 引出目的在前句，后句目的用 是为了/好让；检查与因果句混用"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 为了（目的）/因为（原因）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-yibian-yibian",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 一边…一边（同时动作）/又…又（并存性质）；检查后者接形容词"
+    },
+    {
+     "primitive": "prim:picture-describe",
+     "role": "support",
+     "binding": "看图说出人同时在做的两件事"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-yi-jiu",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "一…就… 后句须紧接发生，就 在后句主语后；检查 *一到家他睡觉了"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴标出两事间隔为零或条件反应"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-lian-dou",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "连…都/也 标出极端项，判断说话人认为什么最不可能"
+    },
+    {
+     "primitive": "prim:slot-order",
+     "role": "support",
+     "binding": "连 的焦点可在主语前或宾语前置：他连饭都没吃"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-lex-l3-core",
+   "uses": [
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "primary",
+     "binding": "三级累计约 2200 词，按话题先回想再揭示"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "对易混词组逐例裁判用法边界"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-hanzi-l3",
+   "uses": [
+    {
+     "primitive": "prim:character-anatomy",
+     "role": "primary",
+     "binding": "三级累计约 900 字，以形声部件推测音义，区分形近字"
+    },
+    {
+     "primitive": "prim:reading-aid-fade",
+     "role": "support",
+     "binding": "短文仅对新字保留拼音，逐步撤除"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-lex-measure-extended",
+   "uses": [
+    {
+     "primitive": "prim:classifier-match",
+     "role": "primary",
+     "binding": "件（衣服事）/条（长条）/双（成对）/套/场/遍/次 按形状类别归纳再处理例外"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 *一个衣服、一条裤子/一件衬衫 的边界"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-fn-phone-appointments",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "电话回合：喂、请问…在吗、预约—改约，分支随对方是否有空"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "必须问出时间地点才能完成预约"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "听电话留言记下时间与回拨号码"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-fn-complaints",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "投诉回合：说明问题—提出要求（换/退）—协商，分支随店家回应"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "投诉时的强硬与礼貌平衡"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-soc-address-terms",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "称呼 老师/师傅/先生/阿姨/小王/老李 按年龄、职业、亲疏选择"
+    },
+    {
+     "primitive": "prim:culture-incident",
+     "role": "support",
+     "binding": "叫服务员 美女/小姐 引起的误会判读"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-soc-politeness",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "您、请问、麻烦你、劳驾 按场合调礼貌度，看出哪处太随便"
+    },
+    {
+     "primitive": "prim:culture-incident",
+     "role": "support",
+     "binding": "对夸奖直接说 谢谢 vs 哪里哪里 的跨文化判读"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-listen-l3",
+   "uses": [
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "primary",
+     "binding": "日常与社会话题对话中记下关键信息"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在关联词处预测讲话下一步"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-read-l3",
+   "uses": [
+    {
+     "primitive": "prim:context-guess",
+     "role": "primary",
+     "binding": "短文中标出挡路词，决定查/跳，并用语素猜义"
+    },
+    {
+     "primitive": "prim:strip-skeleton",
+     "role": "support",
+     "binding": "折叠长定语找句子主干"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-write-l3",
+   "uses": [
+    {
+     "primitive": "prim:grow-text",
+     "role": "primary",
+     "binding": "从一句经历扩展成记叙短文或书信，留在同一稿上"
+    },
+    {
+     "primitive": "prim:one-fix-revision",
+     "role": "support",
+     "binding": "一次只改一类问题：先改 了，再改关联词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-speak-l3",
+   "uses": [
+    {
+     "primitive": "prim:sequence-retell",
+     "role": "primary",
+     "binding": "按图片顺序连贯叙述经历，使用 先…然后…后来"
+    },
+    {
+     "primitive": "prim:record-self-transcribe",
+     "role": "support",
+     "binding": "录下叙述并自己转写，自判声调与 了 的问题"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-le-double",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "双 了：学了两年了 持续到现在；时间轴对比 学了两年（已结束）"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 我学了两年/我学了两年了 按是否仍在继续选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-jiu-cai",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 就（早、快、容易）/才（晚、慢、难）；检查 才 后不加 了"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "同一时间不同副词：八点就来了/十点才来，判断说话人评价"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-gang-gangcai",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 刚（副词，动词前）/刚才（时间名词，可在主语前）/已经/曾经"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴标出事件距今远近再选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-time-clauses",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "…的时候/…以后/自从…以来 时间从句在主句前；检查英语 when 后置迁移"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴标出从句与主句事件的先后与重叠"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-rhetorical-questions",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "难道…吗/不是…吗/哪儿…啊 反问表肯定或否定，判断真实意思"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "反问的语气强度与不礼貌风险"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-double-negation",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "不得不/非…不可/没有不 两次否定得肯定，判断语气强弱"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 不得不（被迫）/必须/一定要"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-modal-adverbs",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "其实/到底/究竟/果然/居然/反正 按说话人预期与态度选"
+    },
+    {
+     "primitive": "prim:source-stance",
+     "role": "support",
+     "binding": "从语气副词判断说话人立场与是否出乎意料"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-interrogative-indefinite",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "谁都/什么都/哪儿也 任指与虚指，判断是问句还是全称"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 *我不想吃什么都 等语序与 都/也 的选择"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-jishi-ye",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "即使/哪怕 前句为假设，后句须有 也 且结果不变；检查与 虽然（事实）区分"
+    },
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "support",
+     "binding": "两句接成让步假设句"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-buguan-dou",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "不管/无论 后须接任指或正反选择项，后句须有 都/也；检查 *不管下雨，都…"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 不管多忙/*不管很忙 的边界"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-jiran-jiu",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "既然 前提为双方已知事实，后句多为建议/推论配 就；检查后句不能是单纯陈述过去"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 既然/因为 按前提是否为双方已知选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-yaoburan",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "要不然/否则/不然 引出不这样做的后果；两句接成并检查方向"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在 要不然 处预测后果方向"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-erqie-faner",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 而（书面对照）/却（转折，在主语后）/反而（与预期相反）"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在 反而 处预测与预期相反的方向"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-fixed-formats",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "越来越、越…越…、一…也不/没 格式义；判断格式表达的变化或极端否定"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "把格式套用到新词：越学越有意思"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-colloquial-formats",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "口语格式在回合中的功能：可不是嘛（附和）、看你说的（谦辞回应）"
+    },
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "support",
+     "binding": "从影视对话中收集口语格式并试用"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-reduplication",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "重叠规则 AA/ABAB/AABB：看看、休息休息、干干净净；用于新词"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "形容词重叠表生动，不再加 很：*很干干净净"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-lixin-ci",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "离合词中间插入槽位：见过一次面、帮我一个忙；检查 *见面他"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 *结婚她、跟她结婚 等边界"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-discourse-connectives",
+   "uses": [
+    {
+     "primitive": "prim:discourse-map",
+     "role": "primary",
+     "binding": "首先/其次/另外/总之/后来/结果 给段落贴职能"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在篇章连接词处预测下一段的方向"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-numbers-large-approx",
+   "uses": [
+    {
+     "primitive": "prim:number-system-map",
+     "role": "primary",
+     "binding": "万/亿 与 thousand/million 互换（三万＝30 thousand），先估再读；含 左右、多、百分之"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "听大数与百分数记入格子，复盘数位换算错误"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-hanzi-l4",
+   "uses": [
+    {
+     "primitive": "prim:character-anatomy",
+     "role": "primary",
+     "binding": "四级累计约 1200 字，用部件与声旁系统化，分辨形近字"
+    },
+    {
+     "primitive": "prim:word-shape-split",
+     "role": "support",
+     "binding": "以字带词，扩展同语素词族"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-lex-l4-core",
+   "uses": [
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "primary",
+     "binding": "四级累计约 3200 词，从真实材料收集搭配并试用"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "近义词与搭配边界裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-listen-l4",
+   "uses": [
+    {
+     "primitive": "prim:transcript-diff",
+     "role": "primary",
+     "binding": "社会话题讲话：写下听到的再与原文对齐，看漏掉的虚词"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "记下讲话中的数字与要点"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-read-l4",
+   "uses": [
+    {
+     "primitive": "prim:discourse-map",
+     "role": "primary",
+     "binding": "叙述与说明文章段落职能标注，认出整体形状"
+    },
+    {
+     "primitive": "prim:context-guess",
+     "role": "support",
+     "binding": "生词查跳与语素猜义"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-speak-l4",
+   "uses": [
+    {
+     "primitive": "prim:record-self-transcribe",
+     "role": "primary",
+     "binding": "录下连贯讲述并自转写，自判声调、量词与连接词问题"
+    },
+    {
+     "primitive": "prim:sequence-retell",
+     "role": "support",
+     "binding": "按事件顺序讲述经历"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-write-l4",
+   "uses": [
+    {
+     "primitive": "prim:one-fix-revision",
+     "role": "primary",
+     "binding": "叙事/说明短文与正式邮件，一次改一类：关联词、量词、语体"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "先标出范文段落职能再按形状写"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-str-paraphrase",
+   "uses": [
+    {
+     "primitive": "prim:info-gap",
+     "role": "primary",
+     "binding": "不能说出目标词，必须换说法让对方猜出：就是那种…的东西"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "请对方解释的回合：你说的…是什么意思？"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-str-guess-morphemes",
+   "uses": [
+    {
+     "primitive": "prim:context-guess",
+     "role": "primary",
+     "binding": "用语素义与语境猜生词，多次相遇中修正"
+    },
+    {
+     "primitive": "prim:word-shape-split",
+     "role": "support",
+     "binding": "先切语素再验证猜测"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-fn-opinion",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "表态回合：我认为…/我不太同意，因为…，分支随对方论点"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "直接反对 vs 委婉的 我不太同意 按场合选择"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-stance-markers",
+   "uses": [
+    {
+     "primitive": "prim:source-stance",
+     "role": "primary",
+     "binding": "在我看来/说实话/显然/毕竟 判断说话人立场与确定度"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "立场标记在篇章中的位置与功能"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-fn-hedging",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "恐怕/似乎/好像/不一定 把直率说法调成委婉，看哪处太冲"
+    },
+    {
+     "primitive": "prim:source-stance",
+     "role": "support",
+     "binding": "判断委婉词背后的确定度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-fn-discussion",
+   "uses": [
+    {
+     "primitive": "prim:repair-and-backchannel",
+     "role": "primary",
+     "binding": "讨论录音中的插话点，检查插话、追问、总结的说法与时机"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "讨论回合：插话、追问 你的意思是…？、总结，分支随他人发言"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "插话与打断的礼貌度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-written-prepositions",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对于/关于/通过/根据/按照/由于/随着 按语义关系选"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 对于/关于 互换的边界及位置限制"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-complex-written",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "以便/以免/从而/因而/尽管 书面复句接合；检查前后句关系"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "与口语 为了/所以/虽然 的语体对应"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-soc-written-style",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "之、其、该、予以 等书面词与口语对应，改写一段口语为书面"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判口语文中混入书面词是否得体"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-hanzi-l5",
+   "uses": [
+    {
+     "primitive": "prim:character-anatomy",
+     "role": "primary",
+     "binding": "五级累计约 1500 字，声旁类推与形近字辨析"
+    },
+    {
+     "primitive": "prim:reading-select",
+     "role": "support",
+     "binding": "多音字 行 háng/xíng、长 cháng/zhǎng 按语境选读音"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-lex-l5-core",
+   "uses": [
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "primary",
+     "binding": "五级累计约 4300 词，收集书面搭配并试用"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "易混词裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-soc-culture-customs",
+   "uses": [
+    {
+     "primitive": "prim:culture-incident",
+     "role": "primary",
+     "binding": "春节、送礼、数字与颜色禁忌（送钟、四）的误会事件判读并改写"
+    },
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "support",
+     "binding": "过春节场景走一遍，调出相关词句"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-soc-face-modesty",
+   "uses": [
+    {
+     "primitive": "prim:culture-incident",
+     "role": "primary",
+     "binding": "被夸后直接接受 vs 哪里哪里/过奖了 的误会判读与改写"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "按关系调整谦虚程度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-fn-congratulate-condole",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "祝贺/祝愿/慰问回合：生日、婚礼、生病、丧事的得体回应"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "节哀顺变 等固定说法的场合限制"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-lex-chengyu-basic",
+   "uses": [
+    {
+     "primitive": "prim:figurative-decode",
+     "role": "primary",
+     "binding": "一路平安、马马虎虎 等四字格：先拆字面，再推整体义"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "逐例裁判成语的褒贬与搭配边界"
+    },
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "support",
+     "binding": "从材料中收集四字格并试用一次"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-listen-l5",
+   "uses": [
+    {
+     "primitive": "prim:transcript-diff",
+     "role": "primary",
+     "binding": "较长讨论与讲座：写下要点句与原文对齐"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在讲座连接词处预测下一论点"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-read-l5",
+   "uses": [
+    {
+     "primitive": "prim:discourse-map",
+     "role": "primary",
+     "binding": "议论/说明文章段落职能与论证形状"
+    },
+    {
+     "primitive": "prim:source-stance",
+     "role": "support",
+     "binding": "区分作者观点与转述"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-write-l5",
+   "uses": [
+    {
+     "primitive": "prim:discourse-map",
+     "role": "primary",
+     "binding": "议论文与正式书信结构，先标范文职能再按形状补写"
+    },
+    {
+     "primitive": "prim:one-fix-revision",
+     "role": "support",
+     "binding": "一次改一类：论点、连接、书面语体"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-complex-attributives",
+   "uses": [
+    {
+     "primitive": "prim:strip-skeleton",
+     "role": "primary",
+     "binding": "多层定语状语折叠找出中心语：一位…的年轻医生"
+    },
+    {
+     "primitive": "prim:attach-position",
+     "role": "support",
+     "binding": "多项定语的排列顺序：领属—数量—从句—形容词—名词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-nominalization-written",
+   "uses": [
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "primary",
+     "binding": "进行研究、加以说明、予以支持 等形式动词搭配收集与试用"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "把口语动词句改写为名词化书面句"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-lex-abstract-collocation",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "提高水平/*提高问题、解决问题、产生影响 搭配逐例裁判"
+    },
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "support",
+     "binding": "从报刊收集抽象名词搭配"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-hanzi-l6",
+   "uses": [
+    {
+     "primitive": "prim:character-anatomy",
+     "role": "primary",
+     "binding": "六级累计约 1800 字，以部件与声旁系统辨析形近字"
+    },
+    {
+     "primitive": "prim:reading-select",
+     "role": "support",
+     "binding": "多音字 还、重、乐 等按词与语境选读音并说依据"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-lex-l6-core",
+   "uses": [
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "primary",
+     "binding": "六级累计约 5500 词，按话题收集搭配与语块"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "易混词裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-synonym-discrimination",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "以为/认为、帮助/帮忙、了解/理解 逐例裁判并归到语义/语法/语体边界"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "同一情境中按意图选近义词并看另一个改变什么"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-fn-meetings",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "会议回合：汇报—提议—协商，分支随与会者反应"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "对上级与同事的提议与反对措辞"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-presentation",
+   "uses": [
+    {
+     "primitive": "prim:discourse-map",
+     "role": "primary",
+     "binding": "报告结构：开场—分点—总结，按形状组织再回答提问"
+    },
+    {
+     "primitive": "prim:record-self-transcribe",
+     "role": "support",
+     "binding": "录下报告自转写，自判连接与语体"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-write-report",
+   "uses": [
+    {
+     "primitive": "prim:discourse-map",
+     "role": "primary",
+     "binding": "工作报告与说明的结构与段落职能"
+    },
+    {
+     "primitive": "prim:one-fix-revision",
+     "role": "support",
+     "binding": "一次改一类：结构、数据表述、书面语"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-fn-describe-data",
+   "uses": [
+    {
+     "primitive": "prim:picture-describe",
+     "role": "primary",
+     "binding": "看图表说 增长了/下降到/占…%，核对数字与趋势"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 增长了（差量）/增长到（终值）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-listen-l6",
+   "uses": [
+    {
+     "primitive": "prim:transcript-diff",
+     "role": "primary",
+     "binding": "自然速度讲座与新闻，写下要点再与原文对齐"
+    },
+    {
+     "primitive": "prim:source-stance",
+     "role": "support",
+     "binding": "区分讲话人观点与引述"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-read-l6",
+   "uses": [
+    {
+     "primitive": "prim:source-stance",
+     "role": "primary",
+     "binding": "报刊评论中区分作者立场与转述，点出依据"
+    },
+    {
+     "primitive": "prim:strip-skeleton",
+     "role": "support",
+     "binding": "长句削到主干"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-translate-mid",
+   "uses": [
+    {
+     "primitive": "prim:cross-language-align",
+     "role": "primary",
+     "binding": "日常与一般社会题材中英互译，对齐意群标出语序重排、补量词、拆长句"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "先独立翻译再与参考译文对照"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-classical-remnants",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "之/其/以/所/乃/亦 文言成分义，在书面句中靠这些字判断关系"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "以…为… 、所…的 格式的使用边界"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-rhetoric",
+   "uses": [
+    {
+     "primitive": "prim:figurative-decode",
+     "role": "primary",
+     "binding": "比喻、夸张、对偶、排比：先写字面义，再推修辞义与效果"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "在文本中定位修辞并标出其篇章功能"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-register-control",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "同一内容在口语、书面、新闻、公文间转换，标出露馅处"
+    },
+    {
+     "primitive": "prim:one-fix-revision",
+     "role": "support",
+     "binding": "一次只改一类语体问题"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-soc-varieties",
+   "uses": [
+    {
+     "primitive": "prim:variety-map",
+     "role": "primary",
+     "binding": "普通话/方言、简/繁字形、大陆/港台用语（视频/視頻、出租车/的士）并排对照并判断场合"
+    },
+    {
+     "primitive": "prim:culture-incident",
+     "role": "support",
+     "binding": "因用语差异产生的误会判读"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-lex-chengyu-advanced",
+   "uses": [
+    {
+     "primitive": "prim:figurative-decode",
+     "role": "primary",
+     "binding": "成语、俗语、歇后语与典故（塞翁失马）：字面—典故—引申义"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "褒贬色彩与语体边界逐例裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-hanzi-l7",
+   "uses": [
+    {
+     "primitive": "prim:character-anatomy",
+     "role": "primary",
+     "binding": "高等累计约 3000 字，生僻部件与古今字形"
+    },
+    {
+     "primitive": "prim:context-guess",
+     "role": "support",
+     "binding": "在古今书面语中靠语境确定字义"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-lex-l7-core",
+   "uses": [
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "primary",
+     "binding": "高等累计约 11000 词，专业与书面搭配采集"
+    },
+    {
+     "primitive": "prim:entry-sense-pick",
+     "role": "support",
+     "binding": "用语境句查词典，在多义项中选对并说明理由"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-listen-advanced",
+   "uses": [
+    {
+     "primitive": "prim:transcript-diff",
+     "role": "primary",
+     "binding": "专业讲座与各种口音会话，与原文对齐找出口音变音处"
+    },
+    {
+     "primitive": "prim:source-stance",
+     "role": "support",
+     "binding": "辩论中区分立场与转述"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-read-advanced",
+   "uses": [
+    {
+     "primitive": "prim:strip-skeleton",
+     "role": "primary",
+     "binding": "学术与古今书面长句削到主干，判断可跳读部分"
+    },
+    {
+     "primitive": "prim:source-stance",
+     "role": "support",
+     "binding": "学术文献中区分作者观点与引用"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-speak-advanced",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "正式发言、辩论与主持的回合管理，分支随对手论点"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "主持与辩论的语体控制"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-write-academic",
+   "uses": [
+    {
+     "primitive": "prim:source-stance",
+     "role": "primary",
+     "binding": "学术写作中的引用、转述与立场标记，点出依据"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "论文结构与段落职能"
+    },
+    {
+     "primitive": "prim:one-fix-revision",
+     "role": "support",
+     "binding": "一次改一类：引用、论证、语体"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-skill-translate-advanced",
+   "uses": [
+    {
+     "primitive": "prim:cross-language-align",
+     "role": "primary",
+     "binding": "专业笔译/口译：对齐意群，检查术语一致、增删与信息保真"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "按目标文体调整语体"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-str-implicature",
+   "uses": [
+    {
+     "primitive": "prim:figurative-decode",
+     "role": "primary",
+     "binding": "话里有话：再说吧＝婉拒、你忙吧＝结束谈话；先字面再推真意并指依据"
+    },
+    {
+     "primitive": "prim:culture-incident",
+     "role": "support",
+     "binding": "按中国交际习惯判读对方真意并改写回应"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-he-conjunction",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "和 只连名词；裁判 *我吃饭和看电视、*他高和帅 归到“连接谓语”类别"
+    },
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "support",
+     "binding": "谓语并列改用 还/也/又…又…"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-verb-reduplication",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "单音 VV/V一V、双音 ABAB：看看、试一试、休息休息；用于新动词"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "动词重叠使请求更轻松：你尝尝"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-you-comparison",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "槽位 A有B（这么/那么）＋形容词，多用于问句与否定"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 有/比/跟…一样 的比较结果"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-degree-extreme",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "很/太…了/得很/极了/死了 程度梯子，叠加语体；检查 *很好极了"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 死了 只与不如意或口语的边界"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-hui-prediction",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 会（推测将来）/要（计划）/能；检查 他不会不来的"
+    },
+    {
+     "primitive": "prim:source-stance",
+     "role": "support",
+     "binding": "判断 会…的 表达的确定度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-zai-you-hai",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 再（未实现的重复）/又（已实现的重复）/还（持续、追加）"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴上标出重复发生在过去还是未来"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-chule-yiwai",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "除了…以外 ＋都（排除）/还、也（追加）按包含与否选择"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "判断 除了他以外我们都去了 中他去没去"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-chadianr",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "差点儿＋不如意事：差点儿迟到＝差点儿没迟到（都没迟到）；判断是否发生"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴上标出事件几乎发生但未发生"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-bushi-ershi",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 不是…而是（否定纠正）/不是…就是（二选一）"
+    },
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "support",
+     "binding": "两句接成 不是…而是… 并检查否定位置"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-dui-laishuo",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "对…来说/对于…而言 标出观点立足点，与 对…很好 的对象义区分"
+    },
+    {
+     "primitive": "prim:source-stance",
+     "role": "support",
+     "binding": "判断评价是从谁的角度做出"
+    }
+   ]
+  },
+  {
+   "kc": "kt:zh-yuqi-buru",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "与其…不如（取后者）/宁可…也不（取前者）；判断说话人选哪项"
+    },
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "support",
+     "binding": "两选项接成取舍复句"
+    }
+   ]
+  }
+ ],
+ "gaps": []
+}

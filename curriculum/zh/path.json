@@ -1,0 +1,641 @@
+{
+ "schemaVersion": 2,
+ "language": "zh",
+ "levelScheme": "GF0025-2021",
+ "levels": [
+  "一级",
+  "二级",
+  "三级",
+  "四级",
+  "五级",
+  "六级",
+  "七—九级"
+ ],
+ "sections": [
+  {
+   "id": "一级",
+   "label": "一级",
+   "units": [
+    "l1-01",
+    "l1-02",
+    "l1-03",
+    "l1-04",
+    "l1-05",
+    "l1-06",
+    "l1-07",
+    "l1-08",
+    "l1-09",
+    "l1-10"
+   ]
+  },
+  {
+   "id": "二级",
+   "label": "二级",
+   "units": [
+    "l2-01",
+    "l2-02",
+    "l2-03",
+    "l2-04",
+    "l2-05",
+    "l2-06",
+    "l2-07",
+    "l2-08"
+   ]
+  },
+  {
+   "id": "三级",
+   "label": "三级",
+   "units": [
+    "l3-01",
+    "l3-02",
+    "l3-03",
+    "l3-04",
+    "l3-05",
+    "l3-06",
+    "l3-07"
+   ]
+  },
+  {
+   "id": "四级",
+   "label": "四级",
+   "units": [
+    "l4-01",
+    "l4-02",
+    "l4-03",
+    "l4-04",
+    "l4-05"
+   ]
+  },
+  {
+   "id": "五级",
+   "label": "五级",
+   "units": [
+    "l5-01",
+    "l5-02",
+    "l5-03"
+   ]
+  },
+  {
+   "id": "六级",
+   "label": "六级",
+   "units": [
+    "l6-01",
+    "l6-02"
+   ]
+  },
+  {
+   "id": "七—九级",
+   "label": "七—九级",
+   "units": [
+    "l7-01",
+    "l7-02"
+   ]
+  }
+ ],
+ "units": [
+  {
+   "id": "l1-01",
+   "section": "一级",
+   "title": "拼音、声调与第一句问候",
+   "goal": "能读准声母、韵母和四个声调，用固定语块问候、道谢、道歉，听不懂时请对方再说一遍",
+   "rationale": "入口：汉语的音节结构和声调是之后所有听说的底座；问候语块不需要任何语法",
+   "kcs": [
+    "kt:zh-pinyin-initials-finals",
+    "kt:zh-pinyin-tones",
+    "kt:zh-pinyin-spelling",
+    "kt:zh-fn-greetings",
+    "kt:zh-fn-thanks-apologies",
+    "kt:zh-str-repair-basic",
+    "kt:zh-fn-classroom-language"
+   ]
+  },
+  {
+   "id": "l1-02",
+   "section": "一级",
+   "title": "我是谁",
+   "goal": "能说出并询问姓名、国籍、职业，介绍自己",
+   "rationale": "\"是\"字句和\"吗\"问句是汉语判断与提问的第一个骨架",
+   "kcs": [
+    "kt:zh-shi-sentence",
+    "kt:zh-ma-question",
+    "kt:zh-bu-negation",
+    "kt:zh-personal-pronouns",
+    "kt:zh-wh-questions",
+    "kt:zh-jiao-xing",
+    "kt:zh-lex-personal-info",
+    "kt:zh-fn-self-introduction",
+    "kt:zh-tone-sandhi"
+   ]
+  },
+  {
+   "id": "l1-03",
+   "section": "一级",
+   "title": "这是什么、谁的",
+   "goal": "能指着东西问名称、主人，说数量",
+   "rationale": "指示代词和\"的\"表领属；量词是汉语名词短语的必需成分，越早越好",
+   "kcs": [
+    "kt:zh-demonstratives",
+    "kt:zh-de-possessive",
+    "kt:zh-numerals",
+    "kt:zh-measure-words-basic",
+    "kt:zh-hanzi-strokes",
+    "kt:zh-hanzi-components",
+    "kt:zh-hanzi-l1"
+   ]
+  },
+  {
+   "id": "l1-04",
+   "section": "一级",
+   "title": "数字、时间与日期",
+   "goal": "能说出和听懂钟点、日期、星期、年龄和价格",
+   "rationale": "时间词和数字是安排与交易的前提；汉语时间词放在动词前，顺序从大到小",
+   "kcs": [
+    "kt:zh-time-expressions",
+    "kt:zh-nominal-predicate",
+    "kt:zh-money-prices"
+   ]
+  },
+  {
+   "id": "l1-05",
+   "section": "一级",
+   "title": "我的家与我的东西",
+   "goal": "能说家里有几口人、有什么东西、东西在哪儿",
+   "rationale": "\"有\"表领有和存在，\"在\"表位置，是两个最基本的动词",
+   "kcs": [
+    "kt:zh-you-sentence",
+    "kt:zh-ji-duoshao",
+    "kt:zh-mei-negation",
+    "kt:zh-zai-location",
+    "kt:zh-locatives",
+    "kt:zh-lex-family",
+    "kt:zh-he-conjunction"
+   ]
+  },
+  {
+   "id": "l1-06",
+   "section": "一级",
+   "title": "我的一天",
+   "goal": "能说每天几点做什么、在哪儿做、怎么去",
+   "rationale": "动词谓语句加上时间、地点、方式状语，就能描述一天；汉语状语一律在动词前",
+   "kcs": [
+    "kt:zh-verb-predicate",
+    "kt:zh-lex-daily-verbs",
+    "kt:zh-time-word-order",
+    "kt:zh-adverbs-basic",
+    "kt:zh-lian-dong",
+    "kt:zh-transport-zuo",
+    "kt:zh-fn-daily-routine"
+   ]
+  },
+  {
+   "id": "l1-07",
+   "section": "一级",
+   "title": "喜欢、想要与能力",
+   "goal": "能说喜欢什么、想做什么、会做什么",
+   "rationale": "能愿动词\"想、要、会、能、可以\"表达意愿和能力，是最常用的情态手段",
+   "kcs": [
+    "kt:zh-xihuan",
+    "kt:zh-xiang-yao",
+    "kt:zh-hui-ability",
+    "kt:zh-neng-keyi",
+    "kt:zh-lex-food-drink",
+    "kt:zh-fn-ordering"
+   ]
+  },
+  {
+   "id": "l1-08",
+   "section": "一级",
+   "title": "描述与评价",
+   "goal": "能用形容词描述人和东西，作简单评价",
+   "rationale": "形容词直接作谓语，前面通常要加\"很\"，这是和英语、日语都不同的地方",
+   "kcs": [
+    "kt:zh-adjective-predicate",
+    "kt:zh-lex-common-adjectives",
+    "kt:zh-le-modal-basic",
+    "kt:zh-ne-ba-particles",
+    "kt:zh-fn-describe-things"
+   ]
+  },
+  {
+   "id": "l1-09",
+   "section": "一级",
+   "title": "请求、邀请与建议",
+   "goal": "能请人做事、邀请别人、提出建议并回应",
+   "rationale": "祈使句加\"请\"\"吧\"，配合正反问，就能完成日常请求和邀约",
+   "kcs": [
+    "kt:zh-imperatives",
+    "kt:zh-affirmative-negative-question",
+    "kt:zh-haishi-question",
+    "kt:zh-fn-invite-suggest",
+    "kt:zh-verb-reduplication"
+   ]
+  },
+  {
+   "id": "l1-10",
+   "section": "一级",
+   "title": "读写听入门",
+   "goal": "能读懂拼音和简单汉字写的告示、菜单与短句，听懂慢速日常短对话",
+   "rationale": "把一级的语言知识汇总为可测的听读写任务",
+   "kcs": [
+    "kt:zh-skill-listen-basic",
+    "kt:zh-skill-read-basic",
+    "kt:zh-skill-write-basic",
+    "kt:zh-orth-punctuation"
+   ]
+  },
+  {
+   "id": "l2-01",
+   "section": "二级",
+   "title": "过去的事：了与过",
+   "goal": "能说已经做了什么、做过什么",
+   "rationale": "汉语没有时态而用\"动作的态\"：了₁ 表完成，过 表经历，是从现在叙述走向过去叙述的关键",
+   "kcs": [
+    "kt:zh-le-perfective",
+    "kt:zh-mei-you-past",
+    "kt:zh-guo-experience",
+    "kt:zh-shi-de",
+    "kt:zh-fn-past-experience"
+   ]
+  },
+  {
+   "id": "l2-02",
+   "section": "二级",
+   "title": "正在发生与持续",
+   "goal": "能说明正在做什么、状态在持续",
+   "rationale": "进行（正在、呢）和持续（着）区分动作的进行与状态的持续",
+   "kcs": [
+    "kt:zh-zhengzai",
+    "kt:zh-zhe-durative",
+    "kt:zh-skill-describe-picture"
+   ]
+  },
+  {
+   "id": "l2-03",
+   "section": "二级",
+   "title": "比较",
+   "goal": "能比较两个人或东西的高矮、大小、好坏",
+   "rationale": "汉语比较句\"A 比 B＋形容词\"不能再加\"很\"，是高频易错点",
+   "kcs": [
+    "kt:zh-bi-comparison",
+    "kt:zh-yiyang",
+    "kt:zh-superlative-zui",
+    "kt:zh-fn-shopping",
+    "kt:zh-you-comparison"
+   ]
+  },
+  {
+   "id": "l2-04",
+   "section": "二级",
+   "title": "补语入门：结果与程度",
+   "goal": "能说动作的结果和做得怎么样",
+   "rationale": "补语是汉语最有特色的语法系统；结果补语和情态补语是最先需要的两类",
+   "kcs": [
+    "kt:zh-result-complements",
+    "kt:zh-degree-complement-de",
+    "kt:zh-duration-complement",
+    "kt:zh-frequency-complement",
+    "kt:zh-degree-extreme"
+   ]
+  },
+  {
+   "id": "l2-05",
+   "section": "二级",
+   "title": "方向与位置的移动",
+   "goal": "能说明人和东西往哪儿移动",
+   "rationale": "趋向补语把\"移动的方向\"放在动词后，是表达位移的核心手段",
+   "kcs": [
+    "kt:zh-directional-simple",
+    "kt:zh-directional-compound",
+    "kt:zh-cong-dao-li",
+    "kt:zh-dui-gei-gen",
+    "kt:zh-fn-directions",
+    "kt:zh-lex-transport-places"
+   ]
+  },
+  {
+   "id": "l2-06",
+   "section": "二级",
+   "title": "原因、转折与条件的连接",
+   "goal": "能用简单复句说明原因、转折、先后和条件",
+   "rationale": "关联词成对使用（因为……所以……）是汉语复句的基本格局",
+   "kcs": [
+    "kt:zh-yinwei-suoyi",
+    "kt:zh-suiran-danshi",
+    "kt:zh-ruguo-jiu",
+    "kt:zh-xian-zai",
+    "kt:zh-huozhe-haishi",
+    "kt:zh-hui-prediction",
+    "kt:zh-zai-you-hai"
+   ]
+  },
+  {
+   "id": "l2-07",
+   "section": "二级",
+   "title": "天气、身体与健康",
+   "goal": "能谈天气，说明身体哪儿不舒服，在医院和药店简单交流",
+   "rationale": "生存需要：看病与天气是高频场景",
+   "kcs": [
+    "kt:zh-lex-weather",
+    "kt:zh-lex-body-health",
+    "kt:zh-youdianr-yidianr",
+    "kt:zh-fn-symptoms"
+   ]
+  },
+  {
+   "id": "l2-08",
+   "section": "二级",
+   "title": "汉字、词汇与二级听读写",
+   "goal": "能认读二级汉字，借助语素猜词义，听懂和读懂日常话题的短对话与短文，写简短消息",
+   "rationale": "汉语合成词由语素组成，掌握语素就能成批学词",
+   "kcs": [
+    "kt:zh-hanzi-l2",
+    "kt:zh-morphemes-compounds",
+    "kt:zh-lex-l2-core",
+    "kt:zh-skill-listen-l2",
+    "kt:zh-skill-read-l2",
+    "kt:zh-skill-write-messages",
+    "kt:zh-pinyin-erhua"
+   ]
+  },
+  {
+   "id": "l3-01",
+   "section": "三级",
+   "title": "把字句",
+   "goal": "能说明怎样处置某物：把书放在桌子上",
+   "rationale": "\"把\"字句是汉语表达\"处置\"的特殊句式，需要结果补语或趋向补语作基础",
+   "kcs": [
+    "kt:zh-v-zai-dao-gei",
+    "kt:zh-ba-sentence",
+    "kt:zh-ba-placement",
+    "kt:zh-fn-instructions"
+   ]
+  },
+  {
+   "id": "l3-02",
+   "section": "三级",
+   "title": "被动与使役",
+   "goal": "能说明被别人做了什么、让别人做什么",
+   "rationale": "\"被\"字句多表示不如意的事；\"让/叫/使\"是兼语使役，和英语、日语的使役对比明显",
+   "kcs": [
+    "kt:zh-bei-passive",
+    "kt:zh-notional-passive",
+    "kt:zh-jianyu-causative"
+   ]
+  },
+  {
+   "id": "l3-03",
+   "section": "三级",
+   "title": "可能补语与趋向补语的引申",
+   "goal": "能说明能否做到（听得懂、买不到），理解\"起来、下去、出来、下来\"的引申义",
+   "rationale": "可能补语是汉语表达能力或可能性的独特形式，和\"能\"分工不同",
+   "kcs": [
+    "kt:zh-potential-complements",
+    "kt:zh-directional-extended"
+   ]
+  },
+  {
+   "id": "l3-04",
+   "section": "三级",
+   "title": "情态与推测",
+   "goal": "能表达应该、必须、可能、大概",
+   "rationale": "情态副词与能愿动词共同表达说话人的判断",
+   "kcs": [
+    "kt:zh-yinggai-bixu",
+    "kt:zh-keneng-dagai",
+    "kt:zh-yao-le",
+    "kt:zh-fn-advice"
+   ]
+  },
+  {
+   "id": "l3-05",
+   "section": "三级",
+   "title": "存现、话题与名词修饰",
+   "goal": "能描述某处存在或出现了什么，用长定语描述人和事物",
+   "rationale": "存现句和\"的\"字定语从句是汉语描写的两大手段；话题句是汉语语序的灵活之处",
+   "kcs": [
+    "kt:zh-existential-sentences",
+    "kt:zh-de-relative",
+    "kt:zh-de-di-de",
+    "kt:zh-topic-comment",
+    "kt:zh-phrase-types"
+   ]
+  },
+  {
+   "id": "l3-06",
+   "section": "三级",
+   "title": "更多复句与关联",
+   "goal": "能用递进、选择、条件、目的复句组织较长的话",
+   "rationale": "三级起关联词的种类明显增加，需要成组对比",
+   "kcs": [
+    "kt:zh-budan-erqie",
+    "kt:zh-zhiyao-jiu",
+    "kt:zh-weile",
+    "kt:zh-yibian-yibian",
+    "kt:zh-yi-jiu",
+    "kt:zh-lian-dou",
+    "kt:zh-chule-yiwai"
+   ]
+  },
+  {
+   "id": "l3-07",
+   "section": "三级",
+   "title": "社会生活与交往",
+   "goal": "能谈学习、工作、爱好和人际关系，在服务场景中提出要求",
+   "rationale": "话题扩展到个人生活之外的日常社会领域",
+   "kcs": [
+    "kt:zh-lex-l3-core",
+    "kt:zh-hanzi-l3",
+    "kt:zh-lex-measure-extended",
+    "kt:zh-fn-phone-appointments",
+    "kt:zh-fn-complaints",
+    "kt:zh-soc-address-terms",
+    "kt:zh-soc-politeness",
+    "kt:zh-skill-listen-l3",
+    "kt:zh-skill-read-l3",
+    "kt:zh-skill-write-l3",
+    "kt:zh-skill-speak-l3"
+   ]
+  },
+  {
+   "id": "l4-01",
+   "section": "四级",
+   "title": "时间的精细表达",
+   "goal": "能精确表达动作的阶段、时间关系和频率",
+   "rationale": "中等阶段需要把\"了、过、着、在\"与时间副词组合，表达更细的时间关系",
+   "kcs": [
+    "kt:zh-le-double",
+    "kt:zh-jiu-cai",
+    "kt:zh-gang-gangcai",
+    "kt:zh-time-clauses",
+    "kt:zh-chadianr"
+   ]
+  },
+  {
+   "id": "l4-02",
+   "section": "四级",
+   "title": "强调与反问",
+   "goal": "能用反问、双重否定和副词表达强调与态度",
+   "rationale": "反问句和语气副词是汉语表达态度最常用的手段",
+   "kcs": [
+    "kt:zh-rhetorical-questions",
+    "kt:zh-double-negation",
+    "kt:zh-modal-adverbs",
+    "kt:zh-interrogative-indefinite"
+   ]
+  },
+  {
+   "id": "l4-03",
+   "section": "四级",
+   "title": "让步、转折与假设的扩展",
+   "goal": "能用即使、不管、既然、要不然等组织论证",
+   "rationale": "中等阶段的关联词用于表达立场和推理",
+   "kcs": [
+    "kt:zh-jishi-ye",
+    "kt:zh-buguan-dou",
+    "kt:zh-jiran-jiu",
+    "kt:zh-yaoburan",
+    "kt:zh-erqie-faner",
+    "kt:zh-bushi-ershi"
+   ]
+  },
+  {
+   "id": "l4-04",
+   "section": "四级",
+   "title": "固定格式与口语格式",
+   "goal": "能理解和使用常见固定格式和口语格式",
+   "rationale": "固定格式（越来越……、一……也不……）和口语格式（……什么的、看你说的）是成块学的",
+   "kcs": [
+    "kt:zh-fixed-formats",
+    "kt:zh-colloquial-formats",
+    "kt:zh-reduplication",
+    "kt:zh-lixin-ci"
+   ]
+  },
+  {
+   "id": "l4-05",
+   "section": "四级",
+   "title": "叙述与说明",
+   "goal": "能连贯讲述经历、说明情况，写叙事与说明短文",
+   "rationale": "中等阶段的活动：从句子走向段落",
+   "kcs": [
+    "kt:zh-discourse-connectives",
+    "kt:zh-numbers-large-approx",
+    "kt:zh-hanzi-l4",
+    "kt:zh-lex-l4-core",
+    "kt:zh-skill-listen-l4",
+    "kt:zh-skill-read-l4",
+    "kt:zh-skill-speak-l4",
+    "kt:zh-skill-write-l4",
+    "kt:zh-str-paraphrase",
+    "kt:zh-str-guess-morphemes"
+   ]
+  },
+  {
+   "id": "l5-01",
+   "section": "五级",
+   "title": "观点与论证",
+   "goal": "能就社会话题表达并论证观点，回应不同意见",
+   "rationale": "中等后段的核心任务是论证，需要立场标记与让步、递进的组合",
+   "kcs": [
+    "kt:zh-fn-opinion",
+    "kt:zh-stance-markers",
+    "kt:zh-fn-hedging",
+    "kt:zh-fn-discussion",
+    "kt:zh-dui-laishuo"
+   ]
+  },
+  {
+   "id": "l5-02",
+   "section": "五级",
+   "title": "书面关联与介词结构",
+   "goal": "能用书面介词结构和关联词组织说明和议论",
+   "rationale": "书面汉语大量使用\"对于、关于、通过、根据、由于\"等介词结构",
+   "kcs": [
+    "kt:zh-written-prepositions",
+    "kt:zh-complex-written",
+    "kt:zh-soc-written-style",
+    "kt:zh-hanzi-l5",
+    "kt:zh-lex-l5-core",
+    "kt:zh-skill-listen-l5",
+    "kt:zh-skill-read-l5",
+    "kt:zh-skill-write-l5",
+    "kt:zh-yuqi-buru"
+   ]
+  },
+  {
+   "id": "l5-03",
+   "section": "五级",
+   "title": "社会文化与得体",
+   "goal": "能理解节日习俗、人际交往礼节和面子观念，在交际中得体应对",
+   "rationale": "社会文化知识决定\"说得得体\"，中等阶段开始系统接触",
+   "kcs": [
+    "kt:zh-soc-culture-customs",
+    "kt:zh-soc-face-modesty",
+    "kt:zh-fn-congratulate-condole",
+    "kt:zh-lex-chengyu-basic"
+   ]
+  },
+  {
+   "id": "l6-01",
+   "section": "六级",
+   "title": "精确与抽象",
+   "goal": "能就抽象话题精确表达，使用书面词汇和长定语",
+   "rationale": "中等阶段的终点：表达复杂、抽象的内容",
+   "kcs": [
+    "kt:zh-complex-attributives",
+    "kt:zh-nominalization-written",
+    "kt:zh-lex-abstract-collocation",
+    "kt:zh-hanzi-l6",
+    "kt:zh-lex-l6-core",
+    "kt:zh-synonym-discrimination"
+   ]
+  },
+  {
+   "id": "l6-02",
+   "section": "六级",
+   "title": "职场与专业交流",
+   "goal": "能在工作中做汇报、参加会议、写工作邮件和报告",
+   "rationale": "职业领域是中等后段学习者的主要需求之一",
+   "kcs": [
+    "kt:zh-fn-meetings",
+    "kt:zh-skill-presentation",
+    "kt:zh-skill-write-report",
+    "kt:zh-fn-describe-data",
+    "kt:zh-skill-listen-l6",
+    "kt:zh-skill-read-l6",
+    "kt:zh-skill-translate-mid"
+   ]
+  },
+  {
+   "id": "l7-01",
+   "section": "七—九级",
+   "title": "高等：语体、修辞与文言遗留",
+   "goal": "能在不同语体间自如转换，理解常见修辞和书面文言成分",
+   "rationale": "高等阶段的目标是\"得体与精确\"，书面语里仍保留大量文言成分",
+   "kcs": [
+    "kt:zh-classical-remnants",
+    "kt:zh-rhetoric",
+    "kt:zh-register-control",
+    "kt:zh-soc-varieties",
+    "kt:zh-lex-chengyu-advanced",
+    "kt:zh-hanzi-l7",
+    "kt:zh-lex-l7-core"
+   ]
+  },
+  {
+   "id": "l7-02",
+   "section": "七—九级",
+   "title": "高等：学术、专业与文学活动",
+   "goal": "能读懂学术文献和文学作品，听懂专业讲座，写学术论文，做专业口译笔译",
+   "rationale": "高等阶段的活动：综合、论证、创造与中介",
+   "kcs": [
+    "kt:zh-skill-listen-advanced",
+    "kt:zh-skill-read-advanced",
+    "kt:zh-skill-speak-advanced",
+    "kt:zh-skill-write-academic",
+    "kt:zh-skill-translate-advanced",
+    "kt:zh-str-implicature"
+   ]
+  }
+ ]
+}

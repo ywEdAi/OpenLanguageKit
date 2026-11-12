@@ -1,0 +1,236 @@
+{
+ "schemaVersion": 2,
+ "language": "en",
+ "sources": [
+  {
+   "id": "src:en:core-inventory",
+   "title": "British Council / Eaquals Core Inventory for General English, 2nd edition (2015)",
+   "url": "https://www.teachingenglish.org.uk/sites/teacheng/files/pub-british-council-eaquals-core-inventoryv2.pdf",
+   "authority": "official_framework",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "逐条读取 PDF 第 6 页总览表、附录 B（五个 CEFR 情景的能力清单）、附录 C（文本类型行名）、附录 D（行名）与附录 E（1–203 编号条目及其级别）。附录 C、D 的级别格子为底纹，未能机器读取。",
+   "licenseNote": "只登记条目名称、编号、级别与页码；中文说明、例句与掌握标准均为原创，不复制附录 E 的例句。"
+  },
+  {
+   "id": "src:en:cefr-2001",
+   "title": "Council of Europe (2001) Common European Framework of Reference for Languages: Learning, teaching, assessment",
+   "url": "https://www.coe.int/en/web/common-european-framework-reference-languages",
+   "authority": "official_framework",
+   "accessStatus": "unavailable",
+   "checkedOn": "2026-11-07",
+   "scope": "本轮未取得正文；仅作为补充类别（语音、拼写、礼貌规约、中介等）的结构参照，章节号待核对。",
+   "licenseNote": "只引用类别名称与章节号。"
+  },
+  {
+   "id": "src:en:cefr-cv-2020",
+   "title": "Council of Europe (2020) CEFR Companion Volume",
+   "url": "https://rm.coe.int/common-european-framework-of-reference-for-languages-learning-teaching/16809ea0d4",
+   "authority": "official_framework",
+   "accessStatus": "unavailable",
+   "checkedOn": "2026-11-07",
+   "scope": "官方 PDF 返回 403，本轮未读取。后续用于校准听说读写与中介活动的分级描述。",
+   "licenseNote": "未使用其内容。"
+  },
+  {
+   "id": "src:en:noun-phrases",
+   "title": "Cambridge English Grammar Today · Noun phrases",
+   "url": "https://dictionary.cambridge.org/grammar/british-grammar/noun-phrases",
+   "authority": "publisher",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对中心词、前后依存成分、特指与类指的正文。",
+   "licenseNote": "仅作解释与范围参照；例句、中文说明和任务标准原创。"
+  },
+  {
+   "id": "src:en:nouns",
+   "title": "Cambridge English Grammar Today · Nouns",
+   "url": "https://dictionary.cambridge.org/grammar/british-grammar/nouns-types-of-nouns",
+   "authority": "publisher",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对名词类别、词尾及动名词作为名词的正文。",
+   "licenseNote": "仅作解释与范围参照；例句、中文说明和任务标准原创。"
+  },
+  {
+   "id": "src:en:present",
+   "title": "Cambridge English Grammar Today · Present",
+   "url": "https://dictionary.cambridge.org/grammar/british-grammar/present",
+   "authority": "publisher",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对现在时间概述及现在相关形式的目录；各细分形式并非全部正文均已核对。",
+   "licenseNote": "仅作解释与范围参照；例句、中文说明和任务标准原创。"
+  },
+  {
+   "id": "src:en:present-compare",
+   "title": "Cambridge English Grammar Today · Present simple or present continuous?",
+   "url": "https://dictionary.cambridge.org/uk/grammar/british-grammar/present-simple-or-present-continuous",
+   "authority": "publisher",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对恒常与临时、一般与当前事件、状态动词及 be 的临时行为用法。",
+   "licenseNote": "仅作解释与范围参照；例句、中文说明和任务标准原创。"
+  },
+  {
+   "id": "src:en:past",
+   "title": "Cambridge English Grammar Today · Past",
+   "url": "https://dictionary.cambridge.org/grammar/british-grammar/past",
+   "authority": "publisher",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对过去时间概述与列出的形式；各细分主题正文未全部打开。",
+   "licenseNote": "仅作解释与范围参照；例句、中文说明和任务标准原创。"
+  },
+  {
+   "id": "src:en:past-perfect-compare",
+   "title": "Cambridge English Grammar Today · Past perfect simple or past perfect continuous?",
+   "url": "https://dictionary.cambridge.org/us/grammar/british-grammar/past-perfect-simple-or-past-perfect-continuous",
+   "authority": "publisher",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对完成、持续、结果与时长的对比和部分状态动词限制。",
+   "licenseNote": "仅作解释与范围参照；例句、中文说明和任务标准原创。"
+  },
+  {
+   "id": "src:en:future",
+   "title": "Cambridge English Grammar Today · Future",
+   "url": "https://dictionary.cambridge.org/grammar/british-grammar/future-",
+   "authority": "publisher",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对将来意义可由多种形式表达的概述、例项与细分目录。",
+   "licenseNote": "仅作解释与范围参照；例句、中文说明和任务标准原创。"
+  },
+  {
+   "id": "src:en:going-to",
+   "title": "Cambridge English Grammar Today · Future: be going to",
+   "url": "https://dictionary.cambridge.org/uk/grammar/british-grammar/will-or-be-going-to",
+   "authority": "publisher",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对 form、intentions、predictions、commands、与 will 对比的正文。",
+   "licenseNote": "仅作解释与范围参照；例句、中文说明和任务标准原创。"
+  },
+  {
+   "id": "src:en:will",
+   "title": "Cambridge English Grammar Today · Will",
+   "url": "https://dictionary.cambridge.org/grammar/british-grammar/will/",
+   "authority": "publisher",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对将来确定性、预测、即时决定及条件句用途。",
+   "licenseNote": "仅作解释与范围参照；例句、中文说明和任务标准原创。"
+  },
+  {
+   "id": "src:en:modality",
+   "title": "Cambridge English Grammar Today · Modality: meanings and uses",
+   "url": "https://dictionary.cambridge.org/grammar/british-grammar/meanings-and-uses",
+   "authority": "publisher",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对 modal meaning 及 certainty、possibility、obligation、permission、request、ability 表。",
+   "licenseNote": "仅作解释与范围参照；例句、中文说明和任务标准原创。"
+  },
+  {
+   "id": "src:en:conditionals",
+   "title": "Cambridge English Grammar Today · Conditionals",
+   "url": "https://dictionary.cambridge.org/grammar/british-grammar/conditional-sentences",
+   "authority": "publisher",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对想象情境、条件与主句、时态选择、语序以及进行形式的正文。",
+   "licenseNote": "仅作解释与范围参照；例句、中文说明和任务标准原创。"
+  },
+  {
+   "id": "src:en:conditionals-wishes",
+   "title": "Cambridge English Grammar Today · Conditionals and wishes",
+   "url": "https://dictionary.cambridge.org/grammar/british-grammar/conditionals-and",
+   "authority": "publisher",
+   "accessStatus": "checked_index",
+   "checkedOn": "2026-11-07",
+   "scope": "核对目录列出 wishes、if only、in case 等；没有核对所有子页面正文。",
+   "licenseNote": "仅作解释与范围参照；例句、中文说明和任务标准原创。"
+  },
+  {
+   "id": "src:en:passives",
+   "title": "Cambridge English Grammar Today · Passives with and without an agent",
+   "url": "https://dictionary.cambridge.org/grammar/british-grammar/passives",
+   "authority": "publisher",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对 by 表施事、with 表工具、省略施事及非人称被动的正文。",
+   "licenseNote": "仅作解释与范围参照；例句、中文说明和任务标准原创。"
+  },
+  {
+   "id": "src:en:reported-speech",
+   "title": "Cambridge English Grammar Today · Reported speech",
+   "url": "https://dictionary.cambridge.org/grammar/british-grammar/reporting-clauses",
+   "authority": "publisher",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对直接间接引语、引述与被引述分句、人称时态变化、标点和报告动词。",
+   "licenseNote": "仅作解释与范围参照；例句、中文说明和任务标准原创。"
+  },
+  {
+   "id": "src:en:question-tags",
+   "title": "Cambridge English Grammar Today · Tags",
+   "url": "https://dictionary.cambridge.org/grammar/british-grammar/question-tags",
+   "authority": "publisher",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对 tags 的用途与助动词、情态动词、代词构成。",
+   "licenseNote": "仅作解释与范围参照；例句、中文说明和任务标准原创。"
+  },
+  {
+   "id": "src:en:adjectives-forms",
+   "title": "Cambridge English Grammar Today · Adjectives: forms",
+   "url": "https://dictionary.cambridge.org/us/grammar/british-grammar/adjectives-forms",
+   "authority": "publisher",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对比较级、最高级与 -ing/-ed 形容词主题。",
+   "licenseNote": "仅作解释与范围参照；例句、中文说明和任务标准原创。"
+  },
+  {
+   "id": "src:en:connected-speech",
+   "title": "British Council TeachingEnglish · Connected speech, part 1",
+   "url": "https://www.teachingenglish.org.uk/professional-development/teachers/knowing-subject/connected-speech-part-1",
+   "authority": "official_framework",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对连续语流、弱读和将语音放入词汇与语法教学的正文。",
+   "licenseNote": "仅作解释与范围参照；例句、中文说明和任务标准原创。"
+  },
+  {
+   "id": "src:en:connected-speech-2",
+   "title": "British Council TeachingEnglish · Connected speech, part 2",
+   "url": "https://www.teachingenglish.org.uk/professional-development/teachers/knowing-subject/connected-speech-part-2",
+   "authority": "official_framework",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对词边界连音的说明；其他语音节点只用作教学设计参考，不声称该页覆盖所有音系。",
+   "licenseNote": "仅作解释与范围参照；例句、中文说明和任务标准原创。"
+  },
+  {
+   "id": "src:en:word-stress",
+   "title": "British Council TeachingEnglish · Word stress",
+   "url": "https://www.teachingenglish.org.uk/professional-development/teachers/knowing-subject/word-stress",
+   "authority": "official_framework",
+   "accessStatus": "checked_text",
+   "checkedOn": "2026-11-07",
+   "scope": "核对词重音教学主题；具体新练习仍需录音核验。",
+   "licenseNote": "仅作解释与范围参照；例句、中文说明和任务标准原创。"
+  },
+  {
+   "id": "src:en:cefr-levels",
+   "title": "Council of Europe · The CEFR levels",
+   "url": "https://www.coe.int/en/web/common-european-framework-reference-languages/level-descriptions",
+   "authority": "official_framework",
+   "accessStatus": "checked_index",
+   "checkedOn": "2026-11-07",
+   "scope": "语言中立的 Can-do 与语言专属内容区分；本轮未复核各技能的完整描述符。",
+   "licenseNote": "仅作解释与范围参照；例句、中文说明和任务标准原创。"
+  }
+ ]
+}

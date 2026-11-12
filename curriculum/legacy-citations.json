@@ -1,0 +1,2547 @@
+{
+ "en": {
+  "kt:en-be-present": [],
+  "kt:en-personal-pronouns": [],
+  "kt:en-possessive-determiners": [],
+  "kt:en-possessive-genitive": [],
+  "kt:en-demonstratives": [],
+  "kt:en-common-adjectives": [],
+  "kt:en-countability": [],
+  "kt:en-much-many": [],
+  "kt:en-there-is-are": [],
+  "kt:en-be-questions": [],
+  "kt:en-do-questions": [],
+  "kt:en-wh-questions": [],
+  "kt:en-imperatives": [],
+  "kt:en-like-ing": [],
+  "kt:en-articles": [],
+  "kt:en-gerunds": [
+   {
+    "sourceId": "src:en:nouns",
+    "locator": "Gerunds",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-infinitive-patterns": [],
+  "kt:en-past-questions": [],
+  "kt:en-past-responses": [],
+  "kt:en-present-simple": [
+   {
+    "sourceId": "src:en:present",
+    "locator": "Present time; present simple for facts and regular events",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-present-continuous": [
+   {
+    "sourceId": "src:en:present-compare",
+    "locator": "Permanent and temporary; verbs not often used in the present continuous",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-past-be": [],
+  "kt:en-past-simple": [],
+  "kt:en-going-to": [
+   {
+    "sourceId": "src:en:going-to",
+    "locator": "Be going to: form; uses; intentions and predictions",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-will-future": [
+   {
+    "sourceId": "src:en:will",
+    "locator": "Will: uses; intentions and decisions",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-present-continuous-future": [],
+  "kt:en-past-continuous": [],
+  "kt:en-present-perfect": [],
+  "kt:en-present-perfect-past": [],
+  "kt:en-future-continuous": [],
+  "kt:en-past-perfect": [
+   {
+    "sourceId": "src:en:past-perfect-compare",
+    "locator": "Completion of an event; activity and duration",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-present-perfect-continuous": [],
+  "kt:en-future-perfect": [],
+  "kt:en-future-perfect-continuous": [],
+  "kt:en-past-perfect-continuous": [
+   {
+    "sourceId": "src:en:past-perfect-compare",
+    "locator": "Completion of an event; activity and duration",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-narrative-tenses": [],
+  "kt:en-would-habit": [],
+  "kt:en-future-prediction": [
+   {
+    "sourceId": "src:en:going-to",
+    "locator": "Be going to or will?",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-future-revision": [
+   {
+    "sourceId": "src:en:future",
+    "locator": "Future: overview of several forms",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-can-ability": [
+   {
+    "sourceId": "src:en:modality",
+    "locator": "Modal meaning table: ability",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-could-ability": [
+   {
+    "sourceId": "src:en:modality",
+    "locator": "Modal meaning table: ability; requests",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-would-like": [],
+  "kt:en-have-to": [
+   {
+    "sourceId": "src:en:modality",
+    "locator": "Modal meaning table: obligation; no obligation",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-should-advice": [
+   {
+    "sourceId": "src:en:modality",
+    "locator": "Modal meaning table: advice and suggestion",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-must-cant-deduction": [
+   {
+    "sourceId": "src:en:modality",
+    "locator": "Modal meaning: certainty and speculation",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-may-might-possibility": [
+   {
+    "sourceId": "src:en:modality",
+    "locator": "Modal meaning table: possible",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-past-modal-evaluation": [],
+  "kt:en-modal-obligation": [
+   {
+    "sourceId": "src:en:modality",
+    "locator": "Modal meaning table: strong obligation",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-neednt-have": [],
+  "kt:en-past-modal-deduction": [],
+  "kt:en-modal-speculation": [
+   {
+    "sourceId": "src:en:modality",
+    "locator": "Modal meaning: certainty, possibility and doubt",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-zero-conditional": [
+   {
+    "sourceId": "src:en:conditionals",
+    "locator": "Conditional sentences; verb forms in the conditional clause",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-first-conditional": [
+   {
+    "sourceId": "src:en:conditionals",
+    "locator": "Conditional sentences; verb forms in the conditional clause",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-second-conditional": [
+   {
+    "sourceId": "src:en:conditionals",
+    "locator": "Conditional sentences: past form for unlikely imagined situations",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-third-conditional": [
+   {
+    "sourceId": "src:en:conditionals",
+    "locator": "Conditional sentences: past perfect for unrealised past conditions",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-mixed-conditionals": [],
+  "kt:en-wish-present": [],
+  "kt:en-wish-regret": [],
+  "kt:en-passive-simple": [
+   {
+    "sourceId": "src:en:passives",
+    "locator": "Passives with an agent; passives without an agent",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-passive-range": [],
+  "kt:en-relative-defining": [],
+  "kt:en-relative-nondefining": [],
+  "kt:en-reported-statements": [
+   {
+    "sourceId": "src:en:reported-speech",
+    "locator": "Direct and indirect speech; reporting and reported clauses",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-reported-questions": [
+   {
+    "sourceId": "src:en:reported-speech",
+    "locator": "Reported speech: punctuation of indirect reports",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-reporting-verbs": [
+   {
+    "sourceId": "src:en:reported-speech",
+    "locator": "Reported speech: reporting verbs; say and tell",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-question-tags": [
+   {
+    "sourceId": "src:en:question-tags",
+    "locator": "Tags: uses; Tags: form",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-negative-inversion": [],
+  "kt:en-adverbs-frequency": [],
+  "kt:en-basic-intensifiers": [],
+  "kt:en-comparatives": [
+   {
+    "sourceId": "src:en:adjectives-forms",
+    "locator": "Adjectives: comparative and superlative",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-superlatives": [
+   {
+    "sourceId": "src:en:adjectives-forms",
+    "locator": "Adjectives: comparative and superlative",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对所定位正文支持的特定解释；不声明覆盖该节点一切可能用法。"
+   }
+  ],
+  "kt:en-adverbial-phrases": [],
+  "kt:en-prepositions-place": [],
+  "kt:en-prepositions-time": [],
+  "kt:en-prepositions-movement": [],
+  "kt:en-adverbs-types": [],
+  "kt:en-too-enough": [],
+  "kt:en-adjective-adverb": [],
+  "kt:en-phrasal-basic": [],
+  "kt:en-phrasal-extended": [],
+  "kt:en-phrasal-splitting": [],
+  "kt:en-fn-directions": [],
+  "kt:en-fn-routines": [],
+  "kt:en-fn-personal-info": [],
+  "kt:en-fn-greetings": [],
+  "kt:en-fn-clock-time": [],
+  "kt:en-fn-numbers": [],
+  "kt:en-fn-prices": [],
+  "kt:en-fn-past-experience": [],
+  "kt:en-fn-people": [],
+  "kt:en-fn-places": [],
+  "kt:en-fn-things": [],
+  "kt:en-fn-obligation": [],
+  "kt:en-fn-requests": [],
+  "kt:en-fn-suggestions": [],
+  "kt:en-fn-check-understanding": [],
+  "kt:en-fn-events": [],
+  "kt:en-fn-feelings": [],
+  "kt:en-fn-opinion": [],
+  "kt:en-fn-open-close": [],
+  "kt:en-fn-manage-turns": [],
+  "kt:en-fn-review": [],
+  "kt:en-fn-hopes-plans": [],
+  "kt:en-fn-argument": [],
+  "kt:en-fn-invite-participation": [],
+  "kt:en-fn-abstract-ideas": [],
+  "kt:en-fn-reactions": [],
+  "kt:en-fn-justify": [],
+  "kt:en-fn-speculate": [],
+  "kt:en-fn-initiative": [],
+  "kt:en-fn-synthesis": [],
+  "kt:en-fn-concede": [],
+  "kt:en-fn-constructive-review": [],
+  "kt:en-fn-defend-view": [],
+  "kt:en-fn-systematic-argument": [],
+  "kt:en-fn-emphasis": [],
+  "kt:en-fn-precision": [],
+  "kt:en-fn-certainty": [],
+  "kt:en-fn-hedging": [],
+  "kt:en-fn-shades-opinion": [],
+  "kt:en-fn-counterarguments": [],
+  "kt:en-fn-hypothesise": [],
+  "kt:en-and-but": [],
+  "kt:en-past-sequencing": [],
+  "kt:en-cause-effect-linkers": [],
+  "kt:en-contrast-linkers": [],
+  "kt:en-formal-signposting": [],
+  "kt:en-subsequently": [],
+  "kt:en-logical-linking": [],
+  "kt:en-register-signposting": [],
+  "kt:en-collocation": [],
+  "kt:en-colloquial-register": [],
+  "kt:en-vague-language": [],
+  "kt:en-lexical-precision": [],
+  "kt:en-false-friends": [],
+  "kt:en-formal-informal": [],
+  "kt:en-idiomatic-use": [],
+  "kt:en-phon-word-stress": [
+   {
+    "sourceId": "src:en:word-stress",
+    "locator": "word-stress",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源支持所列主题或任务范围；本节点的中文细化、例句与评价任务原创，未经教师校准。"
+   }
+  ],
+  "kt:en-phon-weak-forms": [
+   {
+    "sourceId": "src:en:connected-speech",
+    "locator": "Integrating weak forms into grammar work",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源支持所列主题或任务范围；本节点的中文细化、例句与评价任务原创，未经教师校准。"
+   }
+  ],
+  "kt:en-phon-linking": [
+   {
+    "sourceId": "src:en:connected-speech-2",
+    "locator": "Connected speech part 2: word boundaries",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源支持所列主题或任务范围；本节点的中文细化、例句与评价任务原创，未经教师校准。"
+   }
+  ],
+  "kt:en-phon-context": [
+   {
+    "sourceId": "src:en:connected-speech",
+    "locator": "How this affects native and non-native speakers",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源支持所列主题或任务范围；本节点的中文细化、例句与评价任务原创，未经教师校准。"
+   }
+  ],
+  "kt:en-phon-sentence-stress": [
+   {
+    "sourceId": "src:en:connected-speech",
+    "locator": "Connected speech and stress",
+    "supportType": "editorial_synthesis",
+    "verification": "content_checked",
+    "note": "来源支持所列主题或任务范围；本节点的中文细化、例句与评价任务原创，未经教师校准。"
+   }
+  ],
+  "kt:en-phon-word-boundaries": [
+   {
+    "sourceId": "src:en:connected-speech",
+    "locator": "Speech as a continuous stream",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源支持所列主题或任务范围；本节点的中文细化、例句与评价任务原创，未经教师校准。"
+   }
+  ],
+  "kt:en-phon-listen-repeat": [
+   {
+    "sourceId": "src:en:toefl-2026",
+    "locator": "Speaking: Listen and Repeat",
+    "supportType": "assessment_scope",
+    "verification": "content_checked",
+    "note": "来源支持所列主题或任务范围；本节点的中文细化、例句与评价任务原创，未经教师校准。"
+   }
+  ],
+  "kt:en-phon-number-discrimination": [],
+  "kt:en-skill-listening-response": [
+   {
+    "sourceId": "src:en:toefl-2026",
+    "locator": "Listening: Listen and Choose a Response",
+    "supportType": "assessment_scope",
+    "verification": "content_checked",
+    "note": "来源支持所列主题或任务范围；本节点的中文细化、例句与评价任务原创，未经教师校准。"
+   }
+  ],
+  "kt:en-skill-listening-conversation": [
+   {
+    "sourceId": "src:en:toefl-2026",
+    "locator": "Listening: Listen to a Conversation",
+    "supportType": "assessment_scope",
+    "verification": "content_checked",
+    "note": "来源支持所列主题或任务范围；本节点的中文细化、例句与评价任务原创，未经教师校准。"
+   }
+  ],
+  "kt:en-skill-listening-announcement": [
+   {
+    "sourceId": "src:en:toefl-2026",
+    "locator": "Listening: Listen to an Announcement",
+    "supportType": "assessment_scope",
+    "verification": "content_checked",
+    "note": "来源支持所列主题或任务范围；本节点的中文细化、例句与评价任务原创，未经教师校准。"
+   }
+  ],
+  "kt:en-skill-listening-academic": [
+   {
+    "sourceId": "src:en:toefl-2026",
+    "locator": "Listening: Listen to an Academic Talk",
+    "supportType": "assessment_scope",
+    "verification": "content_checked",
+    "note": "来源支持所列主题或任务范围；本节点的中文细化、例句与评价任务原创，未经教师校准。"
+   }
+  ],
+  "kt:en-skill-reading-daily": [
+   {
+    "sourceId": "src:en:toefl-2026",
+    "locator": "Reading: Read in Daily Life",
+    "supportType": "assessment_scope",
+    "verification": "content_checked",
+    "note": "来源支持所列主题或任务范围；本节点的中文细化、例句与评价任务原创，未经教师校准。"
+   }
+  ],
+  "kt:en-skill-reading-academic": [
+   {
+    "sourceId": "src:en:toefl-2026",
+    "locator": "Reading: Read an Academic Passage",
+    "supportType": "assessment_scope",
+    "verification": "content_checked",
+    "note": "来源支持所列主题或任务范围；本节点的中文细化、例句与评价任务原创，未经教师校准。"
+   }
+  ],
+  "kt:en-skill-paraphrase": [
+   {
+    "sourceId": "src:en:gre-verbal",
+    "locator": "Verbal Reasoning: understanding words and sentences",
+    "supportType": "assessment_scope",
+    "verification": "content_checked",
+    "note": "来源支持所列主题或任务范围；本节点的中文细化、例句与评价任务原创，未经教师校准。"
+   }
+  ],
+  "kt:en-skill-summary": [
+   {
+    "sourceId": "src:en:gre-verbal",
+    "locator": "Reading Comprehension: summarizing a passage",
+    "supportType": "assessment_scope",
+    "verification": "content_checked",
+    "note": "来源支持所列主题或任务范围；本节点的中文细化、例句与评价任务原创，未经教师校准。"
+   }
+  ],
+  "kt:en-skill-inference": [
+   {
+    "sourceId": "src:en:gre-verbal",
+    "locator": "Reading Comprehension: drawing conclusions; reasoning from incomplete data",
+    "supportType": "assessment_scope",
+    "verification": "content_checked",
+    "note": "来源支持所列主题或任务范围；本节点的中文细化、例句与评价任务原创，未经教师校准。"
+   }
+  ],
+  "kt:en-skill-speaking-interview": [
+   {
+    "sourceId": "src:en:toefl-2026",
+    "locator": "Speaking: Take an Interview",
+    "supportType": "assessment_scope",
+    "verification": "content_checked",
+    "note": "来源支持所列主题或任务范围；本节点的中文细化、例句与评价任务原创，未经教师校准。"
+   }
+  ]
+ },
+ "ja": {
+  "kt:ja-copula": [
+   {
+    "sourceId": "src:ja:tufs-001",
+    "locator": "Nです／Nではありません / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-topic-predicate": [
+   {
+    "sourceId": "src:ja:tufs-002",
+    "locator": "NはNです / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-nominal-question": [
+   {
+    "sourceId": "src:ja:tufs-003",
+    "locator": "Nですか / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-past-copula": [
+   {
+    "sourceId": "src:ja:tufs-004",
+    "locator": "Nでした／Nではありませんでした / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-existence": [
+   {
+    "sourceId": "src:ja:tufs-005",
+    "locator": "Nがあります／います / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-location-existence": [
+   {
+    "sourceId": "src:ja:tufs-006",
+    "locator": "NにNがあります／います / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-spatial-nouns": [
+   {
+    "sourceId": "src:ja:tufs-007",
+    "locator": "Nの上／下／中／前／後 / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-noun-no-noun": [
+   {
+    "sourceId": "src:ja:tufs-008",
+    "locator": "NのN / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-i-adjective-noun": [
+   {
+    "sourceId": "src:ja:tufs-009",
+    "locator": "AいN / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-na-adjective-noun": [
+   {
+    "sourceId": "src:ja:tufs-010",
+    "locator": "NAなN / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-demonstrative-things": [
+   {
+    "sourceId": "src:ja:tufs-011",
+    "locator": "これ／それ／あれ / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-demonstrative-places": [
+   {
+    "sourceId": "src:ja:tufs-012",
+    "locator": "ここ／そこ／あそこ / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-demonstrative-modifiers": [
+   {
+    "sourceId": "src:ja:tufs-013",
+    "locator": "このN／そのN／あのN / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-demonstrative-questions": [
+   {
+    "sourceId": "src:ja:tufs-014",
+    "locator": "どれ／どこ／どのN / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-numerals-system": [
+   {
+    "sourceId": "src:ja:tufs-015",
+    "locator": "数詞（1） / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-numerals-variants": [
+   {
+    "sourceId": "src:ja:tufs-016",
+    "locator": "数詞（2） / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-counters": [
+   {
+    "sourceId": "src:ja:tufs-017",
+    "locator": "助数詞 / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-hours": [
+   {
+    "sourceId": "src:ja:tufs-018",
+    "locator": "～時 / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-minutes-half": [
+   {
+    "sourceId": "src:ja:tufs-019",
+    "locator": "○○分・半 / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-deictic-days": [
+   {
+    "sourceId": "src:ja:tufs-020",
+    "locator": "昨日・今日など / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-frequency-time": [
+   {
+    "sourceId": "src:ja:tufs-021",
+    "locator": "毎日・毎週など / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-calendar-dates": [
+   {
+    "sourceId": "src:ja:tufs-022",
+    "locator": "月・日付・曜日 / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-polite-verb": [
+   {
+    "sourceId": "src:ja:tufs-023",
+    "locator": "Vます／Vません / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-verb-question": [
+   {
+    "sourceId": "src:ja:tufs-024",
+    "locator": "Vますか / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-polite-past": [
+   {
+    "sourceId": "src:ja:tufs-025",
+    "locator": "Vました/Vませんでした / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-direction-e": [
+   {
+    "sourceId": "src:ja:tufs-026",
+    "locator": "NへVます / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-object-o": [
+   {
+    "sourceId": "src:ja:tufs-027",
+    "locator": "NをVます / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-recipient-ni": [
+   {
+    "sourceId": "src:ja:tufs-028",
+    "locator": "NにNをＶます / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-time-ni": [
+   {
+    "sourceId": "src:ja:tufs-029",
+    "locator": "時＋Vます / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-i-adjective-predicate": [
+   {
+    "sourceId": "src:ja:tufs-030",
+    "locator": "Aいです／Aくありません／Aくないです / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-i-adjective-question": [
+   {
+    "sourceId": "src:ja:tufs-031",
+    "locator": "Aいですか / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-i-adjective-past": [
+   {
+    "sourceId": "src:ja:tufs-032",
+    "locator": "Aかったです／Aくありませんでした／Aくなかったです / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-degree-adverbs": [
+   {
+    "sourceId": "src:ja:tufs-034",
+    "locator": "とても・あまり / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-adjective-classes": [
+   {
+    "sourceId": "src:ja:tufs-035",
+    "locator": "イ形容詞とナ形容詞 / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-na-adjective-predicate": [
+   {
+    "sourceId": "src:ja:tufs-036",
+    "locator": "NAです／NAではありません / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-topic-part-attribute": [
+   {
+    "sourceId": "src:ja:tufs-037",
+    "locator": "N１はN２がAい／NAです / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-plain-paradigm": [
+   {
+    "sourceId": "src:ja:tufs-038",
+    "locator": "普通形の体系 / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-verb-groups": [
+   {
+    "sourceId": "src:ja:tufs-039",
+    "locator": "動詞の３種類 / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-plain-adjectives": [
+   {
+    "sourceId": "src:ja:tufs-040",
+    "locator": "形容詞の普通形 / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-plain-nominal-predicate": [
+   {
+    "sourceId": "src:ja:tufs-041",
+    "locator": "名詞述語の普通形 / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-plain-polite-forms": [
+   {
+    "sourceId": "src:ja:tufs-042",
+    "locator": "普通形と丁寧形 / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-te-form": [
+   {
+    "sourceId": "src:ja:tufs-043",
+    "locator": "Vて（て形） / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-progressive-teiru": [
+   {
+    "sourceId": "src:ja:tufs-044",
+    "locator": "Vています（進行）／Vていません / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-result-state-teiru": [
+   {
+    "sourceId": "src:ja:tufs-045",
+    "locator": "Vています（状態） / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-result-tearu": [
+   {
+    "sourceId": "src:ja:tufs-046",
+    "locator": "Vてあります / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-noun-and": [
+   {
+    "sourceId": "src:ja:tufs-047",
+    "locator": "NとN / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-noun-examples": [
+   {
+    "sourceId": "src:ja:tufs-048",
+    "locator": "NやN / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-adjective-linking": [
+   {
+    "sourceId": "src:ja:tufs-049",
+    "locator": "AくてA・NAでNA・NでN / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-tari-listing": [
+   {
+    "sourceId": "src:ja:tufs-050",
+    "locator": "Vたり、Vたりします / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-te-sequence": [
+   {
+    "sourceId": "src:ja:tufs-051",
+    "locator": "VてVます / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-particle-function": [
+   {
+    "sourceId": "src:ja:tufs-052",
+    "locator": "助詞とは / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-case-particles": [
+   {
+    "sourceId": "src:ja:tufs-053",
+    "locator": "格助詞 / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-noun-request": [
+   {
+    "sourceId": "src:ja:tufs-054",
+    "locator": "Nをください／Nをお願いします / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-quantity-request": [
+   {
+    "sourceId": "src:ja:tufs-055",
+    "locator": "Nを(数)ください／お願いします / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-te-request": [
+   {
+    "sourceId": "src:ja:tufs-056",
+    "locator": "Vてください / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-negative-question-request": [
+   {
+    "sourceId": "src:ja:tufs-057",
+    "locator": "Vてくださいませんか / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-permission": [
+   {
+    "sourceId": "src:ja:tufs-058",
+    "locator": "Vてもいいです / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-prohibition": [
+   {
+    "sourceId": "src:ja:tufs-059",
+    "locator": "Vてはいけません／Vてはだめです / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-negative-request": [
+   {
+    "sourceId": "src:ja:tufs-060",
+    "locator": "Vないでください / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-nominal-permission": [
+   {
+    "sourceId": "src:ja:tufs-061",
+    "locator": "Nでもいいです／Nではだめです / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-invitation-masenka": [
+   {
+    "sourceId": "src:ja:tufs-062",
+    "locator": "Vませんか / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-mashou": [
+   {
+    "sourceId": "src:ja:tufs-063",
+    "locator": "Vましょう / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-accept-refuse-invitation": [
+   {
+    "sourceId": "src:ja:tufs-064",
+    "locator": "誘いの受け方、断り方 / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-volitional-form": [
+   {
+    "sourceId": "src:ja:tufs-065",
+    "locator": "意志形 / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-intention-omou": [
+   {
+    "sourceId": "src:ja:tufs-066",
+    "locator": "Vようと思います／Vようと思っています / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-want-action": [
+   {
+    "sourceId": "src:ja:tufs-067",
+    "locator": "Vたいです／Vたくありません / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-past-wish": [
+   {
+    "sourceId": "src:ja:tufs-068",
+    "locator": "Vたかったです／Vたくありませんでした / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-want-object": [
+   {
+    "sourceId": "src:ja:tufs-069",
+    "locator": "Nがほしいです／Nがほしくありません / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-likes-dislikes": [
+   {
+    "sourceId": "src:ja:tufs-070",
+    "locator": "Nがすきです／Nがすきではありません／Nがきらいです / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-emotional-adjectives": [
+   {
+    "sourceId": "src:ja:tufs-071",
+    "locator": "こわい・悲しい・うれしい、など / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-koto-ga-dekiru": [
+   {
+    "sourceId": "src:ja:tufs-072",
+    "locator": "Vことができます／できません / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-noun-dekiru": [
+   {
+    "sourceId": "src:ja:tufs-073",
+    "locator": "Ｎができます／できません / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-potential-form": [
+   {
+    "sourceId": "src:ja:tufs-074",
+    "locator": "可能形 / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-deshou": [
+   {
+    "sourceId": "src:ja:tufs-075",
+    "locator": "～でしょう / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-possibility-certainty": [
+   {
+    "sourceId": "src:ja:tufs-076",
+    "locator": "～かもしれません・～にちがいありません / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-quotation-opinion": [
+   {
+    "sourceId": "src:ja:tufs-077",
+    "locator": "～と思います / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-noun-modification": [
+   {
+    "sourceId": "src:ja:tufs-078",
+    "locator": "名詞の修飾の復習 / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-relative-clause": [
+   {
+    "sourceId": "src:ja:tufs-079",
+    "locator": "V＋N / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-nominalization": [
+   {
+    "sourceId": "src:ja:tufs-080",
+    "locator": "Vこと・Vの / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-conditional-family": [
+   {
+    "sourceId": "src:ja:tufs-083",
+    "locator": "条件 / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-giving-receiving": [
+   {
+    "sourceId": "src:ja:tufs-085",
+    "locator": "やりもらい / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-benefactive-teageru": [
+   {
+    "sourceId": "src:ja:tufs-086",
+    "locator": "Vてあげます / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-teiku-tekuru": [
+   {
+    "sourceId": "src:ja:tufs-087",
+    "locator": "Vていきます／Vてきます / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-teoku-temiru": [
+   {
+    "sourceId": "src:ja:tufs-088",
+    "locator": "Vておきます／Vてみます / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-style-awareness": [
+   {
+    "sourceId": "src:ja:tufs-089",
+    "locator": "スタイルとは / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-plain-style": [
+   {
+    "sourceId": "src:ja:tufs-090",
+    "locator": "普通体 / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-polite-style": [
+   {
+    "sourceId": "src:ja:tufs-091",
+    "locator": "丁寧体 / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-honorifics": [
+   {
+    "sourceId": "src:ja:tufs-092",
+    "locator": "敬語 / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-toki": [
+   {
+    "sourceId": "src:ja:tufs-093",
+    "locator": "～とき / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-conjunctive-particles": [
+   {
+    "sourceId": "src:ja:tufs-094",
+    "locator": "接続助詞 / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-focus-particles": [
+   {
+    "sourceId": "src:ja:tufs-095",
+    "locator": "副助詞 / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-sentence-final-particles": [
+   {
+    "sourceId": "src:ja:tufs-096",
+    "locator": "終助詞 / カード",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-nagara-concession": [
+   {
+    "sourceId": "src:ja:jf-adversative",
+    "locator": "1. 書き言葉的逆接表現 / ながら(も)",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-nimo-kakawarazu": [
+   {
+    "sourceId": "src:ja:jf-adversative",
+    "locator": "1. 書き言葉的逆接表現 / にもかかわらず",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-monono": [
+   {
+    "sourceId": "src:ja:jf-adversative",
+    "locator": "1. 書き言葉的逆接表現 / ものの",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-ni-kakawarazu": [
+   {
+    "sourceId": "src:ja:jf-adversative",
+    "locator": "1. 書き言葉的逆接表現 / にかかわらず",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-to-ittemo": [
+   {
+    "sourceId": "src:ja:jf-adversative",
+    "locator": "2. 部分的に言い直す表現 / といっても",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-towaie": [
+   {
+    "sourceId": "src:ja:jf-adversative",
+    "locator": "2. 部分的に言い直す表現 / とはいえ",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-kara-toitte": [
+   {
+    "sourceId": "src:ja:jf-adversative",
+    "locator": "2. 部分的に言い直す表現 / からといって",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-okagede": [
+   {
+    "sourceId": "src:ja:jf-reason",
+    "locator": "1. 評価や気持ちの入る表現 / おかげで",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-seide": [
+   {
+    "sourceId": "src:ja:jf-reason",
+    "locator": "1. 評価や気持ちの入る表現 / せいで",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-monodakara": [
+   {
+    "sourceId": "src:ja:jf-mono2",
+    "locator": "1. ものだから",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-n-dakara": [
+   {
+    "sourceId": "src:ja:jf-reason",
+    "locator": "1. 言い訳や説明 / の(ん)だから",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-karaka": [
+   {
+    "sourceId": "src:ja:jf-reason",
+    "locator": "2. からを含む表現 / からか",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-karakoso": [
+   {
+    "sourceId": "src:ja:jf-reason",
+    "locator": "2. からを含む表現 / からこそ",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-karaniwa": [
+   {
+    "sourceId": "src:ja:jf-reason",
+    "locator": "2. からを含む表現 / からには",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-tekara": [
+   {
+    "sourceId": "src:ja:jf-time1",
+    "locator": "時間の前後関係 / てから",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-aidani": [
+   {
+    "sourceId": "src:ja:jf-time2",
+    "locator": "1. 一定の時間・期間内に終了する / あいだに",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-uchini": [
+   {
+    "sourceId": "src:ja:jf-time2",
+    "locator": "1. 一定の時間・期間内に終了する / うちに",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-madeni": [
+   {
+    "sourceId": "src:ja:jf-time2",
+    "locator": "1. 一定の時間・期間内に終了する / までに",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-na-iuchini": [
+   {
+    "sourceId": "src:ja:jf-time2",
+    "locator": "1. 一定の時間・期間内に終了する / ないうちに",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-aida-duration": [
+   {
+    "sourceId": "src:ja:jf-time2",
+    "locator": "2. 一定の時間・期間続く / あいだは",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-uchi-duration": [
+   {
+    "sourceId": "src:ja:jf-time2",
+    "locator": "2. 一定の時間・期間続く / うちは",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-mono-general": [
+   {
+    "sourceId": "src:ja:jf-mono1",
+    "locator": "1. 文末表現 / ものだ",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-mono-admonition": [
+   {
+    "sourceId": "src:ja:jf-mono1",
+    "locator": "1. 文末表現 / 訓戒・忠告",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-mono-recollection": [
+   {
+    "sourceId": "src:ja:jf-mono1",
+    "locator": "1. 文末表現 / 回顧",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-mono-impossible": [
+   {
+    "sourceId": "src:ja:jf-mono2",
+    "locator": "2. 可能形＋ものなら",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-volitional-mononara": [
+   {
+    "sourceId": "src:ja:jf-mono2",
+    "locator": "2. (ヨ)ウ形＋ものなら",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-totan": [
+   {
+    "sourceId": "src:ja:jf-instant",
+    "locator": "とたん(に) / 接续与突发性",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-yainaya": [
+   {
+    "sourceId": "src:ja:jf-instant",
+    "locator": "や否や / 上級表現・待ち構え",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-nakerebanaranai": [
+   {
+    "sourceId": "src:ja:jf-obligation",
+    "locator": "1. 話し手自身に向けた義務",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-naitoikenai": [
+   {
+    "sourceId": "src:ja:jf-obligation",
+    "locator": "1. 義務表現 / ないといけない",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-nakutewanaranai": [
+   {
+    "sourceId": "src:ja:jf-obligation",
+    "locator": "1. 義務表現 / なくてはならない",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-zaruwoenai": [
+   {
+    "sourceId": "src:ja:jf-obligation",
+    "locator": "1. 義務表現 / ざるを得ない",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-naiwake-niwa": [
+   {
+    "sourceId": "src:ja:jf-obligation",
+    "locator": "1. 義務表現 / ないわけにはいかない",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-hougaii": [
+   {
+    "sourceId": "src:ja:jf-advice",
+    "locator": "2. たらいい vs たほうがいい",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-tara-ii": [
+   {
+    "sourceId": "src:ja:jf-advice",
+    "locator": "1. 肯定的助言 / たらいい",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-bekida": [
+   {
+    "sourceId": "src:ja:jf-advice",
+    "locator": "1. 肯定的助言 / べきだ",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-negative-advice": [
+   {
+    "sourceId": "src:ja:jf-advice",
+    "locator": "否定的助言",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-instruction-youni": [
+   {
+    "sourceId": "src:ja:jf-command",
+    "locator": "1. お願いから指示へ / ように",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-instruction-koto": [
+   {
+    "sourceId": "src:ja:jf-command",
+    "locator": "1. お願いから指示へ / こと",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-teitadakimasu-instruction": [
+   {
+    "sourceId": "src:ja:jf-command",
+    "locator": "1. お願いから指示へ / ていただきます",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-passive-event": [
+   {
+    "sourceId": "src:ja:irodori-grammar",
+    "locator": "初級2 第7課 / 受身形① / PDF pp.144–145（表示ページ143–144）",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-passive-person": [
+   {
+    "sourceId": "src:ja:irodori-grammar",
+    "locator": "初級2 第10課 / 受身形② / PDF pp.157–158（表示ページ156–157）",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-passive-adversity": [
+   {
+    "sourceId": "src:ja:jf-passive",
+    "locator": "学習者からの質問１・２ / 所有受身文",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-ga-subject": [
+   {
+    "sourceId": "src:ja:tufs-explanation-053",
+    "locator": "Ⅰ が",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-ni-goal": [
+   {
+    "sourceId": "src:ja:tufs-explanation-053",
+    "locator": "Ⅲ に / 5",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-de-place": [
+   {
+    "sourceId": "src:ja:tufs-explanation-053",
+    "locator": "Ⅷ で / 2",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-de-means": [
+   {
+    "sourceId": "src:ja:tufs-explanation-053",
+    "locator": "Ⅷ で / 4–5",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-kara-made": [
+   {
+    "sourceId": "src:ja:tufs-explanation-053",
+    "locator": "Ⅴ まで・Ⅵ から",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-yori-comparison": [
+   {
+    "sourceId": "src:ja:tufs-explanation-053",
+    "locator": "Ⅶ より / 1",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-to-companion": [
+   {
+    "sourceId": "src:ja:tufs-explanation-053",
+    "locator": "Ⅹ と / 2",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-causative-form": [
+   {
+    "sourceId": "src:ja:jf-causative",
+    "locator": "文法解説26–29课 / 使役動詞",
+    "supportType": "editorial_synthesis",
+    "verification": "index_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-causative-force": [
+   {
+    "sourceId": "src:ja:jf-causative",
+    "locator": "文法解説26–29课 / 使役動詞",
+    "supportType": "editorial_synthesis",
+    "verification": "index_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-causative-permission": [
+   {
+    "sourceId": "src:ja:jf-causative",
+    "locator": "文法解説26–29课 / 使役動詞",
+    "supportType": "editorial_synthesis",
+    "verification": "index_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-causative-passive": [
+   {
+    "sourceId": "src:ja:jf-causative-passive",
+    "locator": "使役受身形 / 作り方",
+    "supportType": "editorial_synthesis",
+    "verification": "index_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-causative-passive-perspective": [
+   {
+    "sourceId": "src:ja:marugoto-b1",
+    "locator": "使役受身 / 動作主とニュアンス",
+    "supportType": "editorial_synthesis",
+    "verification": "index_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-sound-tsu": [
+   {
+    "sourceId": "src:ja:sound-tsu",
+    "locator": "1　サバイバルのためにこれだけは 1.1.1　「つ」",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-sound-r": [
+   {
+    "sourceId": "src:ja:sound-r",
+    "locator": "1　サバイバルのためにこれだけは 1.2.1　ラ行音",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-sound-z": [
+   {
+    "sourceId": "src:ja:sound-z",
+    "locator": "1　サバイバルのためにこれだけは 1.3.1　ザ行音",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-sound-pb": [
+   {
+    "sourceId": "src:ja:sound-pb",
+    "locator": "1　サバイバルのためにこれだけは 1.4.1　清濁p, b",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-sound-td": [
+   {
+    "sourceId": "src:ja:sound-td",
+    "locator": "1　サバイバルのためにこれだけは 1.5.1　清濁t, d",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-sound-kg": [
+   {
+    "sourceId": "src:ja:sound-kg",
+    "locator": "1　サバイバルのためにこれだけは 1.6.1　清濁k, g",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-sound-vowels": [
+   {
+    "sourceId": "src:ja:sound-vowels",
+    "locator": "1　サバイバルのためにこれだけは 1.7.1　母音",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-sound-pitch": [
+   {
+    "sourceId": "src:ja:sound-pitch",
+    "locator": "1　サバイバルのためにこれだけは 1.8.1　アクセント基礎",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-sound-intonation": [
+   {
+    "sourceId": "src:ja:sound-intonation",
+    "locator": "1　サバイバルのためにこれだけは 1.9.1　イントネーション基礎",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-sound-mora": [
+   {
+    "sourceId": "src:ja:sound-mora",
+    "locator": "1　サバイバルのためにこれだけは 1.10.1　拍感覚基礎",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-sound-yoon": [
+   {
+    "sourceId": "src:ja:sound-yoon",
+    "locator": "1　サバイバルのためにこれだけは 1.11.1　拗音（拍感覚含む)",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-sound-sokuon": [
+   {
+    "sourceId": "src:ja:sound-sokuon",
+    "locator": "2　円滑なコミュニケーションのために 2.1.1　拍感覚（促音）",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-sound-long": [
+   {
+    "sourceId": "src:ja:sound-long",
+    "locator": "2　円滑なコミュニケーションのために 2.2.1　拍感覚（長音）",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-sound-nasal-consonant": [
+   {
+    "sourceId": "src:ja:sound-nasal-consonant",
+    "locator": "2　円滑なコミュニケーションのために 2.3.1　拍感覚（撥音－子音前）",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-sound-nasal-other": [
+   {
+    "sourceId": "src:ja:sound-nasal-other",
+    "locator": "2　円滑なコミュニケーションのために 2.4.1　拍感覚（撥音－母音前、半母音前、摩擦音前、語末）",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-sound-loan-accent": [
+   {
+    "sourceId": "src:ja:sound-loan-accent",
+    "locator": "2　円滑なコミュニケーションのために 2.6.1　アクセント（外来語）",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-sound-compound-accent": [
+   {
+    "sourceId": "src:ja:sound-compound-accent",
+    "locator": "2　円滑なコミュニケーションのために 2.7.1　アクセント（複合名詞）",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-sound-rendaku": [
+   {
+    "sourceId": "src:ja:sound-rendaku",
+    "locator": "2　円滑なコミュニケーションのために 2.10.1　連濁",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-sound-devoice": [
+   {
+    "sourceId": "src:ja:sound-devoice",
+    "locator": "2　円滑なコミュニケーションのために 2.11.1　無声化母音の聞き取り",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-script-hiragana": [
+   {
+    "sourceId": "src:ja:tufs-kana",
+    "locator": "かな・カナの書きかた / 对应字形表",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-script-katakana": [
+   {
+    "sourceId": "src:ja:tufs-kana",
+    "locator": "かな・カナの書きかた / 对应字形表",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-script-kana-small": [
+   {
+    "sourceId": "src:ja:tufs-kana",
+    "locator": "かな・カナの書きかた / 对应字形表",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-script-dakuten": [
+   {
+    "sourceId": "src:ja:tufs-kana",
+    "locator": "かな・カナの書きかた / 对应字形表",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-jlpt-basic-reading": [
+   {
+    "sourceId": "src:ja:jlpt-levels",
+    "locator": "N5 / Reading",
+    "supportType": "assessment_scope",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-jlpt-daily-reading": [
+   {
+    "sourceId": "src:ja:jlpt-levels",
+    "locator": "N4 / Reading",
+    "supportType": "assessment_scope",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-jlpt-bridge-reading": [
+   {
+    "sourceId": "src:ja:jlpt-levels",
+    "locator": "N3 / Reading",
+    "supportType": "assessment_scope",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-jlpt-broad-reading": [
+   {
+    "sourceId": "src:ja:jlpt-levels",
+    "locator": "N2 / Reading",
+    "supportType": "assessment_scope",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-jlpt-complex-reading": [
+   {
+    "sourceId": "src:ja:jlpt-levels",
+    "locator": "N1 / Reading",
+    "supportType": "assessment_scope",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-jlpt-basic-listening": [
+   {
+    "sourceId": "src:ja:jlpt-levels",
+    "locator": "N5 / Listening",
+    "supportType": "assessment_scope",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-jlpt-daily-listening": [
+   {
+    "sourceId": "src:ja:jlpt-levels",
+    "locator": "N4 / Listening",
+    "supportType": "assessment_scope",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-jlpt-bridge-listening": [
+   {
+    "sourceId": "src:ja:jlpt-levels",
+    "locator": "N3 / Listening",
+    "supportType": "assessment_scope",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-jlpt-broad-listening": [
+   {
+    "sourceId": "src:ja:jlpt-levels",
+    "locator": "N2 / Listening",
+    "supportType": "assessment_scope",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-jlpt-complex-listening": [
+   {
+    "sourceId": "src:ja:jlpt-levels",
+    "locator": "N1 / Listening",
+    "supportType": "assessment_scope",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-conditional-to": [
+   {
+    "sourceId": "src:ja:tufs-explanation-083",
+    "locator": "と・ば・たらの使い方 / 2–3",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-conditional-ba": [
+   {
+    "sourceId": "src:ja:tufs-explanation-083",
+    "locator": "と・ば・たらの使い方 / 4–6",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-conditional-tara": [
+   {
+    "sourceId": "src:ja:tufs-explanation-083",
+    "locator": "と・ば・たらの使い方 / 7–9",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-conditional-nara": [
+   {
+    "sourceId": "src:ja:tufs-explanation-083",
+    "locator": "ならの使い方 / 10–13",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-ageru": [
+   {
+    "sourceId": "src:ja:tufs-explanation-085",
+    "locator": "あげますとくれますの使い方 / 3–6",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-kureru": [
+   {
+    "sourceId": "src:ja:tufs-explanation-085",
+    "locator": "あげますとくれますの使い方 / 3–6",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-morau": [
+   {
+    "sourceId": "src:ja:tufs-explanation-085",
+    "locator": "もらいますの使い方 / 7–8",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-tekureru": [
+   {
+    "sourceId": "src:ja:tufs-explanation-086",
+    "locator": "Vてあげます・Vてくれます / 3–4",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-temorau": [
+   {
+    "sourceId": "src:ja:tufs-explanation-086",
+    "locator": "Vてもらいます / 5–7",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-honorific-lexical": [
+   {
+    "sourceId": "src:ja:tufs-explanation-092",
+    "locator": "尊敬語 / 3①",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-honorific-oninaru": [
+   {
+    "sourceId": "src:ja:tufs-explanation-092",
+    "locator": "尊敬語 / 3②",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-honorific-rareru": [
+   {
+    "sourceId": "src:ja:tufs-explanation-092",
+    "locator": "尊敬語 / 3③",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-humble-lexical": [
+   {
+    "sourceId": "src:ja:tufs-explanation-092",
+    "locator": "謙譲語 / 6①",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-humble-osuru": [
+   {
+    "sourceId": "src:ja:tufs-explanation-092",
+    "locator": "謙譲語 / 6②",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-focus-dake": [
+   {
+    "sourceId": "src:ja:tufs-explanation-095",
+    "locator": "Ⅲ だけ・ばかり / 1",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-focus-shika": [
+   {
+    "sourceId": "src:ja:tufs-explanation-095",
+    "locator": "Ⅴ しか",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-focus-mo": [
+   {
+    "sourceId": "src:ja:tufs-explanation-095",
+    "locator": "Ⅱ も / 1",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-focus-koso": [
+   {
+    "sourceId": "src:ja:tufs-explanation-095",
+    "locator": "Ⅳ こそ",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-focus-sae": [
+   {
+    "sourceId": "src:ja:tufs-explanation-095",
+    "locator": "Ⅸ さえ / 1",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-final-yo": [
+   {
+    "sourceId": "src:ja:tufs-explanation-096",
+    "locator": "Ⅳ よ",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-final-ne": [
+   {
+    "sourceId": "src:ja:tufs-explanation-096",
+    "locator": "Ⅴ ね（ねえ） / 1",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-keredomo": [
+   {
+    "sourceId": "src:ja:tufs-082",
+    "locator": "逆接 / カード / けれども",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "来源核对形式及解释范围，当前说明与例句为原创。"
+   }
+  ],
+  "kt:ja-adv-toiedomo": [
+   {
+    "sourceId": "src:ja-advanced:reverse",
+    "locator": "2．部分的に言い直す表現：d「～といえども」",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对该用法的正文解释；此处说明、例句和掌握标准原创，来源未给出当前JLPT逐项等级。"
+   }
+  ],
+  "kt:ja-adv-koto-contrast": [
+   {
+    "sourceId": "src:ja-advanced:koto",
+    "locator": "3．従属節として用いられる「こと」：3）「～ことは～が／けれども」",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对该用法的正文解释；此处说明、例句和掌握标准原创，来源未给出当前JLPT逐项等级。"
+   }
+  ],
+  "kt:ja-adv-koto-empathy": [
+   {
+    "sourceId": "src:ja-advanced:koto",
+    "locator": "1．文の後ろに付いて、話し手の気持ちを表す「こと」：2）驚きや感嘆、同情",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对该用法的正文解释；此处说明、例句和掌握标准原创，来源未给出当前JLPT逐项等级。"
+   }
+  ],
+  "kt:ja-adv-koto-alias": [
+   {
+    "sourceId": "src:ja-advanced:koto",
+    "locator": "2．言い換えを表す「Ｎ1ことＮ2」",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对该用法的正文解释；此处说明、例句和掌握标准原创，来源未给出当前JLPT逐项等级。"
+   }
+  ],
+  "kt:ja-adv-koto-person": [
+   {
+    "sourceId": "src:ja-advanced:koto",
+    "locator": "3．従属節として用いられる「こと」：1）「～のことだから」",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对该用法的正文解释；此处说明、例句和掌握标准原创，来源未给出当前JLPT逐项等级。"
+   }
+  ],
+  "kt:ja-adv-koto-evaluation": [
+   {
+    "sourceId": "src:ja-advanced:koto",
+    "locator": "3．従属節として用いられる「こと」：2）「～ことに」",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对该用法的正文解释；此处说明、例句和掌握标准原创，来源未给出当前JLPT逐项等级。"
+   }
+  ],
+  "kt:ja-adv-koto-reason": [
+   {
+    "sourceId": "src:ja-advanced:koto",
+    "locator": "3．従属節として用いられる「こと」：4）「～ことだし」",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对该用法的正文解释；此处说明、例句和掌握标准原创，来源未给出当前JLPT逐项等级。"
+   }
+  ],
+  "kt:ja-adv-koto-quote": [
+   {
+    "sourceId": "src:ja-advanced:koto",
+    "locator": "3．従属節として用いられる「こと」：5）「（言う）ことには」",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对该用法的正文解释；此处说明、例句和掌握标准原创，来源未给出当前JLPT逐项等级。"
+   }
+  ],
+  "kt:ja-adv-koto-without": [
+   {
+    "sourceId": "src:ja-advanced:koto",
+    "locator": "3．従属節として用いられる「こと」：6）「～ことなしに」",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对该用法的正文解释；此处说明、例句和掌握标准原创，来源未给出当前JLPT逐项等级。"
+   }
+  ],
+  "kt:ja-adv-koto-required": [
+   {
+    "sourceId": "src:ja-advanced:koto",
+    "locator": "3．従属節として用いられる「こと」：7）「～ないことには」",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对该用法的正文解释；此处说明、例句和掌握标准原创，来源未给出当前JLPT逐项等级。"
+   }
+  ],
+  "kt:ja-adv-tokoro-polite": [
+   {
+    "sourceId": "src:ja-advanced:tokoro2",
+    "locator": "1．「～ところを」の他の二つの用法：1）前置き表現",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对该用法的正文解释；此处说明、例句和掌握标准原创，来源未给出当前JLPT逐项等级。"
+   }
+  ],
+  "kt:ja-adv-tokoro-expect": [
+   {
+    "sourceId": "src:ja-advanced:tokoro2",
+    "locator": "1．「～ところを」の他の二つの用法：2）逆接的な気持ち",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对该用法的正文解释；此处说明、例句和掌握标准原创，来源未给出当前JLPT逐项等级。"
+   }
+  ],
+  "kt:ja-adv-tokoro-futile": [
+   {
+    "sourceId": "src:ja-advanced:tokoro2",
+    "locator": "2．「～ところで」のもう一つの用法：例(5)(6)及其后解释",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对该用法的正文解释；此处说明、例句和掌握标准原创，来源未给出当前JLPT逐项等级。"
+   }
+  ],
+  "kt:ja-adv-tokoro-near": [
+   {
+    "sourceId": "src:ja-advanced:tokoro1",
+    "locator": "导入例(10)「もうちょっとでぶつかるところだった」及反事实说明",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对该用法的正文解释；此处说明、例句和掌握标准原创，来源未给出当前JLPT逐项等级。"
+   }
+  ],
+  "kt:ja-adv-tokoro-discover": [
+   {
+    "sourceId": "src:ja-advanced:tokoro1",
+    "locator": "导入例(14)及「きっかけ・発見」解释",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对该用法的正文解释；此处说明、例句和掌握标准原创，来源未给出当前JLPT逐项等级。"
+   }
+  ],
+  "kt:ja-adv-tokoro-contrary": [
+   {
+    "sourceId": "src:ja-advanced:tokoro1",
+    "locator": "导入例(15)及「前文で期待していたことと異なる結果」解释",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对该用法的正文解释；此处说明、例句和掌握标准原创，来源未给出当前JLPT逐项等级。"
+   }
+  ],
+  "kt:ja-adv-tokoro-ni": [
+   {
+    "sourceId": "src:ja-advanced:tokoro1",
+    "locator": "1）「～ところで、～ところに、～ところを」：例(12)(17)及に说明",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对该用法的正文解释；此处说明、例句和掌握标准原创，来源未给出当前JLPT逐项等级。"
+   }
+  ],
+  "kt:ja-adv-tokoro-wo": [
+   {
+    "sourceId": "src:ja-advanced:tokoro1",
+    "locator": "1）「～ところで、～ところに、～ところを」：例(13)(18)–(20)及を说明",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对该用法的正文解释；此处说明、例句和掌握标准原创，来源未给出当前JLPT逐项等级。"
+   }
+  ],
+  "kt:ja-adv-tokoro-de": [
+   {
+    "sourceId": "src:ja-advanced:tokoro1",
+    "locator": "1）「～ところで、～ところに、～ところを」：例(11)(16)及で说明",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对该用法的正文解释；此处说明、例句和掌握标准原创，来源未给出当前JLPT逐项等级。"
+   }
+  ],
+  "kt:ja-adv-tsumori-past": [
+   {
+    "sourceId": "src:ja-advanced:tsumori",
+    "locator": "1．「意志」を表す「～（る）つもりだ」の過去",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对该用法的正文解释；此处说明、例句和掌握标准原创，来源未给出当前JLPT逐项等级。"
+   }
+  ],
+  "kt:ja-adv-tsumori-belief-past": [
+   {
+    "sourceId": "src:ja-advanced:tsumori",
+    "locator": "2．「信念・その気」を表す「～（た）つもりだ」の過去",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对该用法的正文解释；此处说明、例句和掌握标准原创，来源未给出当前JLPT逐项等级。"
+   }
+  ],
+  "kt:ja-adv-tsumori-refusal": [
+   {
+    "sourceId": "src:ja-advanced:tsumori",
+    "locator": "3．「意志」を表す「～（る）つもりだ」の否定：1）比较",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对该用法的正文解释；此处说明、例句和掌握标准原创，来源未给出当前JLPT逐项等级。"
+   }
+  ],
+  "kt:ja-adv-tsumori-intent-denial": [
+   {
+    "sourceId": "src:ja-advanced:tsumori",
+    "locator": "3．「意志」を表す「～（る）つもりだ」の否定：2）",
+    "supportType": "direct_explanation",
+    "verification": "content_checked",
+    "note": "已核对该用法的正文解释；此处说明、例句和掌握标准原创，来源未给出当前JLPT逐项等级。"
+   }
+  ]
+ },
+ "zh": {}
+}

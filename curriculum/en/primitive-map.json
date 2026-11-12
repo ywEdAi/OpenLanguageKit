@@ -1,0 +1,5392 @@
+{
+ "lang": "en",
+ "map": [
+  {
+   "kc": "kt:en-orth-alphabet",
+   "uses": [
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "primary",
+     "binding": "易混字母名 E/I、G/J、A/R 成对听辨；幼儿用字母卡点选，检查大小写都能对上"
+    },
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "support",
+     "binding": "听字母名点出大写和小写卡片；Pre-A1 儿童以点选代替书写"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-phon-sound-inventory",
+   "uses": [
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "primary",
+     "binding": "对立对 think/sink、vest/west、ship/sheep；检查 /θ/ /v/ /ɪ-iː/ 能听辨且说出可辨"
+    },
+    {
+     "primitive": "prim:record-self-transcribe",
+     "role": "support",
+     "binding": "说最小对立句录音，自转写后看对方会听成哪个词（c55）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-orth-spelling-aloud",
+   "uses": [
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "primary",
+     "binding": "听口头拼出的名字、邮箱写进表格格子；检查 W/Y/双写 double-l 不错（c51）"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "缺对方姓名拼法，必须用 How do you spell…? 问出并核对"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-greetings",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "见面—介绍—告别回合；分支区分 Good morning/Good night，检查时段与回应匹配"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "Hi 对同学 vs Hello/Nice to meet you 对老师家长，看哪句太随意"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-soc-politeness-basic",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "称呼 Mr/Ms+姓 vs 直呼名；材料是老师、邻居、同学；检查 *Ms Lily 类错误"
+    },
+    {
+     "primitive": "prim:culture-incident",
+     "role": "support",
+     "binding": "学生称外教 Teacher 或 Ms+名 引起的小误会，判读并改写称呼"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-str-repair-basic",
+   "uses": [
+    {
+     "primitive": "prim:repair-and-backchannel",
+     "role": "primary",
+     "binding": "插入“没听清”的困难时刻，检查学习者用 Sorry? / Could you say that again? 请求重复"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "听不懂时的修补回合：Sorry? / Could you say that again, please? 替代 *What?"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "*What? vs Pardon? vs Sorry, could you…，判断哪个对陌生人失礼"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-str-gesture-contact",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "迷路/找厕所时用单词+手势+Excuse me 开启求助；检查不退回中文"
+    },
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "support",
+     "binding": "机场、商店求助场景走一遍，每步调出最少可用词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-word-order-svo",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "主语-动词-宾语-地点-时间槽位；检查 *I at home eat lunch 被定位到时间地点槽"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "Dog bites man / Man bites dog 靠语序判谁做事（c13）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-personal-pronouns",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立集合 he/she、I/me、they/them；看图人物选代词，检查口语 he/she 不混"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "只听代词判断说的是男孩还是女孩（c13），针对普通话 tā 同音"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-be-present",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "I am/you are/he is 及否定缩略归纳后用到新主语；检查形容词前不漏 be"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "I'm happy / I happy 对比，判断哪句完整"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-be-questions",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "be 前移到主语前；Are you…? / Is she…? 槽位拖拽，指出 *You are a student? 书面错"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "Yes, I am / No, she isn't 短答回合，检查短答与主语匹配"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lex-personal-info",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "填登记卡场景：first name、surname、age、address 逐项调词；检查姓名栏不颠倒"
+    },
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "support",
+     "binding": "先凭空写出各栏英文名再对照（c12）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lex-nationalities",
+   "uses": [
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "primary",
+     "binding": "国家名—国籍形容词—语言三列先回想再揭示（c12）；检查 *I'm China"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "China/Chinese 用例逐条裁判，归到 名词误作表语 类"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-personal-info",
+   "uses": [
+    {
+     "primitive": "prim:info-gap",
+     "role": "primary",
+     "binding": "缺对方年龄、职业、住址，靠 What do you do? 等问出（c58）；检查 I'm a teacher 带冠词"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "初次见面交换信息的回合与回问 And you?"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-phon-intonation-questions",
+   "uses": [
+    {
+     "primitive": "prim:contour-match",
+     "role": "primary",
+     "binding": "yes/no 问句升调、wh- 问句降调、陈述降调画轮廓；检查 wh- 不一律升"
+    },
+    {
+     "primitive": "prim:rhythm-shadow",
+     "role": "support",
+     "binding": "跟读一组问答，比较自己的句末升降曲线（c56）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-demonstratives",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "this/that/these/those 按远近与单复数选；材料是指着近处远处物品的图"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "只听 this/these 判断图中是一个还是多个"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-articles-a-an",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "a/an 按首音而非首字母选（an hour、a uniform）；检查职业前不漏冠词"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "a cat / cats 听辨判断一只还是多只（c13）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-noun-plural",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "规则 -s/-es/-ies 与 child-children、man-men 用于新名词；检查数词后带复数"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "只能靠词尾 -s 判断图中数量（c13）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-orth-inflection-spelling",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "去 e、双写、y 变 i 规则推导 make-making、write-writing、study-studies"
+    },
+    {
+     "primitive": "prim:word-shape-split",
+     "role": "support",
+     "binding": "把 stopped、carries 切回词根+词尾，验证拼写变化"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-phon-s-endings",
+   "uses": [
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "primary",
+     "binding": "/s/ /z/ /ɪz/ 三类对立：cats/dogs/buses；检查词尾 -s 不被吞掉"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "只靠听到的 -s 判断单复数或三单"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-wh-questions",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "疑问词前置槽+助动词槽；把 *Your name is what? 拖成 What's your name?"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "缺对方姓名住址等，必须用 what/who/where/how 问出（c58）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-common-adjectives",
+   "uses": [
+    {
+     "primitive": "prim:attach-position",
+     "role": "primary",
+     "binding": "形容词放名词前或 be 后，挪到名词后看出错；检查不加复数 -s"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "*bigs houses、*a car red 等用例逐条裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lex-colours",
+   "uses": [
+    {
+     "primitive": "prim:picture-describe",
+     "role": "primary",
+     "binding": "涂色或看图说 a red bag；检查颜色在名词前、数量对得上；适合幼儿"
+    },
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "support",
+     "binding": "颜色词看色块先回想再揭示（c12）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lex-dimensions",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "tall/high、long/big/large 用例裁判；检查人用 tall、山用 high"
+    },
+    {
+     "primitive": "prim:picture-describe",
+     "role": "support",
+     "binding": "比较图中两物的大小高矮，核对维度词选得对"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lex-clothes",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "早上穿衣、换季场景调词；检查 trousers/jeans 恒复数、a pair of"
+    },
+    {
+     "primitive": "prim:classifier-match",
+     "role": "support",
+     "binding": "a pair of trousers/shoes 计数，对照中文 一条/一双 的归类差异"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-numbers",
+   "uses": [
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "primary",
+     "binding": "听电话号码、房号、数量记入格子（c51）；检查 two hundred 不加 -s"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "缺对方电话号码，问出并逐位核对复述"
+    },
+    {
+     "primitive": "prim:number-system-map",
+     "role": "support",
+     "binding": "hundred/thousand 进位读法"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-numbers-ordinal-dates",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "基数→序数 first/second/third、-th 规则推到新数；检查 May the third"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "听生日、日期记录（c51），检查 13th/30th 不混"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lex-days-months",
+   "uses": [
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "primary",
+     "binding": "星期月份先按顺序回想再揭示（c12）；检查首字母大写"
+    },
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "support",
+     "binding": "一周课表走一遍，每天调出科目与时间词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-phon-number-discrimination",
+   "uses": [
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "primary",
+     "binding": "对立对 thirteen/thirty、fifteen/fifty；靠重音位置和末尾 -n 辨，检查第二音节重读"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "听价格房号中的 -teen/-ty（c51）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-prices",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "询价—还价—付款回合；分支 How much is it/are they，检查单复数一致"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "听价格与找零记入格子（c51）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-clock-time",
+   "uses": [
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "primary",
+     "binding": "听 half past seven、quarter to 等记成钟面或数字（c51）；检查不按中文“差半”理解"
+    },
+    {
+     "primitive": "prim:picture-describe",
+     "role": "support",
+     "binding": "看钟面说时间，系统核对时针分针"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-possessive-determiners",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "his/her 按物主性别选而非所属物；材料是 Tom's mother 类家庭图"
+    },
+    {
+     "primitive": "prim:reference-chain",
+     "role": "support",
+     "binding": "把 his/her 连回人物，检查指向的是拥有者"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-possessive-genitive",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "Tom's car vs the car of Tom vs the leg of the table；检查人名用 's、s' 位置"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "the boy's / the boys' 只靠撇号判一个还是多个男孩"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-possessive-pronouns",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "my book vs mine 是否后接名词；材料是 Whose is this? 一问一答"
+    },
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "support",
+     "binding": "限定词—代词配对 my→mine、her→hers 先回想"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-have-got",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "have/has、have got/has got 及否定疑问推到新主语；检查三单 has"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "I've got a dog vs I've a dog 等辨认拥有义"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-topic-family",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "画家谱介绍家人，逐层调出亲属词；检查 older/younger brother 而非 small"
+    },
+    {
+     "primitive": "prim:culture-incident",
+     "role": "support",
+     "binding": "中文 哥哥/弟弟、堂表亲区分而英语不区分引起的误解；涉及华裔儿童"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-present-simple",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "习惯事实 vs 此刻：一般现在 vs be+V；检查 *I am work 被识别（c14）"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "I work / I'm working 判断是习惯还是此刻"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-third-person-s",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "只能靠 -s 判断主语是 he 还是 they 的听读题（c13）；针对中文动词无变化"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "三单规则 -s/-es/-ies、has/does/goes 推到新动词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-do-questions",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "do/does 承载人称后动词还原；检查 *Does she likes / *doesn't works 双重标记"
+    },
+    {
+     "primitive": "prim:slot-order",
+     "role": "support",
+     "binding": "助动词槽前移成问句，否定 not 插入槽"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-adverbs-frequency",
+   "uses": [
+    {
+     "primitive": "prim:attach-position",
+     "role": "primary",
+     "binding": "always/usually/never 放在实义动词前、be 后；挪动看出错（c18）"
+    },
+    {
+     "primitive": "prim:scale-place",
+     "role": "support",
+     "binding": "never—sometimes—usually—always 频率梯度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-prepositions-time",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "in/on/at 按时间粒度选：月年/日期星期/钟点；检查 *in Monday、on the morning"
+    },
+    {
+     "primitive": "prim:role-marking",
+     "role": "support",
+     "binding": "把时间点归到 年月-日-点 层级再配介词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lex-basic-verbs",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "go home/go to school、do/make 等用例裁判（c04）；检查 *go to home"
+    },
+    {
+     "primitive": "prim:viewpoint-direction",
+     "role": "support",
+     "binding": "come/go、bring/take 按说话人位置选"
+    },
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "support",
+     "binding": "听动词指令做动作（幼儿 TPR）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-routines",
+   "uses": [
+    {
+     "primitive": "prim:grow-text",
+     "role": "primary",
+     "binding": "从 I get up at seven 扩成一天作息段落（c38）；检查转述他人时带三单 -s"
+    },
+    {
+     "primitive": "prim:picture-describe",
+     "role": "support",
+     "binding": "看作息图描述他人一天，核对动作与时间"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-topic-work-jobs",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "医院、学校、工厂场景调出职业与工作动词（c06）；检查 She is an engineer"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "猜职业游戏，靠 Do you work…? 问出"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-and-but-because",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "两短句按关系用 and/but/because 接成一句（c16）；检查不叠用 because…so"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在 but/because 处先押后句方向（c59）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-like-ing",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "like/love/hate 后接 -ing 用到新动词；检查 *I like swim"
+    },
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "support",
+     "binding": "说出自己喜欢做的三件事先回想再对照"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-would-like",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "I want vs I'd like vs Could I have 礼貌度；材料是点餐，检查 I'd like to + V"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "点餐回合中用 I'd like…，检查 to 不漏"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-countability",
+   "uses": [
+    {
+     "primitive": "prim:classifier-match",
+     "role": "primary",
+     "binding": "bread/information/advice 归到不可数，a loaf/a piece of 计量；检查不加 -s 或 a"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "a chicken / chicken 判断一只鸡还是鸡肉（c13）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-some-any",
+   "uses": [
+    {
+     "primitive": "prim:classifier-match",
+     "role": "primary",
+     "binding": "some/any/a lot of 按可数性与句型（肯否疑问）归类；检查 *I don't have some money"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "Is there any milk? 问出冰箱里缺什么"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lex-food-drink",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "早餐/超市/餐厅场景调出食物饮料（c06）；检查 bread/rice 不可数"
+    },
+    {
+     "primitive": "prim:classifier-match",
+     "role": "support",
+     "binding": "a slice of bread、a bowl of rice、a cup of tea 按容器归类"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-topic-hobbies",
+   "uses": [
+    {
+     "primitive": "prim:carry-across",
+     "role": "primary",
+     "binding": "把 My hobby is …ing 搬到自己的爱好上说（c57）；检查 -ing 不漏"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "调查同学爱好，问句被记录"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-topic-leisure",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "play/go/do + 活动用例裁判：play football、go swimming、do yoga（c04）"
+    },
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "support",
+     "binding": "周末安排走一遍，换个走向再说"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-there-is-are",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "There is/are vs have/has：存在 vs 拥有；检查 *Have a supermarket near here"
+    },
+    {
+     "primitive": "prim:picture-describe",
+     "role": "support",
+     "binding": "看房间图说有什么，核对单复数与数量"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-prepositions-place",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "在场景图中把物体和位置关系连起来再选 in/on/under/next to；检查墙上画用 on"
+    },
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "support",
+     "binding": "听 Put the cat under the table 拖到位置；适合幼儿"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-imperatives",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "Open/Don't open 判断该做还是不做；检查否定用 Don't 而非 Not"
+    },
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "support",
+     "binding": "听祈使指令做动作，否定指令时不动"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lex-town-shops",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "逛街买药、买面包、寄信场景调出店名设施（c06）；检查 chemist's/pharmacy"
+    },
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "support",
+     "binding": "在街区地图或商场楼层图上找到要去的店"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-article-the-basic",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "a vs the：首次提及 vs 已知/唯一；材料是小故事，检查 *Where is station?（c15）"
+    },
+    {
+     "primitive": "prim:reference-chain",
+     "role": "support",
+     "binding": "a dog → the dog 同指链，看 the 指回已提过的对象"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-directions",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "问路回合：Excuse me, where's…? —路线—确认；检查 turn left 不加 to/the"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "只有一方有地图，必须问出路线"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-read-signs",
+   "uses": [
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "primary",
+     "binding": "在 No parking、Keep left 等标识中找出完成任务所需的一条；检查 No+V-ing 理解为禁止"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "No smoking vs No food here 判断是禁止还是没有"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-listen-directions",
+   "uses": [
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "primary",
+     "binding": "听路线在地图上画线；检查 left/right 和 second turning 不漏"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "只记方向、序数、地标三格（c48）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-can-ability",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "can 后动词原形、无三单：检查 *He cans swim / *can swims"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "Can you…? 调查同学能力，问句被记录"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-can-could-requests",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "Can I…? vs Could you…? vs Could I possibly…? 礼貌梯度（c17）；检查 could 非过去"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "借东西、请人帮忙回合，分支同意/拒绝的回应"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lex-ways-travelling",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "by bus/on foot/in my car 用例裁判（c04）；检查 *by a bus、*by the car"
+    },
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "support",
+     "binding": "上学/旅行路线走一遍，每段调出交通方式"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lex-travel-services",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "车站买票—酒店入住场景调出 return ticket、single room 等（c06）"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "*go-and-back ticket 等直译用例裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-transactions",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "购票/入住/点餐多回合，店员反应分支；检查带 please 与礼貌请求"
+    },
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "support",
+     "binding": "服务场景走一遍后换走向（缺货、改订）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-present-continuous",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "看图判断 is cooking 是此刻正在做；检查 be 不漏（c13）"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "把动作放上时间轴“此刻进行/暂时”，再选进行时"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-past-be",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "was/were 按人称变，否定疑问不加 did；检查 *Did you be / *didn't was"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "is/was 按时间选，配合 yesterday 等材料"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-past-simple",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "有过去时间词必须用过去式，不靠时间词表达过去（c14）；检查 *Yesterday I go"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "把事件放在过去已完成区段再选形式"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-irregular-past",
+   "uses": [
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "primary",
+     "binding": "高频不规则过去式先回想再揭示，记录独立/提示后（c12）；检查 *goed"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "归纳规则 -ed，同时标出例外集合"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-phon-ed-endings",
+   "uses": [
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "primary",
+     "binding": "/t/ /d/ /ɪd/ 三类：worked/played/wanted；检查只有 t/d 后读 /ɪd/"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "只靠听到的 -ed 判断事情已发生还是习惯"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-past-questions",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "did 承载过去后动词还原；检查 *Did you went / *didn't saw"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "周末经历问答回合，检查回问 What did you do?"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-past-time-expressions",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "last Monday/in 2020/two days ago 用例裁判；检查 *on last Monday、*before two days"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "把时间短语放上过去时间轴，ago 从现在往回数"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-going-to",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "be going to 计划 vs will 临时决定（c14）；检查 be 不漏"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "把计划和有迹象的预测放在将来轴上"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-topic-holidays",
+   "uses": [
+    {
+     "primitive": "prim:carry-across",
+     "role": "primary",
+     "binding": "把假期计划表达搬到自己的假期上（c57）；检查 go on holiday"
+    },
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "support",
+     "binding": "订票—出发—住宿—游玩走一遍"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-comparatives",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "-er/more、better/worse 规则推到新形容词；检查不叠用 *more cheaper"
+    },
+    {
+     "primitive": "prim:picture-describe",
+     "role": "support",
+     "binding": "比较图中两人两物，核对比较对象与 than"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-superlatives",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "-est/most 与 the 搭配推到新词；检查 *It's biggest city"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "班级之最调查，问出 Who is the tallest?"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-basic-intensifiers",
+   "uses": [
+    {
+     "primitive": "prim:attach-position",
+     "role": "primary",
+     "binding": "very 修饰形容词、really 修饰动词，挪到动词前看 *I very like 错"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "very/really/so 用例裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-topic-shopping",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "试衣—问尺码—付款回合；检查 try it on 代词位置"
+    },
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "support",
+     "binding": "买衣服场景走一遍并换走向退换"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-orth-capitals-punctuation",
+   "uses": [
+    {
+     "primitive": "prim:one-fix-revision",
+     "role": "primary",
+     "binding": "只改大写一类（句首、I、人名地名）再改句末标点（c36）；检查 *i like it"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "先抄写短文再与范例对照标点"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-write-forms",
+   "uses": [
+    {
+     "primitive": "prim:template-write",
+     "role": "primary",
+     "binding": "真实表格的姓名、地址、日期栏，检查每栏格式（大写、日期顺序）"
+    },
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "support",
+     "binding": "在真实登记表上找到对应栏位并填写；检查 First name/Surname 不颠倒"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "先填表再与范例对照栏位（c37）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-write-messages",
+   "uses": [
+    {
+     "primitive": "prim:template-write",
+     "role": "primary",
+     "binding": "明信片、便条、短消息模板，检查称呼、正文要点、落款齐全"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "先写明信片/便条再对照范例称呼署名格式（c37）"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "给朋友 vs 给老师的留言措辞（c42）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-read-informational",
+   "uses": [
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "primary",
+     "binding": "在菜单、时刻表、广告中找到完成任务的一条；检查 24 小时制与 a.m./p.m."
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "把扫读到的时间价格填进格子（c48）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-listen-announcements",
+   "uses": [
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "primary",
+     "binding": "只记站台、时间、延误三格（c48）；检查 platform 6/16 不混"
+    },
+    {
+     "primitive": "prim:transcript-diff",
+     "role": "support",
+     "binding": "对照广播原文看漏掉的数字（c50）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-spoken-interaction-basic",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "熟悉话题问答回合，分支要求补充与回问 And you?"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "缺对方信息必须问出，问句被记录（c58）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-people",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "What's he like? vs What does he like? vs What does he look like? 回合分辨"
+    },
+    {
+     "primitive": "prim:picture-describe",
+     "role": "support",
+     "binding": "描述照片人物外貌，核对头发眼睛身高"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lex-personality-adjectives",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "friendly/kind/shy、worried 作表语用例裁判（c04）；检查 *I very worry"
+    },
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "support",
+     "binding": "人物卡先回想形容词再揭示（c12）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-ed-ing-adjectives",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "I'm bored vs I'm boring 判断是感受还是让人无聊（c13）"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "按想说感受者还是引起者选 -ed/-ing"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-phon-word-stress",
+   "uses": [
+    {
+     "primitive": "prim:contour-match",
+     "role": "primary",
+     "binding": "把 banana、photograph/photographer 的重音画成轮廓再读；检查非重读弱化"
+    },
+    {
+     "primitive": "prim:rhythm-shadow",
+     "role": "support",
+     "binding": "跟读多音节词，比较重读音节（c56）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-places",
+   "uses": [
+    {
+     "primitive": "prim:picture-describe",
+     "role": "primary",
+     "binding": "描述家乡/房间图，核对 there is 与位置；检查 have/there be 不混"
+    },
+    {
+     "primitive": "prim:grow-text",
+     "role": "support",
+     "binding": "从 My town has a park 扩成段（c38）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-things",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "It's for V-ing vs You use it to V 描述用途；材料是常见物品"
+    },
+    {
+     "primitive": "prim:picture-describe",
+     "role": "support",
+     "binding": "看物品图说出用途，核对物品与动作对得上"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lex-objects-rooms",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "家中各房间走一遍调出物品（c06）；检查 cupboard/wardrobe、cooker/cook"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "cooker/cook 等易混对用例裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-prepositions-movement",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "在路径图中连起点、路径、终点再选 into/out of/across/through；检查 walk into"
+    },
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "support",
+     "binding": "听路线指令拖动小人走路径"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-adverbs-place-manner",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "good vs well、quick vs quickly 按修饰名词还是动词选；检查 *speaks very good"
+    },
+    {
+     "primitive": "prim:attach-position",
+     "role": "support",
+     "binding": "方式副词放动词宾语后，挪动看位置变化"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-adverbial-phrases",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "动词-宾语-方式-地点-时间槽位；把 *I every day at home study 归位"
+    },
+    {
+     "primitive": "prim:attach-position",
+     "role": "support",
+     "binding": "挪动状语看意义与自然度变化（c18）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-past-continuous",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "背景进行 vs 打断事件放上时间轴；检查 be 不漏"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "was doing vs did 按背景/主线选（c14）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-before-after",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "两事件用 before/after/when 接成一句（c16）；检查从句位置不按中文“以后”"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "先在轴上排两事件先后再选连接词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-past-sequencing",
+   "uses": [
+    {
+     "primitive": "prim:sequence-retell",
+     "role": "primary",
+     "binding": "排图片顺序再用 first/then/after that/later 复述；检查不全用 and then"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "标出叙事中每句的时序位置"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-used-to",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "used to do（以前）vs be used to doing（习惯于）；检查 *I am used to get up"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "把过去习惯与现在不再做放上轴"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-past-experience",
+   "uses": [
+    {
+     "primitive": "prim:sequence-retell",
+     "role": "primary",
+     "binding": "按图讲故事，检查动词变过去式而非靠时间词"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "先讲一段再对照范例时态（c37）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-write-narrative",
+   "uses": [
+    {
+     "primitive": "prim:grow-text",
+     "role": "primary",
+     "binding": "从一句经历扩成段，每步加时间、背景、感受（c38）"
+    },
+    {
+     "primitive": "prim:one-fix-revision",
+     "role": "support",
+     "binding": "一次只改时态一致这一类（c36）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-past-participles",
+   "uses": [
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "primary",
+     "binding": "三列 go-went-gone 先回想再揭示（c12）；检查 *have went"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "归纳规则分词与不规则组（ABC、ABB 型）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-present-perfect",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "have done（与现在相关/经历）vs did（具体过去时间）（c14）；检查 *have seen…yesterday"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "经历与结果状态放上轴，看与“现在”相连"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-pp-adverbs",
+   "uses": [
+    {
+     "primitive": "prim:attach-position",
+     "role": "primary",
+     "binding": "ever/never/already/just 在助动词后、yet 在句末；挪动看出错"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "already vs yet 按肯定/否定疑问选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-present-continuous-future",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "I'm meeting（已约定）vs I'm going to vs I'll（c14）；检查日程不用一般现在"
+    },
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "support",
+     "binding": "看日程本说明天安排"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-will-future",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "will 临时决定/提议/预测 vs going to 计划；检查 *will to go/*will goes"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "will + 原形，所有人称不变"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-invitations",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "邀请—接受/婉拒带理由回合；检查 Would you like to come"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "Do you want to vs Would you like to 礼貌度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-suggestions",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "Let's/How about V-ing/Why don't we 提议与回应回合；检查 How about going"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "各提议句式后接形式对照"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-offers",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "Shall I…? / I'll… 提供帮助与接受拒绝回合；检查 *I help you"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "Can I help? vs Would you like me to…? 礼貌度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-arrangements",
+   "uses": [
+    {
+     "primitive": "prim:info-gap",
+     "role": "primary",
+     "binding": "双方日程不同，必须协商出时间地点；检查 on Friday evening（c58）"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "约见回合含改时间分支"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-informal-discussion",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "小组讨论回合：提议、同意、反对、达成一致；检查 I agree 无 be"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "标出讨论中各发言的功能（c45）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-have-to",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "have to/has to/don't have to 按人称变；检查 *She have to"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "have to vs don't have to：必须 vs 不必"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-must-mustnt",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "义务梯度：must—don't have to—mustn't（必须/不必/禁止）；材料是校规"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "must 后原形无 -s 无 to"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-should-advice",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "朋友诉苦—给建议回合；检查 should 后无 to"
+    },
+    {
+     "primitive": "prim:scale-place",
+     "role": "support",
+     "binding": "could—should—must 建议强度定位（c17）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-obligation",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "必须/不必/禁止梯度定位；检查 mustn't 不当“不必”"
+    },
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "support",
+     "binding": "在规则告示中找出必须/禁止/免费的条目"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-advice",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "求建议—给建议—回应回合；检查 advice 不可数"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "建议强度梯度 You should/You might want to（c17）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-requests",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "Please give me vs Could you…? vs Would you mind…? 按对象调（c17）"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "请求—同意/拒绝回合"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-soc-softening",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "请求的直接度梯度：I was wondering if…、Would you mind…（c17）；检查答 No, not at all"
+    },
+    {
+     "primitive": "prim:culture-incident",
+     "role": "support",
+     "binding": "答 *Yes, sure 回应 Would you mind 造成误会，判读改写"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-may-might",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "will/may/might 按把握程度放上梯度；检查 *might comes"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "情态后原形，无 to 无 -s"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-possibly-probably",
+   "uses": [
+    {
+     "primitive": "prim:attach-position",
+     "role": "primary",
+     "binding": "probably 在 will 后、won't 前；挪动看位置"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "probably/possibly/perhaps 按确定度选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-zero-conditional",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "条件与结果接成 If…,…；检查不加 so/then 叠用"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "If 句判断是普遍规律还是具体将来"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-first-conditional",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "if 从句用一般现在、主句 will；检查 *If it will rain"
+    },
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "support",
+     "binding": "条件+结果接句，比较 if/when"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-gerunds",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "Swimming is fun 中 -ing 作主语，判断哪个是动作名称"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "动词→动名词作主语/宾语/介词后，检查 *Swim is good"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-verb-to-infinitive",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "want/decide/hope + to do 用例裁判；检查 *I want go"
+    },
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "support",
+     "binding": "接 to do 的动词表先回想再揭示"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-infinitive-purpose",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "to + V 表目的 vs for + 名词；检查 *for study English"
+    },
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "support",
+     "binding": "动作+目的两句接成一句"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-much-many",
+   "uses": [
+    {
+     "primitive": "prim:classifier-match",
+     "role": "primary",
+     "binding": "much/many 按名词可数性归类；检查 *How many money/homework"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "How much/many…? 问出购物清单数量"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-determiners-wider",
+   "uses": [
+    {
+     "primitive": "prim:classifier-match",
+     "role": "primary",
+     "binding": "a few/a little/enough 按可数性配名词；检查 *a little apples"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "few vs a few 判断说话人觉得多还是少"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-articles-the-zero",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "泛指零冠词 vs 特指 the；检查 *The life is beautiful（c15）"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "I like the sports 等用例裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fewer-less",
+   "uses": [
+    {
+     "primitive": "prim:classifier-match",
+     "role": "primary",
+     "binding": "fewer+可数 vs less+不可数；标注 less people 口语可见、正式书面不宜"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "less people 口语 vs 书面裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-basic-intensifiers-2",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "a bit—quite—so 强度定位，注意英式 quite；检查 *a bit problem"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "a bit of a problem 用例裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-topic-education",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "学期：选课—上课—考试—成绩走一遍（c06）；检查 take/pass an exam"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "take/pass/fail an exam 用例裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-phrasal-basic",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "look after/look for/look up 判断意思，不按字面拆"
+    },
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "support",
+     "binding": "从对话中采集短语动词收进语块本（c02）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-that-clauses",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "I don't think he'll come vs I think he won't 否定前移偏好"
+    },
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "support",
+     "binding": "想法+内容用 that 接成一句"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-read-instructions",
+   "uses": [
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "primary",
+     "binding": "在说明书、作业要求中找出条件词 only/within/unless 所限定的一条"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "含 unless/only 的指令判断是否该做"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-read-correspondence",
+   "uses": [
+    {
+     "primitive": "prim:source-stance",
+     "role": "primary",
+     "binding": "读信辨隐含请求 Let me know if… 需回复；材料是私人与简短正式信"
+    },
+    {
+     "primitive": "prim:figurative-decode",
+     "role": "support",
+     "binding": "字面陈述背后的请求"
+    },
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "support",
+     "binding": "在邮件中找时间地点要求"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-str-skim-scan",
+   "uses": [
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "primary",
+     "binding": "限时在长文中找特定信息（扫读）；检查不逐词翻译"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "略读后给每段贴主旨标签（c25）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-spoken-monologue",
+   "uses": [
+    {
+     "primitive": "prim:grow-text",
+     "role": "primary",
+     "binding": "从一句计划扩成连贯独白，每步加连接（c38）"
+    },
+    {
+     "primitive": "prim:record-self-transcribe",
+     "role": "support",
+     "binding": "录独白自转写，看停顿与连接（c55）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-str-ask-clarification",
+   "uses": [
+    {
+     "primitive": "prim:repair-and-backchannel",
+     "role": "primary",
+     "binding": "困难时刻是对方用了生词或含糊指代，检查学习者用固定说法澄清而不是沉默或猜"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "请澄清固定说法 Sorry, what does X mean? / Do you mean…? 回合"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "*What? 与礼貌说法对比"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-str-approximate",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "卡词时用 a kind of…/a thing for…+手势继续，检查不换中文"
+    },
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "support",
+     "binding": "先自己描述目标词再揭示对照"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-phon-sentence-stress",
+   "uses": [
+    {
+     "primitive": "prim:rhythm-shadow",
+     "role": "primary",
+     "binding": "标出信息重点重读词再跟读，比较重音分布（c56）"
+    },
+    {
+     "primitive": "prim:contour-match",
+     "role": "support",
+     "binding": "同句不同重音位置对应不同含义，听后选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-phon-weak-forms",
+   "uses": [
+    {
+     "primitive": "prim:transcript-diff",
+     "role": "primary",
+     "binding": "听写含 to/of/and/can 的句子，对齐看弱读处漏了什么（c47）"
+    },
+    {
+     "primitive": "prim:rhythm-shadow",
+     "role": "support",
+     "binding": "跟读时弱读功能词，比较节奏（c56）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-events",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "过去进行（背景）vs 一般过去（主线）（c14）；检查 I was walking when it rained"
+    },
+    {
+     "primitive": "prim:sequence-retell",
+     "role": "support",
+     "binding": "按图讲一件事，区分背景句与事件句"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-feelings",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "bored/boring 等感受者 vs 引起者；材料是讲述经历中的感受"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "情绪形容词搭配 angry with/about 用例裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-past-perfect",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "两个过去事件上轴，更早者用 had done；检查无参照点不用"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "had done vs did 按是否需回溯选（c35）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-present-perfect-vs-past",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "现在完成 vs 一般过去按是否有已结束时间选（c14）"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "事件是否与现在相连放上轴"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-present-perfect-continuous",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "从过去延续到现在的过程上轴，选 have been doing；检查 *I am learning…for three years"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "have done（结果/次数）vs have been doing（过程/时长）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-for-since",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "for+时长 vs since+起点；检查 *since three years"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "在轴上标起点还是标区间"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-would-habit",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "would（反复动作）vs used to（动作与状态）；检查状态不用 would"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "过去反复动作在轴上的分布"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-opinion",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "表达观点—同意—部分同意—反对回合；检查 I agree 无 be"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "I totally disagree vs I'm not sure I agree 强度（c17）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-because-so",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "因果两句用 because 或 so 接，只用一个（c16）；检查不叠用"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "because/so 处押后句是原因还是结果（c59）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-cause-effect-linkers",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "due to+名词 vs because+从句 vs as a result 句间；检查 *due to it was"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "遇 therefore/as a result 押后句方向（c33）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-however",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "however 连两句需句号或分号，与 but 对照；检查逗号接句"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "遇 However 押转折（c33）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-contrast-linkers",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "两事物对照用 whereas/while 接成一句（c16）；检查有对照对象"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "标出对照的两边"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-contrasting-opinions",
+   "uses": [
+    {
+     "primitive": "prim:discourse-map",
+     "role": "primary",
+     "binding": "on the one hand/on the other hand 两面结构，检查两面都在且对立（c32）"
+    },
+    {
+     "primitive": "prim:grow-text",
+     "role": "support",
+     "binding": "从一面观点扩成两面段落"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-open-close",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "开启与收尾回合：Anyway, I'd better go…；检查不突然 Bye"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "对朋友 vs 对同事的收尾措辞"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-check-understanding",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "Does that make sense? / So you mean…? 确认回合"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "*Do you understand me? 居高临下 vs 得体说法"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-manage-turns",
+   "uses": [
+    {
+     "primitive": "prim:repair-and-backchannel",
+     "role": "primary",
+     "binding": "困难时刻是对方跑题或打断，检查学习者打断、换题、拉回话题的说法"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "打断—换题—回到话题回合：Sorry to interrupt…/Going back to…（c45）"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "*Wait, I want to say 生硬 vs 缓冲说法"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-informal-spoken-markers",
+   "uses": [
+    {
+     "primitive": "prim:repair-and-backchannel",
+     "role": "primary",
+     "binding": "检查 well / anyway / so 在接话、拖延、转回话题时的位置"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "在口语转写中标出 well/anyway/so 的组织功能（c45）"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "you know/like 过度使用裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-question-tags",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "助动词+人称代词、肯否反转推到新句；检查不一律 isn't it/right"
+    },
+    {
+     "primitive": "prim:contour-match",
+     "role": "support",
+     "binding": "附加问句升调（求证）vs 降调（求同）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-short-responses",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "So did I / Neither do I / Did you? 助动词与原句匹配；检查 *So do I"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "聊天中用短回应接话"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-str-ask-elaborate",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "请对方展开 Could you give an example? / What do you mean by…? 回合"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "信息不完整，必须追问细节才能完成任务（c58）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-str-self-correct",
+   "uses": [
+    {
+     "primitive": "prim:record-self-transcribe",
+     "role": "primary",
+     "binding": "录对话自转写，标出该自我修正处并重说（c55）"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "Sorry, what I meant was… 修正回合"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-future-prediction",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "有现场迹象 going to vs 个人看法 will（c14）；检查 be 不漏"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "预测依据在现在还是将来"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-certainty-scale",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "will/probably/may/might 确定度梯度排序（c34）；检查 probably 位置"
+    },
+    {
+     "primitive": "prim:attach-position",
+     "role": "support",
+     "binding": "probably 放 will 后、won't 前"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-future-continuous",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "将来某时正在进行，放上轴选 will be doing；检查 be 不漏"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "will do vs will be doing"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-must-cant-deduction",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "must/might/can't 推断梯度两端；检查否定推断用 can't 而非 mustn't"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "He must be tired 判断是推断还是义务"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-must-vs-have-to",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "must（说话人要求）vs have to（外部规则），mustn't vs don't have to"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "must 的强硬程度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-ought-to",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "ought to + 原形、否定 ought not to；检查 to 不漏"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "ought to/should 的正式度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-need-to",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "need to/needn't/don't need to；检查 *needn't to"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "needn't 作情态 vs need 作实义动词变形"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-past-modals-evaluation",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "should have/could have/might have 按评价/机会/可能选；检查 *should of"
+    },
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "support",
+     "binding": "should've 弱读与 should of 拼写对照"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-second-conditional",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "If I had… I would… 与现实有距离 vs 第一条件（c14）；检查 if 从句无 would"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "第二条件句判断是否真实"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-third-conditional",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "过去反事实 had done/would have done；检查 if 从句无 would have"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "把实际发生与假设分支放上过去轴"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-talk-films-books",
+   "uses": [
+    {
+     "primitive": "prim:sequence-retell",
+     "role": "primary",
+     "binding": "复述情节用现在时一致，检查不随意换时态"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "先写影评再对照范例（c37）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-topic-film",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "从选片—看片—评价走一遍（c06）；检查 actor/role/character"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "actor/role/character 用例裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-topic-books",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "novel/book/fiction/non-fiction 用例裁判；检查 *a history novel"
+    },
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "support",
+     "binding": "从书评中采集评价搭配（c02）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-topic-media",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "on TV/in the news/on the radio 介词用例裁判（c04）"
+    },
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "support",
+     "binding": "从媒体报道采集搭配（c05）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-topic-news",
+   "uses": [
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "primary",
+     "binding": "从新闻中采集时事搭配（c02）；检查 news 不可数"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "*a news/the news are 用例裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-passive-simple",
+   "uses": [
+    {
+     "primitive": "prim:viewpoint-direction",
+     "role": "primary",
+     "binding": "从受事视角讲事件：The bridge was built…；检查 be 不漏"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "主动 vs 被动按要强调的对象选（c20）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-reported-statements",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "引语→转述的时态后移与人称变化推到新句；检查 tell sb/say"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "say vs tell 按有无宾语选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-embedded-questions",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "间接疑问用陈述语序，疑问词后主谓不倒装；检查 *where is the station"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "Where is…? vs Could you tell me where…? 礼貌度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-adjectives-adverbs",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "careful vs carefully 修饰名词还是动词；检查 *drives careful"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "形容词→-ly 副词规则与 good→well"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-adverbs-degree-probability",
+   "uses": [
+    {
+     "primitive": "prim:attach-position",
+     "role": "primary",
+     "binding": "completely/probably 等的位置挪动，看意义与语法（c18）"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "按程度强弱选副词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-adverb-comparison",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "more carefully/faster/better 规则推到新副词；检查 *quicklier"
+    },
+    {
+     "primitive": "prim:picture-describe",
+     "role": "support",
+     "binding": "比较图中两人动作快慢"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-too-enough",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "enough—very—too 程度定位，too 带负面结果；检查 *too delicious"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "too heavy to carry 判断能否做到"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-wide-intensifiers",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "fairly—very—extremely—absolutely 强度梯度，与可分级/不可分级匹配（c17）"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "very amazing 等用例裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-adjective-collocation",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "heavy rain/strong tea 等搭配裁判（c04）；检查 *big rain"
+    },
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "support",
+     "binding": "在材料中采集形容词+名词搭配（c05）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-relative-defining",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "两句用 who/which/that 接成定语从句（c19）；检查不保留重复代词"
+    },
+    {
+     "primitive": "prim:strip-skeleton",
+     "role": "support",
+     "binding": "把后置定语从句折叠找出主干名词（c29）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-determiners-broad",
+   "uses": [
+    {
+     "primitive": "prim:classifier-match",
+     "role": "primary",
+     "binding": "most/most of the/both/either/neither 与名词形式匹配；检查 *Most of people"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "either/neither 判断两者肯定否定"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-collocation",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "make/do/take/turn on 动名搭配裁判（c04）；检查 *do a mistake、*open the light"
+    },
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "support",
+     "binding": "从材料采集动词搭配收入语块本（c05）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-colloquial-language",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "gonna/stuff/guys 在聊天 vs 正式邮件中的适切度（c42）"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "口语词用例按场合裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-phrasal-extended",
+   "uses": [
+    {
+     "primitive": "prim:attach-position",
+     "role": "primary",
+     "binding": "代词宾语放动词与小品词之间：pick it up；检查 *pick up it"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "put off/put up with 判断意思"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-word-formation",
+   "uses": [
+    {
+     "primitive": "prim:word-shape-split",
+     "role": "primary",
+     "binding": "切分前缀后缀验证词义，带出同族词（c28）；检查 *unpossible"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "否定前缀 un-/in-/im-/il-/dis- 规律用到新词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-str-guess-from-context",
+   "uses": [
+    {
+     "primitive": "prim:context-guess",
+     "role": "primary",
+     "binding": "标出生词决定查还是跳，多次相遇中猜—修正（c27）"
+    },
+    {
+     "primitive": "prim:word-shape-split",
+     "role": "support",
+     "binding": "借构词猜义（c28）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-read-articles",
+   "uses": [
+    {
+     "primitive": "prim:source-stance",
+     "role": "primary",
+     "binding": "分清作者观点与引语中他人观点（c31）；检查不把引语当作者立场"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "给每段贴功能标签（c25）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-forum-post",
+   "uses": [
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "primary",
+     "binding": "先写回帖再对照范例看是否给理由（c37）"
+    },
+    {
+     "primitive": "prim:grow-text",
+     "role": "support",
+     "binding": "从 I agree 扩成有理由的回帖（c38）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-str-key-points",
+   "uses": [
+    {
+     "primitive": "prim:strip-skeleton",
+     "role": "primary",
+     "binding": "折叠例子和细节找出主旨句（c29）；检查不把生动细节当主旨"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "标出主旨/例证/细节（c25）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-listen-conversation",
+   "uses": [
+    {
+     "primitive": "prim:source-stance",
+     "role": "primary",
+     "binding": "分清两人各自立场，把观点归到说话人（c53）"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "只记每人立场与理由格子（c48）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-listen-media",
+   "uses": [
+    {
+     "primitive": "prim:transcript-diff",
+     "role": "primary",
+     "binding": "听新闻片段写下所听再对齐原文（c47）；检查不依赖字幕"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "只记 5 个要点格子（c48）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-read-narrative",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "把过去完成时标出的回溯事件放上时间轴（c35）；检查事件顺序"
+    },
+    {
+     "primitive": "prim:sequence-retell",
+     "role": "support",
+     "binding": "排出故事事件顺序再复述"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-relay-information",
+   "uses": [
+    {
+     "primitive": "prim:cross-language-align",
+     "role": "primary",
+     "binding": "把英文材料要点向中文听者转述（或反向），筛选而非逐字翻译"
+    },
+    {
+     "primitive": "prim:strip-skeleton",
+     "role": "support",
+     "binding": "先削出要点再转述（c29）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-phon-linking",
+   "uses": [
+    {
+     "primitive": "prim:rhythm-shadow",
+     "role": "primary",
+     "binding": "标出 pick it up 的连读处再跟读，比较（c56）；检查辅音后不加元音"
+    },
+    {
+     "primitive": "prim:transcript-diff",
+     "role": "support",
+     "binding": "听连读句写下再对齐（c47）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-phon-word-boundaries",
+   "uses": [
+    {
+     "primitive": "prim:transcript-diff",
+     "role": "primary",
+     "binding": "听连读语流写下再与原文对齐，看哪儿认不出熟词（c47/c50）"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "借语法预测下一个词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-soc-varieties",
+   "uses": [
+    {
+     "primitive": "prim:variety-map",
+     "role": "primary",
+     "binding": "colour/color、flat/apartment、英美口音对照；检查同一文本统一一种"
+    },
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "support",
+     "binding": "英美口音同词对比听辨"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-narrative-tenses",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "事件、背景、回溯三层放上时间轴再选形式（c35）"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "past/past continuous/past perfect 选择（c14）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-past-perfect-continuous",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "过去某点之前持续的过程上轴；检查状态动词不用进行"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "had done vs had been doing"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-subsequently",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "subsequently（副词）vs subsequent to（介词）；检查 *Subsequently the meeting"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "then/after that vs subsequently 正式度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-hopes-plans",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "hope to/plan to/be thinking of V-ing/might 计划确定度；检查 *hoping to moving"
+    },
+    {
+     "primitive": "prim:carry-across",
+     "role": "support",
+     "binding": "搬到自己的未来计划上说（c57）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-future-perfect",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "将来参照点之前完成的事件上轴；检查 by the time 从句不用 will"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "will do vs will have done"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-future-perfect-continuous",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "到将来某点已持续多久，上轴选 will have been doing；检查 been 不漏"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "will have been + V-ing 构形"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-precise-info",
+   "uses": [
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "primary",
+     "binding": "记精确数字、日期、条件格子（c51）；检查 fewer/less 搭配"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "对方需要精确信息，必须给齐"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-abstract-ideas",
+   "uses": [
+    {
+     "primitive": "prim:grow-text",
+     "role": "primary",
+     "binding": "从一个抽象词定义扩成解释段（c38）；检查 means doing"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "先自己定义再对照范例"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-generalise-qualify",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "tend to/generally/in most cases 限定强度（c17）；检查 tend to + V"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "概括句用例裁判是否过度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-articles-abstract",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "泛指抽象名词零冠词 vs 特指 the（c15）；检查 *The life is short"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "the technology/technology 用例裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-relative-nondefining",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "限定 vs 非限定（逗号、不用 that）按是否附加信息选"
+    },
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "support",
+     "binding": "附加信息并入主句（c19）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-complex-noun-phrases",
+   "uses": [
+    {
+     "primitive": "prim:strip-skeleton",
+     "role": "primary",
+     "binding": "折叠前后修饰找中心名词（c29/c22）；检查 *a five-years plan"
+    },
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "support",
+     "binding": "把多句信息打包进名词短语（c19）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-participle-clauses",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "两句压缩成分词短语再拆回（c19）；检查分词逻辑主语与主句主语一致"
+    },
+    {
+     "primitive": "prim:reference-chain",
+     "role": "support",
+     "binding": "把分词连回逻辑主语，查悬垂"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-certainty",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "certain/bound to/likely/doubt 确定度定位（c34）；检查 be bound to"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "确定度措辞与场合（c17）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-speculate",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "按线索强弱定位 might/could/must have；检查 *can have forgotten"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "只有部分线索，提出推测并追问"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-modal-speculation",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "must/might/could/can't be 推断强度定位（c34）；检查 *mustn't be"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "情态判断是推测还是义务"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-past-modal-deduction",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "must have/might have/can't have 按证据强度定位；检查 *mustn't have"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "推断对象在过去"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-neednt-have",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "needn't have done（做了但不必）vs didn't need to（多半没做）"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "判断事情是否做了"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-attitudinal-adverbs",
+   "uses": [
+    {
+     "primitive": "prim:source-stance",
+     "role": "primary",
+     "binding": "frankly/apparently/admittedly 判断说话人态度与信息来源（c34）"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "apparently 判断“据说”而非“明显”"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-argument",
+   "uses": [
+    {
+     "primitive": "prim:discourse-map",
+     "role": "primary",
+     "binding": "主张—理由—例证结构，标出缺失理由处（c32）"
+    },
+    {
+     "primitive": "prim:grow-text",
+     "role": "support",
+     "binding": "从主张扩成论证段（c38）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-persuade",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "*You must buy vs Have you considered… 说服力度（c17）"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "说服回合，对方异议分支"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-although",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "although 让步句，与 but 只用一个（c16）；检查不叠用"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "although/despite/however 按后接形式选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-despite",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "despite+名词/V-ing vs although+从句；检查 *despite of"
+    },
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "support",
+     "binding": "把让步从句改写成 despite 短语（c19）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-formal-signposting",
+   "uses": [
+    {
+     "primitive": "prim:discourse-map",
+     "role": "primary",
+     "binding": "标出演讲中的路标 First/Moving on/To sum up 与结构（c32）"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "And then… vs Moving on to… 正式度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-summarising",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "in a word/in short/all in all 用例裁判；检查 in a word 只接一词"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "标出总结段的位置与功能"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-synthesis",
+   "uses": [
+    {
+     "primitive": "prim:discourse-map",
+     "role": "primary",
+     "binding": "按观点而非按来源组织，标出整合关系（c39）"
+    },
+    {
+     "primitive": "prim:source-stance",
+     "role": "support",
+     "binding": "标出各来源观点并对照原文（c53）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-intensifier-collocation",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "very/absolutely+可分级/极端形容词用例裁判；检查 *very exhausted"
+    },
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "support",
+     "binding": "采集 highly likely/deeply concerned 等搭配（c05）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-complex-sentences",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "主从句组合与拆分，检查从句不独立成句（c16/c44）"
+    },
+    {
+     "primitive": "prim:strip-skeleton",
+     "role": "support",
+     "binding": "折叠从句找主句（c29）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-str-plan",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "按听众调整术语与信息顺序（c42）"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "先拟稿再对照听众需求修改（c37）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-str-circumlocution",
+   "uses": [
+    {
+     "primitive": "prim:info-gap",
+     "role": "primary",
+     "binding": "对方要猜出你描述的东西，描述必须可辨（c58）；检查不笼统 It's a thing"
+    },
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "support",
+     "binding": "先描述目标词再揭示对照"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-presentation",
+   "uses": [
+    {
+     "primitive": "prim:discourse-map",
+     "role": "primary",
+     "binding": "按陈述形状排路标与段落（c32）"
+    },
+    {
+     "primitive": "prim:record-self-transcribe",
+     "role": "support",
+     "binding": "录陈述自转写，看是否照稿（c55）"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "问答环节回合"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-str-gain-time",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "卡壳时 Let me think…/That's a good question 填充回合；检查不用“那个”"
+    },
+    {
+     "primitive": "prim:record-self-transcribe",
+     "role": "support",
+     "binding": "自转写找出中文填充词与长停顿（c55）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-phon-intonation",
+   "uses": [
+    {
+     "primitive": "prim:contour-match",
+     "role": "primary",
+     "binding": "降升调表态度（礼貌、怀疑、惊讶）画轮廓再说；检查语调不平直"
+    },
+    {
+     "primitive": "prim:rhythm-shadow",
+     "role": "support",
+     "binding": "跟读对话，比较语调起伏（c56）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-initiative",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "主动提议、分工、推进议程回合；检查 Perhaps you could…"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "*You do the costs vs Perhaps you could…（c17）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-invite-participation",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "What do you think? / Would you like to add…? 邀请回合（c45）；检查 *How do you think"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "邀请发言措辞"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-reactions",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "听到好坏消息的反应回合，分支选同情/惊讶"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "*It doesn't matter 冷漠 vs I'm so sorry to hear that"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-review",
+   "uses": [
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "primary",
+     "binding": "先写评论再对照范例评价维度（c37）；检查 bored/boring"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "-ed/-ing 评价形容词选择"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-str-follow-up",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "承接他人发言：Building on what X said… 回合（c45）"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "*I agree with you, but 用于全反对时的误导"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-formal-discussion",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "会议回合：表态、反对、让步、总结（c45）；检查 I don't agree with you"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "*You are wrong vs I see your point, but…（c17）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-passive-range",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "be 的各种时态情态形式+过去分词推到新句；检查 is being repaired"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "主动 vs 被动按焦点选（c20）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-causative",
+   "uses": [
+    {
+     "primitive": "prim:viewpoint-direction",
+     "role": "primary",
+     "binding": "I had my hair cut：从委托者视角，动作由他人完成；检查 *I cut my hair"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "have/get sth done 构形"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-reported-questions",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "转述问句恢复陈述语序、加 if/whether；检查 *where did I live"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "时态后移与人称变化"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-reporting-verbs",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "suggest/advise/recommend 等补语结构用例裁判（c04）；检查 *suggested me to go"
+    },
+    {
+     "primitive": "prim:source-stance",
+     "role": "support",
+     "binding": "claim/admit/insist 表达态度（c31）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-mixed-conditionals",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "条件与结果分属过去/现在，各自上轴再选形式；检查 *would have been rich now"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "按时间组合选条件形式"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-wish-present",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "wish + 过去式表现在不现实；检查 *I wish I am taller"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "I wish I had 判断现实是否拥有"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-topic-arts",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "参观画展—看演出—评价走一遍（c06）；检查 art/the arts"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "art/arts 可数性用例裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-adjective-adverb-choice",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "感官/系动词后用形容词 feel bad vs 动作动词后用副词；检查 *smells nicely"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "He looks angry vs angrily 判断描述状态还是动作"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-read-argument",
+   "uses": [
+    {
+     "primitive": "prim:source-stance",
+     "role": "primary",
+     "binding": "分清作者立场与引用的反方观点（c31/c53）"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "标出论点、反论、反驳（c32）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-listen-lectures",
+   "uses": [
+    {
+     "primitive": "prim:discourse-map",
+     "role": "primary",
+     "binding": "借路标抓讲座结构（c32）；检查不逐字记"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "只记要点格子（c48）"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在路标处预测下一部分（c49）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-listen-film",
+   "uses": [
+    {
+     "primitive": "prim:transcript-diff",
+     "role": "primary",
+     "binding": "去掉字幕听对白再对齐原文（c47）"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在对白停顿处预测下一句"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-write-essay",
+   "uses": [
+    {
+     "primitive": "prim:discourse-map",
+     "role": "primary",
+     "binding": "按议论文形状写主题句与段落（c32/c39）；检查一段一论点"
+    },
+    {
+     "primitive": "prim:one-fix-revision",
+     "role": "support",
+     "binding": "一次只改一类问题（c36）"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "先写再对照范文（c37）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-write-formal-correspondence",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "正式信件措辞与格式（c42）；检查 look forward to hearing"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "先写再对照范例（c37）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-read-documents",
+   "uses": [
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "primary",
+     "binding": "在合同、指南中找出 unless/provided that 限定的条款"
+    },
+    {
+     "primitive": "prim:strip-skeleton",
+     "role": "support",
+     "binding": "削去长条款修饰找主干（c29）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-paraphrase",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "改述时保留命题与限定 few/may（c19）；检查限定词不丢"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "改述后与原文对照意义（c37）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-summary",
+   "uses": [
+    {
+     "primitive": "prim:strip-skeleton",
+     "role": "primary",
+     "binding": "削出主旨与支持层次（c29）；检查不照搬原句"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "标出主旨与支持层级（c25）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-interview",
+   "uses": [
+    {
+     "primitive": "prim:grow-text",
+     "role": "primary",
+     "binding": "从一句回答扩成有例子的回答（c38）；检查不止 Yes/No"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "访谈回合与追问"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-phon-context",
+   "uses": [
+    {
+     "primitive": "prim:predict-next",
+     "role": "primary",
+     "binding": "借语境和语法预测弱读功能词（c49）"
+    },
+    {
+     "primitive": "prim:transcript-diff",
+     "role": "support",
+     "binding": "对齐看漏掉的时态与功能词（c50）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-phon-listen-repeat",
+   "uses": [
+    {
+     "primitive": "prim:rhythm-shadow",
+     "role": "primary",
+     "binding": "按语块切分跟读，比较停顿与重读（c56）；检查不逐词等重"
+    },
+    {
+     "primitive": "prim:record-self-transcribe",
+     "role": "support",
+     "binding": "录跟读自转写看可懂度（c55）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-orth-punctuation-advanced",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "两独立句用句号/分号/连词而非逗号连接（c16）；检查 comma splice"
+    },
+    {
+     "primitive": "prim:one-fix-revision",
+     "role": "support",
+     "binding": "只改标点一类（c36）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-precision",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "annoyed—angry—furious 情绪强度定位；检查不只 very angry"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "分级情绪词用例裁判（c04）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-shades-opinion",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "I'm convinced/I suspect/I doubt 立场强度定位（c34）"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "立场措辞的语气（c17）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-hedging",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "proves/suggests/may indicate 断言强度定位（c34）；检查不过度断言"
+    },
+    {
+     "primitive": "prim:source-stance",
+     "role": "support",
+     "binding": "把断言强度对回证据位置（c53）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-cleft-sentences",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "It was John who…/What I need is… 按要强调的成分选（c15）；检查 It 与 that 不漏"
+    },
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "support",
+     "binding": "普通句与分裂句互相改写"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-emphasis",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "do/does 强调、分裂句、倒装按强调目标选；检查 *I do agrees"
+    },
+    {
+     "primitive": "prim:contour-match",
+     "role": "support",
+     "binding": "强调重音位置与语调"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-negative-inversion",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "否定副词前置后助动词移到主语前；检查 *Never I have seen"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "倒装的正式书面语体"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-systematic-argument",
+   "uses": [
+    {
+     "primitive": "prim:discourse-map",
+     "role": "primary",
+     "binding": "英文论证先立主旨句再展开，与中文先铺垫结构对照（c32/c39）"
+    },
+    {
+     "primitive": "prim:one-fix-revision",
+     "role": "support",
+     "binding": "只调结构一类（c36）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-concede",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "让步+立场 While it is true that…, …；检查不叠用 but"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "admittedly/granted/although 按让步程度选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-defend-view",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "对方质疑回合，必须补新证据而非重复（分支随质疑类型）"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "主张—证据—反驳结构"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-counterarguments",
+   "uses": [
+    {
+     "primitive": "prim:source-stance",
+     "role": "primary",
+     "binding": "分清反论点归属与作者回应（c31）"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "标出反论与反驳段（c32）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-constructive-review",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "批评措辞强度与具体性（c17）；检查不笼统 It is not good"
+    },
+    {
+     "primitive": "prim:one-fix-revision",
+     "role": "support",
+     "binding": "评他人稿只评一类问题（c36）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-logical-markers",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "on the contrary vs by contrast vs moreover vs consequently；检查二者不混"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "遇标记押后句方向（c33/c59）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-signposting-registers",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "Anyway/So vs Furthermore/In conclusion 按语体选（c42）"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "标出路标位置"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-hypothesise",
+   "uses": [
+    {
+     "primitive": "prim:source-stance",
+     "role": "primary",
+     "binding": "区分相关与因果的确定度表达（c34）；检查不写 A causes B"
+    },
+    {
+     "primitive": "prim:scale-place",
+     "role": "support",
+     "binding": "may lead to/is likely to cause 按证据定位"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-define-exemplify",
+   "uses": [
+    {
+     "primitive": "prim:grow-text",
+     "role": "primary",
+     "binding": "定义—细节—举例逐步扩段（c38）；检查 such as + 名词"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "such as/for example/e.g. 用例裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-str-infer-attitude",
+   "uses": [
+    {
+     "primitive": "prim:source-stance",
+     "role": "primary",
+     "binding": "claim/allege/so-called 等距离标记判作者态度（c31/c34）"
+    },
+    {
+     "primitive": "prim:figurative-decode",
+     "role": "support",
+     "binding": "言外之意与讽刺"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "报告动词判断作者是否认同"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-str-outline-sources",
+   "uses": [
+    {
+     "primitive": "prim:discourse-map",
+     "role": "primary",
+     "binding": "按主题而非按来源拟提纲（c39）；检查不 Source A says…"
+    },
+    {
+     "primitive": "prim:source-stance",
+     "role": "support",
+     "binding": "把每条提纲点对回原文位置（c53）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-str-draft-redraft",
+   "uses": [
+    {
+     "primitive": "prim:one-fix-revision",
+     "role": "primary",
+     "binding": "每轮只改一类：结构→论证→语言（c36/c40）"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "初稿与修改稿对照"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-soc-academic-conventions",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "缩写、口语词在学术文体中的替换（c42）；检查 *don't/a lot of"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "学术用语用例裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lex-greek-latin",
+   "uses": [
+    {
+     "primitive": "prim:word-shape-split",
+     "role": "primary",
+     "binding": "切分希腊拉丁词根词缀，带出同族词（c28）；检查 criteria/criterion"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "-on/-a、-is/-es 等不规则复数推到新词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-read-complex",
+   "uses": [
+    {
+     "primitive": "prim:strip-skeleton",
+     "role": "primary",
+     "binding": "削去长名词短语与从句找中心词（c22/c29/c30）"
+    },
+    {
+     "primitive": "prim:reference-chain",
+     "role": "support",
+     "binding": "长文中的同指与换说法（c24）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-write-academic",
+   "uses": [
+    {
+     "primitive": "prim:source-stance",
+     "role": "primary",
+     "binding": "区分自己观点与转述来源并标位置（c53）；检查不近似抄袭"
+    },
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "support",
+     "binding": "改述时重组句子结构而非换词（c19）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-note-taking",
+   "uses": [
+    {
+     "primitive": "prim:strip-skeleton",
+     "role": "primary",
+     "binding": "只记主干与关键词（c29）；检查不逐字记"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "按讲座结构组织笔记（c32）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-read-literature",
+   "uses": [
+    {
+     "primitive": "prim:figurative-decode",
+     "role": "primary",
+     "binding": "辨叙述者语气与反讽，对照字面义与真实态度并引原文"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "标出叙事结构"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-narrative-control",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "全部过去形式含被动放上轴（c35）；检查过去叙述不混入现在时"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "按叙事层次选时态（c14）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-future-revision",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "will/going to/present continuous/present simple 按语境选（c14）；检查 when 从句不用 will"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "将来事件性质上轴"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-modals-past",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "modal + have + 过去分词构形推到新动词；检查 *must had done"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "过去情态按意义选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-mixed-conditionals-advanced",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "条件与结果分属不同时间区段上轴（c35）"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "按时间组合选形式"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-wish-regret",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "wish+过去式（现在）vs wish+had done（过去遗憾）vs if only；检查 *I wish I can"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "遗憾对象在现在还是过去"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-phrasal-splitting",
+   "uses": [
+    {
+     "primitive": "prim:attach-position",
+     "role": "primary",
+     "binding": "代词宾语放小品词前：hand it in；挪动检查（c18）"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "可分/不可分短语动词用例裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-vague-language",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "about/around/or so/-ish 用例裁判；检查不叠用 about around"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "模糊语的语体适切"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lexical-precision",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "skinny/slim/thin 近义组用例裁判，归到褒贬类（c04）"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "按语境选近义词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-false-friends",
+   "uses": [
+    {
+     "primitive": "prim:false-friend-check",
+     "role": "primary",
+     "binding": "宣传/propaganda、经理/manager 等对译项核对褒贬与使用域；检查不一对一直译"
+    },
+    {
+     "primitive": "prim:culture-incident",
+     "role": "support",
+     "binding": "误用 propaganda 引起的误会判读"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-formal-informal-register",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "同一文本语域统一，标出露馅处（c42）；检查 *Hey guys, kindly"
+    },
+    {
+     "primitive": "prim:one-fix-revision",
+     "role": "support",
+     "binding": "只改语域一类（c36）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-idiomatic-expressions",
+   "uses": [
+    {
+     "primitive": "prim:figurative-decode",
+     "role": "primary",
+     "binding": "习语字面义 vs 实际义判读；检查固定成分不改 *on the same pages"
+    },
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "support",
+     "binding": "从真实材料采集习语（c02）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-topic-science",
+   "uses": [
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "primary",
+     "binding": "从科普文采集学术搭配（c05）；检查 research 不可数"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "research/a study 用例裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-topic-technical-legal",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "合同中 shall 判断为义务而非将来"
+    },
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "support",
+     "binding": "在合同中找出义务与条件条款"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lex-topic-collocations",
+   "uses": [
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "primary",
+     "binding": "按话题采集动名搭配（c05）；检查 *make a survey"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "搭配用例裁判（c04）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-phon-awareness",
+   "uses": [
+    {
+     "primitive": "prim:oral-sound-play",
+     "role": "primary",
+     "binding": "不出现字母：押韵判断、拍音节、/k/-/æ/-/t/ 拼合与切分；检查辅音不带元音（幼儿）"
+    },
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "support",
+     "binding": "辅音带拼音呼读 bu/te 与纯辅音对比"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-orth-letter-sounds",
+   "uses": [
+    {
+     "primitive": "prim:sound-spelling-blend",
+     "role": "primary",
+     "binding": "字母→常见读音对应，区分字母名与读音；检查 bag 不读字母名（幼儿）"
+    },
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "support",
+     "binding": "听音点出字母卡"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-orth-cvc-decoding",
+   "uses": [
+    {
+     "primitive": "prim:sound-spelling-blend",
+     "role": "primary",
+     "binding": "CVC 短元音逐音拼合成词再按音拼写；检查连读不断开"
+    },
+    {
+     "primitive": "prim:oral-to-print",
+     "role": "support",
+     "binding": "孩子已会说的 cat/dog 连到字形；华裔儿童与幼儿"
+    },
+    {
+     "primitive": "prim:reading-aid-fade",
+     "role": "support",
+     "binding": "拼读提示逐步撤除，区分有无提示读对"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-orth-digraphs-blends",
+   "uses": [
+    {
+     "primitive": "prim:sound-spelling-blend",
+     "role": "primary",
+     "binding": "sh/ch/th、bl/st 连缀拼读；检查连缀间不插元音"
+    },
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "support",
+     "binding": "stop/sitop、blue/bulu 对比"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-orth-sight-words",
+   "uses": [
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "primary",
+     "binding": "said/come/one 等认读词闪卡先回想再揭示（c12）"
+    },
+    {
+     "primitive": "prim:oral-to-print",
+     "role": "support",
+     "binding": "已会说的高频词连到不规则字形"
+    },
+    {
+     "primitive": "prim:reading-aid-fade",
+     "role": "support",
+     "binding": "绘本中认读词提示逐步撤除"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-orth-handwriting",
+   "uses": [
+    {
+     "primitive": "prim:character-anatomy",
+     "role": "primary",
+     "binding": "字母笔顺、起笔点与四线格高度，b/d、p/q 朝向对比（幼儿）"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "先写再与范字对照"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-thanks-apologies",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "致谢/道歉及回应回合；检查回应感谢用 You're welcome 而非 Never mind"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "Sorry/I'm so sorry/Excuse me 场合区分"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-classroom-language",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "课堂回合：How do you say…in English? / Can I go to the toilet?（幼儿）"
+    },
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "support",
+     "binding": "听课堂指令 Stand up/Open your book 做动作"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-listen-and-do",
+   "uses": [
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "primary",
+     "binding": "听 Colour the small ball red 在图上涂色，检查颜色、大小都对（幼儿）"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "只记颜色、数量、位置"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lex-school-classroom",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "一天课堂走一遍调出物品与学科（c06）；检查学科名无冠词"
+    },
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "support",
+     "binding": "听物品名点图（幼儿）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lex-animals",
+   "uses": [
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "primary",
+     "binding": "动物图先回想名称再揭示（c12）；检查泛指用复数 I like cats"
+    },
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "support",
+     "binding": "听动物名与叫声点图（幼儿）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lex-body",
+   "uses": [
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "primary",
+     "binding": "听 Touch your nose 指身体部位（幼儿 TPR）；检查 hair 不可数"
+    },
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "support",
+     "binding": "身体图先回想再揭示"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-dummy-it",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "It's cold / It's three o'clock 判断 it 不指具体物；检查不漏 it"
+    },
+    {
+     "primitive": "prim:slot-order",
+     "role": "support",
+     "binding": "主语槽必须填 it"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lex-weather-seasons",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "sun/sunny、rain/raining 名词 vs 形容词/动词；检查 *It's sun"
+    },
+    {
+     "primitive": "prim:picture-describe",
+     "role": "support",
+     "binding": "看天气图说天气"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lex-feelings-basic",
+   "uses": [
+    {
+     "primitive": "prim:picture-describe",
+     "role": "primary",
+     "binding": "看表情图说 I'm hungry/tired；检查 be 不漏（幼儿）"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "I'm hungry vs I hungry 判完整"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lex-toys-shapes",
+   "uses": [
+    {
+     "primitive": "prim:attach-position",
+     "role": "primary",
+     "binding": "形容词顺序 大小-颜色-名词：a big red ball；挪动看出错"
+    },
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "support",
+     "binding": "听形状颜色指令拖玩具（幼儿）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lex-sports-games",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "play football/play the piano 冠词用例裁判（c04）"
+    },
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "support",
+     "binding": "运动会走一遍"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-describe-picture",
+   "uses": [
+    {
+     "primitive": "prim:picture-describe",
+     "role": "primary",
+     "binding": "看图说话，图上元素核对数量与位置；检查 There's a dog 不用 has"
+    },
+    {
+     "primitive": "prim:grow-text",
+     "role": "support",
+     "binding": "从一句描述扩成一段（c38）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-listen-stories",
+   "uses": [
+    {
+     "primitive": "prim:context-guess",
+     "role": "primary",
+     "binding": "借图片与上下文猜生词，不因一词放弃（c27）（幼儿绘本）"
+    },
+    {
+     "primitive": "prim:sequence-retell",
+     "role": "support",
+     "binding": "听后排图复述故事"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-topic-health",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "看医生回合：描述症状—医生提问—建议；检查 I have a headache"
+    },
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "support",
+     "binding": "生病—看医生—买药走一遍（c06）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-emergencies-help",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "紧急求助回合：说出关键信息 Help!/地址/伤情；检查简短清楚"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "接线员缺地址等信息，必须给出"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-telephone",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "电话回合：This is…/Can I speak to…? / 留言；检查不说 I am…"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "记电话留言中的号码姓名（c51）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-appointments",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "预约—改约—取消回合，分支无空位；检查 on Monday/at 3"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "双方空闲时间不同，协商出时间（c58）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-topic-housing",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "看房—签约—报修走一遍（c06）；检查 is broken/doesn't work"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "报修电话回合"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-topic-money-services",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "银行取钱—寄包裹走一遍（c06）；检查 take out money"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "银行柜台回合"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-topic-technology",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "go online/download/log in 用例裁判；检查 *up the internet"
+    },
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "support",
+     "binding": "用手机上网办事走一遍（c06）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-digital-messaging",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "给朋友 vs 给老师的消息：u/thx 是否合适（c42）"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "先写消息再对照范例"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-congratulate-sympathy",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "祝贺/慰问回合与回应；检查 Congratulations on…"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "对熟人 vs 同事的祝贺慰问措辞"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-reflexive-pronouns",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "myself/himself/themselves 构形推到各人称；检查 *hisself"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "themselves vs each other 按单向还是互相选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-indefinite-pronouns",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "something/anything/nothing 按肯定否定疑问选；检查 *don't know nothing"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "nobody/anybody 判断有没有人"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-subject-questions",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "Who called Tom? vs Who did Tom call? 判断谁是动作者（c13）"
+    },
+    {
+     "primitive": "prim:slot-order",
+     "role": "support",
+     "binding": "问主语时无助动词槽"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-make-let-help",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "make/let sb do 无 to、help sb (to) do；检查 *made me to wait"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "make（强迫）vs let（允许）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-topic-relationships",
+   "uses": [
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "primary",
+     "binding": "从对话采集 make friends with/get on with 等搭配（c02）；检查 friends 复数"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "交友相关搭配用例裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-be-get-used-to",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "be used to（状态）vs get used to（过程）vs used to do；检查 to 后接 -ing"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "习惯化过程上轴"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-prefer-would-rather",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "prefer A to B/would rather do than do 后接形式；检查 *I'd rather to"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "prefer vs would rather vs would prefer"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-soc-small-talk",
+   "uses": [
+    {
+     "primitive": "prim:culture-incident",
+     "role": "primary",
+     "binding": "问工资、婚否、年龄引起尴尬的小事件判读并改写话题"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "闲谈回合：天气、周末、工作"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-time-clauses",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "when/until/as soon as 从句用一般现在表将来；检查 *when I will arrive"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "两将来事件先后上轴"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-had-better",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "had better + 原形，否定 had better not；检查 *had better to"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "had better 的警告强度 vs should"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-topic-environment",
+   "uses": [
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "primary",
+     "binding": "从环保报道采集搭配（c05）；检查 pollution 不可数"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "pollution/waste 可数性裁判"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-so-such",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "so + 形容词 vs such a + 形容词 + 名词；检查 *such hot day"
+    },
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "support",
+     "binding": "so/such…that 接结果句"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-complaints",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "*Give me my money back vs I'm afraid…/Could you… 投诉措辞（c17）"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "投诉与处理回合，分支商家回应"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-topic-work-business",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "公司一天：部门、会议、邮件走一遍（c06）；检查 responsible for V-ing"
+    },
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "support",
+     "binding": "采集职场搭配（c05）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-lex-numbers-data",
+   "uses": [
+    {
+     "primitive": "prim:number-system-map",
+     "role": "primary",
+     "binding": "15 万=150,000、1 亿=100 million 在数位轴上对齐读写；检查不说 fifteen ten thousand"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "听大数、百分比、小数记入格子（c51）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-describe-trends",
+   "uses": [
+    {
+     "primitive": "prim:picture-describe",
+     "role": "primary",
+     "binding": "看图表描述趋势，图上数据核对 rise by/to（c46）"
+    },
+    {
+     "primitive": "prim:grow-text",
+     "role": "support",
+     "binding": "从一句趋势扩成图表描述段（c46）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-substitution-ellipsis",
+   "uses": [
+    {
+     "primitive": "prim:reference-chain",
+     "role": "primary",
+     "binding": "把 one(s)/so/not/do so 连回替代的内容（c23）；检查 *I think yes"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "I think so vs I hope not 选择"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-conditional-alternatives",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "unless/provided/as long as/in case 各自限制后句内容；检查 in case≠if"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "unless/in case 判断条件成立时做什么"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-fn-negotiate",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "谈判回合：提条件—让步—成交，分支对方还价"
+    },
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "support",
+     "binding": "If you order more 条件句不用 will"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "谈判措辞强度（c17）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-write-cv-cover",
+   "uses": [
+    {
+     "primitive": "prim:culture-incident",
+     "role": "primary",
+     "binding": "中文简历写年龄婚姻照片在英文语境的问题判读并改写"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "求职信语体（c42）"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "先写再对照范例（c37）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-skill-write-report",
+   "uses": [
+    {
+     "primitive": "prim:discourse-map",
+     "role": "primary",
+     "binding": "报告结构：引言—发现—建议（c32）"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "去主观口语化（c42）；检查 *really terrible"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-orth-long-vowels",
+   "uses": [
+    {
+     "primitive": "prim:sound-spelling-blend",
+     "role": "primary",
+     "binding": "不发音 e 与 ai/ee/oa 元音组合拼读；检查 cake 末尾 e 不读"
+    },
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "support",
+     "binding": "cap/cape、hop/hope 对比"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-orth-vowel-patterns",
+   "uses": [
+    {
+     "primitive": "prim:sound-spelling-blend",
+     "role": "primary",
+     "binding": "ar/or/er、ou/ow/oi 拼读；检查 r 发音保持一个变体"
+    },
+    {
+     "primitive": "prim:variety-map",
+     "role": "support",
+     "binding": "英美 r 音与拼写对照"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-orth-multisyllable",
+   "uses": [
+    {
+     "primitive": "prim:word-shape-split",
+     "role": "primary",
+     "binding": "把多音节词切成音节与词缀再拼读（c28）；检查非重读弱化"
+    },
+    {
+     "primitive": "prim:contour-match",
+     "role": "support",
+     "binding": "标出重音节轮廓"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-phon-ipa",
+   "uses": [
+    {
+     "primitive": "prim:sound-spelling-blend",
+     "role": "primary",
+     "binding": "音标符号→声音对应，与拼音同形异音对照（/e/ vs 拼音 e）"
+    },
+    {
+     "primitive": "prim:reading-aid-fade",
+     "role": "support",
+     "binding": "生词音标提示逐步撤除"
+    }
+   ]
+  },
+  {
+   "kc": "kt:en-str-dictionary-learning",
+   "uses": [
+    {
+     "primitive": "prim:entry-sense-pick",
+     "role": "primary",
+     "binding": "按语境在多义条目中选义项，如 light 的“光/轻/浅色”；检查不只看第一项"
+    },
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "support",
+     "binding": "把生词连同例句搭配记入语块本（c02）"
+    }
+   ]
+  }
+ ],
+ "gaps": [
+  {
+   "kc": "kt:en-str-plan",
+   "reason": "按听众预先规划内容与顺序；register-calibrate 只调措辞，attempt-then-compare 只事后对照，新增原语中也没有面向听众画像的规划",
+   "proposal": "audience-plan：给定听众画像，先排信息顺序与术语取舍，再由“听众”提问检验哪里跟不上"
+  }
+ ]
+}

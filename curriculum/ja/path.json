@@ -1,0 +1,1064 @@
+{
+ "schemaVersion": 2,
+ "language": "ja",
+ "sections": [
+  {
+   "id": "A1",
+   "label": "A1",
+   "units": [
+    "a1-01",
+    "a1-02",
+    "a1-03",
+    "a1-04",
+    "a1-05",
+    "a1-06",
+    "a1-07",
+    "a1-08",
+    "a1-09",
+    "a1-10",
+    "a1-11",
+    "a1-12",
+    "a1-13",
+    "a1-14"
+   ]
+  },
+  {
+   "id": "A2",
+   "label": "A2",
+   "units": [
+    "a2-01",
+    "a2-02",
+    "a2-03",
+    "a2-04",
+    "a2-05",
+    "a2-06",
+    "a2-07",
+    "a2-08",
+    "a2-09",
+    "a2-10",
+    "a2-11",
+    "a2-12",
+    "a2-13",
+    "a2-14",
+    "a2-15",
+    "a2-16",
+    "a2-17",
+    "a2-18",
+    "a2-19",
+    "a2-20",
+    "a2-21"
+   ]
+  },
+  {
+   "id": "B1",
+   "label": "B1",
+   "units": [
+    "b1-01",
+    "b1-02",
+    "b1-03",
+    "b1-04",
+    "b1-05",
+    "b1-06",
+    "b1-07",
+    "b1-08",
+    "b1-09",
+    "b1-10",
+    "b1-11",
+    "b1-12",
+    "b1-13",
+    "b1-14",
+    "b1-15",
+    "b1-16"
+   ]
+  },
+  {
+   "id": "B2",
+   "label": "B2",
+   "units": [
+    "b2-01",
+    "b2-02",
+    "b2-03",
+    "b2-04",
+    "b2-05",
+    "b2-06",
+    "b2-07",
+    "b2-08"
+   ]
+  },
+  {
+   "id": "C1",
+   "label": "C1",
+   "units": [
+    "c1-01",
+    "c1-02",
+    "c1-03",
+    "c1-04",
+    "c1-05"
+   ]
+  }
+ ],
+ "units": [
+  {
+   "id": "a1-01",
+   "section": "A1",
+   "title": "假名、声音与第一句问候",
+   "goal": "能认读平假名、按拍读出单词，用固定语块问候、道谢、道歉，听不懂时请对方再说一遍",
+   "rationale": "入口：日语读写从假名开始，假名与拍是一一对应的，学会平假名就能读出所有课本词汇；问候语块不需要任何语法",
+   "kcs": [
+    "kt:ja-script-hiragana",
+    "kt:ja-sound-vowels",
+    "kt:ja-sound-mora",
+    "kt:ja-script-dakuten",
+    "kt:ja-sound-kg",
+    "kt:ja-sound-td",
+    "kt:ja-sound-pb",
+    "kt:ja-fn-greetings",
+    "kt:ja-fn-thanks-apologies",
+    "kt:ja-str-repair-basic",
+    "kt:ja-fn-classroom-language",
+    "kt:ja-soc-bowing-etiquette",
+    "kt:ja-sound-tsu"
+   ]
+  },
+  {
+   "id": "a1-02",
+   "section": "A1",
+   "title": "我是谁",
+   "goal": "能做自我介绍：姓名、国籍、职业、住在哪里，并询问对方",
+   "rationale": "判断句「NはNです」是日语句子的第一个骨架；自我介绍是 A1 最高频的真实交际",
+   "kcs": [
+    "kt:ja-copula",
+    "kt:ja-topic-predicate",
+    "kt:ja-nominal-question",
+    "kt:ja-noun-no-noun",
+    "kt:ja-script-katakana",
+    "kt:ja-soc-address-terms",
+    "kt:ja-lex-personal-info",
+    "kt:ja-fn-self-introduction",
+    "kt:ja-sound-intonation"
+   ]
+  },
+  {
+   "id": "a1-03",
+   "section": "A1",
+   "title": "这是什么、在哪里",
+   "goal": "能指着东西问名称、主人和位置",
+   "rationale": "こ・そ・あ・ど是日语指示体系的核心，和\"这/那\"的二分不同，需要尽早建立",
+   "kcs": [
+    "kt:ja-demonstrative-things",
+    "kt:ja-demonstrative-modifiers",
+    "kt:ja-demonstrative-places",
+    "kt:ja-demonstrative-questions",
+    "kt:ja-mo-also",
+    "kt:ja-script-small-kana",
+    "kt:ja-sound-yoon",
+    "kt:ja-sound-sokuon",
+    "kt:ja-sound-long"
+   ]
+  },
+  {
+   "id": "a1-04",
+   "section": "A1",
+   "title": "数字、时间与日期",
+   "goal": "能听说数字、价格、钟点、星期和日期，安排时间",
+   "rationale": "数字和时间是交易与约定的前提；日语数字读音变化多，单独成单元",
+   "kcs": [
+    "kt:ja-numerals-system",
+    "kt:ja-numerals-variants",
+    "kt:ja-counters",
+    "kt:ja-hours",
+    "kt:ja-minutes-half",
+    "kt:ja-calendar-dates",
+    "kt:ja-deictic-days",
+    "kt:ja-kara-made",
+    "kt:ja-fn-schedule"
+   ]
+  },
+  {
+   "id": "a1-05",
+   "section": "A1",
+   "title": "我的一天",
+   "goal": "能说出每天做什么、什么时候、在哪里、和谁一起",
+   "rationale": "动词ます形加上を・に・で・へ等格助词，就能描述一天的日常；格助词是日语句子的\"关系网\"",
+   "kcs": [
+    "kt:ja-polite-verb",
+    "kt:ja-verb-question",
+    "kt:ja-polite-past",
+    "kt:ja-particle-function",
+    "kt:ja-object-o",
+    "kt:ja-direction-e",
+    "kt:ja-ni-goal",
+    "kt:ja-time-ni",
+    "kt:ja-de-place",
+    "kt:ja-to-companion",
+    "kt:ja-frequency-time",
+    "kt:ja-lex-daily-verbs",
+    "kt:ja-fn-daily-routine"
+   ]
+  },
+  {
+   "id": "a1-06",
+   "section": "A1",
+   "title": "喜欢的食物与点餐",
+   "goal": "能说喜欢和不喜欢的东西，在店里点餐、说数量",
+   "rationale": "「Nが好きです」和「Nをください」是 A1 最有用的两个语块，点餐场景马上能用",
+   "kcs": [
+    "kt:ja-ga-subject",
+    "kt:ja-likes-dislikes",
+    "kt:ja-lex-food-drink",
+    "kt:ja-noun-request",
+    "kt:ja-quantity-request",
+    "kt:ja-fn-ordering"
+   ]
+  },
+  {
+   "id": "a1-07",
+   "section": "A1",
+   "title": "家与职场：有什么、在哪里",
+   "goal": "能说明房间里有什么、某人或某物在哪里",
+   "rationale": "ある／いる 区分有生与无生，是日语和汉语、英语都不同的存在表达",
+   "kcs": [
+    "kt:ja-existence",
+    "kt:ja-location-existence",
+    "kt:ja-noun-and",
+    "kt:ja-spatial-nouns",
+    "kt:ja-lex-house-workplace",
+    "kt:ja-fn-ask-location"
+   ]
+  },
+  {
+   "id": "a1-08",
+   "section": "A1",
+   "title": "描述城市与东西",
+   "goal": "能用形容词描述城市、建筑和物品，作出评价并回应",
+   "rationale": "日语形容词分两类、自己有时态变化，需要早一点建立；「～ですね」用于寻求共鸣",
+   "kcs": [
+    "kt:ja-adjective-classes",
+    "kt:ja-i-adjective-noun",
+    "kt:ja-na-adjective-noun",
+    "kt:ja-i-adjective-predicate",
+    "kt:ja-i-adjective-question",
+    "kt:ja-i-adjective-past",
+    "kt:ja-na-adjective-predicate",
+    "kt:ja-past-copula",
+    "kt:ja-degree-adverbs",
+    "kt:ja-topic-part-attribute",
+    "kt:ja-final-ne",
+    "kt:ja-final-yo",
+    "kt:ja-fn-describe-places"
+   ]
+  },
+  {
+   "id": "a1-09",
+   "section": "A1",
+   "title": "て形与请求",
+   "goal": "能请人做事、借东西，听懂简单的指示",
+   "rationale": "て形是后续几十个句型的入口（请求、许可、进行、顺序），必须先学会动词分类",
+   "kcs": [
+    "kt:ja-verb-groups",
+    "kt:ja-te-form",
+    "kt:ja-te-request",
+    "kt:ja-fn-borrow-request",
+    "kt:ja-te-sequence",
+    "kt:ja-tekara"
+   ]
+  },
+  {
+   "id": "a1-10",
+   "section": "A1",
+   "title": "爱好与邀约",
+   "goal": "能谈喜欢做的事，邀请别人、接受或委婉拒绝",
+   "rationale": "邀约是建立关系的第一步；日语拒绝讲究不说\"不\"，A1 就要学会「ちょっと…」",
+   "kcs": [
+    "kt:ja-lex-hobbies",
+    "kt:ja-invitation-masenka",
+    "kt:ja-mashou",
+    "kt:ja-accept-refuse-invitation",
+    "kt:ja-noun-examples",
+    "kt:ja-noun-dekiru"
+   ]
+  },
+  {
+   "id": "a1-11",
+   "section": "A1",
+   "title": "交通与问路",
+   "goal": "能确认车辆去向，问怎么去、坐什么去",
+   "rationale": "出行是生存需要；「で」表示手段，「に乗る」等动词搭配要成块记",
+   "kcs": [
+    "kt:ja-de-means",
+    "kt:ja-lex-transport-town",
+    "kt:ja-fn-transport",
+    "kt:ja-case-particles"
+   ]
+  },
+  {
+   "id": "a1-12",
+   "section": "A1",
+   "title": "在商店",
+   "goal": "能说明想买什么、问价格、说明需要的东西",
+   "rationale": "「～んですが」是日语最常用的开启请求方式，A1 先当语块学",
+   "kcs": [
+    "kt:ja-want-object",
+    "kt:ja-ndesu",
+    "kt:ja-fn-shopping",
+    "kt:ja-focus-dake"
+   ]
+  },
+  {
+   "id": "a1-13",
+   "section": "A1",
+   "title": "假日",
+   "goal": "能说上周末做了什么、想去哪里、想做什么",
+   "rationale": "过去时与愿望把话题从\"每天\"扩展到\"经历\"和\"计划\"",
+   "kcs": [
+    "kt:ja-want-action",
+    "kt:ja-past-wish",
+    "kt:ja-purpose-ni-iku",
+    "kt:ja-fn-weekend-past",
+    "kt:ja-fn-travel-wishes"
+   ]
+  },
+  {
+   "id": "a1-14",
+   "section": "A1",
+   "title": "读写与听力入门",
+   "goal": "能读懂假名与基本汉字写的告示、菜单和简单便条，听懂慢速日常对话的要点",
+   "rationale": "把 A1 的语言知识汇总为可测的读、听、写任务",
+   "kcs": [
+    "kt:ja-kanji-system",
+    "kt:ja-kanji-n5",
+    "kt:ja-orth-particle-spelling",
+    "kt:ja-orth-punctuation",
+    "kt:ja-skill-read-basic",
+    "kt:ja-skill-listen-basic",
+    "kt:ja-skill-write-forms-memo"
+   ]
+  },
+  {
+   "id": "a2-01",
+   "section": "A2",
+   "title": "普通形体系",
+   "goal": "能把动词、形容词、名词谓语在丁寧形和普通形之间转换",
+   "rationale": "普通形是复句、名词修饰、引用和口语的共同基础，A2 后几乎每个句型都要用",
+   "kcs": [
+    "kt:ja-plain-paradigm",
+    "kt:ja-plain-adjectives",
+    "kt:ja-plain-nominal-predicate",
+    "kt:ja-plain-polite-forms"
+   ]
+  },
+  {
+   "id": "a2-02",
+   "section": "A2",
+   "title": "现在的我：工作与喜欢做的事",
+   "goal": "能说现在在哪里工作、在做什么，以及喜欢做的事",
+   "rationale": "「ている」承载进行、状态和习惯，是日语时体的核心；「のが好き」把动作变成名词",
+   "kcs": [
+    "kt:ja-progressive-teiru",
+    "kt:ja-result-state-teiru",
+    "kt:ja-nominalization",
+    "kt:ja-fn-talk-current-self",
+    "kt:ja-nagara",
+    "kt:ja-tokoro-aspect"
+   ]
+  },
+  {
+   "id": "a2-03",
+   "section": "A2",
+   "title": "季节与天气、变化",
+   "goal": "能谈天气和季节，说明东西怎样变化",
+   "rationale": "「くなる／になる」是描述变化的基本手段，天气话题让它马上有用",
+   "kcs": [
+    "kt:ja-naru-change",
+    "kt:ja-adjective-linking",
+    "kt:ja-lex-weather-seasons",
+    "kt:ja-fn-weather-talk"
+   ]
+  },
+  {
+   "id": "a2-04",
+   "section": "A2",
+   "title": "我的城市与问路",
+   "goal": "能介绍自己住的城市，听懂并说明怎么走",
+   "rationale": "「と」条件和「たらいい」用于路线说明，是条件句的第一次出现",
+   "kcs": [
+    "kt:ja-conditional-to",
+    "kt:ja-tara-ii",
+    "kt:ja-fn-directions",
+    "kt:ja-fn-describe-town"
+   ]
+  },
+  {
+   "id": "a2-05",
+   "section": "A2",
+   "title": "一起出去：理由与经验",
+   "goal": "能说明迟到等情况的原因，问对方有没有做过某事",
+   "rationale": "「て」表原因和「たことがある」是 A2 交际中最高频的两类表达",
+   "kcs": [
+    "kt:ja-te-cause",
+    "kt:ja-experience-takotogaaru",
+    "kt:ja-tari-listing",
+    "kt:ja-fn-lateness-contact"
+   ]
+  },
+  {
+   "id": "a2-06",
+   "section": "A2",
+   "title": "授受：给、收与帮忙",
+   "goal": "能说明谁给了谁什么、谁为谁做了什么，礼貌地请人帮忙",
+   "rationale": "授受动词按\"视点\"选用，是日语特有的系统，和\"给\"的单一形式对比最大",
+   "kcs": [
+    "kt:ja-giving-receiving",
+    "kt:ja-ageru",
+    "kt:ja-kureru",
+    "kt:ja-morau",
+    "kt:ja-benefactive-teageru",
+    "kt:ja-tekureru",
+    "kt:ja-temorau",
+    "kt:ja-negative-question-request",
+    "kt:ja-fn-ask-favour",
+    "kt:ja-fn-apply-join"
+   ]
+  },
+  {
+   "id": "a2-07",
+   "section": "A2",
+   "title": "料理与看起来",
+   "goal": "能说明谁带什么、评价看起来怎么样的食物",
+   "rationale": "「ていく／てくる」与「そうだ（样态）」都依赖说话人的视点和观察",
+   "kcs": [
+    "kt:ja-teiku-tekuru",
+    "kt:ja-sou-appearance",
+    "kt:ja-fn-food-compliments"
+   ]
+  },
+  {
+   "id": "a2-08",
+   "section": "A2",
+   "title": "工作联络：许可与禁止",
+   "goal": "能请假、请求许可，理解规则与禁止事项",
+   "rationale": "许可与禁止是职场和公共场所的必需功能，都建立在て形上",
+   "kcs": [
+    "kt:ja-permission",
+    "kt:ja-prohibition",
+    "kt:ja-negative-request",
+    "kt:ja-nominal-permission",
+    "kt:ja-deshou",
+    "kt:ja-fn-work-contact"
+   ]
+  },
+  {
+   "id": "a2-09",
+   "section": "A2",
+   "title": "健康的生活",
+   "goal": "能向医生说明症状，说自己为健康注意什么",
+   "rationale": "「～んです」说明情况、「ようにする」表示努力，都是看病和生活建议场景的核心",
+   "kcs": [
+    "kt:ja-lex-body-health",
+    "kt:ja-fn-symptoms",
+    "kt:ja-sugiru",
+    "kt:ja-youni-suru"
+   ]
+  },
+  {
+   "id": "a2-10",
+   "section": "A2",
+   "title": "人际交往与赠礼",
+   "goal": "能用名词修饰说明物品的来历，提议送礼并商量",
+   "rationale": "名词修饰从句（连体修饰）是日语长句的骨架，没有关系代词，要先体会\"修饰在前\"",
+   "kcs": [
+    "kt:ja-noun-modification",
+    "kt:ja-relative-clause",
+    "kt:ja-lex-family-terms",
+    "kt:ja-fn-gifts"
+   ]
+  },
+  {
+   "id": "a2-11",
+   "section": "A2",
+   "title": "周围的人",
+   "goal": "能介绍身边的人：刚做了什么、看起来是什么样的人",
+   "rationale": "「たばかり」「そうな人」让人物描述更自然",
+   "kcs": [
+    "kt:ja-tabakari",
+    "kt:ja-lex-personality",
+    "kt:ja-fn-describe-people",
+    "kt:ja-emotional-adjectives"
+   ]
+  },
+  {
+   "id": "a2-12",
+   "section": "A2",
+   "title": "在餐厅：理由与条件",
+   "goal": "能说明过敏等不能吃的理由，听懂吃法的说明",
+   "rationale": "「ので」比「から」更礼貌，是说明理由的正式选择；「ないで」表示不做某事的状态",
+   "kcs": [
+    "kt:ja-kara-node",
+    "kt:ja-naide",
+    "kt:ja-potential-form",
+    "kt:ja-fn-restaurant-needs"
+   ]
+  },
+  {
+   "id": "a2-13",
+   "section": "A2",
+   "title": "旅行：建议与能力",
+   "goal": "能给出和接受旅行建议，说能做到什么",
+   "rationale": "可能形与「ほうがいい」是旅行计划里最常用的两类表达",
+   "kcs": [
+    "kt:ja-hougaii",
+    "kt:ja-negative-advice",
+    "kt:ja-koto-ga-dekiru",
+    "kt:ja-fn-travel-advice"
+   ]
+  },
+  {
+   "id": "a2-14",
+   "section": "A2",
+   "title": "地区活动：条件与疑问",
+   "goal": "能说明\"如果下雨就……\"等安排，问别人是否知道某事",
+   "rationale": "四种条件形（と・ば・たら・なら）在 A2 集中对比；嵌入疑问「～か」是问信息的礼貌形式",
+   "kcs": [
+    "kt:ja-conditional-tara",
+    "kt:ja-conditional-ba",
+    "kt:ja-conditional-nara",
+    "kt:ja-conditional-family",
+    "kt:ja-embedded-question",
+    "kt:ja-fn-local-events"
+   ]
+  },
+  {
+   "id": "a2-15",
+   "section": "A2",
+   "title": "节日与礼仪",
+   "goal": "能询问节日习俗，确认场合该怎么穿、怎么做",
+   "rationale": "社会文化知识（节庆、送礼、禁忌）是日语交际里决定\"得体\"的部分",
+   "kcs": [
+    "kt:ja-soc-annual-events",
+    "kt:ja-soc-manners",
+    "kt:ja-fn-ask-customs"
+   ]
+  },
+  {
+   "id": "a2-16",
+   "section": "A2",
+   "title": "购物与比较",
+   "goal": "能比较商品、说明使用感受，说明忘了带什么",
+   "rationale": "比较句、「やすい／にくい」和「てしまう」都是购物时评价与说明的工具",
+   "kcs": [
+    "kt:ja-comparison",
+    "kt:ja-yasui-nikui",
+    "kt:ja-teshimau",
+    "kt:ja-fn-shopping-compare"
+   ]
+  },
+  {
+   "id": "a2-17",
+   "section": "A2",
+   "title": "各种服务",
+   "goal": "能利用图书馆、理发店、邮局等服务，提出具体要求",
+   "rationale": "「てある」「ておく」「てみる」是围绕\"准备与尝试\"的 て形补助动词",
+   "kcs": [
+    "kt:ja-result-tearu",
+    "kt:ja-teoku-temiru",
+    "kt:ja-fn-services"
+   ]
+  },
+  {
+   "id": "a2-18",
+   "section": "A2",
+   "title": "自然、环境与防灾",
+   "goal": "能理解防灾提示，说明状态保持不变，打电话求救",
+   "rationale": "「たまま」「ても」用于提醒与规则；防灾与紧急求助是在日生活的高风险场景",
+   "kcs": [
+    "kt:ja-tamama",
+    "kt:ja-temo",
+    "kt:ja-lex-nature-disaster",
+    "kt:ja-fn-emergency"
+   ]
+  },
+  {
+   "id": "a2-19",
+   "section": "A2",
+   "title": "我的人生：变化与打算",
+   "goal": "能说明能力的变化，谈将来的打算",
+   "rationale": "意志形和「ようと思う」「つもり」把话题推向将来的计划",
+   "kcs": [
+    "kt:ja-toki",
+    "kt:ja-mae-ato",
+    "kt:ja-madeni",
+    "kt:ja-youni-naru",
+    "kt:ja-volitional-form",
+    "kt:ja-intention-omou",
+    "kt:ja-tsumori",
+    "kt:ja-kotoni-suru-naru",
+    "kt:ja-fn-future-plans"
+   ]
+  },
+  {
+   "id": "a2-20",
+   "section": "A2",
+   "title": "语体：丁寧体与普通体",
+   "goal": "能区分对谁该用丁寧体、对谁用普通体，听懂朋友间的口语缩略",
+   "rationale": "语体选择是日语\"对谁说话\"的语法化，A2 有了普通形之后才能系统教",
+   "kcs": [
+    "kt:ja-style-awareness",
+    "kt:ja-polite-style",
+    "kt:ja-plain-style",
+    "kt:ja-soc-casual-contractions",
+    "kt:ja-sentence-final-particles",
+    "kt:ja-soc-uchi-soto",
+    "kt:ja-str-aizuchi"
+   ]
+  },
+  {
+   "id": "a2-21",
+   "section": "A2",
+   "title": "读、听、写：日常范围",
+   "goal": "能读懂日常话题的短文和通知，听懂稍慢的日常对话，写短邮件和聊天消息",
+   "rationale": "把 A2 知识汇总为日常读听写任务",
+   "kcs": [
+    "kt:ja-kanji-n4",
+    "kt:ja-sound-pitch",
+    "kt:ja-sound-nasal-consonant",
+    "kt:ja-sound-nasal-other",
+    "kt:ja-sound-devoice",
+    "kt:ja-sound-r",
+    "kt:ja-sound-z",
+    "kt:ja-script-katakana-extended",
+    "kt:ja-skill-read-daily",
+    "kt:ja-skill-listen-daily",
+    "kt:ja-skill-write-messages",
+    "kt:ja-orth-input"
+   ]
+  },
+  {
+   "id": "b1-01",
+   "section": "B1",
+   "title": "喜欢的东西，口语里的\"话题\"",
+   "goal": "能自然地谈喜好，口语中确认记不清的事",
+   "rationale": "「って」「っけ」是口语中极高频的标记，书本语法里常被忽略",
+   "kcs": [
+    "kt:ja-tte-topic",
+    "kt:ja-kke",
+    "kt:ja-fn-talk-likes"
+   ]
+  },
+  {
+   "id": "b1-02",
+   "section": "B1",
+   "title": "住房与推测",
+   "goal": "能找房子、谈搬家，向房东说明设备故障",
+   "rationale": "「みたい・ようだ・らしい」是依据观察推断的证据性表达，日语区分得比中文细",
+   "kcs": [
+    "kt:ja-evidentials",
+    "kt:ja-sou-hearsay",
+    "kt:ja-lex-housing",
+    "kt:ja-fn-housing-problems"
+   ]
+  },
+  {
+   "id": "b1-03",
+   "section": "B1",
+   "title": "日常饮食与推荐",
+   "goal": "能说明喜欢的店，推荐并说明理由",
+   "rationale": "自己的生活习惯和推荐是 B1 叙述与评价的练习场",
+   "kcs": [
+    "kt:ja-fn-recommend",
+    "kt:ja-fn-own-habits"
+   ]
+  },
+  {
+   "id": "b1-04",
+   "section": "B1",
+   "title": "结识新朋友",
+   "goal": "能和陌生人自然搭话，表达交朋友的愿望",
+   "rationale": "「ればと思う」等愿望表达与搭话策略",
+   "kcs": [
+    "kt:ja-wish-expressions",
+    "kt:ja-fn-start-conversation"
+   ]
+  },
+  {
+   "id": "b1-05",
+   "section": "B1",
+   "title": "我与日语：讲经历",
+   "goal": "能讲述学日语的契机和方法，转述别人说的话",
+   "rationale": "引用与转述「と言う」把叙述从\"我\"扩展到\"别人说\"",
+   "kcs": [
+    "kt:ja-quotation",
+    "kt:ja-quotation-opinion",
+    "kt:ja-fn-learning-story"
+   ]
+  },
+  {
+   "id": "b1-06",
+   "section": "B1",
+   "title": "遇到问题时：受身",
+   "goal": "能说明遇到的麻烦（被骗、被偷），识别诈骗邮件",
+   "rationale": "受身句在日语里常表示\"受害\"，是描述麻烦事的主要手段",
+   "kcs": [
+    "kt:ja-passive-event",
+    "kt:ja-passive-person",
+    "kt:ja-passive-adversity",
+    "kt:ja-fn-trouble-report"
+   ]
+  },
+  {
+   "id": "b1-07",
+   "section": "B1",
+   "title": "人际交往：祝贺与烦恼",
+   "goal": "能在婚礼等场合祝贺，向别人倾诉和商量烦恼",
+   "rationale": "正式祝贺语和倾诉商量都依赖场合得体",
+   "kcs": [
+    "kt:ja-fn-congratulate-condole",
+    "kt:ja-fn-consult-worries"
+   ]
+  },
+  {
+   "id": "b1-08",
+   "section": "B1",
+   "title": "旅行的乐趣",
+   "goal": "能讲旅行经历和感想，表达想尝试的事",
+   "rationale": "叙述与感想的综合运用",
+   "kcs": [
+    "kt:ja-te-yokatta",
+    "kt:ja-fn-travel-story"
+   ]
+  },
+  {
+   "id": "b1-09",
+   "section": "B1",
+   "title": "使役与使役受身",
+   "goal": "能说明让别人做、允许别人做，以及被迫做",
+   "rationale": "使役与使役受身在职场和家庭叙述中高频，依赖受身",
+   "kcs": [
+    "kt:ja-causative-form",
+    "kt:ja-causative-force",
+    "kt:ja-causative-permission",
+    "kt:ja-causative-passive",
+    "kt:ja-causative-passive-perspective"
+   ]
+  },
+  {
+   "id": "b1-10",
+   "section": "B1",
+   "title": "在日本工作：敬语入门",
+   "goal": "能说明工作内容，用敬语与上司和客人交流，在面试中自荐",
+   "rationale": "敬语是职场日语的门槛；B1 先掌握常用尊敬语和谦让语，系统化放在 B2",
+   "kcs": [
+    "kt:ja-honorifics",
+    "kt:ja-honorific-lexical",
+    "kt:ja-honorific-oninaru",
+    "kt:ja-honorific-rareru",
+    "kt:ja-humble-lexical",
+    "kt:ja-humble-osuru",
+    "kt:ja-saseteitadaku",
+    "kt:ja-fn-explain-work",
+    "kt:ja-fn-job-interview"
+   ]
+  },
+  {
+   "id": "b1-11",
+   "section": "B1",
+   "title": "时间关系",
+   "goal": "能精确表达\"在……期间\"\"趁……\"\"一……就……\"",
+   "rationale": "JF 的时间表达专题把 とき・間・うち・までに 的区别讲得很清楚，B1 集中对比",
+   "kcs": [
+    "kt:ja-aidani",
+    "kt:ja-aida-duration",
+    "kt:ja-uchini",
+    "kt:ja-na-iuchini",
+    "kt:ja-uchi-duration",
+    "kt:ja-totan"
+   ]
+  },
+  {
+   "id": "b1-12",
+   "section": "B1",
+   "title": "理由与逆接",
+   "goal": "能区分各种理由和转折表达的语气",
+   "rationale": "理由（から・ので・おかげで・せいで）和逆接（のに・けれども）的语气差异是 B1 表达分寸的关键",
+   "kcs": [
+    "kt:ja-noni",
+    "kt:ja-keredomo",
+    "kt:ja-conjunctive-particles",
+    "kt:ja-okagede",
+    "kt:ja-seide",
+    "kt:ja-n-dakara",
+    "kt:ja-to-ittemo",
+    "kt:ja-shikashi",
+    "kt:ja-discourse-connectives"
+   ]
+  },
+  {
+   "id": "b1-13",
+   "section": "B1",
+   "title": "义务、建议与指示",
+   "goal": "能表达必须、建议、应该和规则性的指示",
+   "rationale": "JF 的义务/助言/指示专题给出了形式间的语气差别",
+   "kcs": [
+    "kt:ja-nakerebanaranai",
+    "kt:ja-naitoikenai",
+    "kt:ja-nakutewanaranai",
+    "kt:ja-nakutemoii",
+    "kt:ja-bekida",
+    "kt:ja-instruction-youni",
+    "kt:ja-instruction-koto",
+    "kt:ja-command-form"
+   ]
+  },
+  {
+   "id": "b1-14",
+   "section": "B1",
+   "title": "推测与判断",
+   "goal": "能区分可能、确信、应当如此和理所当然的判断",
+   "rationale": "推量（かもしれない・にちがいない・はず・わけ）表达说话人的把握程度",
+   "kcs": [
+    "kt:ja-possibility-certainty",
+    "kt:ja-hazu",
+    "kt:ja-wake"
+   ]
+  },
+  {
+   "id": "b1-15",
+   "section": "B1",
+   "title": "助词的焦点与 は／が",
+   "goal": "能根据语境正确选择 は 和 が，用副助词表达限定、意外和强调",
+   "rationale": "は／が 是中文母语者最难的日语知识点之一；在有了足够句型后，B1 系统对比",
+   "kcs": [
+    "kt:ja-wa-ga-contrast",
+    "kt:ja-focus-particles",
+    "kt:ja-focus-shika",
+    "kt:ja-focus-koso",
+    "kt:ja-focus-sae",
+    "kt:ja-yori-comparison",
+    "kt:ja-ba-hodo"
+   ]
+  },
+  {
+   "id": "b1-16",
+   "section": "B1",
+   "title": "读、听、写、说：日常到社会",
+   "goal": "能读懂日常与社会话题的文章，听懂接近自然速度的对话，写结构清楚的文章和邮件，做简短发言",
+   "rationale": "B1 的读听写说任务，并开始用汉字词扩充词汇",
+   "kcs": [
+    "kt:ja-kanji-n3",
+    "kt:ja-lex-word-origin",
+    "kt:ja-lex-onomatopoeia",
+    "kt:ja-sound-loan-accent",
+    "kt:ja-sound-compound-accent",
+    "kt:ja-sound-rendaku",
+    "kt:ja-skill-read-bridge",
+    "kt:ja-skill-listen-bridge",
+    "kt:ja-skill-short-speech",
+    "kt:ja-skill-write-paragraph",
+    "kt:ja-skill-write-email-polite",
+    "kt:ja-str-paraphrase-ja",
+    "kt:ja-str-guess-kanji"
+   ]
+  },
+  {
+   "id": "b2-01",
+   "section": "B2",
+   "title": "逆接与让步的高级形式",
+   "goal": "能用书面和正式场合的让步表达论证",
+   "rationale": "JF 逆接专题中的 N2 形式集中在 B2，用于议论与说明文",
+   "kcs": [
+    "kt:ja-nagara-concession",
+    "kt:ja-nimo-kakawarazu",
+    "kt:ja-monono",
+    "kt:ja-ni-kakawarazu",
+    "kt:ja-towaie",
+    "kt:ja-kara-toitte",
+    "kt:ja-adv-toiedomo"
+   ]
+  },
+  {
+   "id": "b2-02",
+   "section": "B2",
+   "title": "理由的细分与もの",
+   "goal": "能区分各种理由表达的立场，用もの表达规律、劝诫和回顾",
+   "rationale": "もの・ものだから・からこそ 等表达说话人对理由和规律的态度",
+   "kcs": [
+    "kt:ja-monodakara",
+    "kt:ja-karaka",
+    "kt:ja-karakoso",
+    "kt:ja-karaniwa",
+    "kt:ja-mono-general",
+    "kt:ja-mono-admonition",
+    "kt:ja-mono-recollection",
+    "kt:ja-mono-impossible"
+   ]
+  },
+  {
+   "id": "b2-03",
+   "section": "B2",
+   "title": "こと与ところ的多种用法",
+   "goal": "能理解こと、ところ在感叹、评价、时间、逆接中的用法",
+   "rationale": "形式名词是中高级日语的难点：同形不同义，要靠语境区分",
+   "kcs": [
+    "kt:ja-adv-koto-contrast",
+    "kt:ja-adv-koto-empathy",
+    "kt:ja-adv-koto-alias",
+    "kt:ja-adv-koto-person",
+    "kt:ja-adv-koto-evaluation",
+    "kt:ja-adv-koto-reason",
+    "kt:ja-adv-koto-quote",
+    "kt:ja-adv-koto-without",
+    "kt:ja-adv-koto-required",
+    "kt:ja-adv-tokoro-near",
+    "kt:ja-adv-tokoro-discover",
+    "kt:ja-adv-tokoro-contrary",
+    "kt:ja-adv-tokoro-ni",
+    "kt:ja-adv-tokoro-wo",
+    "kt:ja-adv-tokoro-de",
+    "kt:ja-adv-tokoro-polite",
+    "kt:ja-adv-tokoro-expect",
+    "kt:ja-adv-tokoro-futile"
+   ]
+  },
+  {
+   "id": "b2-04",
+   "section": "B2",
+   "title": "意图、不得不与安排",
+   "goal": "能表达过去的意图与认定、不得不做、正式的安排与指示",
+   "rationale": "つもり的扩展、ざるを得ない 等表达说话人的立场",
+   "kcs": [
+    "kt:ja-adv-tsumori-past",
+    "kt:ja-adv-tsumori-belief-past",
+    "kt:ja-adv-tsumori-refusal",
+    "kt:ja-adv-tsumori-intent-denial",
+    "kt:ja-zaruwoenai",
+    "kt:ja-naiwake-niwa",
+    "kt:ja-teitadakimasu-instruction"
+   ]
+  },
+  {
+   "id": "b2-05",
+   "section": "B2",
+   "title": "复合助词：书面的关系表达",
+   "goal": "能用について・に対して・として・にとって・によって等组织说明与议论",
+   "rationale": "复合格助词是从会话日语走向书面日语的桥梁，N3–N2 极高频",
+   "kcs": [
+    "kt:ja-compound-topic",
+    "kt:ja-compound-standpoint",
+    "kt:ja-compound-means-cause",
+    "kt:ja-compound-range-change"
+   ]
+  },
+  {
+   "id": "b2-06",
+   "section": "B2",
+   "title": "书面语体与说明文",
+   "goal": "能把会话文改写成だ・である体的书面文章，使用书面接续词",
+   "rationale": "书面语有自己的文体、接续词和名词化，是写报告、论文的前提",
+   "kcs": [
+    "kt:ja-soc-written-style",
+    "kt:ja-written-connectives",
+    "kt:ja-nominal-style",
+    "kt:ja-kanji-n2",
+    "kt:ja-orth-okurigana",
+    "kt:ja-orth-genkou"
+   ]
+  },
+  {
+   "id": "b2-07",
+   "section": "B2",
+   "title": "职场与敬语的综合运用",
+   "goal": "能在会议和商务邮件中得体地使用敬语、缓冲语和委婉拒绝",
+   "rationale": "B1 学了敬语形式，B2 要在真实职场情境中按对象和内外关系组合使用",
+   "kcs": [
+    "kt:ja-soc-cushion-refusal",
+    "kt:ja-soc-business-keigo",
+    "kt:ja-fn-meetings-ja",
+    "kt:ja-skill-write-business-email",
+    "kt:ja-fn-telephone-ja"
+   ]
+  },
+  {
+   "id": "b2-08",
+   "section": "B2",
+   "title": "读、听、说、写：广泛话题",
+   "goal": "能读懂报纸评论、说明文，听懂新闻和讲座，做有条理的发表，写意见文、报告和摘要",
+   "rationale": "B2 的活动：论证与说明",
+   "kcs": [
+    "kt:ja-skill-read-broad",
+    "kt:ja-skill-listen-broad",
+    "kt:ja-skill-presentation-ja",
+    "kt:ja-skill-discussion-ja",
+    "kt:ja-skill-write-opinion",
+    "kt:ja-skill-summary-ja",
+    "kt:ja-lex-yojijukugo-idioms"
+   ]
+  },
+  {
+   "id": "c1-01",
+   "section": "C1",
+   "title": "N1 功能语（一）：时间、范围与限定",
+   "goal": "能理解并使用表达时间关系、范围限度和限定的书面功能语",
+   "rationale": "N1 级文型多为书面功能语，按功能分组学习比逐条记忆更有效",
+   "kcs": [
+    "kt:ja-yainaya",
+    "kt:ja-n1-time-relations",
+    "kt:ja-n1-range-limit",
+    "kt:ja-n1-limitation-addition",
+    "kt:ja-n1-relation-manner"
+   ]
+  },
+  {
+   "id": "c1-02",
+   "section": "C1",
+   "title": "N1 功能语（二）：逆接、条件、目的与原因",
+   "goal": "能用书面功能语精确表达让步、条件、目的手段与原因",
+   "rationale": "与 B2 的逆接、理由形式成对学习",
+   "kcs": [
+    "kt:ja-n1-concession-accompaniment",
+    "kt:ja-n1-condition",
+    "kt:ja-n1-purpose-cause",
+    "kt:ja-volitional-mononara"
+   ]
+  },
+  {
+   "id": "c1-03",
+   "section": "C1",
+   "title": "N1 功能语（三）：评价、强调与心情",
+   "goal": "能理解和使用表达可能性、评价基准、比较、结局、强调与心情的功能语",
+   "rationale": "这些功能语决定文章的立场和语气，是读懂评论与文学的关键",
+   "kcs": [
+    "kt:ja-n1-possibility-standard",
+    "kt:ja-n1-comparison-outcome",
+    "kt:ja-n1-emphasis-assertion",
+    "kt:ja-n1-evaluation-feeling"
+   ]
+  },
+  {
+   "id": "c1-04",
+   "section": "C1",
+   "title": "语域、方言与表达的精度",
+   "goal": "能根据场合精细调整语域，听懂常见方言，理解含蓄与言外之意",
+   "rationale": "C1 的社会语言能力：不仅说对，还要说得恰如其分",
+   "kcs": [
+    "kt:ja-soc-register-control",
+    "kt:ja-soc-dialects",
+    "kt:ja-str-implicature",
+    "kt:ja-kanji-joyo"
+   ]
+  },
+  {
+   "id": "c1-05",
+   "section": "C1",
+   "title": "学术与专业活动",
+   "goal": "能读懂论说文、学术文章与文学作品，听懂专业讲座，写报告和论文，主持讨论",
+   "rationale": "C1 的活动：综合、论证与创造性语言",
+   "kcs": [
+    "kt:ja-skill-read-complex",
+    "kt:ja-skill-listen-complex",
+    "kt:ja-skill-read-literature-ja",
+    "kt:ja-skill-write-report-ja",
+    "kt:ja-skill-chair-discussion",
+    "kt:ja-skill-mediate-ja"
+   ]
+  }
+ ]
+}

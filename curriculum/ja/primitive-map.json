@@ -1,0 +1,5882 @@
+{
+ "lang": "ja",
+ "map": [
+  {
+   "kc": "kt:ja-script-hiragana",
+   "uses": [
+    {
+     "primitive": "prim:sound-spelling-blend",
+     "role": "primary",
+     "binding": "五十音逐行对音拼词，再听音写假名；检查清音46字认读与听写"
+    },
+    {
+     "primitive": "prim:character-anatomy",
+     "role": "support",
+     "binding": "形近组ぬ/め、ね/れ/わ、さ/ち、る/ろ拆笔画比较，按笔顺写出"
+    },
+    {
+     "primitive": "prim:reading-aid-fade",
+     "role": "support",
+     "binding": "课文词先附罗马字，按已掌握假名逐字撤除，只计无注音读对"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-sound-vowels",
+   "uses": [
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "primary",
+     "binding": "对立 え/エイ、お/オウ（无滑音单元音vs汉语复元音）；检查发音不带滑音"
+    },
+    {
+     "primitive": "prim:rhythm-shadow",
+     "role": "support",
+     "binding": "跟读あいうえお连读与短词，比较每个元音的长度是否均等"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-sound-mora",
+   "uses": [
+    {
+     "primitive": "prim:rhythm-shadow",
+     "role": "primary",
+     "binding": "材料とうきょう、おばあさん等多拍词，逐拍拍手跟读；检查拍数与原声一致"
+    },
+    {
+     "primitive": "prim:oral-sound-play",
+     "role": "support",
+     "binding": "不看文字，拍手数词的拍数（ここ/こうこう）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-script-dakuten",
+   "uses": [
+    {
+     "primitive": "prim:sound-spelling-blend",
+     "role": "primary",
+     "binding": "对立 か/が、た/だ、は/ば/ぱ；听音写出带不带浊点，检查漏写浊点"
+    },
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "support",
+     "binding": "先听辨清浊词对（かき/かぎ），再写出所听到的形式"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-sound-kg",
+   "uses": [
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "primary",
+     "binding": "对立 k/g（たかい/たがい、かき/かぎ）；中国人以送气区分，检查按声带振动辨认"
+    },
+    {
+     "primitive": "prim:transcript-diff",
+     "role": "support",
+     "binding": "听写含か/が的短句，对齐原文标出清浊错位"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-sound-td",
+   "uses": [
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "primary",
+     "binding": "对立 t/d（たいがく/だいがく）；检查浊音声带振动、不被听成清音"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-sound-pb",
+   "uses": [
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "primary",
+     "binding": "对立 p/b（パス/バス）；拼音b不振动易被听成ぱ，检查ば行带浊音"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-greetings",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "早中晚、告别、进出门的问候回合；检查对象是老师/上司时补全ございます"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "同一问候对朋友/老师两版（おはよう/おはようございます），指出露馅处"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-thanks-apologies",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 すみません/ごめんなさい/ありがとう/申し訳ありません，按对象和道谢或道歉意图选择"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "对上级、顾客、朋友校准道歉强度与礼貌度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-str-repair-basic",
+   "uses": [
+    {
+     "primitive": "prim:repair-and-backchannel",
+     "role": "primary",
+     "binding": "困难时刻是语速快或生词，检查 もう一度お願いします／ゆっくり… 的使用"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "听不懂时的修复回合：すみません＋もう一度/ゆっくり；检查先加すみません缓冲"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "对方语速快信息缺失，必须请求重复才能完成任务"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-classroom-language",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "课堂指令和提问回合；检查用「～は日本語で何と言いますか」问说法"
+    },
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "support",
+     "binding": "听老师课堂指令（開けて、書いて）做动作；适合低龄学习者"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-soc-bowing-etiquette",
+   "uses": [
+    {
+     "primitive": "prim:culture-incident",
+     "role": "primary",
+     "binding": "事件：初次见面伸手握手/拥抱；判断对方感受，改为鞠躬与寒暄配合"
+    },
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "support",
+     "binding": "从进门、问候、告别走一遍鞠躬深浅与场合"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-copula",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "槽位 主题は＋名词＋です（谓语在句末）；检查*私です学生类前置错误"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "只能凭です/ではありません判断肯定或否定的身份判断题"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-topic-predicate",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "只凭は分出话题与说明的句子判断；兼查助词は读wa"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-nominal-question",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "只凭句末か判断陈述或疑问；检查Nですか不漏です"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "问身份回合：はい、そうです/いいえ、ちがいます 的分支回答"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-noun-no-noun",
+   "uses": [
+    {
+     "primitive": "prim:attach-position",
+     "role": "primary",
+     "binding": "N1のN2 中N1挂在N2上（所属/属性）；检查形容词后不误加の"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "判断の表所属还是属性的意义题"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-script-katakana",
+   "uses": [
+    {
+     "primitive": "prim:character-anatomy",
+     "role": "primary",
+     "binding": "形近组シ/ツ、ソ/ン、ク/ケ/タ按笔画方向拆解再按笔顺书写"
+    },
+    {
+     "primitive": "prim:sound-spelling-blend",
+     "role": "support",
+     "binding": "外来语与外国人名音形对应，按音拼出片假名（含长音ー）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-soc-address-terms",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "さん/様/くん/ちゃん按关系选择；检查不给自己名字加さん"
+    },
+    {
+     "primitive": "prim:culture-incident",
+     "role": "support",
+     "binding": "事件：自称王さん、直呼上司姓名，判断对方理解并改写"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-lex-personal-info",
+   "uses": [
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "primary",
+     "binding": "国名、语言、职业词先回想再对照"
+    },
+    {
+     "primitive": "prim:false-friend-check",
+     "role": "support",
+     "binding": "中文汉字国名（美国）对照日语片假名国名（アメリカ）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-self-introduction",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "初次见面回合：はじめまして→名字→国籍职业→よろしく；检查不给自己加さん"
+    },
+    {
+     "primitive": "prim:carry-across",
+     "role": "support",
+     "binding": "把模板换成自己真实信息再说一遍"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-sound-intonation",
+   "uses": [
+    {
+     "primitive": "prim:contour-match",
+     "role": "primary",
+     "binding": "选出句末升调（疑问）或降调（陈述）的轮廓；检查不给每字加声调起伏"
+    },
+    {
+     "primitive": "prim:rhythm-shadow",
+     "role": "support",
+     "binding": "跟读短对话，对比句末语调曲线"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-demonstrative-things",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 これ/それ/あれ按说话人与听话人距离选；检查听话人身边物用それ"
+    },
+    {
+     "primitive": "prim:role-marking",
+     "role": "support",
+     "binding": "场景图标出说话人、听话人、物品位置后选指示词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-demonstrative-modifiers",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "对立 この/これ 等：只凭能否后接名词判断；检查*このは类错误"
+    },
+    {
+     "primitive": "prim:attach-position",
+     "role": "support",
+     "binding": "このN中この必须挂在名词前，拿掉名词看是否成立"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-demonstrative-places",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 ここ/そこ/あそこ 与 これ/あれ（场所vs物）；检查问场所不用これ"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-demonstrative-questions",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "疑问词在谓语位：NはだれNですか；检查*だれは类倒置"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 どれ/どこ/どの/だれ/なん 按所问对象选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-mo-also",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "只凭も/は区分“也”与话题的判断题；检查不出现*はも叠用"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-script-small-kana",
+   "uses": [
+    {
+     "primitive": "prim:sound-spelling-blend",
+     "role": "primary",
+     "binding": "对立 びょういん/びよういん、きって/きて；听音写大小字，检查小字位置与大小"
+    },
+    {
+     "primitive": "prim:character-anatomy",
+     "role": "support",
+     "binding": "小ゃゅょっ占格大小与位置的书写练习"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-sound-yoon",
+   "uses": [
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "primary",
+     "binding": "对立 きょ（一拍）/きよ（两拍）；听辨拗音不拆拍"
+    },
+    {
+     "primitive": "prim:rhythm-shadow",
+     "role": "support",
+     "binding": "跟读含拗音词，拍手检查拍数"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-sound-sokuon",
+   "uses": [
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "primary",
+     "binding": "对立 きって/きて、ざっし/ざし；检查促音占满一拍不被吞"
+    },
+    {
+     "primitive": "prim:rhythm-shadow",
+     "role": "support",
+     "binding": "跟读促音词，比较停顿长度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-sound-long",
+   "uses": [
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "primary",
+     "binding": "对立 おばあさん/おばさん、とうきょう/ときょ；检查长音不缩短"
+    },
+    {
+     "primitive": "prim:sound-spelling-blend",
+     "role": "support",
+     "binding": "长音写法规则（おう/えい/ー）按音拼写"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-numerals-system",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "位值组合规则用到新数字（百、千不加いち）；系统显示万以下各位拼合"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "听价格、号码只记数字格子，复盘位值错误"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-numerals-variants",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "音变规则（さんびゃく、ろっぴゃく、はっせん）应用到新组合，显示每步推导"
+    },
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "support",
+     "binding": "4/7/9的两种读法先回想再对照，记录独立正确率"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-counters",
+   "uses": [
+    {
+     "primitive": "prim:classifier-match",
+     "role": "primary",
+     "binding": "物品按形状分类选つ/人/枚/本/個/匹；检查不照搬汉语量词（一瓶→一本）"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "助数词与数字的音变（いっぽん、さんぼん、ろっぽん）推导到新数"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-hours",
+   "uses": [
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "primary",
+     "binding": "四時よじ、九時くじ、七時しちじ先回想再对照"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "听钟点只填时刻格，复盘4/7/9读音错误"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-minutes-half",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "ふん/ぷん交替规则用于新分钟数（さんぷん、ろっぷん），显示推导"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "听时刻表只记分钟，检查ふん/ぷん听辨"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-calendar-dates",
+   "uses": [
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "primary",
+     "binding": "曜日与日期特殊读法（ついたち、はつか）先回想；检查月曜日≠星期日"
+    },
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "support",
+     "binding": "在日历、通知上找到指定日期与曜日"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-deictic-days",
+   "uses": [
+    {
+     "primitive": "prim:reading-select",
+     "role": "primary",
+     "binding": "今日きょう、明日あした、今年ことし等熟字训与音读对照，按语境选读"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "把昨日/今日/明日等放上时间轴对应位置"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-kara-made",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "时间线上标起点和终点再选から/まで；检查助词后置（九時から）"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "听营业时间只记起止时刻"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-schedule",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "询问营业时间回合：何時から何時までですか；检查问截止时间用まで"
+    },
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "support",
+     "binding": "在店铺营业时间牌找开/关门时刻"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-polite-verb",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "槽位 宾语＋を＋动词ます（动词句末）；检查*飲みますお茶类汉语语序"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "只凭ます/ません判断肯定否定"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-verb-question",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "动词疑问回答分支：はい、Vます/いいえ、Vません；检查不用はい、そうです"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "只凭句末か判断是否为问句"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-polite-past",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "ます→ました/ません→ませんでした 推到新动词；检查*ましたません"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "事件放时间轴过去/非过去后选形式"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-particle-function",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "场景图中名词与角色连线，再看助词总在名词后；检查*で駅类前置"
+    },
+    {
+     "primitive": "prim:slot-order",
+     "role": "support",
+     "binding": "名词＋助词作为一个槽块拖放，违反后置时指出"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-object-o",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "动作对象连到を；对立 好き/わかる 对象用が；检查*日本語をわかります"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判を/が用例，归入“状态谓语对象用が”边界类"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-direction-e",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "移动方向连到へ（读e）；检查读音与写法"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "对立 へ/に 只凭助词判方向或到达点"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-ni-goal",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "到达点和对方连到に；对立 乗る/会う 的对象用に不用を"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判*電車を乗ります、*友達を会います 等用例"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-time-ni",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "裁判 九時に/明日/毎日 加不加に；检查相对时间词不加に"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "只凭有无に判断具体时点或相对时间"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-de-place",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "动作场所连到で、存在场所连到に；检查*図書館に勉強します"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 で/に 按动作还是存在选择"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-to-companion",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "场景图中同伴连到と；检查不漏と（友達と見ます）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-frequency-time",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "裁判毎日/週二回/よく 后加不加に；检查*毎日に"
+    },
+    {
+     "primitive": "prim:scale-place",
+     "role": "support",
+     "binding": "把いつも/よく/ときどき/あまり～ない/ぜんぜん～ない排上频度梯度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-lex-daily-verbs",
+   "uses": [
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "primary",
+     "binding": "采集“助词＋动词”整块（お風呂に入る、シャワーを浴びる）入语块本"
+    },
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "support",
+     "binding": "从起床到睡觉走一遍日常动作动词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-daily-routine",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "按时间顺序走一天，每步用时间＋场所で＋动词ます"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "先写自己的一天，再与范例对照助词で/に差距"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-case-particles",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "一个场景图中标齐施事、对象、场所、方向、起止、比较基准再选格助词"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判に/で、を/が混用例并归类"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-ga-subject",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "好恶、能力、存在的对象连到が；对立 魚を食べる/魚が好き"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 *魚を好き、*日本語をわかる 等，归入状态谓语类"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-likes-dislikes",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "好き/きらい 对象只能用が；检查*ラーメンを好き"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "问答喜欢什么：Nが好きですか→はい/あまり"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-lex-food-drink",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "走一遍点餐和用餐场景调出食物餐具词"
+    },
+    {
+     "primitive": "prim:false-friend-check",
+     "role": "support",
+     "binding": "お湯按中文猜成汤，对照实为热水"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-noun-request",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "槽位 N＋を＋ください；检查*ください、メニュー前置"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "店员与顾客回合：Nをください/お願いします"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-quantity-request",
+   "uses": [
+    {
+     "primitive": "prim:attach-position",
+     "role": "primary",
+     "binding": "数量词位置：Nを三つください（数量挂动词前）对比三つのN"
+    },
+    {
+     "primitive": "prim:classifier-match",
+     "role": "support",
+     "binding": "点单时按物品选助数词与读音"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-ordering",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "进店到结账回合：何名様→三人です→注文；检查不对自己用様"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "区分店员敬语与顾客普通礼貌，标出用到自己身上的露馅处"
+    },
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "support",
+     "binding": "在真实菜单上找菜名和价格"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-existence",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 あります/います 按有生命与否选；检查*兄があります"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "只凭あります/います判定所说的是人物还是物"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-location-existence",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "对立两种语序 NにNがあります/NはNにあります 按新旧信息排列"
+    },
+    {
+     "primitive": "prim:role-marking",
+     "role": "support",
+     "binding": "存在场所连到に不用で；检查*教室で学生がいます"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-spatial-nouns",
+   "uses": [
+    {
+     "primitive": "prim:attach-position",
+     "role": "primary",
+     "binding": "N＋の＋上/中/前：方位名词挂在参照物后；检查不漏の"
+    },
+    {
+     "primitive": "prim:picture-describe",
+     "role": "support",
+     "binding": "看房间图描述物品位置，按图核对方位"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-lex-house-workplace",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "走一遍家里各房间和办公室调出物品词"
+    },
+    {
+     "primitive": "prim:false-friend-check",
+     "role": "support",
+     "binding": "台所、事務所按中文字面猜，再对照日语义"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-ask-location",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "问人/物在哪回合：どこにいますか/ありますか；检查问人用います"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "学习者缺物品位置信息必须问出来"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adjective-classes",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "先归类イ/ナ形容词（きれい、きらい为ナ），再对新词变否定；显示推导"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判*きれくない、*きれいくない，归入“看词尾误判”类"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-i-adjective-noun",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "对立 おいしいケーキ/*おいしいのケーキ；判断修饰形是否成立"
+    },
+    {
+     "primitive": "prim:attach-position",
+     "role": "support",
+     "binding": "イ形容词直接挂名词前，拿掉の看是否成立"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-na-adjective-noun",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "对立 静かな部屋/*静かの部屋；只凭な判断"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "ナ形容词修饰形规则推到新词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-i-adjective-predicate",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "高い→高くないです 规则推到新形容词；检查*高いではありません"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-i-adjective-question",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 どう/どんなN 按问评价或问种类选；检查どんな不单独作谓语"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "问感想回合：日本の生活はどうですか→答评价"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-i-adjective-past",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "楽しい→楽しかったです 推到新词，含いい→よかった；检查*楽しいでした"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴过去点上选过去形"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-na-adjective-predicate",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "静か→静かです/でした/ではありません 推导；检查*静かなです"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-past-copula",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "时间轴上标昨天/今天后选Nでした/です；检查谈过去仍用です"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "名词谓语四形推导到新名词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-degree-adverbs",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "把とても/かなり/すこし/あまり～ない/ぜんぜん～ない排上程度梯度；检查あまり接否定"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判*あまり高いです 等用例"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-topic-part-attribute",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "全体（象）连到は、部分（鼻）连到が；检查两处都用は产生对比"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 兄は背が高い/兄は背は高い 看含义变化"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-final-ne",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 ね/よ/无 按共享或新信息选；检查告诉新信息不用ね"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "共同看景、确认约定回合中加ね共鸣"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-final-yo",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 よ/ね：告知对方不知道vs共同感受；检查两人共看风景时用ね"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "提醒对方的回合（雨ですよ）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-describe-places",
+   "uses": [
+    {
+     "primitive": "prim:picture-describe",
+     "role": "primary",
+     "binding": "看城市/建筑图用修饰形与谓语形描述，按图核对"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "先写介绍自己城市的短文再对照范例"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-verb-groups",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "先归类三类动词（帰る、入る为Ⅰ类例外），再对新动词变ます形"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判*帰ます、*入ます，归入る结尾例外类"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-te-form",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "て形音便规则（う/つ/る→って、む/ぶ/ぬ→んで…行く→行って）推到新动词，显示推导"
+    },
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "support",
+     "binding": "て形歌/规则先回想再对照，记录独立正确率"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-te-request",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "ます形→て形＋ください 推导；检查*書きますください"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "请对方做事的回合（写一下、等一下）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-borrow-request",
+   "uses": [
+    {
+     "primitive": "prim:viewpoint-direction",
+     "role": "primary",
+     "binding": "物品流向：貸す（给出）/借りる（拿进）；对立 貸してください/借りてもいいですか"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "借笔、借伞的请求与应答回合"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-te-sequence",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "把2-3个动作短句用て接成一句，只在句末标时态；检查*行きました、买いました"
+    },
+    {
+     "primitive": "prim:sequence-retell",
+     "role": "support",
+     "binding": "按图片顺序用VてVて复述一天"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-tekara",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 Vてから（先后）/Vますから（原因）；看换形式后意义变化"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "两事件放上时间轴确定先后再选てから"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-lex-hobbies",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "裁判*テニスを遊びます，归入“玩”≠遊ぶ类，替换为する/やる"
+    },
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "support",
+     "binding": "采集爱好搭配（ピアノを弾く、写真を撮る）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-invitation-masenka",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 Vませんか（邀请）/Vますか（询问计划）；看对方理解的变化"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "邀约回合及对方接受/拒绝分支"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-mashou",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 ませんか/ましょう/ましょうか 按邀请、提议、主动帮忙选"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "对上级初次邀请不用ましょう，标出露馅处"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-accept-refuse-invitation",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "邀约后接受或委婉拒绝分支：ちょっと…/残念ですが；检查不直接说行きません"
+    },
+    {
+     "primitive": "prim:culture-incident",
+     "role": "support",
+     "binding": "事件：直接回绝邀请导致尴尬，改写为委婉说法"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-noun-and",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "裁判と连接动词、形容词的用例（*安いとおいしい），只允许名词"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "对立 と/や 判断是否完全列举"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-noun-examples",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 と/や（など）：完整列举vs举例；看听者理解是否还有别人"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-de-means",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "工具、手段连到で，乗る对象连到に；检查*バスを乗って"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判 バスで行く/*バスを乗って行く"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-lex-transport-town",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "走一遍从车站到市区，调出交通设施词"
+    },
+    {
+     "primitive": "prim:false-friend-check",
+     "role": "support",
+     "binding": "電車按中文理解为有轨电车，对照日语泛指铁路列车"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-transport",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "车站问路与确认目的地回合：～行きですか、～までいくら；检查不用で标目的地"
+    },
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "support",
+     "binding": "在站名牌、线路图上找换乘与目的地"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-want-object",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "ほしい对象用が；对立 Nがほしい/*Nをほしい"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 ほしい（要东西）/たい（要做事）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-ndesu",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "对立 行きます/行くんです：只凭んです判断“说明/追问缘由”语气"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "名词、ナ形接なんです的接续推导；检查*仕事んです"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "用～んですが开启请求和咨询的回合"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-shopping",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "店内问物品位置、价格、结账回合"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "听价格只记数字（さんぜん、はっせん），按音变复盘"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-want-action",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "ます形词干＋たい推导到新动词；检查*行くたい"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "对长辈不直接问～たいですか，标出失礼处"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-past-wish",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "たい→たかった/たくない/たくなかった 按イ形容词规则推导；检查*行きたいでした"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-purpose-ni-iku",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "ます形词干＋に行く 推导；检查*買うに行く"
+    },
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "support",
+     "binding": "把“去”和“目的动作”两句合成Vに行く"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-weekend-past",
+   "uses": [
+    {
+     "primitive": "prim:sequence-retell",
+     "role": "primary",
+     "binding": "按照片顺序讲周末做了什么，用过去形和て连接"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "检查过去事件选ました而非ます"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-travel-wishes",
+   "uses": [
+    {
+     "primitive": "prim:carry-across",
+     "role": "primary",
+     "binding": "把～たい/～に行きたい搬到自己真实的旅行愿望"
+    },
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "support",
+     "binding": "采集旅行搭配（温泉に入る、写真を撮る）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-kanji-system",
+   "uses": [
+    {
+     "primitive": "prim:reading-select",
+     "role": "primary",
+     "binding": "同一汉字在不同词中选音读或训读，归纳普通话到音读的对应（促音、长音）；检查学校がっこう"
+    },
+    {
+     "primitive": "prim:character-anatomy",
+     "role": "support",
+     "binding": "拆部首，借形旁猜义"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-kanji-n5",
+   "uses": [
+    {
+     "primitive": "prim:reading-select",
+     "role": "primary",
+     "binding": "入门汉字在不同词中的读音（四時よじ、四月しがつ、一人ひとり）"
+    },
+    {
+     "primitive": "prim:reading-aid-fade",
+     "role": "support",
+     "binding": "入门汉字词注音按掌握逐字撤除"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-orth-particle-spelling",
+   "uses": [
+    {
+     "primitive": "prim:sound-spelling-blend",
+     "role": "primary",
+     "binding": "助词は/へ/を读wa/e/o但按原写；听写检查*わたしわ、*がっこうえ"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "只凭书写形式区分助词は与词内わ"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-orth-punctuation",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "裁判中文标点「，」《》混入日文的用例，替换为、。「」『』"
+    },
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "support",
+     "binding": "在横排与竖排真实文本上找句读与括号用法"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-read-basic",
+   "uses": [
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "primary",
+     "binding": "在告示、菜单、时刻表上找答案；检查休み理解为不营业等"
+    },
+    {
+     "primitive": "prim:reading-aid-fade",
+     "role": "support",
+     "binding": "短文假名注音逐步撤除，区分有无注音读对"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-listen-basic",
+   "uses": [
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "primary",
+     "binding": "慢速对话只记数字、时间、价格格子；复盘四/七、百/八百混淆"
+    },
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "support",
+     "binding": "听简短指令在图上点选；适合低龄学习者"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-write-forms-memo",
+   "uses": [
+    {
+     "primitive": "prim:template-write",
+     "role": "primary",
+     "binding": "日本的申请表与便条格式，检查姓名片假名栏、和历/西历日期、便条的要点与署名"
+    },
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "support",
+     "binding": "在真实表格上找到姓名、フリガナ、住所栏并正确填写"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "先写便条，再对照范例看格式差距"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-plain-paradigm",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "由ます形推辞书形/ない形/た形/なかった形，含う→わない、行く→行った；显示每步规则"
+    },
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "support",
+     "binding": "对动词表先回想四种普通形再揭示，记录独立正确率"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-plain-adjectives",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "イ/ナ形容词普通形四形推导；检查*高いだ、*おもしろいだった"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-plain-nominal-predicate",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "名词だ/じゃない/だった/じゃなかった 推导；检查*学生だない"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-plain-polite-forms",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "普通形与丁寧形双向转换，推到新词；检查*高いでした"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "同一句对朋友与对老师两版，标出混用处"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-sound-devoice",
+   "uses": [
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "primary",
+     "binding": "对立 清化的です/ます与拖长的de-su；听辨元音清化"
+    },
+    {
+     "primitive": "prim:rhythm-shadow",
+     "role": "support",
+     "binding": "跟读です、～ます、した等句末，比较元音是否清化"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-sound-nasal-consonant",
+   "uses": [
+    {
+     "primitive": "prim:rhythm-shadow",
+     "role": "primary",
+     "binding": "跟读さんぽ、しんぶん等，拍手检查ん独占一拍"
+    },
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "support",
+     "binding": "对立 ん在p/t/k前的不同发音位置"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-sound-nasal-other",
+   "uses": [
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "primary",
+     "binding": "对立 きんえん/きねん、げんいん/げにん；检查元音前ん不连读成n"
+    },
+    {
+     "primitive": "prim:rhythm-shadow",
+     "role": "support",
+     "binding": "跟读含词尾ん的词，比较拍数"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-progressive-teiru",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "时间轴上标“正在进行”区段后选Vている；检查て形正确（読んで）"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "ています由て形推导；检查*読みています"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-result-state-teiru",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "对立 進行（読んでいる）/結果状態（結婚している、住んでいる）在时间轴上的位置"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判*北京に住みます，归入“状态用ている”类"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-nominalization",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "对立 料理するのが好き/*料理するが好き；判断名词化与否"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 こと/の：见る、聞く等感知动词只用の"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-talk-current-self",
+   "uses": [
+    {
+     "primitive": "prim:carry-across",
+     "role": "primary",
+     "binding": "用ている与で把自己现在的工作、居住说一遍；检查*工場に働いています"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "寒暄中问答近况的回合"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-naru-change",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "寒い→寒くなる、静か→静かになる、N→Nになる 推导"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴上标变化前后状态"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adjective-linking",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "把两个形容词短句用くて/で接成一句；检查*安いで、*安いくて"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "イ形くて、ナ形/名词で 推导到新词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-lex-weather-seasons",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "裁判 暑い/熱い/厚い、寒い/冷たい 用例，归入同音/近义边界"
+    },
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "support",
+     "binding": "走一遍四季调出天气季节词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-weather-talk",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "寒暄回合：今日は暑いですね→そうですね；检查加ね共鸣"
+    },
+    {
+     "primitive": "prim:culture-incident",
+     "role": "support",
+     "binding": "事件：天气寒暄被当作信息陈述回应，判断对方期待"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-conditional-to",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "前句用と时后句不能接请求、意志；检查*着くと、電話してください并改用たら"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判と接自然结果与接请求的用例"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-tara-ii",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "た形＋らいいですか 推导；检查*行きたらいい"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "求建议回合：どう行ったらいいですか→答"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-directions",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "问路指路回合，含まっすぐ行くと、角を曲がる"
+    },
+    {
+     "primitive": "prim:role-marking",
+     "role": "support",
+     "binding": "地图上把经过点连到を（角を曲がる、橋を渡る）；检查*角に曲がる"
+    },
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "support",
+     "binding": "听指路在地图上画出路线"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-describe-town",
+   "uses": [
+    {
+     "primitive": "prim:carry-across",
+     "role": "primary",
+     "binding": "把あります/います、～が有名です 搬到介绍自己城市"
+    },
+    {
+     "primitive": "prim:picture-describe",
+     "role": "support",
+     "binding": "看城市地图描述设施，按图核对あります/います"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-te-cause",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "原因て后句不能接请求、意志；检查*雨が降って、傘を貸してください"
+    },
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "support",
+     "binding": "原因和结果两句接为Vて"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-experience-takotogaaru",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 Vたことがある（经验）/Vることがある（有时）；看意义变化"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴上标过去某次经验后选形"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-tari-listing",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "把几个动作用～たり～たりする合成，检查句末する不漏"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "た形＋り 推导"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-lateness-contact",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "迟到电话回合：先道歉→原因→预计时间；检查顺序与要素齐全"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "对老师、上司、朋友调整道歉说法"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-giving-receiving",
+   "uses": [
+    {
+     "primitive": "prim:viewpoint-direction",
+     "role": "primary",
+     "binding": "先定说话人站在我方还是对方，再在あげる/くれる/もらう中选；检查*友達が私にあげました"
+    },
+    {
+     "primitive": "prim:role-marking",
+     "role": "support",
+     "binding": "场景图标给予者、接受者、物品，再标が/に"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-ageru",
+   "uses": [
+    {
+     "primitive": "prim:viewpoint-direction",
+     "role": "primary",
+     "binding": "给予方向从我方或第三方指向外；接受者为自己时改用くれる"
+    },
+    {
+     "primitive": "prim:role-marking",
+     "role": "support",
+     "binding": "接受者标に，给予者标が/は"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-kureru",
+   "uses": [
+    {
+     "primitive": "prim:viewpoint-direction",
+     "role": "primary",
+     "binding": "给予方向指向我方（含家人）时选くれる；检查*友達が私にあげました"
+    },
+    {
+     "primitive": "prim:role-marking",
+     "role": "support",
+     "binding": "场景图标出接受者属我方"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-morau",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "接受者が、给予者に/から；检查*友達が私にもらいました"
+    },
+    {
+     "primitive": "prim:viewpoint-direction",
+     "role": "support",
+     "binding": "同一事件以接受者为视点用もらう、以给予者为主语用くれる"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-benefactive-teageru",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "受益者标法：友達の荷物を持つ，不一律用に；检查受益者位置"
+    },
+    {
+     "primitive": "prim:viewpoint-direction",
+     "role": "support",
+     "binding": "恩惠从我方流向他人选てあげる"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "对上级说てあげる显得施恩，标出露馅处"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-tekureru",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "受益者是我时不加私に，用私の荷物を；检查受益者标法"
+    },
+    {
+     "primitive": "prim:viewpoint-direction",
+     "role": "support",
+     "binding": "恩惠流向我方，施事作主语选てくれる"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-temorau",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "施事标に（友達に教えてもらう）；检查*友達が教えてもらいました"
+    },
+    {
+     "primitive": "prim:viewpoint-direction",
+     "role": "support",
+     "binding": "同一恩惠事件用てもらう（我为主语）与てくれる（对方为主语）两视点说"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-negative-question-request",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "对立 てください/てくれませんか/てもらえませんか/ていただけませんか 礼貌梯度"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "判断否定疑问实为请求；检查回答不说*はい、～ません"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-ask-favour",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "请求回合：铺垫（～んですが）→请求→感谢；检查不直接开口要求"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "对老师、同事、朋友调整请求礼貌度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-apply-join",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "报名回合：～に参加したいんですが→手续确认；检查加んですが缓冲"
+    },
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "support",
+     "binding": "在报名告示上找日期、费用、方式"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-teiku-tekuru",
+   "uses": [
+    {
+     "primitive": "prim:viewpoint-direction",
+     "role": "primary",
+     "binding": "以说话人位置/当下为基准判断向近或向远的移动与变化；检查在家说帰ってきて"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "变化义ていく/てくる在时间轴上标从过去到现在、从现在向将来"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-sou-appearance",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 样态おいしそう/传闻おいしいそう；检查*降るそう表样态"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "词干＋そう推导，含いい→よさそう、ない→なさそう"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-food-compliments",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 おいしそう（未尝）/おいしい（已尝）按时机选"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "被招待吃饭时的称赞与回应回合"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-permission",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "て形＋もいいですか 推导；检查*撮るてもいい"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "请求许可回合及允许/拒绝（ちょっと…）分支"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-prohibition",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "て形＋はいけません 推导；检查*吸うては"
+    },
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "support",
+     "binding": "在告示、标识上找禁止事项"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-negative-request",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "ない形＋でください 推导；检查*止めませんでください"
+    },
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "support",
+     "binding": "在公共场所告示上找～ないでください"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-nominal-permission",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "对立 Nでもいい/Nではだめ；检查*カードてもいい"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "付款、选项询问回合：カードでもいいですか"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-deshou",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "名词、ナ形直接接でしょう；检查*静かだでしょう"
+    },
+    {
+     "primitive": "prim:scale-place",
+     "role": "support",
+     "binding": "在だ/でしょう/かもしれない确信度梯度上定位"
+    },
+    {
+     "primitive": "prim:source-stance",
+     "role": "support",
+     "binding": "判断天气预报等说话人确定度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-work-contact",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "请假与报告回合：先缓冲→理由→征求许可；检查不直接宣布休みます"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "对上司与同事调整联络措辞"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-lex-body-health",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "走一遍看病流程调出身体部位与症状词"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判*頭が疼い 等汉语迁移，换为痛い"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-symptoms",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "医生问诊回合：どうしましたか→症状→时间；检查痛かったです"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "医生缺症状信息，学习者必须说清部位、起始时间"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-youni-suru",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "辞书形/ない形＋ようにする 推导；检查*食べませんようにする"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 ようにする（努力习惯）/ことにする（决定）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-sugiru",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "词干＋すぎる 推导（高すぎる、食べすぎる）；检查*高いすぎる"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-noun-modification",
+   "uses": [
+    {
+     "primitive": "prim:attach-position",
+     "role": "primary",
+     "binding": "修饰语（形容词、名词の、从句）全部挂名词前；检查*高いの山"
+    },
+    {
+     "primitive": "prim:strip-skeleton",
+     "role": "support",
+     "binding": "折叠多层修饰找被修饰名词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-relative-clause",
+   "uses": [
+    {
+     "primitive": "prim:attach-position",
+     "role": "primary",
+     "binding": "连体从句直接挂名词前，无の；检查*昨日買ったの本"
+    },
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "support",
+     "binding": "把“我昨天买了书”与“那本书很有趣”合成连体修饰句"
+    },
+    {
+     "primitive": "prim:strip-skeleton",
+     "role": "support",
+     "binding": "折叠修饰从句找主干名词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-lex-family-terms",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "对立 母/お母さん、兄/お兄さん 按内外选择；检查对外称父母用父/母"
+    },
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "support",
+     "binding": "自家与他家两套称谓先回想再对照"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-gifts",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "商量送礼与赠送时的回合（つまらないものですが）；检查くれる/あげる方向"
+    },
+    {
+     "primitive": "prim:culture-incident",
+     "role": "support",
+     "binding": "事件：送礼时夸礼物贵重或收礼当面拆，判断对方感受"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-tabakari",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 たばかり（主观刚刚）/たところ（刚好完成）；检查*来るばかり"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴上标刚完成点"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-describe-people",
+   "uses": [
+    {
+     "primitive": "prim:picture-describe",
+     "role": "primary",
+     "binding": "看人物图描述外貌、穿着，按图核对"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判かわいそう/かわいらしい、よさそう 等用例"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-lex-personality",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "裁判*彼は高いです，归入“身体部位＋が＋形容词”类（背が高い）"
+    },
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "support",
+     "binding": "采集性格外貌搭配（背が高い、髪が長い）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-emotional-adjectives",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 悲しい/悲しがっている/悲しそう 按第一人称或第三人称选"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判*田中さんは悲しいです 等直接断言他人感受"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-kara-node",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 から/ので 按主观或客观、礼貌度选"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "名词、ナ形接だから/なので 推导；检查*静かから"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-naide",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 Vないで（不做A而做B）/Vなくて（原因）；看意义变化"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "ないで/ずに推导，含する→せずに"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-potential-form",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "三类动词可能形推导（行ける、食べられる、来られる、できる）；检查*行けれる"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "只凭可能形词尾判断“能”与否"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-restaurant-needs",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "说明过敏或饮食限制回合：アレルギーがあるので～"
+    },
+    {
+     "primitive": "prim:culture-incident",
+     "role": "support",
+     "binding": "事件：只说不吃被理解为不喜欢，改写为说明过敏"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-hougaii",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "た形＋ほうがいい 推导；检查*予約するたほうがいい"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "给建议回合"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-negative-advice",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "ない形＋ほうがいい 推导；检查*飲まなかったほうがいい"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-koto-ga-dekiru",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "辞书形＋ことができる 推导；检查*話しことができる"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 ことができる/可能形 按书面或口语选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-noun-dekiru",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "能力对象连到が；检查*日本語をできます"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-travel-advice",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "朋友问旅行，给建议说感想的回合"
+    },
+    {
+     "primitive": "prim:carry-across",
+     "role": "support",
+     "binding": "把ほうがいい、可能形搬到自己真实的旅行经验"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-conditional-tara",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "た形＋ら 推导（安かったら、学生だったら）；检查*安いだったら"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴标前项完成后后项发生"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-conditional-ba",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "ば形推导，含いい→よければ、ない→なければ；检查*いければ"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "判断ば句是一般条件或必要条件"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-conditional-nara",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 なら（以对方话题为前提）/たら；回应对方话题选なら"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "名词直接接なら；检查*日曜日だなら"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-conditional-family",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "同一前句换と/ば/たら/なら，核对后句能否接请求意志、时间先后"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立四形按“一般规律/假设/以对方话题为前提”的意图选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-embedded-question",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "把疑问句嵌入～か知っていますか/～かどうか，使用普通形；检查*どこですか知って"
+    },
+    {
+     "primitive": "prim:slot-order",
+     "role": "support",
+     "binding": "嵌入问句槽位在主句动词前"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-local-events",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "询问活动时间、地点、参加方式回合；检查举办地点用で"
+    },
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "support",
+     "binding": "在祭典海报上找时间地点费用"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-soc-annual-events",
+   "uses": [
+    {
+     "primitive": "prim:culture-incident",
+     "role": "primary",
+     "binding": "事件：把お正月当成农历春节，判断误解并改写"
+    },
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "support",
+     "binding": "按月份走一遍年中行事及相关说法"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-soc-manners",
+   "uses": [
+    {
+     "primitive": "prim:culture-incident",
+     "role": "primary",
+     "binding": "事件：进门只说こんにちは、送礼禁忌，判断对方理解并改写"
+    },
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "support",
+     "binding": "拜访全过程走一遍：お邪魔します→手土产→失礼します"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-ask-customs",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "询问习俗回合，用～んですか表示关心"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "学习者不知道习俗细节，必须问清该怎么做"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-comparison",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "槽位 AよりBのほうが～、NでいちばんN；检查*AはよりBが"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 どちら（两项）/どれ（三项以上）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-yasui-nikui",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "ます形词干＋やすい/にくい 推导；检查*使うやすい"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判にくい/づらい与汉语“难”的用例"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-teshimau",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 Vた/Vてしまった：完结与遗憾含义"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "缩略形推导（読んじゃう、飲んじゃう、食べちゃう）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-shopping-compare",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "比较商品与说明问题（退换）回合；检查どちら"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "学习者缺两种商品差异信息，需问出来"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-result-tearu",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 開いている/開けてある：有意准备与否；检查自动词不接てある"
+    },
+    {
+     "primitive": "prim:role-marking",
+     "role": "support",
+     "binding": "标出他动词对象与结果状态的关系"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-teoku-temiru",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 ておく（预备）/てみる（尝试）；检查想说事先读好时用ておく"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴标预备动作与后续事件"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-services",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "理发、邮局等服务请求回合：～てもらえますか"
+    },
+    {
+     "primitive": "prim:role-marking",
+     "role": "support",
+     "binding": "检查授受方向：切ってもらう/*切ってあげますか"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-tamama",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 たまま/て：状态保持与先后；检查*つけるまま"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴标状态持续期间"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-temo",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "ても推导（高くても、静かでも、学生でも）；检查*高いでも"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 ても/たら 让步与条件"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-lex-nature-disaster",
+   "uses": [
+    {
+     "primitive": "prim:scene-walkthrough",
+     "role": "primary",
+     "binding": "走一遍地震避难场景调出词语"
+    },
+    {
+     "primitive": "prim:reading-select",
+     "role": "support",
+     "binding": "灾害汉字词读音（地震じしん、津波つなみ）按音读/训读选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-emergency",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "拨119/110求助回合：先说事件→地点→状况；检查号码"
+    },
+    {
+     "primitive": "prim:culture-incident",
+     "role": "support",
+     "binding": "事件：拨打120或弄混119/110，改正"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-youni-naru",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 ようになる（能力习惯变化）/ようにする（努力）；检查不漏よう"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴标变化前后的能力状态"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-volitional-form",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "三类动词意志形推导（行こう、食べよう、しよう、来よう）；检查*しろう"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-intention-omou",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 行こうと思う（打算）/行くと思う（推测）；看意义变化"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "意志形＋と思う 推导"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-tsumori",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "把ようと思う/つもり/予定排上决心与确定度梯度"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "辞书形/ない形＋つもり；检查*行くないつもり"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-future-plans",
+   "uses": [
+    {
+     "primitive": "prim:carry-across",
+     "role": "primary",
+     "binding": "把ようになる、つもり、ようと思う搬到自己的经历和计划"
+    },
+    {
+     "primitive": "prim:grow-text",
+     "role": "support",
+     "binding": "从一句计划扩展成一段将来规划"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-style-awareness",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "按关系（亲疏×上下）给场景选敬体或普通体；检查年长熟友与年轻上司"
+    },
+    {
+     "primitive": "prim:culture-incident",
+     "role": "support",
+     "binding": "事件：对年轻上司用普通体，判断对方感受"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-polite-style",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "把一段普通体对话改为丁寧体，标出漏改处"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "丁寧体各词类形式推导；检查*おいしいでした"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-plain-style",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "把丁寧体对话改为朋友间普通体，标出名词疑问*ひまだか"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "普通体疑问与否定形推导"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-soc-casual-contractions",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "只凭缩略形（ちゃった、てる、なきゃ）判断语义差别"
+    },
+    {
+     "primitive": "prim:transcript-diff",
+     "role": "support",
+     "binding": "听口语对话写下所听，与原文对齐找出缩略处"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-sentence-final-particles",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 よ/ね/よね/な/の 按信息归属与关系选；看同一句换助词后的效果"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "检查わ、な等性别语体色彩的场合"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-soc-uchi-soto",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "按内外关系选称谓与敬语：对外称母/自家人不用敬语"
+    },
+    {
+     "primitive": "prim:culture-incident",
+     "role": "support",
+     "binding": "事件：对外说*私のお母さん，判断印象并改写"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-str-aizuchi",
+   "uses": [
+    {
+     "primitive": "prim:repair-and-backchannel",
+     "role": "primary",
+     "binding": "录音里对方停顿处要求接应，检查はい・ええ・そうですか 的时机与频率，避免沉默或打断"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "对方讲话中在停顿处插入はい/ええ/そうですか；检查沉默过长"
+    },
+    {
+     "primitive": "prim:culture-incident",
+     "role": "support",
+     "binding": "事件：长时间沉默被误读为没听懂，改写回应"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-kanji-n4",
+   "uses": [
+    {
+     "primitive": "prim:character-anatomy",
+     "role": "primary",
+     "binding": "对比构件，按笔顺写出"
+    },
+    {
+     "primitive": "prim:variety-map",
+     "role": "support",
+     "binding": "日本新字体与简体并排（駅/驿、売/卖、楽/乐），判断该用哪种"
+    },
+    {
+     "primitive": "prim:reading-aid-fade",
+     "role": "support",
+     "binding": "初级汉字词注音逐字撤除"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-sound-pitch",
+   "uses": [
+    {
+     "primitive": "prim:contour-match",
+     "role": "primary",
+     "binding": "把词的高低（頭高、中高、平板）画成轮廓，再按轮廓读；检查不当成声调"
+    },
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "support",
+     "binding": "对立 はし（箸/橋）、あめ（雨/飴）高低词对"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-sound-r",
+   "uses": [
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "primary",
+     "binding": "对立 ら/だ/拼音r；检查り不读成“日”，用舌尖轻弹"
+    },
+    {
+     "primitive": "prim:rhythm-shadow",
+     "role": "support",
+     "binding": "跟读ラ行密集的短句"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-sound-z",
+   "uses": [
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "primary",
+     "binding": "对立 ざ/さ、ず/す、つ/す；检查ぞう/そう清浊辨别"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-script-katakana-extended",
+   "uses": [
+    {
+     "primitive": "prim:sound-spelling-blend",
+     "role": "primary",
+     "binding": "外来音组合（ティ、ファ、ヴ）按音拼写；检查小字*カフエ"
+    },
+    {
+     "primitive": "prim:character-anatomy",
+     "role": "support",
+     "binding": "大小字组合格位练习"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-read-daily",
+   "uses": [
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "primary",
+     "binding": "在通知、告示上找完成任务的条目"
+    },
+    {
+     "primitive": "prim:false-friend-check",
+     "role": "support",
+     "binding": "大家=房东、留守=不在家，先写字面猜测再对照"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-listen-daily",
+   "uses": [
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "primary",
+     "binding": "只记最终时间地点，复盘第一个出现的被更改的信息"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在でも、あ、ちょっと处押下一句会否更改信息"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-write-messages",
+   "uses": [
+    {
+     "primitive": "prim:template-write",
+     "role": "primary",
+     "binding": "邮件与聊天模板，检查开头寒暄、用件、结尾 よろしくお願いします 的格式"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "给老师与朋友各写一条消息，标出了解です等不得体处"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "先写邮件再对照范例"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-orth-input",
+   "uses": [
+    {
+     "primitive": "prim:ime-convert",
+     "role": "primary",
+     "binding": "罗马字键入（nn、小字、促音）后在候选中按语境选汉字；检查げんいん打成げにん"
+    },
+    {
+     "primitive": "prim:sound-spelling-blend",
+     "role": "support",
+     "binding": "假名到罗马字键入对应"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-tte-topic",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "对立 ～って/～というのは/～と言っていました 按场合选；检查正式场合不用って"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "判断って是话题提示还是引用"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-kke",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 っけ（回想确认已知信息）/か/の（问新信息）"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "忘记约定时间时向朋友确认的回合"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-talk-likes",
+   "uses": [
+    {
+     "primitive": "prim:carry-across",
+     "role": "primary",
+     "binding": "用Vるのが好き、～から 说自己最喜欢的事与理由；检查*見るが好き"
+    },
+    {
+     "primitive": "prim:grow-text",
+     "role": "support",
+     "binding": "从“喜欢X”一句扩展加理由与例子"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-evidentials",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 ようだ/みたいだ/らしい 按依据与语体选"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "各词类接续推导（学生のようだ、学生みたい、学生らしい）"
+    },
+    {
+     "primitive": "prim:source-stance",
+     "role": "support",
+     "binding": "判断说话人依据来自观察还是传闻"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-sou-hearsay",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 传闻おいしいそうだ/样态おいしそうだ；看意义变化"
+    },
+    {
+     "primitive": "prim:source-stance",
+     "role": "support",
+     "binding": "标出传闻信息的来源（天気予報によると）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-lex-housing",
+   "uses": [
+    {
+     "primitive": "prim:false-friend-check",
+     "role": "primary",
+     "binding": "大家、家賃、間取り先按中文字面猜，再对照日语义"
+    },
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "support",
+     "binding": "在租房广告上找家賃、敷金、間取り"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-housing-problems",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "报修回合：～んですが、見ていただけませんか；检查不一开口就命令"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "对房东/管理公司调整请求礼貌度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-recommend",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "推荐回合：～ならXがいいですよ、～ば"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 推荐时用なら/ば/たら"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-own-habits",
+   "uses": [
+    {
+     "primitive": "prim:carry-across",
+     "role": "primary",
+     "binding": "把频度表达（週に二回、毎日）搬到自己的习惯；检查*週二回に"
+    },
+    {
+     "primitive": "prim:grow-text",
+     "role": "support",
+     "binding": "从一句习惯扩展成说明一段生活习惯"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-wish-expressions",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 たい（自己）/てほしい（希望他人）/といい；检查*あなたが来たい"
+    },
+    {
+     "primitive": "prim:role-marking",
+     "role": "support",
+     "binding": "标出愿望主体与执行者：あなたに来てほしい"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-start-conversation",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "搭话回合：从环境话题开启，逐步拉近"
+    },
+    {
+     "primitive": "prim:culture-incident",
+     "role": "support",
+     "binding": "事件：初次见面问年龄收入，判断对方感受并改写"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-quotation",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "槽位 引用内容＋と＋言う；检查*彼は言いました、来週帰ります"
+    },
+    {
+     "primitive": "prim:reference-chain",
+     "role": "support",
+     "binding": "直接引语转间接引语时人称与时间词的替换"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-quotation-opinion",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "名词、ナ形＋だと思う推导；检查*便利と思います"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 と思う/と思っている 按第一人称或第三人称选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-learning-story",
+   "uses": [
+    {
+     "primitive": "prim:sequence-retell",
+     "role": "primary",
+     "binding": "按时间顺序讲学习经历：きっかけ→方法→变化"
+    },
+    {
+     "primitive": "prim:grow-text",
+     "role": "support",
+     "binding": "从一句“我学日语X年”扩展成一段"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-passive-event",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "受身形推导（書かれる、使われる、食べられる）；检查*書けられる"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "只凭受身形判断主语是事件对象"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-passive-person",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "受动者为主语は/が、施动者标に；检查*先生が私をほめられました"
+    },
+    {
+     "primitive": "prim:viewpoint-direction",
+     "role": "support",
+     "binding": "同一事件站在受动者视点用受身、站在施动者视点用主动"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-passive-adversity",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "自动词受害受身：雨に降られた，施动者标に；检查*雨が降られました"
+    },
+    {
+     "primitive": "prim:viewpoint-direction",
+     "role": "support",
+     "binding": "站在受害者视点叙述，看受害感是否表达"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-trouble-report",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "向警察或窗口报告受害的回合，以自己为主语用受身"
+    },
+    {
+     "primitive": "prim:viewpoint-direction",
+     "role": "support",
+     "binding": "检查叙述视点统一于受害者，不在犯人与自己间切换主语"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-congratulate-condole",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "对长辈、同事校准祝贺与慰问套话；检查おめでとうございます"
+    },
+    {
+     "primitive": "prim:culture-incident",
+     "role": "support",
+     "binding": "事件：慰问时用忌讳词，判断对方感受并改写"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-consult-worries",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "倾诉与回应回合：先共情（大変ですね）再建议"
+    },
+    {
+     "primitive": "prim:culture-incident",
+     "role": "support",
+     "binding": "事件：一听完就给建议，判断对方感受"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-te-yokatta",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "ない形→なくてよかった 推导；检查*降らないでよかった"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 てよかった/てうれしい/たらいい 按事后感受选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-travel-story",
+   "uses": [
+    {
+     "primitive": "prim:sequence-retell",
+     "role": "primary",
+     "binding": "按照片顺序讲旅行，用て、それから连接"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 見える/見られる 按自然看到或能够看选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-causative-form",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "使役形推导（書かせる、食べさせる、させる、来させる）；检查*書かさせる"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-causative-force",
+   "uses": [
+    {
+     "primitive": "prim:role-marking",
+     "role": "primary",
+     "binding": "被使役者标を或に；他动词时用に，避免双を"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 させる/てもらう 强制与请托"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-causative-permission",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "判断させてくれた是许可而非强迫"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 强制させる/许可させてくれる/させてもらう"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-causative-passive",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "使役受身推导（書かされる、話させられる、食べさせられる）；检查*話さされる"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-causative-passive-perspective",
+   "uses": [
+    {
+     "primitive": "prim:viewpoint-direction",
+     "role": "primary",
+     "binding": "站在被使役者视点，对立 させられた（被迫）/させてもらった（获准）"
+    },
+    {
+     "primitive": "prim:role-marking",
+     "role": "support",
+     "binding": "标出被迫者与命令者角色"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-honorifics",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "按动作主体（对方/自己）选尊敬语或谦让语，标出用错对象的露馅处"
+    },
+    {
+     "primitive": "prim:role-marking",
+     "role": "support",
+     "binding": "场景图标出动作主体是谁，再决定敬语方向"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-honorific-lexical",
+   "uses": [
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "primary",
+     "binding": "特殊尊敬动词（いらっしゃる、召し上がる、おっしゃる）先回想再对照"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "ます形推导（いらっしゃいます）；检查*いらっしゃります"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-honorific-oninaru",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "おVになる 推到新动词；检查一拍词干*お見になる"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "对上级描述其动作时套用"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-honorific-rareru",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "判断れる/られる是尊敬还是被动（書かれた）"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 られる/おVになる 敬意程度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-humble-lexical",
+   "uses": [
+    {
+     "primitive": "prim:recall-before-reveal",
+     "role": "primary",
+     "binding": "特殊谦让动词（参る、申す、いただく、拝見する）先回想再对照"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "检查谦让语只用于自己动作，标出用于对方处"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-humble-osuru",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "おVする/ごNする 推到新动词"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 お待ちする/お待ちください 按动作主体选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-saseteitadaku",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "使役形＋ていただく 推导；检查*休まさせて"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "判断何时用させていただく得体，何时过度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-explain-work",
+   "uses": [
+    {
+     "primitive": "prim:sequence-retell",
+     "role": "primary",
+     "binding": "按流程顺序说明工作，用てから、それから连接"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 てから（先后）/たから（原因）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-job-interview",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "面试问答回合：志望动机、自我PR、经验"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "面试中敬语与谦让语校准；检查*働きさせていただく"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-toki",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "主句事件与从句事件放时间轴，按相对时态选辞书形/た形＋とき"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 着くとき/着いたとき 看先后变化"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-mae-ato",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "时间轴标前后，前に接辞书形、後で接た形；检查*食べた前に"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "前に/後で 接续推导"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-madeni",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 まで（持续到）/までに（期限前一次完成）；检查*五時まで出して"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴上画持续区段与截止点"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-aidani",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "时间轴上标期间内的一点事件选間に；对立持续事件"
+    },
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "support",
+     "binding": "核对主句是一次性事件（間に）还是持续（間）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-aida-duration",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "时间轴上画主句持续覆盖整段选間；检查一次性事件用間に"
+    },
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "support",
+     "binding": "核对主句是否为持续动作或状态"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-uchini",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "时间轴标状态持续段与状态结束前的行动；检查不接时点名词"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 うちに/前に 看紧迫含义"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-na-iuchini",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 ないうちに/前に；检查*帰らない前に"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴标“还没发生”的区段"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-uchi-duration",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "うちは后句须为持续或习惯状态，一次动作改用うちに"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴标期间与主句状态"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-totan",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "たとたん后句须为意外的已然事实，不接意志请求；检查*～とたん、浴びるつもり"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴标前项完成瞬间与紧接的后项"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-nagara",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "ます形词干＋ながら 推导；检查*聞くながら"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴标两个同时进行的动作，主要动作在后"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-tokoro-aspect",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "时间轴标动作前、中、刚完成三点选るところ/ているところ/たところ"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 たところ/たばかり"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-noni",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 のに（不满）/けど（中性）；看说话人情绪变化"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "名词、ナ形＋なのに 推导"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-keredomo",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "ナ形、名词＋だけど 推导；检查*静かけど"
+    },
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "support",
+     "binding": "把对照两句用けれども/が接起"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-conjunctive-particles",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 て/から/ので/のに/が/し/ながら 同一情境选连接，看语气变化"
+    },
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "support",
+     "binding": "把两句按想强调的关系接成一句"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-okagede",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 おかげで（好结果）/せいで（坏结果）"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "名词＋のおかげで 接续；检查*先生おかげで"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-seide",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 せいで/おかげで 按结果好坏选；检查*先生のせいで合格"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-n-dakara",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "名词＋なんだから 推导"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "判断んだから的责备语气在对上级时失礼"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-to-ittemo",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 といっても（虽说）/ても（即使）；看意义变化"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在といっても处预测后面会修正前项的程度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-shikashi",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "对立 しかし/でも/ところが 按书面或口语、意外与否选"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在逆接词处押下一句方向"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-discourse-connectives",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 それから/それで/だから/つまり/たとえば 按前后关系选；检查不每句用それから"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在连接词处预测下一句功能"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "给段落各句标功能后选接续词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-nakerebanaranai",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "ない形→なければならない 推导；检查*行かないければ"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-naitoikenai",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 ないといけない（必须）/てはいけない（禁止）"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "口语缩略なきゃ推导"
+    },
+    {
+     "primitive": "prim:scale-place",
+     "role": "support",
+     "binding": "在义务梯度上与なくてもいい对照"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-nakutewanaranai",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "ない形→なくては/なくちゃ 推导；检查*行かないくては"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "义务表达书面与口语形式选择"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-nakutemoii",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "ない形→なくてもいい 推导；检查*来ないてもいい"
+    },
+    {
+     "primitive": "prim:scale-place",
+     "role": "support",
+     "binding": "在义务梯度上与なければならない相对定位"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-bekida",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "把べきだ/なければならない/ほうがいい/なくてもいい排上义务梯度"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "辞书形＋べきではない；检查*行かないべき"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-instruction-youni",
+   "uses": [
+    {
+     "primitive": "prim:reference-chain",
+     "role": "primary",
+     "binding": "转述指示时还原发令者与被指示者"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "辞书形/ない形＋ように；检查*来てように"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-instruction-koto",
+   "uses": [
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "primary",
+     "binding": "在规章告示上找～こと式指示"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "辞书形＋こと；检查*話しますこと"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-command-form",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "三类动词命令形推导（食べろ、来い、しろ）；检查*食べれ"
+    },
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "support",
+     "binding": "在标识（止まれ、入るな）上判断命令与禁止"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-possibility-certainty",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "把かもしれない/でしょう/はずだ/にちがいない排上确信度梯度"
+    },
+    {
+     "primitive": "prim:source-stance",
+     "role": "support",
+     "binding": "标出说话人确定度的依据"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "名词、ナ形直接接かもしれない"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-hazu",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "在确信度梯度上定位はず，并与义务梯度上的べき分开；检查*約束は守るはず"
+    },
+    {
+     "primitive": "prim:source-stance",
+     "role": "support",
+     "binding": "指出推断所依据的原文位置"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-wake",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "判断わけではない为部分否定，わけがない为强否定"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 わけだ/わけではない/わけがない"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-kotoni-suru-naru",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 ことにする（自己决定）/ことになる（外部决定）；检查不漏こと"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-wa-ga-contrast",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立集合 は/が；材料是一问一答和故事开头；检查新信息位置选が、对比句选は"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "只凭は/が判断哪个是新信息"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-focus-particles",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "裁判副助词与を、が叠加用例（*水をだけ），归入替代/叠加类"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 だけ/しか/こそ/さえ/も 按焦点意图选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-focus-dake",
+   "uses": [
+    {
+     "primitive": "prim:attach-position",
+     "role": "primary",
+     "binding": "だけ挂在名词后（コーヒーだけ飲む）；检查*だけ飲みます"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "判断だけ限定范围"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-focus-shika",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "しか必配否定；对立 千円しかない/千円だけある"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 しか/だけ 看说话人不足感"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-focus-koso",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 こそ（正是）/やっと（才）；检查*今日こそ来ました"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判こそ与汉语“才”混同的用例"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-focus-sae",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 さえ/も/まで 极端例示"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判*先生さえが 等叠加用例"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-yori-comparison",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "槽位 AのほうがBより～；检查ほう位置"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "判断书面より表“从”还是比较基准"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-kanji-n3",
+   "uses": [
+    {
+     "primitive": "prim:variety-map",
+     "role": "primary",
+     "binding": "日本字形与简繁体并排（変/变/變、図/图/圖），检查混入"
+    },
+    {
+     "primitive": "prim:reading-aid-fade",
+     "role": "support",
+     "binding": "中级汉字词注音逐字撤除"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-lex-word-origin",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 和语/汉语/外来语同义词（帰る/帰宅する）按场合选"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "检查口语中汉语词过多显得生硬"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-lex-onomatopoeia",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "裁判拟态词与动词搭配（*ぐっすり起きる）"
+    },
+    {
+     "primitive": "prim:chunk-harvest",
+     "role": "support",
+     "binding": "采集拟声拟态词＋动词整块"
+    },
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "support",
+     "binding": "对立 清浊拟声词（ころころ/ごろごろ）的语感差"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-sound-loan-accent",
+   "uses": [
+    {
+     "primitive": "prim:contour-match",
+     "role": "primary",
+     "binding": "外来语音高轮廓（バナナ为头高）画出再读；检查不套用英语重音"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-sound-compound-accent",
+   "uses": [
+    {
+     "primitive": "prim:contour-match",
+     "role": "primary",
+     "binding": "复合名词合成后只留一个下降，画出轮廓；检查*な＼つや＼すみ"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "复合规则用于新复合词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-sound-rendaku",
+   "uses": [
+    {
+     "primitive": "prim:reading-select",
+     "role": "primary",
+     "binding": "复合词后项是否连浊（含ライマン法则），用于新复合词"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判*あいがぎ 等过度浊化用例"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-sound-tsu",
+   "uses": [
+    {
+     "primitive": "prim:sound-contrast",
+     "role": "primary",
+     "binding": "对立 つ/す/ちゅ（つき/すき）；检查舌尖塞擦音"
+    },
+    {
+     "primitive": "prim:rhythm-shadow",
+     "role": "support",
+     "binding": "跟读含つ的短句"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-read-bridge",
+   "uses": [
+    {
+     "primitive": "prim:false-friend-check",
+     "role": "primary",
+     "binding": "先写按中文字面的理解，再对照検討、結構、迷惑的日语义"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "给段落标功能抓住概要"
+    },
+    {
+     "primitive": "prim:strip-skeleton",
+     "role": "support",
+     "binding": "长句折叠修饰找主干"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-listen-bridge",
+   "uses": [
+    {
+     "primitive": "prim:predict-next",
+     "role": "primary",
+     "binding": "在けど、んだけど处押后半句是否委婉拒绝"
+    },
+    {
+     "primitive": "prim:transcript-diff",
+     "role": "support",
+     "binding": "写下所听与原文对齐，找漏听的句尾"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "只记关键时间地点"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-short-speech",
+   "uses": [
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "primary",
+     "binding": "先录发言，再与范例对照语体统一"
+    },
+    {
+     "primitive": "prim:record-self-transcribe",
+     "role": "support",
+     "binding": "自己转写录音，自判普通体与丁寧体混用"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "按开头—主体—结尾组织"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-write-paragraph",
+   "uses": [
+    {
+     "primitive": "prim:grow-text",
+     "role": "primary",
+     "binding": "从一句主题句按提示扩展成段"
+    },
+    {
+     "primitive": "prim:one-fix-revision",
+     "role": "support",
+     "binding": "一次只改一类：先统一语体，再改接续"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "段落中标主题句、支撑句、结论"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-write-email-polite",
+   "uses": [
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "primary",
+     "binding": "先写请求邮件，再与范例对照开头自报姓名和结尾"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "检查こんにちは开头等不得体处"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "邮件结构：宛名→挨拶→名乗り→用件→結び"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-str-paraphrase-ja",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "想不起词时用～みたいなもの绕说的回合"
+    },
+    {
+     "primitive": "prim:info-gap",
+     "role": "support",
+     "binding": "学习者必须描述缺失的词让对方猜出"
+    },
+    {
+     "primitive": "prim:false-friend-check",
+     "role": "support",
+     "binding": "检查直接音读出的中文词在日语中是否存在、意思是否相同"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-str-guess-kanji",
+   "uses": [
+    {
+     "primitive": "prim:context-guess",
+     "role": "primary",
+     "binding": "由汉字＋语境猜生词，再核对"
+    },
+    {
+     "primitive": "prim:false-friend-check",
+     "role": "support",
+     "binding": "标出手紙、勉強等字面义与日语义完全不同的词"
+    },
+    {
+     "primitive": "prim:word-shape-split",
+     "role": "support",
+     "binding": "切分汉字复合词并带出同语素词族"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-nagara-concession",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "判断ながら（も）是“同时”还是“虽然”，靠前项状态动词与后项转折"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 ながら（も）/のに/けれども"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-nimo-kakawarazu",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 にもかかわらず（尽管）/にかかわらず（不论）；看意义变化"
+    },
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "support",
+     "binding": "把预期与相反事实两句接成一句"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-monono",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "名词接であるものの、动词普通形接ものの；检查*学生ものの"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在ものの处预测后句与前项预期相反"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-ni-kakawarazu",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 にかかわらず/にもかかわらず；前接对立项（天候、年齢）时选不论"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "判断前项是否为一组对立选项"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-towaie",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "とはいえ后句须与前项预期相反；检查*春とはいえ、暖かい"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 とはいえ/のに/ものの 语体与语气"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-kara-toitte",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "からといって后句须为部分否定（わけではない、とは限らない）"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在からといって处预测后句否定推论"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adv-toiedomo",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "裁判前接普通名词的用例，需有“本应例外”的前提"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "判断といえども的书面语体场合"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-monodakara",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "ものだから后句不接请求命令；检查*時間がないものだから、急いでください"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "检查对上级辩解时的语气"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-karaka",
+   "uses": [
+    {
+     "primitive": "prim:source-stance",
+     "role": "primary",
+     "binding": "判断说话人对原因的确定度低（からか）"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 からか/から/ため"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-karakoso",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 からこそ/ので/から 强调程度；检查*好きなのでこそ"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "判断からこそ突出唯一理由"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-karaniwa",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "からには后句须为决心、义务、劝说；检查*雨が降ったからには、道がぬれた"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 からには/から"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-mono-general",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "同一句加不加ものだ，看一般规律/具体事实的变化"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判ものだ用于一次性事实的用例"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-mono-admonition",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "判断ものだ劝诫对上级失礼的场合"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 ものだ/べきだ/ほうがいい 劝告强度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-mono-recollection",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "时间轴上画过去反复习惯段而非一次性事件"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 たものだ/た"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-mono-impossible",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "可能形＋ものなら 推导；检查*行くものなら"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 可能形ものなら/意志形ものなら"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adv-koto-contrast",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "槽位 Vことは同一V＋が；检查前后谓语一致"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在ことは～が处预测后句保留意见"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adv-koto-empathy",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "判断どんなに～ことか为感叹而非疑问"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adv-koto-alias",
+   "uses": [
+    {
+     "primitive": "prim:slot-order",
+     "role": "primary",
+     "binding": "槽位 本名ことN别称 不可颠倒"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "判断哪个是本名、哪个是别称"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adv-koto-person",
+   "uses": [
+    {
+     "primitive": "prim:source-stance",
+     "role": "primary",
+     "binding": "判断推断依据是对人物的已知性格"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判用于不熟悉的人的用例"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adv-koto-evaluation",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "裁判前接非感情词的用例（*食べたことに）"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "判断ことに表说话人对后句事实的评价"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adv-koto-reason",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "ことだし后句须为提议或决定；检查*雨もやんだことだし、道が乾いた"
+    },
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "support",
+     "binding": "理由与提议两句接成一句"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adv-koto-quote",
+   "uses": [
+    {
+     "primitive": "prim:source-stance",
+     "role": "primary",
+     "binding": "标出转述来源和后句传闻标志（そうだ）"
+    },
+    {
+     "primitive": "prim:reference-chain",
+     "role": "support",
+     "binding": "把转述内容连回说话人"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adv-koto-without",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "辞书形＋ことなしに 推导；检查*見ないことなしに"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "判断书面语场合"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adv-koto-required",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "ないことには后句须为否定或不可能；检查*使ってみないことには、よくわかる"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在ないことには处预测否定性结果"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adv-tokoro-near",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "时间轴标“差点发生而未发生”的点；检查*乗り遅れたところだった"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "判断ところだった表未实现"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adv-tokoro-discover",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 たところ（结果发现）/たところだ（刚刚）"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在たところ后预测发现的结果"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adv-tokoro-contrary",
+   "uses": [
+    {
+     "primitive": "prim:predict-next",
+     "role": "primary",
+     "binding": "在ところが处押后句出乎意料；检查符合预期的用例"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 ところが/しかし"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adv-tokoro-ni",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "ところに/へ后句为来访、遭遇，不为说话人主动动作"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 ところに/ところを"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adv-tokoro-wo",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 ところを（后接見る、捕まる等作用于该场面）/ところに"
+    },
+    {
+     "primitive": "prim:role-marking",
+     "role": "support",
+     "binding": "标出作用于该场面的动词与对象"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adv-tokoro-de",
+   "uses": [
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "primary",
+     "binding": "时间轴标完成节点，接た形；检查*そろうところで"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 たところで（节点）/たところで（徒劳）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adv-tokoro-polite",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "致歉致谢套话お忙しいところを对上级与对朋友的校准"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "打扰或感谢开头的商务回合"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adv-tokoro-expect",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "判断ところを表常态与现实相反，后句不找作用于场面的动词"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 两种ところを"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adv-tokoro-futile",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "たところで后句须为否定或徒劳；检查*急いだところで、間に合った"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在たところで处预测后句为否定"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adv-tsumori-past",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 辞书形＋つもりだった（原打算）/たつもり（自以为）"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴标打算与实际偏离"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adv-tsumori-belief-past",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 たつもり（自以为已做）/つもりだった（原计划）"
+    },
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "support",
+     "binding": "判断说话人认识与事实不符"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adv-tsumori-refusal",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 つもりはない（没打算）/つもりじゃない（不是有意）"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "拒绝时的强硬度校准"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-adv-tsumori-intent-denial",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "辞书形＋つもりじゃなかった；检查*傷つけたつもりじゃなかった"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "道歉时解释“不是有意的”回合"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-zaruwoenai",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "ない形词干＋ざるを得ない，する→せざる；检查*しざる"
+    },
+    {
+     "primitive": "prim:scale-place",
+     "role": "support",
+     "binding": "与なければならない、ないわけにはいかない比较被迫程度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-naiwake-niwa",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "判断双重否定为“不得不做”"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 ないわけにはいかない/ざるを得ない"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-teitadakimasu-instruction",
+   "uses": [
+    {
+     "primitive": "prim:form-for-meaning",
+     "role": "primary",
+     "binding": "判断ていただきます为正式指示而非可拒绝的请求"
+    },
+    {
+     "primitive": "prim:listen-and-do",
+     "role": "support",
+     "binding": "听考场或会场的ていただきます指示做出相应动作"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-compound-topic",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 について/に関して/に対して 按话题或对象选"
+    },
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "support",
+     "binding": "裁判*日本文化に対して興味がある 等汉语迁移"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-compound-standpoint",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 として/にとって/に対して；检查*彼にとって親切だ"
+    },
+    {
+     "primitive": "prim:role-marking",
+     "role": "support",
+     "binding": "标出立场主体与评价对象"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-compound-means-cause",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 によって/に/をもとに；检查一般受身不用によって"
+    },
+    {
+     "primitive": "prim:role-marking",
+     "role": "support",
+     "binding": "标出受身中施动者与依据"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-compound-range-change",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "动词辞书形/名词＋につれて接续；检查*発展するのにつれて"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 にしたがって/につれて/とともに"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-ba-hodo",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "ば形＋同一辞书形＋ほど 推导；检查*読めば見るほど"
+    },
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "support",
+     "binding": "把两个程度变化合成ば～ほど"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-soc-written-style",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "把です・ます体改写为だ・である体，标出混用处"
+    },
+    {
+     "primitive": "prim:one-fix-revision",
+     "role": "support",
+     "binding": "在自己的作文上只改语体一类"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-written-connectives",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 しかし/ただし/なお/一方 按转折、附加条件、补充、对照选"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "段落中标各句功能后选书面接续词"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-nominal-style",
+   "uses": [
+    {
+     "primitive": "prim:combine-unpack",
+     "role": "primary",
+     "binding": "把动词句改为名词化（ごみを削減する→ごみ削減）；检查*ごみを削減の目標"
+    },
+    {
+     "primitive": "prim:word-shape-split",
+     "role": "support",
+     "binding": "切分～化、～性、～的 派生词并带出词族"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-kanji-n2",
+   "uses": [
+    {
+     "primitive": "prim:reading-select",
+     "role": "primary",
+     "binding": "音读中按普通话对应补长音促音（影響えいきょう、結果けっか）"
+    },
+    {
+     "primitive": "prim:reading-aid-fade",
+     "role": "support",
+     "binding": "中高级汉字词注音逐字撤除"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-orth-okurigana",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "裁判*少い、*短かい、*新らしい 等送假名用例，归入多送/少送类"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 汉字/假名表记按文体选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-orth-genkou",
+   "uses": [
+    {
+     "primitive": "prim:real-document-scan",
+     "role": "primary",
+     "binding": "在原稿纸样本上找段首空一格、标点占格、拗促音位置"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "先在原稿纸上写一段，再对照格式范例"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-soc-cushion-refusal",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "按对象选恐れ入りますが/あいにく 等缓冲语，标出直接说できません处"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "接到请求时委婉拒绝的回合"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-soc-business-keigo",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "内外×上下：对客户提本公司上司不加さん、用谦让语；检查*山田部長さん"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "商务电话与接待回合中切换敬语"
+    },
+    {
+     "primitive": "prim:culture-incident",
+     "role": "support",
+     "binding": "事件：对客户尊称本公司上司，判断问题"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-meetings-ja",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "会议回合：赞成、反对、提出替代方案并加缓冲"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "校准反对意见的直接度"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-write-business-email",
+   "uses": [
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "primary",
+     "binding": "先写商务邮件，再对照范例看开头套话与结尾"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "检查こんにちは开头等不得体"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "商务邮件结构：宛名→お世話になっております→名乗り→用件→結び"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-fn-telephone-ja",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "商务电话回合：报公司名→转接→不在时留言；检查不用もしもし"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "电话中只记来电者、公司、回电号码"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-read-broad",
+   "uses": [
+    {
+     "primitive": "prim:discourse-map",
+     "role": "primary",
+     "binding": "给评论、说明文段落标功能找主张"
+    },
+    {
+     "primitive": "prim:false-friend-check",
+     "role": "support",
+     "binding": "深刻、大丈夫等同形词字面猜测与日语义对照"
+    },
+    {
+     "primitive": "prim:strip-skeleton",
+     "role": "support",
+     "binding": "长句折叠修饰找主干"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-listen-broad",
+   "uses": [
+    {
+     "primitive": "prim:transcript-diff",
+     "role": "primary",
+     "binding": "写下新闻、讲座所听与原文对齐，找漏听的句尾否定"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在转折处押后面的真正主张"
+    },
+    {
+     "primitive": "prim:listen-for-data",
+     "role": "support",
+     "binding": "新闻中只记数据格子"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-presentation-ja",
+   "uses": [
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "primary",
+     "binding": "先做发表录音，再与范例对照口头语体"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "按导入—论点—结论组织发表"
+    },
+    {
+     "primitive": "prim:exchange-script",
+     "role": "support",
+     "binding": "发表后答问回合"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-discussion-ja",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "讨论回合：陈述立场、让步后反驳；检查不直接说違います"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "反驳直接度校准"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-write-opinion",
+   "uses": [
+    {
+     "primitive": "prim:discourse-map",
+     "role": "primary",
+     "binding": "意见文结构：主张—理由—反论—再反驳—结论"
+    },
+    {
+     "primitive": "prim:one-fix-revision",
+     "role": "support",
+     "binding": "一次只改一类（语体统一、接续、论据）"
+    },
+    {
+     "primitive": "prim:grow-text",
+     "role": "support",
+     "binding": "从主张句扩展成段"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-summary-ja",
+   "uses": [
+    {
+     "primitive": "prim:strip-skeleton",
+     "role": "primary",
+     "binding": "折叠例子与修饰，只留主干要点"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "先标各段功能再概括"
+    },
+    {
+     "primitive": "prim:attempt-then-compare",
+     "role": "support",
+     "binding": "先写概要再与范例对照"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-lex-yojijukugo-idioms",
+   "uses": [
+    {
+     "primitive": "prim:usage-boundary",
+     "role": "primary",
+     "binding": "裁判按中文成语替换的用例（*一箭双雕→一石二鳥）"
+    },
+    {
+     "primitive": "prim:false-friend-check",
+     "role": "support",
+     "binding": "同字成语中日义项是否一致"
+    },
+    {
+     "primitive": "prim:figurative-decode",
+     "role": "support",
+     "binding": "惯用句字面义与比喻义对照"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-yainaya",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "辞书形＋や否や；检查*帰ったや否や"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴标前项一发生后项立即发生"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-n1-time-relations",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 が早いか/なり/そばから 按人称与反复性选"
+    },
+    {
+     "primitive": "prim:aspect-timeline",
+     "role": "support",
+     "binding": "时间轴标两事件紧接或反复"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-n1-range-limit",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "を皮切りに后句须为相继展开的多个事件；检查*～を皮切りに、会議が終わった"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 を皮切りに/に至るまで/をもって"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-n1-limitation-addition",
+   "uses": [
+    {
+     "primitive": "prim:scale-place",
+     "role": "primary",
+     "binding": "把两项排上程度梯度：はおろか前项为易、后项为极端；检查方向颠倒"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 はおろか/のみならず/に限らず"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-n1-relation-manner",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 を問わず/をよそに/んばかり 等"
+    },
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "support",
+     "binding": "ない形→んばかり（泣かんばかり、せんばかり）推导"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-n1-concession-accompaniment",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "がてら后句须为移动或顺带行为；检查*散歩がてら考えた"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 がてら/かたがた/ついでに"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-n1-condition",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "なくしては/なしには后句须为否定或不可能；检查*努力なくしては成功できる"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 N1条件形式（とあれば、ないことには）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-n1-purpose-cause",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "べく后句不接命令请求；检查*合格すべく頑張れ"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 べく/んがため/ゆえに 按目的或原因选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-volitional-mononara",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 意志形ものなら（要是敢）/可能形ものなら（要是能）"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在ようものなら处预测后句为严重后果"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-n1-possibility-standard",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "うる/える与ない形推导（ありえない）；检查*ありうない"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 うる/かねる/べからず 按可能、不可能、禁止选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-n1-comparison-outcome",
+   "uses": [
+    {
+     "primitive": "prim:paradigm-apply",
+     "role": "primary",
+     "binding": "ずじまい接续（読まずじまい、せずじまい）推导"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 ずじまい/あげく/末に 按结局性质选"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-n1-emphasis-assertion",
+   "uses": [
+    {
+     "primitive": "prim:clause-constraint",
+     "role": "primary",
+     "binding": "たりとも、として～ない 后句必须否定；检查*一日たりとも休む"
+    },
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "support",
+     "binding": "对立 N1强调断定形式"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-n1-evaluation-feeling",
+   "uses": [
+    {
+     "primitive": "prim:choose-by-intent",
+     "role": "primary",
+     "binding": "对立 限りだ/禁じ得ない/てやまない；检查只用于第一人称"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "判断书面语场合"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-soc-register-control",
+   "uses": [
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "primary",
+     "binding": "同一内容改写成口语、书面、正式、新闻体四版，标出混入的口语词"
+    },
+    {
+     "primitive": "prim:one-fix-revision",
+     "role": "support",
+     "binding": "在自己的稿子上只改语域一类"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-soc-dialects",
+   "uses": [
+    {
+     "primitive": "prim:variety-map",
+     "role": "primary",
+     "binding": "关西方言与标准语并排（へん=ない、はる、や=だ），判断场合"
+    },
+    {
+     "primitive": "prim:transcript-diff",
+     "role": "support",
+     "binding": "听方言对话写下所听，与原文对齐"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-str-implicature",
+   "uses": [
+    {
+     "primitive": "prim:figurative-decode",
+     "role": "primary",
+     "binding": "「ちょっと…」「考えておきます」字面义与言外拒绝对照"
+    },
+    {
+     "primitive": "prim:culture-incident",
+     "role": "support",
+     "binding": "事件：继续追问导致尴尬，改写回应"
+    },
+    {
+     "primitive": "prim:predict-next",
+     "role": "support",
+     "binding": "在省略的句尾处押真实意图"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-kanji-joyo",
+   "uses": [
+    {
+     "primitive": "prim:reading-select",
+     "role": "primary",
+     "binding": "按词性质选读音，重点熟字训（土産みやげ、大人おとな）；检查按字读"
+    },
+    {
+     "primitive": "prim:reading-aid-fade",
+     "role": "support",
+     "binding": "常用汉字注音逐步撤除"
+    },
+    {
+     "primitive": "prim:character-anatomy",
+     "role": "support",
+     "binding": "借构件猜义猜音"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-read-complex",
+   "uses": [
+    {
+     "primitive": "prim:strip-skeleton",
+     "role": "primary",
+     "binding": "学术长句折叠修饰找主干"
+    },
+    {
+     "primitive": "prim:source-stance",
+     "role": "support",
+     "binding": "区分作者主张与转述，判断ではあるまいか是作者主张"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "给论说文段落标功能"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-listen-complex",
+   "uses": [
+    {
+     "primitive": "prim:predict-next",
+     "role": "primary",
+     "binding": "在それはそうなんですけど处押后面的真正主张"
+    },
+    {
+     "primitive": "prim:transcript-diff",
+     "role": "support",
+     "binding": "写下讲座片段与原文对齐"
+    },
+    {
+     "primitive": "prim:source-stance",
+     "role": "support",
+     "binding": "区分说话人立场与引用他人"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-read-literature-ja",
+   "uses": [
+    {
+     "primitive": "prim:figurative-decode",
+     "role": "primary",
+     "binding": "由描写与修辞推断人物心理"
+    },
+    {
+     "primitive": "prim:reference-chain",
+     "role": "support",
+     "binding": "把省略主语和指示词连回人物"
+    },
+    {
+     "primitive": "prim:context-guess",
+     "role": "support",
+     "binding": "生词按语境猜后修正"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-write-report-ja",
+   "uses": [
+    {
+     "primitive": "prim:source-stance",
+     "role": "primary",
+     "binding": "区分引用与自己的论述，标出引用来源；避免私は～と思う"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "报告结构：序论—本论—结论"
+    },
+    {
+     "primitive": "prim:one-fix-revision",
+     "role": "support",
+     "binding": "一次只改一类（文体、引用格式、论证）"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-chair-discussion",
+   "uses": [
+    {
+     "primitive": "prim:exchange-script",
+     "role": "primary",
+     "binding": "主持回合：开场、分配发言、整理意见、收束；检查不过多发表己见"
+    },
+    {
+     "primitive": "prim:register-calibrate",
+     "role": "support",
+     "binding": "主持中保持中立措辞"
+    },
+    {
+     "primitive": "prim:discourse-map",
+     "role": "support",
+     "binding": "把讨论意见归纳为几类"
+    }
+   ]
+  },
+  {
+   "kc": "kt:ja-skill-mediate-ja",
+   "uses": [
+    {
+     "primitive": "prim:cross-language-align",
+     "role": "primary",
+     "binding": "日语资料与中文转述按意义块对齐，标出增删换说，为指定听众重组要点"
+    },
+    {
+     "primitive": "prim:strip-skeleton",
+     "role": "support",
+     "binding": "先削出日语资料主干要点"
+    }
+   ]
+  }
+ ],
+ "gaps": [
+  {
+   "kc": "kt:ja-orth-genkou",
+   "reason": "原稿纸格式是版面规则（每格一字、段首空格、标点与拗促音占格），real-document-scan 只是查找，没有‘按版面规则排版并被逐格核对’的原语",
+   "proposal": "新原语 layout-grid：在格子版面上排文字，系统逐格核对占格规则（也可用于竖排、书法格、汉字田字格）"
+  },
+  {
+   "kc": "kt:ja-soc-bowing-etiquette",
+   "reason": "鞠躬深浅与时机是身体动作，现有原语都以语言输出为证据，culture-incident 只能判读不能练动作",
+   "proposal": "新原语 gesture-match：看场景选出或摆出合适的非语言动作（鞠躬角度、递名片方式），由场景规则核对"
+  }
+ ]
+}

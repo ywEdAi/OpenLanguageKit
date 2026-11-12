@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tone Contour</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .tc-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .tc-layout { grid-template-columns: 1fr; } }
+  .tc-side { position: sticky; top: 12px; display: grid; gap: 12px; }
+  .tc-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tc-tabs button { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 4px 10px; }
+  .tc-tabs button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+  .tc-cards { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+  .tc-item { border: 1px solid var(--line); background: var(--panel); border-radius: var(--radius); padding: 8px 10px 6px;
+    display: inline-flex; flex-direction: column; align-items: center; gap: 2px; min-width: 96px; }
+  .tc-item[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+  .tc-item .ch { font-size: 1.6rem; line-height: 1.2; }
+  [data-variant="child"] .tc-item .ch { font-size: 2.2rem; }
+  .tc-item .py { font-size: .85rem; color: var(--muted); }
+  .tc-ref { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+  .tc-legend { display: grid; gap: 4px; }
+  .tc-legend button { display: flex; gap: 8px; align-items: center; border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 3px 10px; text-align: left; }
+  svg.tc { display: block; overflow: visible; }
+  svg.tc .grid { stroke: var(--line); stroke-width: 1; }
+  svg.tc text { fill: var(--muted); font-size: 11px; font-family: var(--font); }
+  svg.tc text.mora { fill: var(--ink); font-size: 15px; }
+  svg.tc .ln { fill: none; stroke: currentColor; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+  [data-variant="child"] svg.tc .ln { stroke-width: 6; }
+  svg.tc .ghost { opacity: .4; stroke-dasharray: 5 5; stroke-width: 3; }
+  svg.tc .dot { fill: currentColor; }
+  svg.tc .pdot { fill: var(--panel); stroke: currentColor; stroke-width: 2.5; }
+  svg.tc .link { stroke: currentColor; stroke-width: 2.5; fill: none; }
+  svg.tc .link.p { stroke-dasharray: 3 4; }
+  svg.tc .drop { stroke: var(--bad); stroke-width: 3; fill: none; stroke-linecap: round; }
+  svg.tc .arrow { stroke: var(--warn); stroke-width: 2; fill: none; marker-end: url(#tc-arr); }
+  svg.tc .layer { fill: var(--muted); font-size: 12px; }
+  .pitch { color: var(--accent); }
+  .slots { display: flex; gap: 10px; margin: 10px 0; flex-wrap: wrap; }
+  .slot { border: 2px dashed var(--line); background: var(--panel); border-radius: 12px; min-width: 84px; min-height: 96px; padding: 4px;
+    display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+  [data-variant="child"] .slot { min-width: 110px; min-height: 120px; }
+  .slot.focus { border-style: solid; border-color: var(--accent); }
+  .slot.ok { background: var(--accent-soft); border-style: solid; border-color: var(--accent); }
+  .slot.bad { background: var(--bad-soft); border-style: solid; border-color: var(--bad); }
+  .slot .q { font-size: 2rem; color: var(--muted); }
+  .palette { display: flex; flex-wrap: wrap; gap: 8px; }
+  .opt { border: 1px solid var(--line); background: var(--panel); border-radius: 12px; padding: 4px 8px; display: inline-flex; flex-direction: column; align-items: center; font-size: .8rem; }
+  [data-variant="child"] .opt { padding: 8px 14px; font-size: 1rem; }
+  .opt.right { background: var(--accent-soft); border-color: var(--accent); }
+  .opt.wrongpick { background: var(--bad-soft); border-color: var(--bad); }
+  .big { font-size: 2.6rem; text-align: center; line-height: 1.2; margin: 4px 0; }
+  [data-variant="child"] .big { font-size: 3.4rem; }
+  .tts { border-left: 4px solid var(--line); }
+  .reverse { border-left: 4px solid var(--warn); }
+  .rulelist { margin: 6px 0 0; padding-left: 18px; font-size: .88rem; }
+  .progress { font-size: .85rem; color: var(--muted); }
+  .wrong { animation: shake .3s; }
+  @keyframes shake { 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function () {
+  'use strict';
+  var h = KTBlock.h;
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'tones-zh';
+  var entry = KT_REGISTRY.packs[setId] || {};
+  var file = entry.file;
+  if (file && entry.block !== 'tone-contour') { document.getElementById('app').textContent = '数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。'; return; }
+  if (!file) { document.getElementById('app').textContent = '未知的数据包：' + setId; return; }
+  var sc = document.createElement('script');
+  sc.src = file;
+  sc.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else document.getElementById('app').textContent = '数据包里没有：' + setId; };
+  sc.onerror = function () { document.getElementById('app').textContent = '数据包加载失败：' + file; };
+  document.head.appendChild(sc);
+
+  /* ---------- SVG helpers ---------- */
+  var NS = 'http://www.w3.org/2000/svg';
+  function s(tag, attrs, kids) {
+    var el = document.createElementNS(NS, tag);
+    Object.keys(attrs || {}).forEach(function (k) { if (attrs[k] !== null && attrs[k] !== undefined) el.setAttribute(k, attrs[k]); });
+    [].concat(kids || []).forEach(function (c) { if (c) el.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+    return el;
+  }
+  function child() { return document.documentElement.dataset.variant === 'child'; }
+  function toneClass(c) { return 'tone' + String(c).charAt(0); }
+
+  function start(pack) {
+    var B = KTBlock.init({ id: 'tone-contour', primitive: 'prim:contour-match', title: pack.title, set: pack.id });
+    document.title = pack.title + ' · Tone Contour';
+    var zh = pack.lang === 'zh';
+    var modes = zh ? [{ id: 'look', label: '看线听音' }, { id: 'listen', label: '听音选线' }, { id: 'sandhi', label: '变调' }]
+                   : [{ id: 'look', label: '看点听音' }, { id: 'listen', label: '听音选型' }];
+    var st = {
+      mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : 'look',
+      set: zh ? pack.sets[0].id : pack.groups[0].id,
+      particle: true, sel: null, q: null, done: {}
+    };
+    var ui = KTBlock.chrome(B, { title: pack.title, subtitle: pack.subtitle, modes: modes, mode: st.mode,
+      onMode: function (m) { st.mode = m; st.q = null; st.sel = null; ui.setMode(m); B.emit('view', { mode: m }); render(); },
+      onVariant: function () { st.q = null; render(); } });
+    var bar = h('div', { class: 'kb-bar' });
+    var stage = h('div', {});
+    var side = h('aside', { class: 'tc-side' });
+    var main = h('main', { class: 'kb-main' }, [bar, h('div', { class: 'tc-layout' }, [stage, side])]);
+    document.getElementById('app').append(ui.header, main, ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id });
+
+    function play(text, item, slow) {
+      var ok = B.speak(text, pack.speech, { audio: item && item.audio, rate: slow ? 0.55 : undefined });
+      if (!ok) feedback('这个浏览器不能播放语音。', 'warn');
+    }
+    function feedback(msg, tone) {
+      var f = stage.querySelector('.kb-feedback') || side.querySelector('.kb-feedback');
+      if (f) { f.textContent = msg; f.className = 'kb-feedback ' + (tone || ''); }
+    }
+
+    /* ---------- zh: Chao five-level contours ---------- */
+    var C = pack.contours || {};
+    function chaoDigits(c) { return C[c] && C[c].chao ? C[c].chao.join('') : '轻'; }
+    function toneLabel(c) { return child() ? C[c].child : C[c].label + ' ' + chaoDigits(c); }
+    /** cats: surface categories per syllable; opts: {cw, ht, scale, ghost:[cats], labels, rows:[{cats, label}]} */
+    function zhSvg(cats, opts) {
+      opts = opts || {};
+      var cw = opts.cw || (child() ? 76 : 60), ht = opts.ht || (child() ? 96 : 76), pad = 10, gut = opts.scale ? 18 : 4;
+      var rows = opts.rows || [{ cats: cats }];
+      var rowH = ht + (opts.rows ? 18 : 0);
+      var w = gut + cats.length * cw, H = rows.length * rowH;
+      var svg = s('svg', { class: 'tc', width: w, height: H, viewBox: '0 0 ' + w + ' ' + H, role: 'img',
+        'aria-label': rows.map(function (r) { return (r.label || '') + r.cats.map(function (c) { return C[c] ? C[c].label : c; }).join('，'); }).join('；') });
+      if (opts.arrows) svg.appendChild(s('defs', {}, [s('marker', { id: 'tc-arr', viewBox: '0 0 10 10', refX: 8, refY: 5, markerWidth: 6, markerHeight: 6, orient: 'auto-start-reverse' },
+        [s('path', { d: 'M0 0L10 5L0 10z', style: 'fill: var(--warn)' })])]));
+      rows.forEach(function (row, ri) {
+        var top = ri * rowH + (opts.rows ? 16 : 0);
+        function y(L) { return top + pad + (5 - L) * (ht - 2 * pad) / 4; }
+        if (row.label) svg.appendChild(s('text', { class: 'layer', x: 0, y: top - 4 }, row.label));
+        for (var L = 1; L <= 5; L++) {
+          svg.appendChild(s('line', { class: 'grid', x1: gut, x2: w, y1: y(L), y2: y(L) }));
+          if (opts.scale) svg.appendChild(s('text', { x: 2, y: y(L) + 4 }, String(L)));
+        }
+        function draw(cs, ghost) {
+          cs.forEach(function (c, i) {
+            var x0 = gut + i * cw + 12, x1 = gut + (i + 1) * cw - 12, g = s('g', { class: toneClass(c) });
+            var spec = C[c];
+            if (!spec) return;
+            if (!spec.chao) {
+              var prev = i ? cs[i - 1] : 'start';
+              g.appendChild(s('circle', { class: 'dot', cx: (x0 + x1) / 2, cy: y(pack.neutralAfter[prev] || 3), r: child() ? 7 : 5, opacity: ghost ? .4 : 1 }));
+            } else {
+              var n = spec.chao.length;
+              var pts = spec.chao.map(function (L, k) { return (x0 + (x1 - x0) * k / (n - 1)).toFixed(1) + ',' + y(L).toFixed(1); });
+              g.appendChild(s('polyline', { class: 'ln' + (ghost ? ' ghost' : ''), points: pts.join(' ') }));
+              if (child() && !ghost) { var last = pts[n - 1].split(','); g.appendChild(s('circle', { class: 'dot', cx: last[0], cy: last[1], r: 6 })); }
+            }
+            svg.appendChild(g);
+          });
+        }
+        if (opts.ghost) draw(opts.ghost, true);
+        draw(row.cats, false);
+      });
+      if (opts.arrows) opts.arrows.forEach(function (i) {
+        var x = gut + i * cw + cw / 2;
+        svg.appendChild(s('line', { class: 'arrow', x1: x, x2: x, y1: ht - 4, y2: rowH + 18 }));
+      });
+      return svg;
+    }
+    function catsOf(t) { return String(t).split(' '); }
+
+    /* ---------- ja: mora high/low dots ---------- */
+    function heights(n, a) {
+      var out = [];
+      for (var i = 0; i <= n; i++) {
+        if (a === 0) out.push(i === 0 ? 'L' : 'H');
+        else if (a === 1) out.push(i === 0 ? 'H' : 'L');
+        else out.push(i === 0 ? 'L' : (i < a ? 'H' : 'L'));
+      }
+      return out;
+    }
+    function patternName(n, a) { return a === 0 ? pack.patterns['0'] : a === 1 ? pack.patterns['1'] : a === n ? pack.patterns.last : pack.patterns.mid; }
+    /** opts: {particle, onlyFirst, text:false} */
+    function jaSvg(morae, a, opts) {
+      opts = opts || {};
+      var n = morae.length, cw = child() ? 44 : 34, withP = opts.particle !== false, cols = n + (withP ? 1 : 0);
+      var yH = 14, yL = child() ? 52 : 44, ty = yL + 26, w = cols * cw, H = opts.text === false ? yL + 10 : ty + 6;
+      var hs = heights(n, a);
+      var svg = s('svg', { class: 'tc pitch', width: w, height: H, viewBox: '0 0 ' + w + ' ' + H, role: 'img',
+        'aria-label': morae.join('') + (withP ? pack.particle : '') + '：' + hs.slice(0, cols).map(function (x) { return x === 'H' ? '高' : '低'; }).join('') });
+      function cx(i) { return i * cw + cw / 2; }
+      function cy(i) { return hs[i] === 'H' ? yH : yL; }
+      var shown = opts.onlyFirst ? 1 : cols;
+      for (var i = 0; i < shown - 1; i++) svg.appendChild(s('line', { class: 'link' + (i === n - 1 ? ' p' : ''), x1: cx(i), y1: cy(i), x2: cx(i + 1), y2: cy(i + 1) }));
+      for (i = 0; i < cols; i++) {
+        if (i < shown) svg.appendChild(s('circle', { class: i === n ? 'pdot' : 'dot', cx: cx(i), cy: cy(i), r: child() ? 8 : 6 }));
+        if (opts.text !== false) svg.appendChild(s('text', { class: 'mora', x: cx(i), y: ty, 'text-anchor': 'middle', opacity: i === n ? .6 : 1 }, i === n ? pack.particle : morae[i]));
+      }
+      if (a > 0 && !opts.onlyFirst && (a < n || withP)) {
+        var dx = a * cw; svg.appendChild(s('path', { class: 'drop', d: 'M' + (dx - 5) + ' ' + (yH - 8) + 'L' + (dx + 5) + ' ' + (yH + 4) }));
+      }
+      return svg;
+    }
+    function jaSay(wd) { return wd.word + (st.particle ? pack.particle : ''); }
+
+    /* ---------- bar & side ---------- */
+    function renderBar() {
+      bar.innerHTML = '';
+      if (st.mode === 'look') {
+        var list = zh ? pack.sets : pack.groups;
+        bar.append(h('div', { class: 'tc-tabs' }, list.map(function (g) {
+          return h('button', { 'aria-pressed': g.id === st.set ? 'true' : 'false', onclick: function () { st.set = g.id; st.sel = null; B.emit('view', { set: g.id }); render(); } }, g.label);
+        })));
+        if (!zh) bar.append(h('label', { class: 'kb-variant' }, [h('input', { type: 'checkbox', checked: st.particle,
+          onchange: function (e) { st.particle = e.target.checked; B.emit('highlight', { particle: st.particle }); render(); } }), ' 后接 ' + pack.particle]));
+      } else {
+        var p = pool(), d = p.filter(function (x) { return st.done[x.id]; }).length;
+        bar.append(h('span', { class: 'progress' }, '本组 ' + p.length + ' 题，已做 ' + d + ' 题。第一次作答会被记录；提示和看答案另算。'));
+      }
+    }
+    function renderSide() {
+      side.innerHTML = '';
+      if (st.mode === 'look') side.append(st.sel ? detailCard(st.sel) : h('div', { class: 'kb-card' }, [
+        h('p', { class: 'kb-prompt', text: zh ? '点一个字，听它的声调，看它的线。' : '点一个词，听它接上 ' + pack.particle + ' 的读法，看高低点。' }),
+        zh ? h('p', { class: 'kb-note', text: '同一组的字声母韵母都一样，只有线不一样：意思就靠这条线区分。' }) : null,
+        h('div', { class: 'kb-feedback' })]));
+      if (!zh) side.append(h('div', { class: 'kb-card' }, [h('b', { text: '重音＝往下掉的地方' }), h('p', { class: 'kb-note', text: pack.rule })]));
+      var g = !zh && pack.groups.find(function (x) { return x.id === st.set; });
+      if (g && g.note && st.mode === 'look') side.append(h('div', { class: 'kb-card' }, [h('p', { class: 'kb-note', text: g.note })]));
+      side.append(h('div', { class: 'kb-card tts' }, [h('b', { text: '关于机器发音' }), h('p', { class: 'kb-note', text: pack.ttsNote })]));
+      if (pack.reverse) side.append(h('div', { class: 'kb-card reverse' }, [h('b', { text: '写的和说的' }), h('p', { class: 'kb-note', text: pack.reverse })]));
+    }
+    function detailCard(it) {
+      if (zh) {
+        var cats = catsOf(it.t);
+        return h('div', { class: 'kb-card' }, [
+          h('div', { class: 'big', text: it.text }), h('p', { style: 'text-align:center;margin:0' }, [h('b', { text: it.py })]),
+          h('div', { style: 'display:flex;justify-content:center;margin:8px 0' }, [zhSvg(cats, { scale: !child(), cw: 80, ht: 110 })]),
+          h('p', { class: 'kb-note' }, cats.map(function (c) { return C[c].label + '（' + (child() ? C[c].child : C[c].name + '，' + chaoDigits(c)) + '）'; }).join(' + ')),
+          it.note ? h('p', { class: 'kb-note', text: it.note }) : null,
+          h('button', { class: 'kb-btn primary', onclick: function () { play(it.text, it); } }, '▶ 再听一次'), h('div', { class: 'kb-feedback' })]);
+      }
+      var n = it.morae.length;
+      return h('div', { class: 'kb-card' }, [
+        h('div', { class: 'big', text: it.word }), h('p', { style: 'text-align:center;margin:0' }, [it.kana, '　', it.gloss]),
+        h('div', { style: 'display:flex;justify-content:center;margin:8px 0' }, [jaSvg(it.morae, it.accent, { particle: st.particle })]),
+        h('p', { class: 'kb-note', text: patternName(n, it.accent) + ' [' + it.accent + ']：' + (it.accent === 0 ? '整个词都不往下掉，接上的 ' + pack.particle + ' 也是高的。' : '第 ' + it.accent + ' 拍后面往下掉' + (it.accent === n ? '，掉在助词上，所以单念听不出来。' : '。')) }),
+        h('button', { class: 'kb-btn primary', onclick: function () { play(jaSay(it), it); } }, '▶ 再听一次'), h('div', { class: 'kb-feedback' })]);
+    }
+
+    /* ---------- look mode ---------- */
+    function renderLook() {
+      stage.innerHTML = '';
+      if (zh) {
+        var set = pack.sets.find(function (x) { return x.id === st.set; });
+        var ref = ['1', '2', '3', '4'];
+        var chart = s('svg', { class: 'tc', width: 200, height: 130, viewBox: '0 0 200 130', role: 'img', 'aria-label': '五度标调：一声 55，二声 35，三声 214，四声 51' });
+        for (var L = 1; L <= 5; L++) { var yy = 10 + (5 - L) * 27.5; chart.appendChild(s('line', { class: 'grid', x1: 18, x2: 200, y1: yy, y2: yy })); chart.appendChild(s('text', { x: 2, y: yy + 4 }, String(L))); }
+        ref.concat(child() ? [] : ['3h']).forEach(function (c) {
+          var pts = C[c].chao.map(function (L, k, a) { return (30 + (c === '3h' ? 80 : 160) * k / (a.length - 1)).toFixed(1) + ',' + (10 + (5 - L) * 27.5).toFixed(1); });
+          chart.appendChild(s('g', { class: toneClass(c) }, [s('polyline', { class: 'ln' + (c === '3h' ? ' ghost' : ''), points: pts.join(' ') })]));
+        });
+        stage.append(h('div', { class: 'kb-card tc-ref' }, [chart, h('div', { class: 'tc-legend' }, ref.concat(['3h', '0']).filter(function (c) { return !(child() && c === '3h'); }).map(function (c) {
+          var it = set.items.find(function (x) { return x.t === c; });
+          return h('button', { class: toneClass(c), disabled: !it, onclick: function () { if (it) { st.sel = it; play(it.text, it); B.emit('select', { item: it.text, tone: c }); render(); } } },
+            [zhSvg([c], { cw: 44, ht: 30 }), h('span', { text: C[c].label + '　' + chaoDigits(c) + (child() ? '　' + C[c].child : '　' + C[c].name) })]);
+        }))]));
+        stage.append(h('div', { class: 'tc-cards' }, set.items.map(function (it) {
+          return h('button', { class: 'tc-item', 'aria-pressed': st.sel === it ? 'true' : 'false', onclick: function () { st.sel = it; play(it.text, it); B.emit('select', { item: it.text, tone: it.t }); render(); } },
+            [zhSvg(catsOf(it.t)), h('span', { class: 'ch', text: it.text }), h('span', { class: 'py', text: it.py })]);
+        })));
+      } else {
+        var g = pack.groups.find(function (x) { return x.id === st.set; });
+        stage.append(h('div', { class: 'tc-cards' }, g.words.map(function (wd) {
+          return h('button', { class: 'tc-item', 'aria-pressed': st.sel === wd ? 'true' : 'false', onclick: function () { st.sel = wd; play(jaSay(wd), wd); B.emit('select', { item: wd.id, accent: wd.accent, particle: st.particle }); render(); } },
+            [jaSvg(wd.morae, wd.accent, { particle: st.particle }), h('span', { class: 'ch', text: wd.word }), h('span', { class: 'py', text: wd.gloss + ' · ' + patternName(wd.morae.length, wd.accent) })]);
+        })));
+        if (!st.particle) stage.append(h('p', { class: 'kb-note', text: '去掉 ' + pack.particle + ' 以后，尾高型和平板型的点是一样的：花／鼻、橋／端 单念时分不出来。' }));
+      }
+    }
+
+    /* ---------- practice pools ---------- */
+    function pool() {
+      if (!zh) return [].concat.apply([], pack.groups.map(function (g) { return g.words; }));
+      if (st.mode === 'sandhi') return pack.sandhi.map(function (x) { return Object.assign({ id: 'sandhi:' + x.id }, x, { id: 'sandhi:' + x.id }); });
+      var seen = {}, monos = [];
+      pack.sets.forEach(function (set) { set.items.forEach(function (it) {
+        if (it.t.indexOf(' ') < 0 && it.t !== '0' && !seen[it.text]) { seen[it.text] = 1; monos.push({ id: 'listen:' + it.text, text: it.text, py: it.py, tones: [it.t], surface: [it.t], audio: it.audio }); }
+      }); });
+      var words = pack.words.map(function (wd) { return Object.assign({}, wd, { id: 'listen:' + wd.id }); });
+      var all = monos.concat(words);
+      return child() ? all.filter(function (x) { return x.surface.indexOf('0') < 0; }) : all;
+    }
+    function next() {
+      var p = pool().filter(function (x) { return !st.done[x.id]; });
+      if (!p.length) { B.emit('complete', { mode: st.mode, set: pack.id }); st.done = {}; p = pool(); }
+      var it = p[Math.floor(Math.random() * p.length)];
+      st.q = { item: it, picks: [], focus: 0, finished: false, bad: {}, hint: 0 };
+      if (zh && st.mode === 'listen') {
+        st.q.key = it.surface.map(function (c) { return c === '3h' ? '3' : c; });
+        if (child() && it.surface.length === 1) {
+          var others = KTBlock.shuffle(['1', '2', '3', '4'].filter(function (c) { return c !== st.q.key[0]; })).slice(0, 2);
+          st.q.opts = others.concat(st.q.key).sort();
+        } else st.q.opts = child() ? ['1', '2', '3', '4'] : ['1', '2', '3', '4', '0'];
+        setTimeout(function () { play(it.text, it); }, 80);
+      } else if (zh) {
+        st.q.key = it.actual.map(function (c) { return child() && c === '3h' ? '3' : c; });
+        st.q.opts = child() ? ['1', '2', '3', '4'] : ['1', '2', '3', '3h', '4'];
+      } else {
+        var n = it.morae.length, all = [];
+        for (var a = 0; a <= n; a++) all.push(a);
+        if (child()) {
+          var g = pack.groups.find(function (x) { return x.words.indexOf(it) >= 0; });
+          var partner = g.words.filter(function (w) { return w.accent !== it.accent && w.morae.length === n; })[0];
+          var alt = partner ? partner.accent : KTBlock.shuffle(all.filter(function (x) { return x !== it.accent; }))[0];
+          st.q.opts = [it.accent, alt].sort();
+        } else st.q.opts = all;
+        setTimeout(function () { play(it.word + pack.particle, it); }, 80);
+      }
+    }
+
+    /* ---------- zh listen & sandhi: slot filling ---------- */
+    function slotRow(n, show) {
+      return h('div', { class: 'slots' }, Array.from({ length: n }, function (_, i) {
+        var q = st.q, c = q.picks[i];
+        var cls = 'slot' + (q.finished ? (q.picks[i] === q.key[i] ? ' ok' : ' bad') : q.bad[i] ? ' bad' : (i === q.focus ? ' focus' : ''));
+        return h('button', { class: cls, 'aria-label': '第 ' + (i + 1) + ' 个字' + (c ? '：' + C[c].label : '：未选'), onclick: function () { if (!q.finished) { q.focus = i; render(); } } },
+          [c ? zhSvg([c], { cw: child() ? 90 : 70 }) : h('span', { class: 'q', text: '?' }), h('span', { class: 'py', text: show ? show[i] : (c ? toneLabel(c) : '第 ' + (i + 1) + ' 字') })]);
+      }));
+    }
+    function palette() {
+      var q = st.q;
+      return h('div', { class: 'palette', role: 'group', 'aria-label': '可选的线' }, q.opts.map(function (c) {
+        return h('button', { class: 'opt ' + toneClass(c), disabled: q.finished, onclick: function () {
+          q.picks[q.focus] = c; delete q.bad[q.focus];
+          B.emit('select', { item: q.item.id, slot: q.focus, choice: c });
+          var n = (q.item.surface || q.item.actual).length;
+          for (var k = 1; k <= n; k++) { var j = (q.focus + k) % n; if (!q.picks[j]) { q.focus = j; break; } }
+          render();
+        } }, [zhSvg([c], { cw: child() ? 64 : 50, ht: child() ? 60 : 44 }), h('span', { text: toneLabel(c) })]);
+      }));
+    }
+    function sameKey(picks, key) { return key.every(function (c, i) { return picks[i] === c; }); }
+
+    function renderListenZh() {
+      if (!st.q) next();
+      var q = st.q, it = q.item, n = it.surface.length;
+      var filled = q.picks.filter(Boolean).length === n;
+      var wrap = h('div', { class: 'kb-card' }, [
+        h('p', { class: 'kb-prompt', text: n > 1 ? '听这个词，有几个字就有几格。每一格选你听到的线。' : '听这个字，选你听到的线。' }),
+        slotRow(n, q.finished ? it.text.split('').map(function (ch, i) { return ch + ' ' + toneLabel(it.surface[i]); }) : null),
+        q.finished ? null : palette(),
+        h('div', { class: 'kb-bar', style: 'margin-top:10px' }, [
+          h('button', { class: 'kb-btn', onclick: function () { play(it.text, it); B.emit('view', { item: it.id, replay: true }); } }, '▶ 再听'),
+          q.finished ? null : h('button', { class: 'kb-btn', onclick: function () { B.hint(it.id, 1); play(it.text, it, true); } }, '提示：慢一点'),
+          q.finished ? null : (n > 1
+            ? h('button', { class: 'kb-btn', disabled: q.hint >= 2, onclick: function () { q.hint = 2; B.hint(it.id, 2); q.picks[0] = q.key[0]; q.focus = 1; render(); feedback('第一个字的线已经放上了，再听后一个字。', 'warn'); } }, '提示：给出第一个字')
+            : h('button', { class: 'kb-btn', onclick: function () { B.hint(it.id, 2); play('妈', null); setTimeout(function () { play(it.text, it); }, 1100); feedback('先放一声“妈 mā”（55），再放目标字。比一比：比它高、低，还是在变？', 'warn'); } }, '提示：和一声比')),
+          q.finished ? null : h('button', { class: 'kb-btn', onclick: function () { B.reveal(it.id); q.picks = q.key.slice(); finish(false); } }, '看答案'),
+          q.finished ? null : h('button', { class: 'kb-btn primary', disabled: !filled, onclick: submitListen }, '提交'),
+          q.finished ? h('button', { class: 'kb-btn primary', onclick: function () { st.q = null; render(); } }, '下一题') : null
+        ]),
+        h('div', { class: 'kb-feedback', text: q.msg || '先选，再提交。答错可以再改；第一次提交的答案会被记录。' })
+      ]);
+      if (q.finished) wrap.append(h('div', { style: 'margin-top:10px' }, [
+        h('p', { style: 'margin:0' }, [h('b', { text: it.text }), '　' + it.py]),
+        zhSvg(it.surface, { scale: !child() }), surfaceNote(it) ? h('p', { class: 'kb-note', text: surfaceNote(it) }) : null]));
+      stage.innerHTML = ''; stage.append(wrap);
+    }
+    function surfaceNote(it) {
+      var notes = [];
+      it.surface.forEach(function (c, i) {
+        if (c === '3h') notes.push('“' + it.text[i] + '”是三声，但在别的字前面只降不升（半三声 21）。');
+        else if (it.tones[i] === '3' && c === '2') notes.push('“' + it.text[i] + '”写作三声，因为后面也是三声，说出来是二声。去“变调”里看两层对照。');
+        else if (c === '0') notes.push('“' + it.text[i] + '”读轻声，又短又轻，高低跟着前一个字走。');
+      });
+      return notes.join(' ');
+    }
+    function submitListen() {
+      var q = st.q, ok = sameKey(q.picks, q.key);
+      B.attempt(q.item.id, { correct: ok, response: q.picks.join(' ') });
+      if (ok) { finish(true); return; }
+      q.bad = {}; q.key.forEach(function (c, i) { if (q.picks[i] !== c) q.bad[i] = true; });
+      q.focus = +Object.keys(q.bad)[0];
+      q.msg = '标红的格子不对。再听一遍，只改红色的格子。';
+      render(); setTimeout(function () { play(q.item.text, q.item); }, 300);
+    }
+    function finish(ok) {
+      var q = st.q; q.finished = true; st.done[q.item.id] = true;
+      q.msg = ok ? '对。' : '答案已经放上了。这一题记为“看过答案”。';
+      render();
+    }
+
+    function renderSandhi() {
+      if (!st.q) next();
+      var q = st.q, it = q.item, n = it.written.length;
+      var filled = q.picks.filter(Boolean).length === n;
+      var changed = it.written.map(function (c, i) { return c !== it.actual[i] ? i : -1; }).filter(function (i) { return i >= 0; });
+      var wrap = h('div', { class: 'kb-card' }, [
+        h('div', { class: 'big', text: it.text }),
+        h('p', { style: 'text-align:center;margin:0' }, ['写作：', h('b', { text: it.py })]),
+        q.finished
+          ? h('div', { style: 'display:flex;justify-content:center;margin:10px 0' }, [zhSvg(it.written, { cw: child() ? 90 : 76, scale: !child(), arrows: changed,
+              rows: [{ cats: it.written, label: '写的（字典调）' }, { cats: it.actual, label: '说的（实际读音）' }] })])
+          : h('div', {}, [h('p', { class: 'kb-note', text: '上面这行是写的调：' }), zhSvg(it.written, { cw: child() ? 90 : 70, scale: !child() }),
+              h('p', { class: 'kb-prompt', style: 'margin-top:12px', text: '先别听。按规则预测：说出来时每个字是什么调？' }), slotRow(n), palette()]),
+        q.finished ? h('p', {}, [h('b', { text: '规则：' }), pack.rules[it.rule]]) : null,
+        q.finished && q.picks.length ? h('p', { class: 'kb-note', text: '你的预测：' + q.picks.map(function (c) { return C[c].label; }).join(' + ') + '。实际：' + it.actual.map(function (c) { return C[c].label; }).join(' + ') + '。' }) : null,
+        q.showRules ? h('ul', { class: 'rulelist' }, Object.keys(pack.rules).map(function (k) { return h('li', { text: pack.rules[k] }); })) : null,
+        h('div', { class: 'kb-bar', style: 'margin-top:10px' }, q.finished ? [
+          h('button', { class: 'kb-btn', onclick: function () { play(it.text, it); B.emit('view', { item: it.id, replay: true }); } }, '▶ 听实际读音'),
+          h('button', { class: 'kb-btn primary', onclick: function () { st.q = null; render(); } }, '下一题')
+        ] : [
+          h('button', { class: 'kb-btn', disabled: q.showRules, onclick: function () { q.showRules = true; B.hint(it.id, 1); render(); } }, '提示：看规则表'),
+          h('button', { class: 'kb-btn primary', disabled: !filled, onclick: function () {
+            var ok = sameKey(q.picks, q.key);
+            B.attempt(it.id, { correct: ok, response: q.picks.join(' '), layer: 'actual' });
+            q.finished = true; st.done[it.id] = true;
+            q.msg = ok ? '预测对了。听一听是不是这样。' : '和实际读音不一样。对照上下两行，看哪个字变了。';
+            B.emit('compare', { item: it.id, written: it.written, actual: it.actual, predicted: q.picks.slice() });
+            render(); play(it.text, it);
+          } }, '提交预测，然后听')
+        ]),
+        h('div', { class: 'kb-feedback' + (q.finished && !sameKey(q.picks, q.key) ? ' bad' : ''), text: q.msg || '只有一次预测机会，预测之后才放音。这里的“对”指和实际读音一致。' })
+      ]);
+      stage.innerHTML = ''; stage.append(wrap);
+    }
+
+    /* ---------- ja listen ---------- */
+    function renderListenJa() {
+      if (!st.q) next();
+      var q = st.q, it = q.item, n = it.morae.length;
+      var g = pack.groups.find(function (x) { return x.words.indexOf(it) >= 0; });
+      var partners = g.words.filter(function (w) { return w !== it && w.kana === it.kana; });
+      var wrap = h('div', { class: 'kb-card' }, [
+        h('p', { class: 'kb-prompt', text: '听“' + it.kana + pack.particle + '”，选高低的样子。' + (q.finished ? '' : '（先不告诉你是哪个词）') }),
+        q.firstHint ? h('div', {}, [jaSvg(it.morae, it.accent, { onlyFirst: true }), h('p', { class: 'kb-note', text: '第一拍是' + (it.accent === 1 ? '高' : '低') + '的。' })]) : null,
+        h('div', { class: 'palette' }, q.opts.map(function (a) {
+          var cls = 'opt' + (q.finished && a === it.accent ? ' right' : '') + (q.wrong && q.wrong[a] ? ' wrongpick' : '');
+          return h('button', { class: cls, disabled: q.finished, onclick: function () { pickJa(a); } },
+            [jaSvg(it.morae, a), h('span', { text: patternName(n, a) + (child() ? '' : ' [' + a + ']') })]);
+        })),
+        h('div', { class: 'kb-bar', style: 'margin-top:10px' }, [
+          h('button', { class: 'kb-btn', onclick: function () { play(it.word + pack.particle, it); B.emit('view', { item: it.id, replay: true }); } }, '▶ 再听'),
+          q.finished ? null : h('button', { class: 'kb-btn', onclick: function () { B.hint(it.id, 1); play(it.word + pack.particle, it, true); } }, '提示：慢一点'),
+          q.finished ? null : h('button', { class: 'kb-btn', disabled: q.firstHint, onclick: function () { q.firstHint = true; B.hint(it.id, 2); render(); } }, '提示：第一拍高还是低'),
+          q.finished ? null : h('button', { class: 'kb-btn', onclick: function () { B.reveal(it.id); q.finished = true; st.done[it.id] = true; q.msg = '答案已标出。这一题记为“看过答案”。'; render(); } }, '看答案'),
+          q.finished ? h('button', { class: 'kb-btn primary', onclick: function () { st.q = null; render(); } }, '下一题') : null
+        ]),
+        q.finished ? h('p', {}, [h('b', { text: it.word }), '（' + it.kana + '，' + it.gloss + '）：' + patternName(n, it.accent) + ' [' + it.accent + ']']) : null,
+        q.finished && partners.length ? h('div', { class: 'kb-bar' }, ['对比听：'].concat(partners.map(function (w) {
+          return h('button', { class: 'kb-btn', onclick: function () { play(w.word + pack.particle, w); B.emit('compare', { item: it.id, with: w.id }); } }, w.word + pack.particle + '（' + patternName(w.morae.length, w.accent) + '）');
+        }))) : null,
+        h('div', { class: 'kb-feedback', text: q.msg || '第一次选择会被记录；选错可以再选，算作重试。' })
+      ]);
+      stage.innerHTML = ''; stage.append(wrap);
+    }
+    function pickJa(a) {
+      var q = st.q, it = q.item, ok = a === it.accent;
+      B.attempt(it.id, { correct: ok, response: a });
+      if (ok) { q.finished = true; st.done[it.id] = true; q.msg = '对。' + (it.accent === 0 ? '平板型：后面的 ' + pack.particle + ' 也是高的。' : '在第 ' + it.accent + ' 拍后面往下掉。'); render(); return; }
+      q.wrong = q.wrong || {}; q.wrong[a] = true;
+      q.msg = '不是这个。你选的是' + patternName(it.morae.length, a) + '。注意听哪里往下掉，再听一遍。';
+      render(); setTimeout(function () { play(it.word + pack.particle, it); }, 300);
+    }
+
+    function render() {
+      renderBar();
+      if (st.mode === 'look') renderLook();
+      else if (st.mode === 'sandhi') renderSandhi();
+      else if (zh) renderListenZh();
+      else renderListenJa();
+      renderSide();
+    }
+    render();
+  }
+})();
+</script>
+</body>
+</html>

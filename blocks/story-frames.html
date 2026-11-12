@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Story Frames</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .sf-frame { border: 2px solid var(--ink); border-radius: 12px; overflow: hidden; background: var(--panel); line-height: 0; }
+  .sf-frame svg { display: block; width: 100%; height: auto; }
+  /* the animated frame: three poses; outside the stepper only the last pose shows */
+  .sf-pose { display: none; }
+  .sf-p3 { display: inline; }
+  [data-step] .sf-pose { display: inline; opacity: 0; transition: opacity .35s; }
+  [data-step="1"] .sf-p1, [data-step="2"] .sf-p2, [data-step="3"] .sf-p3 { opacity: 1; }
+  [data-step="3"] .sf-wig { animation: sf-wig .28s infinite alternate; }
+  @keyframes sf-wig { from { transform: translate(-1.5px, 0); } to { transform: translate(1.5px, -1px); } }
+  .sf-hidden { display: grid; place-items: center; aspect-ratio: 4 / 3; border: 2px dashed var(--line); border-radius: 12px; color: var(--muted); font-size: 2rem; background: var(--bg); }
+  .sf-strip { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; margin-bottom: 12px; }
+  .sf-strip .sf-frame { border-width: 1.5px; border-radius: 8px; }
+  .sf-strip .sf-hidden { font-size: 1.1rem; border-radius: 8px; }
+  .sf-strip > div { position: relative; }
+  .sf-strip .now .sf-frame { box-shadow: 0 0 0 3px var(--accent); }
+  .sf-badge { position: absolute; top: -6px; right: -4px; font-size: .7rem; line-height: 1.3; padding: 0 6px; border-radius: 999px; background: var(--accent); color: var(--accent-ink); }
+  .sf-badge.miss { background: var(--warn); color: #fff; }
+  .sf-watch { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(280px, 1fr); gap: 16px; align-items: start; }
+  @media (max-width: 760px) { .sf-watch { grid-template-columns: 1fr; } }
+  .sf-sent { font-size: 1.25rem; line-height: 1.4; margin: 4px 0; }
+  [data-variant="child"] .sf-sent { font-size: 1.5rem; }
+  .sf-read { color: var(--muted); font-size: .9rem; margin: 0; }
+  .sf-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
+  [data-variant="child"] .kb-btn { padding: 10px 18px; font-size: 1.05rem; }
+  .speak-btn { border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 2px 10px; font-size: .9rem; }
+  .sf-bets { display: grid; gap: 8px; margin-top: 8px; }
+  .sf-bets button { text-align: left; border: 1px solid var(--line); background: var(--panel); border-radius: 12px; padding: 8px 12px; display: flex; gap: 10px; align-items: center; }
+  .sf-bets button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); box-shadow: 0 0 0 2px var(--accent); }
+  .sf-bets .arrow { font-size: 1.5rem; width: 1.6em; text-align: center; }
+  .sf-bets b { font-size: 1.1rem; }
+  .sf-bets small { color: var(--muted); display: block; }
+  .sf-two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .sf-two > div { border: 1px solid var(--line); border-radius: 10px; padding: 6px 10px; }
+  .sf-two h4 { margin: 0; font-size: .8rem; color: var(--muted); font-weight: 600; }
+  .sf-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  @media (max-width: 520px) { .sf-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .sf-card { all: unset; cursor: grab; display: block; border-radius: 14px; }
+  .sf-card:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+  .sf-card[aria-pressed="true"] .sf-frame { box-shadow: 0 0 0 4px var(--accent); }
+  .sf-card.right .sf-frame { border-color: #2e8b57; box-shadow: 0 0 0 2px #2e8b57; }
+  .sf-card.hinted .sf-frame { box-shadow: 0 0 0 4px var(--warn); }
+  .sf-card p { line-height: 1.35; margin: 4px 2px 0; font-size: .85rem; }
+  .sf-time { position: relative; margin-top: 8px; }
+  .sf-time .sf-strip { margin: 0; }
+  .sf-time svg.lines { display: block; width: 100%; height: 54px; }
+  .sf-time svg.lines line { stroke: var(--muted); stroke-width: 1.5; opacity: .6; }
+  .sf-time svg.lines line.cross { stroke: var(--bad); stroke-width: 4; opacity: 1; stroke-dasharray: 8 5; }
+  .sf-time h4 { margin: 6px 0 4px; font-size: .8rem; color: var(--muted); font-weight: 600; }
+  .sf-chain { display: flex; flex-wrap: wrap; gap: 8px 4px; align-items: center; }
+  .sf-chain .sf-frame { width: 116px; border-width: 1.5px; border-radius: 8px; }
+  .sf-slot { border: 2px dashed var(--line); background: var(--bg); border-radius: 12px; min-width: 84px; padding: 4px 6px; text-align: center; font-size: .82rem; line-height: 1.25; }
+  .sf-slot .arrow { display: block; font-size: 1.5rem; line-height: 1; }
+  .sf-slot[aria-pressed="true"] { border-color: var(--accent); border-style: solid; }
+  .sf-slot.right { border-style: solid; border-color: #2e8b57; background: var(--accent-soft); }
+  .sf-slot.wrong { border-style: solid; border-color: var(--bad); background: var(--bad-soft); }
+  .sf-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .sf-chips button { border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 5px 12px; }
+  .sf-stepper { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
+  .sf-stepper button.dot { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: var(--panel); font-weight: 700; }
+  .sf-stepper button.dot[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .sf-lines { display: grid; gap: 6px; margin-top: 8px; }
+  .sf-line { display: flex; gap: 6px; align-items: center; border: 1px solid var(--line); border-radius: 10px; padding: 6px 8px; background: var(--panel); }
+  .sf-line > span { flex: 1; }
+  .sf-line button { border: 1px solid var(--line); background: var(--bg); border-radius: 8px; width: 34px; height: 34px; }
+  .sf-line.right { border-color: #2e8b57; }
+  .sf-retell { display: grid; gap: 10px; }
+  .sf-rrow { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 10px; align-items: center; }
+  @media (max-width: 520px) { .sf-rrow { grid-template-columns: 84px minmax(0, 1fr); } }
+  .sf-rrow .sf-frame { border-width: 1.5px; border-radius: 8px; }
+  .sf-rrow input, textarea.sf-text { width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; background: var(--bg); }
+  textarea.sf-text { min-height: 150px; resize: vertical; }
+  .sf-cue { display: inline-block; font-size: .82rem; color: var(--warn); background: var(--warn-soft); border-radius: 999px; padding: 1px 10px; margin-bottom: 4px; }
+  .sf-thumbs { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
+  .sf-thumbs button { all: unset; cursor: pointer; display: block; position: relative; }
+  .sf-thumbs button:focus-visible { outline: 3px solid var(--focus); }
+  .sf-thumbs .sf-frame { border-width: 1.5px; border-radius: 8px; }
+  .sf-thumbs .uncovered .sf-frame { filter: grayscale(1); opacity: .4; }
+  .sf-thumbs .tag { position: absolute; left: 2px; bottom: 2px; font-size: .7rem; line-height: 1.3; background: var(--accent); color: var(--accent-ink); border-radius: 6px; padding: 0 5px; }
+  .sf-list { list-style: none; padding: 0; margin: 8px 0 0; font-size: .92rem; }
+  .sf-list li { margin: 3px 0; }
+  .sf-list li::before { content: '○ '; color: var(--muted); }
+  .sf-list li.done::before { content: '✓ '; color: #2e8b57; }
+  .sf-list li.no::before { content: '✕ '; color: var(--bad); }
+  .sf-pill { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+  .sf-pill button { border: 0; background: transparent; padding: 4px 12px; }
+  .sf-pill button[aria-pressed="true"] { background: var(--accent-soft); }
+  .sf-scard { border: 1px solid var(--line); border-radius: 10px; padding: 6px 10px; margin-top: 6px; display: flex; gap: 8px; align-items: center; background: var(--panel); }
+  .sf-scard[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+  .sf-scard span.t { flex: 1; text-align: left; }
+  h3.sf-h { margin: 0 0 6px; font-size: 1rem; }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function () {
+  'use strict';
+  var h = KTBlock.h, shuffle = KTBlock.shuffle;
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'story-en';
+  var entry = KT_REGISTRY.packs[setId] || {};
+  var app = document.getElementById('app');
+  if (!entry.file) { app.textContent = '未知的数据包：' + setId; return; }
+  if (entry.block !== 'story-frames') { app.textContent = '数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在连环画里打开。'; return; }
+  var s = document.createElement('script');
+  s.src = entry.file;
+  s.onload = function () { start(KT_DATA[setId]); };
+  s.onerror = function () { app.textContent = '数据包加载失败：' + entry.file; };
+  document.head.appendChild(s);
+
+  var ARROW = { seq: '→', same: '⇉', cause: '⇒', contrast: '↯', back: '↶', end: '⇥', trap: '✕' };
+  var DIR_ARROW = { on: '→', turn: '↷', close: '⇥', back: '↶' };
+  function same(a, b) { return a.length === b.length && a.every(function (x, i) { return x === b[i]; }); }
+  function mixed(list, avoid) { var out, n = 0; do { out = shuffle(list); n += 1; } while (n < 20 && avoid.some(function (a) { return same(out, a); })); return out; }
+
+  function start(pack) {
+    var scene = KT_SCENES[pack.scene];
+    var B = KTBlock.init({ id: 'story-frames', primitive: 'prim:sequence-retell', title: pack.title, set: pack.id });
+    document.title = pack.title + ' · Story Frames';
+    var isCJK = pack.lang === 'zh' || pack.lang === 'ja';
+    var modes = [{ id: 'watch', label: '预测' }, { id: 'order', label: '排序' }, { id: 'link', label: '连接' }, { id: 'process', label: '过程' }, { id: 'retell', label: '复述' }];
+    var st = { mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : 'watch', showReading: true };
+    var W, O, L, R, T, timer = null;
+    function child() { return B.variant === 'child'; }
+    var ui = KTBlock.chrome(B, { title: pack.title, subtitle: pack.subtitle, modes: modes, mode: st.mode,
+      onMode: function (m) { go(m); }, onVariant: function () { resetAll(); render(); } });
+    var bar = h('div', { class: 'kb-bar' }), body = h('div', {});
+    app.append(ui.header, h('main', { class: 'kb-main' }, [bar, body]), ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id });
+
+    function go(m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m }); render(); }
+    function say(text) { return B.speak(text, pack.speech); }
+    function speakBtn(text, label) { return h('button', { class: 'speak-btn', type: 'button', onclick: function () { say(text); } }, label || '▶ 听'); }
+    function frame(id, step) {
+      var d = h('div', { class: 'sf-frame', role: 'img', 'aria-label': scene.frames[id].alt });
+      d.innerHTML = scene.frames[id].svg;                // authored in the data pack, not learner input
+      if (step) d.dataset.step = step;
+      return d;
+    }
+    function sentence(o, gloss) {
+      return h('div', {}, [h('p', { class: 'sf-sent', lang: pack.lang }, [o.t, o.src === 'kc' ? h('span', { class: 'kb-note', title: '取自课程知识点的例句' }, ' ★') : null]),
+        o.r && st.showReading ? h('p', { class: 'sf-read', text: o.r }) : null,
+        gloss && o.g ? h('p', { class: 'kb-note', style: 'margin:2px 0 0', text: o.g }) : null]);
+    }
+    function has(re, text) { return new RegExp(re, 'i').test(text); }
+    function tokens(x) { x = x.toLowerCase().replace(/[.,!?;:—\-。，！？、；：“”"']/g, ' '); return isCJK ? x.replace(/\s/g, '').split('') : x.split(/\s+/).filter(Boolean); }
+    function overlap(a, b) { var ta = tokens(a), tb = tokens(b); if (!ta.length) return 0; return ta.filter(function (t) { return tb.indexOf(t) >= 0; }).length / ta.length * Math.min(1, ta.length / tb.length + .25); }
+
+    /* ================= 预测：看一幅，猜下一幅 ================= */
+    function resetWatch() { W = { shown: 1, pick: null, bets: {} }; }
+    function junction(id) {
+      var j = scene.junctions.find(function (x) { return x.before === id; });
+      if (!j) return null;
+      if (child() && j.type === 'dir' && !j.child) return null;
+      return j;
+    }
+    function dirCards() { return child() ? ['on', 'turn'] : ['on', 'turn', 'close', 'back']; }
+    function renderWatch() {
+      var n = scene.told.length, cur = scene.told[W.shown - 1], next = scene.told[W.shown];
+      var strip = h('div', { class: 'sf-strip' }, scene.told.map(function (id, i) {
+        var b = W.bets[id];
+        return h('div', { class: i === W.shown - 1 ? 'now' : '' }, [i < W.shown ? frame(id) : h('div', { class: 'sf-hidden', text: '?' }),
+          b ? h('span', { class: 'sf-badge' + (b.hit ? '' : ' miss'), title: b.hit ? '这里你押中了' : '这里你没押中：故事在这儿拐了弯', text: b.hit ? '押中' : '没押中' }) : null]);
+      }));
+      var cap = pack.frames[cur], isAnim = scene.anim.frame === cur;
+      var big = frame(cur, isAnim ? 3 : null);
+      var left = h('div', {}, [big, isAnim ? h('div', { class: 'sf-row' }, [h('button', { class: 'kb-btn', type: 'button', onclick: function () { play(big); } }, '▶ 看它是怎么拔的'), h('button', { class: 'kb-btn', type: 'button', onclick: function () { go('process'); } }, '去说这个过程')]) : null]);
+      var right = h('div', { class: 'kb-card' }, [sentence(cap, true), h('div', { class: 'sf-row' }, [speakBtn(cap.t, '▶ 听这一幅')])]);
+      var last = W.bets[cur];
+      if (last) right.append(h('div', { class: 'sf-two', style: 'margin-top:10px' }, [
+        h('div', {}, [h('h4', { text: '你押的' }), h('span', { lang: pack.lang, text: last.label })]),
+        h('div', {}, [h('h4', { text: '实际' }), h('span', { lang: pack.lang, text: last.actual })])]),
+        h('div', { class: 'kb-feedback' + (last.hit ? '' : ' warn'), role: 'status' }, (last.hit ? '押中了。' : '没押中，没关系：先押再看，才看得见故事在这里怎么走。') + last.why));
+      var j = next && junction(next);
+      if (!next) {
+        right.append(h('div', { class: 'kb-feedback' }, '故事讲完了。押对方向，不等于每一句都听懂了——接着把画排一排。'),
+          h('div', { class: 'sf-row' }, [h('button', { class: 'kb-btn primary', type: 'button', onclick: function () { go('order'); } }, '去排序'),
+            h('button', { class: 'kb-btn', type: 'button', onclick: function () { W.shown = 1; W.pick = null; render(); } }, '从头再看'),
+            h('button', { class: 'speak-btn', type: 'button', onclick: function () { B.speakSequence(scene.told.map(function (id) { return { text: pack.frames[id].t, pause: 350 }; }), pack.speech); } }, '▶ 连着听一遍')]));
+      } else if (j) {
+        var opts = j.type === 'dir' ? dirCards().map(function (d) { return { id: d, arrow: DIR_ARROW[d], t: pack.directions[d].w, zh: pack.directions[d].zh }; }) :
+          (W.pickOrder && W.pickFor === next ? W.pickOrder : (W.pickFor = next, W.pickOrder = shuffle(pack.picks[next]))).map(function (p, k) { return { id: p.t, arrow: '•', t: p.t, r: p.r, right: p.right }; });
+        right.append(h('p', { class: 'kb-prompt', style: 'margin-top:14px', text: j.type === 'dir' ? '先押：下一幅，故事会怎么走？押了才能看。' : '先押：下一幅是哪一句？' }),
+          h('div', { class: 'sf-bets' }, opts.map(function (o) {
+            return h('button', { type: 'button', 'aria-pressed': W.pick === o.id ? 'true' : 'false', onclick: function () { W.pick = o.id; B.emit('select', { item: 'bet:' + next, response: o.id }); render(); } },
+              [h('span', { class: 'arrow', 'aria-hidden': 'true', text: o.arrow }), h('span', {}, [h('b', { lang: pack.lang, text: o.t }), o.zh ? h('small', { text: o.zh }) : null, o.r && st.showReading ? h('small', { text: o.r }) : null])]);
+          })),
+          h('div', { class: 'sf-row' }, [h('button', { class: 'kb-btn primary', type: 'button', disabled: W.pick === null, onclick: function () {
+            var actual = j.type === 'dir' ? (child() ? j.child : j.actual) : pack.picks[next].find(function (p) { return p.right; }).t;
+            var hit = W.pick === actual;
+            B.attempt('bet:' + next, { correct: hit, response: W.pick });       // submitted before the frame is shown
+            W.bets[next] = { hit: hit, why: j.why, label: j.type === 'dir' ? pack.directions[W.pick].w : W.pick, actual: j.type === 'dir' ? pack.directions[actual].w : actual };
+            W.pick = null; W.shown += 1; B.emit('reveal', { item: 'frame:' + next, afterBet: true }); render();
+          } }, '押定，揭晓下一幅')]));
+      } else {
+        right.append(h('div', { class: 'sf-row' }, [h('button', { class: 'kb-btn primary', type: 'button', onclick: function () { W.shown += 1; B.emit('view', { item: 'frame:' + next }); render(); } }, '下一幅')]));
+      }
+      body.append(strip, h('div', { class: 'sf-watch' }, [left, right]));
+    }
+    function play(el, done) {
+      clearInterval(timer);
+      var k = 1; el.dataset.step = 1;
+      timer = setInterval(function () { k += 1; if (k > scene.anim.steps) { clearInterval(timer); if (done) done(); return; } el.dataset.step = k; }, 1100);
+    }
+
+    /* ================= 排序：按发生的先后 ================= */
+    function resetOrder() { O = { arr: mixed(scene.happened, [scene.happened, scene.told]), sel: null, solved: false, msg: null, tone: '', hint: 0, showText: false, assisted: false }; }
+    function move(i, j) {
+      if (j < 0 || j >= O.arr.length || O.solved) return;
+      var t = O.arr[i]; O.arr[i] = O.arr[j]; O.arr[j] = t;
+      B.emit('reorder', { item: 'order', order: O.arr.slice() });
+    }
+    function renderOrder() {
+      var cards = h('div', { class: 'sf-cards' }, O.arr.map(function (id, i) {
+        return h('button', { class: 'sf-card' + (O.solved ? ' right' : '') + (O.hint >= 2 && id === scene.flash && !O.solved ? ' hinted' : ''), type: 'button', 'aria-pressed': O.sel === i ? 'true' : 'false',
+          'aria-label': '第 ' + (i + 1) + ' 个位置：' + scene.frames[id].alt,
+          onclick: function () {
+            if (O.solved) return;
+            if (O.sel === null) O.sel = i; else if (O.sel === i) O.sel = null; else { move(O.sel, i); O.sel = null; }
+            render();
+          },
+          onkeydown: function (e) {
+            if (O.sel !== i || O.solved) return;
+            var d = e.key === 'ArrowLeft' ? -1 : e.key === 'ArrowRight' ? 1 : 0;
+            if (!d) return;
+            e.preventDefault(); move(i, i + d); O.sel = Math.max(0, Math.min(O.arr.length - 1, i + d)); render();
+            var b = body.querySelectorAll('.sf-card')[O.sel]; if (b) b.focus();
+          } }, [frame(id), O.showText ? h('p', { lang: pack.lang, text: pack.frames[id].b }) : null]);
+      }));
+      var card = h('div', { class: 'kb-card', style: 'margin-bottom:12px' }, [
+        h('p', { class: 'kb-prompt', text: '把画按事情“发生”的先后排好，从左到右、从上到下。注意：不一定是故事讲的顺序。' }),
+        h('p', { class: 'kb-note', text: '点一幅，再点另一幅，两幅交换位置；选中后也可以用键盘 ← → 挪动。' }),
+        h('div', { class: 'sf-row' }, [
+          O.solved ? null : h('button', { class: 'kb-btn primary', type: 'button', onclick: function () {
+            var ok = same(O.arr, scene.happened);
+            B.attempt('order', { correct: ok, response: O.arr.slice() });
+            if (ok) { O.solved = true; O.sel = null; O.msg = '顺序对了。'; O.tone = ''; B.emit('compare', { item: 'told-vs-happened' }); }
+            else {
+              O.tone = 'bad';
+              O.msg = same(O.arr, scene.told) ? '这是故事“讲”的顺序。问的是“发生”的顺序：有一幅讲在后面，其实发生得更早。' :
+                '还不对。现在有 ' + O.arr.filter(function (x, i) { return x === scene.happened[i]; }).length + ' 幅在对的位置。';
+            }
+            render();
+          } }, '检查顺序'),
+          O.solved ? null : h('button', { class: 'kb-btn', type: 'button', onclick: function () {
+            O.hint = Math.min(2, O.hint + 1); O.assisted = true; B.hint('order', O.hint); O.msg = scene.orderHints[O.hint - 1]; O.tone = 'warn'; render();
+          } }, '提示'),
+          h('label', { class: 'kb-variant' }, [h('input', { type: 'checkbox', checked: O.showText, onchange: function (e) { O.showText = e.target.checked; B.emit('highlight', { item: 'order', showText: O.showText }); render(); } }), ' 显示句子（去掉了连接词）']),
+          O.solved ? h('button', { class: 'kb-btn primary', type: 'button', onclick: function () { go('link'); } }, '去放连接词') : null,
+          O.solved ? h('button', { class: 'kb-btn', type: 'button', onclick: function () { resetOrder(); render(); } }, '打乱再排') : null
+        ]),
+        h('div', { class: 'kb-feedback ' + O.tone, role: 'status', hidden: !O.msg }, O.msg || '')
+      ]);
+      body.append(card, cards);
+      if (O.solved) body.append(timeline());
+    }
+    /** Two rows — as told, as it happened — with a line per frame. Where they cross, telling order ≠ event order. */
+    function timeline() {
+      var n = scene.told.length, NS = 'http://www.w3.org/2000/svg';
+      var svg = document.createElementNS(NS, 'svg'); svg.setAttribute('class', 'lines'); svg.setAttribute('viewBox', '0 0 ' + n * 100 + ' 54'); svg.setAttribute('preserveAspectRatio', 'none'); svg.setAttribute('aria-hidden', 'true');
+      scene.told.forEach(function (id, i) {
+        var j = scene.happened.indexOf(id), ln = document.createElementNS(NS, 'line');
+        ln.setAttribute('x1', i * 100 + 50); ln.setAttribute('y1', 2); ln.setAttribute('x2', j * 100 + 50); ln.setAttribute('y2', 52);
+        if (id === scene.flash) ln.setAttribute('class', 'cross');
+        svg.appendChild(ln);
+      });
+      function row(list) { return h('div', { class: 'sf-strip' }, list.map(function (id) { return h('div', {}, [frame(id)]); })); }
+      return h('div', { class: 'kb-card sf-time', style: 'margin-top:12px' }, [
+        h('h4', { text: '故事讲的顺序' }), row(scene.told), svg, row(scene.happened), h('h4', { text: '事情发生的顺序' }),
+        h('div', { class: 'kb-feedback warn' }, '虚线那一幅和别的线交叉了：它讲在后面，却发生在最前面（✕ 交叉）。讲的顺序不一定等于发生的顺序，复述时要把这一处标出来。' + pack.backNote)
+      ]);
+    }
+
+    /* ================= 连接：两幅之间是什么关系 ================= */
+    function resetLink() { L = { pick: {}, open: 0, msg: null, tone: '' }; }
+    function renderLink() {
+      var conns = child() ? pack.connectives.filter(function (c) { return ['seq', 'contrast', 'back', 'end'].indexOf(c.cat) >= 0; }) : pack.connectives;
+      var chain = h('div', { class: 'sf-chain' });
+      scene.told.forEach(function (id, i) {
+        chain.append(frame(id));
+        if (i === scene.told.length - 1) return;
+        var p = L.pick[i], c = p && pack.connectives.find(function (x) { return x.id === p.id; });
+        chain.append(h('button', { class: 'sf-slot' + (p ? (p.ok ? ' right' : ' wrong') : ''), type: 'button', 'aria-pressed': L.open === i ? 'true' : 'false', 'aria-label': '第 ' + (i + 1) + ' 个连接处',
+          onclick: function () { L.open = i; L.msg = null; render(); } },
+          [h('span', { class: 'arrow', 'aria-hidden': 'true', text: c ? ARROW[c.cat] : '？' }), c ? h('span', { lang: pack.lang, text: c.w }) : '选连接', c ? h('span', { class: 'kb-note', style: 'display:block', text: pack.cats[c.cat] }) : null]));
+      });
+      var done = scene.slots.every(function (_, i) { return L.pick[i] && L.pick[i].ok; });
+      var used = Object.keys(L.pick).map(function (i) { return L.pick[i].id; });
+      var mono = done && used.every(function (x) { return x === used[0]; });
+      var panel = h('div', { class: 'kb-card', style: 'margin-top:12px' }, [
+        h('p', { class: 'kb-prompt', text: done ? '五个连接处都放好了。' : '第 ' + (L.open + 1) + ' 个连接处：前一幅和后一幅之间，用哪个连接？' }),
+        done ? null : h('div', { class: 'sf-chips' }, conns.map(function (c) {
+          return h('button', { type: 'button', lang: pack.lang, onclick: function () {
+            var i = L.open, slot = scene.slots[i], ok = slot.ok.indexOf(c.cat) >= 0;
+            B.emit('connect', { item: 'link:' + i, connective: c.id, category: c.cat });
+            B.attempt('link:' + i, { correct: ok, response: c.id });
+            L.pick[i] = { id: c.id, ok: ok };
+            L.tone = ok ? '' : 'bad';
+            L.msg = ok ? '可以。' + slot.why : (slot.ok.indexOf('back') >= 0 ? slot.why + pack.backNote : (c.no || '这里不是“' + pack.cats[c.cat] + '”。') + slot.why);
+            if (ok) { var nx = scene.slots.findIndex(function (_, k) { return !(L.pick[k] && L.pick[k].ok); }); if (nx >= 0) L.open = nx; }
+            render();
+          } }, [c.w, h('small', { class: 'kb-note', text: ' ' + ARROW[c.cat] + ' ' + pack.cats[c.cat] })]);
+        })),
+        h('div', { class: 'kb-feedback ' + L.tone, role: 'status', hidden: !L.msg }, L.msg || ''),
+        mono ? h('div', { class: 'kb-feedback warn' }, pack.checks.mono) : null,
+        done ? h('div', { class: 'sf-row' }, [h('button', { class: 'kb-btn primary', type: 'button', onclick: function () { go('process'); } }, '去看动画说过程'), h('button', { class: 'kb-btn', type: 'button', onclick: function () { resetLink(); render(); } }, '重来')]) : null,
+        h('p', { class: 'kb-note', text: '箭头的样子跟着关系变：→ 先后，⇉ 同时，⇒ 因果，↯ 转折，↶ 回头补说更早的事，⇥ 收尾。每个连接处的第一次选择单独保留。' })
+      ]);
+      body.append(h('div', { class: 'kb-card' }, [h('p', { class: 'kb-note', style: 'margin:0 0 8px', text: '这是故事讲的顺序。点两幅画之间的格子，放一个连接。' }), chain]), panel);
+    }
+
+    /* ================= 过程：看动画，说一步一步 ================= */
+    function resetProcess() { R = { step: 1, seen: {}, arr: mixed([0, 1, 2], [[0, 1, 2]]), solved: false, msg: null, tone: '', model: false, rated: false }; }
+    function renderProcess() {
+      var big = frame(scene.anim.frame, R.step);
+      function setStep(k) { clearInterval(timer); R.step = k; R.seen[k] = true; big.dataset.step = k; B.emit('view', { item: 'anim-step', step: k }); syncDots(); }
+      var dots = [1, 2, 3].map(function (k) { return h('button', { class: 'dot', type: 'button', 'aria-label': '第 ' + k + ' 步', onclick: function () { setStep(k); renderLines(); } }, String(k)); });
+      function syncDots() { dots.forEach(function (d, i) { d.setAttribute('aria-pressed', R.step === i + 1 ? 'true' : 'false'); }); }
+      R.seen[R.step] = true; syncDots();
+      var stepper = h('div', { class: 'sf-stepper' }, dots.concat([
+        h('button', { class: 'kb-btn', type: 'button', onclick: function () {
+          var k = 1; setStep(1); renderLines();
+          clearInterval(timer); timer = setInterval(function () { k += 1; if (k > 3) { clearInterval(timer); return; } setStep(k); renderLines(); }, 1200);
+        } }, '▶ 连着放'),
+        h('span', { class: 'kb-note', text: '一步一步看，没有字。' })
+      ]));
+      var allSeen = function () { return R.seen[1] && R.seen[2] && R.seen[3]; };
+      var linesBox = h('div', {});
+      function renderLines() {
+        linesBox.innerHTML = '';
+        var steps = pack.process.steps;
+        linesBox.append(h('p', { class: 'kb-prompt', text: '这三句话说的是哪一步？按动画的先后排好。' }),
+          h('div', { class: 'sf-lines' }, R.arr.map(function (k, i) {
+            return h('div', { class: 'sf-line' + (R.solved ? ' right' : '') }, [
+              h('span', {}, [h('span', { lang: pack.lang, text: steps[k].t }), steps[k].r && st.showReading ? h('small', { class: 'kb-note', style: 'display:block', text: steps[k].r }) : null, R.solved ? h('small', { class: 'kb-note', style: 'display:block', text: steps[k].g }) : null]),
+              speakBtn(steps[k].t, '▶'),
+              R.solved ? null : h('button', { type: 'button', 'aria-label': '上移', disabled: i === 0, onclick: function () { var t = R.arr[i - 1]; R.arr[i - 1] = R.arr[i]; R.arr[i] = t; B.emit('reorder', { item: 'process-order', order: R.arr.slice() }); renderLines(); } }, '↑'),
+              R.solved ? null : h('button', { type: 'button', 'aria-label': '下移', disabled: i === 2, onclick: function () { var t = R.arr[i + 1]; R.arr[i + 1] = R.arr[i]; R.arr[i] = t; B.emit('reorder', { item: 'process-order', order: R.arr.slice() }); renderLines(); } }, '↓')
+            ]);
+          })));
+        if (!R.solved) linesBox.append(h('div', { class: 'sf-row' }, [h('button', { class: 'kb-btn primary', type: 'button', disabled: !allSeen(), onclick: function () {
+          var ok = same(R.arr, [0, 1, 2]);
+          B.attempt('process-order', { correct: ok, response: R.arr.slice() });
+          if (ok) { R.solved = true; R.msg = '对上了。'; R.tone = ''; } else { R.msg = '和动画的先后还不一样。回到第 1 步，再一步一步看。'; R.tone = 'bad'; }
+          renderLines();
+        } }, '检查'), allSeen() ? null : h('span', { class: 'kb-note', text: '三步都看过才能检查。' })]));
+        linesBox.append(h('div', { class: 'kb-feedback ' + R.tone, role: 'status', hidden: !R.msg }, R.msg || ''));
+        if (R.solved) {
+          linesBox.append(h('p', { class: 'kb-prompt', style: 'margin-top:14px', text: '现在不看句子，对着动画把这个过程大声说一遍，用上：' + pack.process.words }),
+            h('p', { class: 'kb-note', text: '页面听不到你。说完再看范例，自己或搭档来判断；自评单独记，不算答对。' }));
+          if (!R.model) linesBox.append(h('div', { class: 'sf-row' }, [h('button', { class: 'kb-btn primary', type: 'button', onclick: function () { R.model = true; B.emit('compare', { item: 'process-model' }); renderLines(); } }, '我说完了，看范例')]));
+          else {
+            linesBox.append(h('div', { class: 'kb-card', style: 'margin-top:8px;border-left:4px solid var(--accent)' }, [sentence({ t: pack.process.model, r: pack.process.modelR, g: pack.process.modelG }, true), speakBtn(pack.process.model)]));
+            if (!R.rated) linesBox.append(h('div', { class: 'sf-row' }, [['三步都说到了，也用了连接词', true], ['少了一步，或没用连接词', false]].map(function (o) {
+              return h('button', { class: 'kb-btn', type: 'button', onclick: function () { R.rated = true; B.attempt('process-say', { selfReport: true, correct: o[1], response: o[0] }); renderLines(); } }, o[0]);
+            })));
+            else linesBox.append(h('div', { class: 'sf-row' }, [h('button', { class: 'kb-btn primary', type: 'button', onclick: function () { go('retell'); } }, '去复述整个故事')]));
+          }
+        }
+      }
+      renderLines();
+      body.append(h('div', { class: 'sf-watch' }, [h('div', {}, [big, stepper]), h('div', { class: 'kb-card' }, [linesBox])]));
+    }
+
+    /* ================= 复述：文字撤掉，只留图 ================= */
+    function resetRetell() { T = { level: 1, inputs: {}, text: '', sents: null, links: {}, sel: 0, res: null, assisted: false, list: false, peek: false, spoken: null, compare: false, l1pass: false }; }
+    function checkRetell(items) {      // items: [{text, frame}] in the order they were told
+      var all = items.map(function (x) { return x.text; }).join(isCJK ? '' : ' ');
+      var devices = pack.checks.devices.filter(function (d) { return has(d.re, all); }).map(function (d) { return d.id; });
+      var needDev = child() ? 2 : 3;
+      var coveredF = scene.told.filter(function (f) { return items.some(function (x) { return x.frame === f; }); });
+      var traps = []; items.forEach(function (x) { pack.checks.traps.forEach(function (t) { if (has(t.re, x.text) && traps.indexOf(t.msg) < 0) traps.push(t.msg); }); });
+      var copied = items.filter(function (x) { return x.frame && overlap(x.text, pack.frames[x.frame].t) >= .85; }).length;
+      // flashback: told after something that happened later → must carry a "this was earlier" marker
+      var cross = false, flashTold = false;
+      items.forEach(function (x, i) {
+        if (x.frame !== scene.flash) return;
+        flashTold = true;
+        var later = items.slice(0, i).some(function (y) { return y.frame && scene.happened.indexOf(y.frame) > scene.happened.indexOf(scene.flash); });
+        if (later && !has(pack.checks.back, x.text)) cross = true;
+      });
+      var plain = (all.match(new RegExp(pack.checks.monoRe, 'gi')) || []).length;      // "then … then … then"
+      var res = { devices: devices, needDev: needDev, covered: coveredF, traps: traps, copied: copied, cross: cross, flashTold: flashTold, mono: plain >= 3 && plain > items.length / 2 };
+      res.pass = coveredF.length === scene.told.length && devices.length >= needDev && !res.mono && !traps.length && !cross && copied <= items.length / 2;
+      return res;
+    }
+    function resultCard(res, level) {
+      return h('div', { class: 'kb-card' }, [
+        h('h3', { class: 'sf-h', text: res.pass ? '这一遍过了' : '还差几处' }),
+        h('ul', { class: 'sf-list' }, [
+          h('li', { class: res.covered.length === scene.told.length ? 'done' : 'no', text: '六幅图都说到了（现在 ' + res.covered.length + ' 幅' + (level === 2 ? '；灰色的是没连到的' : '') + '）' }),
+          h('li', { class: res.devices.length >= res.needDev && !res.mono ? 'done' : 'no', text: '至少 ' + res.needDev + ' 种不同的连接手段（找到：' + (res.devices.join('、') || '无') + '）' + (res.mono || res.devices.length < 2 ? '。' + pack.checks.mono : '') }),
+          h('li', { class: res.cross ? 'no' : res.flashTold ? 'done' : '', text: res.cross ? '顺序交叉：夜里那一幅讲在后面，却没有标出它更早。' + pack.backNote : '夜里那一幅：标出了它发生得更早，或者按发生顺序讲在了前面' }),
+          h('li', { class: res.traps.length ? 'no' : 'done', text: res.traps.length ? res.traps.join(' ') : '没有发现已知的时间表达错误（只查了几种固定的错法）' }),
+          h('li', { class: res.copied > 0 ? (res.copied > 3 ? 'no' : '') : 'done', text: res.copied ? res.copied + ' 句和原文几乎一样：试着用自己的话说' : '是你自己的话，不是照抄原文' })
+        ]),
+        h('p', { class: 'kb-note', text: '页面只按一份固定的连接词表和几条规则核对，看不懂句子的意思；排对顺序、过了这几条，不等于故事讲得好。' })
+      ]);
+    }
+    function renderRetell() {
+      var head = h('div', { class: 'kb-card' }, [
+        h('div', { class: 'sf-row', style: 'margin-top:0' }, [
+          h('div', { class: 'sf-pill', role: 'group', 'aria-label': '支持的多少' }, [[1, '有提示词'], [2, '只有图']].map(function (o) {
+            return h('button', { type: 'button', 'aria-pressed': T.level === o[0] ? 'true' : 'false', onclick: function () { var keep = T.l1pass; resetRetell(); T.level = o[0]; T.l1pass = keep; B.emit('view', { item: 'retell', support: o[1] }); render(); } }, o[1]);
+          })),
+          h('span', { class: 'kb-note', text: T.level === 1 ? '原文收起来了。每幅图上留一个提示词，一幅说一句。' : '提示词也撤掉了：只看图，把整个故事讲一遍。' })
+        ]),
+        T.l1pass && T.level === 1 ? h('div', { class: 'kb-feedback', style: 'margin-top:8px' }, '有提示词的这一遍过了。支持可以撤掉了：换到“只有图”再讲一遍。') : null
+      ]);
+      body.append(head);
+      if (T.spoken) return renderSpoken();
+      if (T.level === 1) {
+        var rows = h('div', { class: 'sf-retell' }, scene.told.map(function (id) {
+          var input = h('input', { type: 'text', lang: pack.lang, 'aria-label': '这一幅的句子', oninput: function (e) { T.inputs[id] = e.target.value; } });
+          input.value = T.inputs[id] || '';
+          return h('div', { class: 'sf-rrow' }, [frame(id), h('div', {}, [h('span', { class: 'sf-cue', lang: pack.lang, text: pack.frames[id].cue }), input])]);
+        }));
+        body.append(h('div', { class: 'kb-card', style: 'margin-top:12px' }, [rows, retellButtons(function () {
+          var items = scene.told.map(function (id) { return { text: (T.inputs[id] || '').trim(), frame: id }; }).filter(function (x) { return x.text; });
+          if (!items.length) return;
+          T.res = checkRetell(items); T.l1pass = T.l1pass || T.res.pass;
+          if (T.peek) B.reveal('retell:cued');
+          B.attempt('retell:cued', { correct: T.res.pass, response: items.map(function (x) { return x.text; }) });
+          render();
+        })]));
+      } else {
+        if (!T.sents) {
+          var ta = h('textarea', { class: 'sf-text', lang: pack.lang, placeholder: '一行写一句。', 'aria-label': '你的复述', oninput: function (e) { T.text = e.target.value; } });
+          ta.value = T.text;
+          body.append(h('div', { class: 'kb-card', style: 'margin-top:12px' }, [h('div', { class: 'sf-thumbs' }, scene.told.map(function (id) { return h('div', {}, [frame(id)]); })),
+            h('div', { style: 'margin-top:10px' }, [ta]),
+            T.list ? h('div', { class: 'kb-feedback warn' }, pack.checks.list.join('　｜　')) : null,
+            retellButtons(function () {
+              var sents = T.text.replace(/([.!?。！？])\s*/g, '$1\n').split(/\n+/).map(function (x) { return x.trim(); }).filter(function (x) { return tokens(x).length > 1; });
+              if (!sents.length) return;
+              T.sents = sents; T.sel = 0; T.links = {};
+              B.emit('submit', { item: 'retell:free', firstDraft: true, sentences: sents, assisted: T.assisted });
+              render();
+            }, true)]));
+        } else {
+          var items = T.sents.map(function (t, i) { return { text: t, frame: T.links[i] || null }; });
+          var linkedAll = items.every(function (x) { return x.frame; });
+          var cov = items.map(function (x) { return x.frame; });
+          body.append(h('div', { class: 'kb-card', style: 'margin-top:12px' }, [
+            h('p', { class: 'kb-prompt', text: '把每一句放回它说的那幅图：选一句，再点图。' }),
+            h('div', { class: 'sf-thumbs' }, scene.told.map(function (id) {
+              var idx = items.map(function (x, i) { return x.frame === id ? i + 1 : 0; }).filter(Boolean);
+              return h('button', { type: 'button', class: T.res && cov.indexOf(id) < 0 ? 'uncovered' : '', 'aria-label': scene.frames[id].alt, onclick: function () {
+                if (T.sel === null || T.res) return;
+                var first = T.links[T.sel] === undefined;
+                T.links[T.sel] = id; B.emit(first ? 'connect' : 'revise', { item: 'retell-sentence:' + T.sel, frame: id });
+                var nx = T.sents.findIndex(function (_, k) { return !T.links[k]; }); T.sel = nx >= 0 ? nx : T.sel; render();
+              } }, [frame(id), idx.length ? h('span', { class: 'tag', text: '句 ' + idx.join('、') }) : null]);
+            })),
+            h('div', {}, T.sents.map(function (t, i) {
+              return h('button', { class: 'sf-scard', type: 'button', style: 'width:100%', 'aria-pressed': T.sel === i ? 'true' : 'false', onclick: function () { T.sel = i; render(); } },
+                [h('span', { class: 'kb-note', text: '句 ' + (i + 1) }), h('span', { class: 't', lang: pack.lang, text: t }), h('span', { class: 'kb-note', text: T.links[i] ? '已连' : '未连' })]);
+            })),
+            T.res ? null : h('div', { class: 'sf-row' }, [h('button', { class: 'kb-btn primary', type: 'button', disabled: !linkedAll, onclick: function () {
+              T.res = checkRetell(items);
+              if (T.assisted) B.hint('retell:free', 3);
+              if (T.peek) B.reveal('retell:free');
+              B.attempt('retell:free', { correct: T.res.pass, response: T.sents });
+              render();
+            } }, '核对'), linkedAll ? null : h('span', { class: 'kb-note', text: '每一句都连到图上才能核对。' })])
+          ]));
+        }
+      }
+      if (T.res) {
+        body.append(h('div', { style: 'margin-top:12px' }, [resultCard(T.res, T.level)]),
+          h('div', { class: 'sf-row' }, [
+            T.compare ? null : h('button', { class: 'kb-btn primary', type: 'button', onclick: function () { T.compare = true; B.emit('compare', { item: 'retell-vs-original' }); render(); } }, '和原文对照'),
+            h('button', { class: 'kb-btn', type: 'button', onclick: function () { var lv = T.level, keep = T.l1pass, inputs = T.inputs, text = T.text; resetRetell(); T.level = lv; T.l1pass = keep; T.inputs = inputs; T.text = text; render(); } }, '改一改，再来一遍'),
+            T.level === 1 ? h('button', { class: 'kb-btn', type: 'button', onclick: function () { var keep = T.l1pass; resetRetell(); T.level = 2; T.l1pass = keep; render(); } }, '撤掉提示词，只看图讲') : null
+          ]));
+        if (T.compare) body.append(original());
+      }
+    }
+    function original() {
+      return h('div', { class: 'kb-card', style: 'margin-top:12px' }, [h('h3', { class: 'sf-h', text: '原文（只是一种讲法）' })].concat(scene.told.map(function (id) { return sentence(pack.frames[id], false); }),
+        [h('div', { class: 'sf-row' }, [h('button', { class: 'speak-btn', type: 'button', onclick: function () { B.speakSequence(scene.told.map(function (id) { return { text: pack.frames[id].t, pause: 350 }; }), pack.speech); } }, '▶ 听原文')])]));
+    }
+    function retellButtons(onSubmit, free) {
+      return h('div', {}, [h('div', { class: 'sf-row' }, [
+        h('button', { class: 'kb-btn primary', type: 'button', onclick: onSubmit }, free ? '提交复述' : '核对'),
+        h('button', { class: 'kb-btn', type: 'button', onclick: function () { T.spoken = { checked: {} }; B.emit('submit', { item: 'retell-spoken', support: T.level === 1 ? 'cued' : 'pictures-only', heardByPage: false }); render(); } }, '我口头复述（给自己或搭档听）'),
+        free ? h('button', { class: 'kb-btn', type: 'button', onclick: function () { T.list = true; T.assisted = true; B.hint('retell:free', 3); render(); } }, '看连接词清单（算提示）') : null,
+        h('button', { class: 'kb-btn', type: 'button', onclick: function () { T.peek = !T.peek; if (T.peek) { T.assisted = true; B.reveal(T.level === 1 ? 'retell:cued' : 'retell:free'); } render(); } }, T.peek ? '收起原文' : '再看一遍原文（记为辅助完成）')
+      ]), T.peek ? original() : null]);
+    }
+    function renderSpoken() {
+      var sp = T.spoken;
+      body.append(h('div', { class: 'kb-card', style: 'margin-top:12px' }, [
+        h('div', { class: 'sf-thumbs' }, scene.told.map(function (id) { return h('div', {}, [frame(id)]); })),
+        h('p', { class: 'kb-prompt', style: 'margin-top:12px', text: '看着图，把故事大声讲一遍。讲完后，自己或搭档对照下面几条。' }),
+        h('p', { class: 'kb-note', text: '页面没有听，也不会给录音打分。这几条是自评，单独记录，不算答对。' }),
+        h('div', {}, pack.selfCheck.map(function (t, i) {
+          return h('label', { style: 'display:block;margin:6px 0' }, [h('input', { type: 'checkbox', checked: !!sp.checked[i], disabled: sp.done, onchange: function (e) { sp.checked[i] = e.target.checked; } }), ' ' + t]);
+        })),
+        sp.done ? h('div', { class: 'kb-feedback' }, '记下了（自评）。' + pack.partner) : null,
+        h('div', { class: 'sf-row' }, [
+          sp.done ? null : h('button', { class: 'kb-btn primary', type: 'button', onclick: function () {
+            var yes = pack.selfCheck.filter(function (_, i) { return sp.checked[i]; });
+            if (T.peek) B.reveal('retell-spoken:' + T.level);
+            B.attempt('retell-spoken:' + T.level, { selfReport: true, correct: yes.length === pack.selfCheck.length, response: yes });
+            sp.done = true; render();
+          } }, '记下自评'),
+          h('button', { class: 'kb-btn', type: 'button', onclick: function () { T.spoken = null; render(); } }, '改成打字'),
+          sp.done ? h('button', { class: 'kb-btn', type: 'button', onclick: function () { T.compare = !T.compare; if (T.compare) B.emit('compare', { item: 'retell-vs-original', spoken: true }); render(); } }, '和原文对照') : null
+        ])
+      ]));
+      if (T.compare) body.append(original());
+    }
+
+    function resetAll() { resetWatch(); resetOrder(); resetLink(); resetProcess(); resetRetell(); }
+    function render() {
+      clearInterval(timer);
+      bar.innerHTML = ''; body.innerHTML = '';
+      if (pack.readingLabel) bar.append(h('label', { class: 'kb-variant' }, [h('input', { type: 'checkbox', checked: st.showReading, onchange: function (e) { st.showReading = e.target.checked; B.emit('highlight', { showReading: st.showReading }); render(); } }), ' 显示' + pack.readingLabel]));
+      bar.append(h('span', { class: 'kb-note', text: '声音来自浏览器的语音合成，只放音，不录音、不打分。' }));
+      if (st.mode === 'watch') renderWatch();
+      else if (st.mode === 'order') renderOrder();
+      else if (st.mode === 'link') renderLink();
+      else if (st.mode === 'process') renderProcess();
+      else renderRetell();
+    }
+    resetAll();
+    render();
+    window.__sfReady = true;
+  }
+})();
+</script>
+</body>
+</html>

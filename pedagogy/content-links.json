@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "contentNamespace": "kt:",
+  "pedagogyNamespace": "ped:",
+  "links": [],
+  "candidates": [
+    {
+      "id": "ped-link-candidate:predict-discourse-direction",
+      "status": "candidate_pending_content_id",
+      "pedagogyNodeIds": [
+        "ped:attention",
+        "ped:noticing-hypothesis"
+      ],
+      "contentMatch": {
+        "language": "en",
+        "semanticCriteria": [
+          "语篇关系",
+          "根据上下文预测续句",
+          "有标记与无标记的转折"
+        ]
+      },
+      "contentReference": null,
+      "assetReference": "C33 / c33-which-way-next",
+      "proposedRelation": "informs_task_design",
+      "basis": "design_inference",
+      "taskSuggestion": "先判断续句方向并解释线索，再看原文。之后在无选项的新句上重做。",
+      "evaluationSuggestion": "分别记录原任务选择、无选项解释、延迟新材料表现。",
+      "limitations": [
+        "尚无经确认的 kt: ID，不生成实际边。",
+        "这是设计建议，不是本活动已有学习效果的声明。",
+        "预测新续句不必然是检索练习，不以预测正确率证明回忆或 noticing。"
+      ]
+    },
+    {
+      "id": "ped-link-candidate:express-and-revise-relations",
+      "status": "candidate_pending_content_id",
+      "pedagogyNodeIds": [
+        "ped:pushed-output",
+        "ped:corrective-feedback",
+        "ped:explicit-instruction"
+      ],
+      "contentMatch": {
+        "language": "en",
+        "semanticCriteria": [
+          "因果与先后",
+          "让步",
+          "关系表达的语义与语用边界"
+        ]
+      },
+      "contentReference": null,
+      "assetReference": "C59 / c59-say-the-relation",
+      "proposedRelation": "informs_task_design",
+      "basis": "design_inference",
+      "taskSuggestion": "先自己表达两句之间的关系，再比较表达选择并修改。不要求所有关系都添加连接词。",
+      "evaluationSuggestion": "保存原句、反馈、修订和撤除词库后的新主题表达。",
+      "limitations": [
+        "尚无经确认的 kt: ID，不生成实际边。",
+        "这是设计建议，不是本活动已有学习效果的声明。"
+      ]
+    },
+    {
+      "id": "ped-link-candidate:delayed-discourse-retrieval",
+      "status": "candidate_pending_content_id",
+      "pedagogyNodeIds": [
+        "ped:retrieval-practice",
+        "ped:spaced-practice",
+        "ped:transfer"
+      ],
+      "contentMatch": {
+        "language": "en",
+        "semanticCriteria": [
+          "语篇关系",
+          "连接表达",
+          "新主题上的使用"
+        ]
+      },
+      "contentReference": null,
+      "assetReference": null,
+      "proposedRelation": "informs_task_design",
+      "basis": "design_inference",
+      "taskSuggestion": "在另一天用新主题回忆并使用表达，保持复习间隔和是否显示答案为独立记录。",
+      "evaluationSuggestion": "将同题保持与新材料使用分别评分。间隔只是试点参数。",
+      "limitations": [
+        "尚无经确认的 kt: ID，不生成实际边。",
+        "这是设计建议，不是本活动已有学习效果的声明。"
+      ]
+    },
+    {
+      "id": "ped-link-candidate:japanese-relation-task",
+      "status": "candidate_pending_content_id",
+      "pedagogyNodeIds": [
+        "ped:pushed-output",
+        "ped:scaffolding",
+        "ped:transfer"
+      ],
+      "contentMatch": {
+        "language": "ja",
+        "semanticCriteria": [
+          "日语因果与时序表达",
+          "让步与逆接",
+          "语篇关系的显式与隐式实现"
+        ]
+      },
+      "contentReference": null,
+      "assetReference": null,
+      "proposedRelation": "informs_task_design",
+      "basis": "design_inference",
+      "taskSuggestion": "依据日语内容节点提供自然语境，让学习者独立表达、按错误获取最小提示，再在新语境撤除提示。",
+      "evaluationSuggestion": "需日语审校。不能把英语标记逐词替换，也不预设跨语言迁移成功。",
+      "limitations": [
+        "尚无经确认的 kt: ID，不生成实际边。",
+        "这是设计建议，不是本活动已有学习效果的声明。"
+      ]
+    }
+  ],
+  "resolutionPolicy": "确认实际 kt: 节点存在并保存核对依据后再创建关联。候选不得渲染为实际导航边。"
+}

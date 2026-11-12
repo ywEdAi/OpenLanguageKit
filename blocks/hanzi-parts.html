@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hanzi Parts</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  :root { --dg: 190px; --tile: 46px; --cjk: "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", "Source Han Sans SC", sans-serif; }
+  :root[lang="ja"] { --cjk: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans CJK JP", "Yu Gothic", "Meiryo", sans-serif; }
+  :root[data-variant="child"] { --dg: 240px; --tile: 64px; }
+  .cjk, .big, .slot .g, .tile, .pick button, .chip b, .ftile .g { font-family: var(--cjk); }
+  .hp-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .hp-layout { grid-template-columns: 1fr; } }
+  .hp-side { display: grid; gap: 12px; }
+  .pick { display: flex; flex-wrap: wrap; gap: 4px; max-height: 128px; overflow: auto; padding: 2px; }
+  .pick button { width: 38px; height: 38px; border: 1px solid var(--line); background: var(--panel); border-radius: 8px; font-size: 1.25rem; padding: 0; }
+  [data-variant="child"] .pick button { width: 48px; height: 48px; font-size: 1.6rem; }
+  .pick button[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+  .hero { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+  .big { font-size: 7rem; line-height: 1.05; min-width: 1.1em; text-align: center; }
+  [data-variant="child"] .big { font-size: 8.5rem; }
+  .meta p { margin: 4px 0; }
+  .reading { font-size: 1.4rem; font-weight: 600; }
+  /* structure diagram: absolute boxes per IDC type */
+  .dg { position: relative; width: var(--dg); height: var(--dg); flex: none; }
+  .slot { position: absolute; display: flex; align-items: center; justify-content: center; border: 2px solid var(--rc, var(--line));
+    border-radius: 10px; background: color-mix(in srgb, var(--rc, var(--line)) 14%, var(--panel)); padding: 4px; }
+  .slot .g { font-size: calc(var(--dg) * .22); line-height: 1; }
+  .slot .n { position: absolute; top: 2px; right: 5px; font-size: .7rem; color: var(--muted); }
+  .slot.outer { z-index: 0; } .slot.inner { z-index: 1; }
+  .slot.outer .g { font-size: calc(var(--dg) * .17); }
+  .slot.empty { border-style: dashed; background: transparent; }
+  .slot.target { box-shadow: 0 0 0 3px var(--focus); }
+  .slot.bad { border-color: var(--bad); background: var(--bad-soft); }
+  .slot.locked { border-style: double; border-width: 4px; }
+  button.slot { cursor: pointer; font: inherit; color: inherit; }
+  .r-meaning { --rc: var(--t1); } .r-sound { --rc: var(--t4); } .r-form { --rc: var(--t0); }
+  .role { display: inline-block; font-size: .75rem; padding: 0 7px; border-radius: 999px; border: 1px solid var(--rc); color: var(--rc); white-space: nowrap; }
+  .parts { display: grid; gap: 8px; margin: 12px 0 0; padding: 0; list-style: none; }
+  .parts li { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; padding: 6px 8px; border-left: 4px solid var(--rc); background: color-mix(in srgb, var(--rc) 7%, var(--panel)); border-radius: 8px; }
+  .parts .pg { font-size: 2rem; width: 1.3em; text-align: center; font-family: var(--cjk); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 3px 10px; font-size: .85rem; }
+  .chip b { font-size: 1.15rem; margin-right: 4px; font-weight: 500; }
+  .chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+  .tiles { display: flex; flex-wrap: wrap; gap: var(--gap); margin: 10px 0; }
+  .tile { width: var(--tile); height: var(--tile); font-size: calc(var(--tile) * .55); border: 1px solid var(--line); background: var(--panel); border-radius: 10px; }
+  .tile.used { opacity: .25; }
+  .opts { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 12px; }
+  .opts button { border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 6px 12px; min-height: 40px; }
+  [data-variant="child"] .opts button { min-height: 56px; padding: 8px 16px; font-size: 1.15rem; }
+  .opts button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+  .opts button.right { border-color: var(--accent); background: var(--accent-soft); }
+  .opts button.wrongpick { border-color: var(--bad); background: var(--bad-soft); }
+  .ftiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin-top: 12px; }
+  .ftile { text-align: left; border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 8px 10px; display: grid; gap: 2px; }
+  .ftile .g { font-size: 2.2rem; line-height: 1.1; }
+  .ftile.exc { border-style: dashed; border-color: var(--warn); background: var(--warn-soft); }
+  .badge { font-size: .75rem; color: var(--muted); }
+  .exc .badge.rel { color: var(--warn); font-weight: 600; }
+  .oku { color: var(--muted); }
+  .kana { font-family: var(--cjk); }
+  .words { margin: 6px 0 0; padding-left: 0; list-style: none; display: grid; gap: 4px; }
+  .tag { font-size: .7rem; border-radius: 4px; padding: 0 5px; background: var(--accent-soft); margin-left: 4px; }
+  .compare { display: flex; gap: 18px; align-items: end; }
+  .compare div { text-align: center; } .compare .g { font-size: 3rem; font-family: var(--cjk); display: block; }
+  .reverse { border-left: 4px solid var(--warn); }
+  .strokes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; text-align: center; font-size: .8rem; }
+  .strokes svg { width: 44px; height: 44px; display: block; margin: 0 auto; color: var(--ink); }
+  .legend { display: flex; gap: 6px; flex-wrap: wrap; }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function () {
+  'use strict';
+  var h = KTBlock.h;
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'hanzi-zh';
+  var entry = KT_REGISTRY.packs[setId] || {};
+  var file = entry.file;
+  if (file && entry.block !== 'hanzi-parts') { document.getElementById('app').textContent = '数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。'; return; }
+  if (!file) { document.getElementById('app').textContent = '未知的数据包：' + setId; return; }
+  var s = document.createElement('script');
+  s.src = file;
+  s.onload = function () { start(KT_DATA[setId]); };
+  s.onerror = function () { document.getElementById('app').textContent = '数据包加载失败：' + file; };
+  document.head.appendChild(s);
+
+  /* ---------- structure geometry: [left, top, width, height] in %; first box is the outer part for enclosures ---------- */
+  var IDC = {
+    '⿰': { name: '左右结构', boxes: [[0, 0, 40, 100], [43, 0, 57, 100]] },
+    '⿱': { name: '上下结构', boxes: [[0, 0, 100, 40], [0, 43, 100, 57]] },
+    '⿲': { name: '左中右结构', boxes: [[0, 0, 31, 100], [34, 0, 32, 100], [69, 0, 31, 100]] },
+    '⿳': { name: '上中下结构', boxes: [[0, 0, 100, 31], [0, 34, 100, 32], [0, 69, 100, 31]] },
+    '⿴': { name: '全包围结构', outer: 'flex-start;justify-content:flex-start', boxes: [[0, 0, 100, 100], [26, 26, 48, 48]] },
+    '⿵': { name: '上三包围结构', outer: 'flex-start', boxes: [[0, 0, 100, 100], [22, 30, 56, 70]] },
+    '⿶': { name: '下三包围结构', outer: 'flex-end', boxes: [[0, 0, 100, 100], [22, 0, 56, 70]] },
+    '⿷': { name: '左三包围结构', outer: 'center;justify-content:flex-start', boxes: [[0, 0, 100, 100], [30, 22, 70, 56]] },
+    '⿸': { name: '左上包围结构', outer: 'flex-start;justify-content:flex-start', boxes: [[0, 0, 100, 100], [34, 34, 66, 66]] },
+    '⿹': { name: '右上包围结构', outer: 'flex-start;justify-content:flex-end', boxes: [[0, 0, 100, 100], [0, 34, 66, 66]] },
+    '⿺': { name: '左下包围结构', outer: 'flex-end;justify-content:flex-start', boxes: [[0, 0, 100, 100], [34, 0, 66, 66]] },
+    '⿻': { name: '穿插结构', outer: 'center', boxes: [[0, 0, 100, 100], [20, 20, 60, 60]] },
+    '独体': { name: '独体字', boxes: [[0, 0, 100, 100]] }
+  };
+  var ROLE = { meaning: '表意（形旁）', sound: '表音（声旁）', form: '只是字形' };
+  var STROKES = [
+    ['横', 'M6 21 L34 19'], ['竖', 'M20 5 L20 35'], ['撇', 'M28 6 Q25 24 8 34'], ['点', 'M15 11 L25 23'],
+    ['捺', 'M8 8 Q19 25 35 32'], ['提', 'M8 31 L32 14'], ['折（横折）', 'M6 10 L30 10 L30 35'], ['钩（竖钩）', 'M22 5 L22 32 L14 26']
+  ];
+
+  /* ---------- reading comparison (zh: pinyin; ja: on-yomi) ---------- */
+  var TM = {}; ['āáǎàa', 'ēéěèe', 'īíǐìi', 'ōóǒòo', 'ūúǔùu', 'ǖǘǚǜü'].forEach(function (row) {
+    for (var i = 0; i < 4; i++) TM[row[i]] = [row[4], i + 1];
+  });
+  function pyParse(p) {
+    var base = '', tone = 0;
+    for (var i = 0; i < p.length; i++) { var m = TM[p[i]]; if (m) { base += m[0]; tone = m[1]; } else base += p[i]; }
+    return { base: base, tone: tone };
+  }
+  var INITS = ['zh', 'ch', 'sh', 'b', 'p', 'm', 'f', 'd', 't', 'n', 'l', 'g', 'k', 'h', 'j', 'q', 'x', 'r', 'z', 'c', 's', 'y', 'w'];
+  function pySplit(b) { for (var i = 0; i < INITS.length; i++) if (b.indexOf(INITS[i]) === 0) return [INITS[i], b.slice(INITS[i].length)]; return ['', b]; }
+  function kanaNorm(k) { return k.normalize('NFD').replace(/[゙゚]/g, '').replace(/ウ$/, ''); }
+  var REL = { same: '和声旁同音', tone: '只差声调', partial: '声母或韵母相同', near: '相近（清浊或长短不同）', none: '声旁已不提示读音' };
+  var CLUE = { same: '有用', tone: '有用', partial: '部分有用', near: '部分有用', none: '失效' };
+
+  function start(pack) {
+    var JA = pack.lang === 'ja';
+    document.documentElement.lang = JA ? 'ja' : 'zh-CN';
+    var B = KTBlock.init({ id: 'hanzi-parts', primitive: 'prim:character-anatomy', title: pack.title, set: pack.id });
+    document.title = pack.title + ' · Hanzi Parts';
+    var byGlyph = {}; pack.chars.forEach(function (c) { byGlyph[c.glyph] = c; });
+    var comp = {}; pack.components.forEach(function (c) { comp[c.glyph] = c; });
+    var modes = [{ id: 'explore', label: '拆字' }, { id: 'build', label: '拼字' }, { id: 'family', label: '同族' }, { id: 'guess', label: '猜一猜' }];
+    var seenKey = 'hp-seen-' + pack.id;
+    var st = {
+      mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : 'explore',
+      cur: byGlyph[params.get('char')] || pack.chars.find(function (c) { return c.parts.length > 1; }),
+      fam: null, build: null, guess: null, solved: {},
+      seen: B.store(seenKey) || {}, gStats: { total: 0, unrel: 0 }
+    };
+    var ui = KTBlock.chrome(B, { title: pack.title, subtitle: pack.subtitle, modes: modes, mode: st.mode,
+      onMode: function (m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m }); render(); }, onVariant: function () { st.build = null; st.guess = null; render(); } });
+    var bar = h('div', { class: 'kb-bar' });
+    var body = h('div');
+    var side = h('aside', { class: 'hp-side' });
+    document.getElementById('app').append(ui.header, h('main', { class: 'kb-main' }, [bar, h('div', { class: 'hp-layout' }, [body, side])]), ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id });
+
+    function child() { return B.variant === 'child'; }
+    function markSeen(c) { if (!st.seen[c.glyph]) { st.seen[c.glyph] = 1; B.store(seenKey, st.seen); } }
+    function compReading(g) { var c = comp[g]; if (!c) return null; return JA ? (c.on || []) : c.pinyin; }
+    function relOf(c, part) {
+      var r = compReading(part.glyph);
+      if (!r || !r.length) return null;
+      if (JA) {
+        if (c.on.some(function (o) { return r.indexOf(o) >= 0; })) return 'same';
+        if (c.on.some(function (o) { return r.some(function (x) { return kanaNorm(x) === kanaNorm(o); }); })) return 'near';
+        return 'none';
+      }
+      var a = pyParse(c.pinyin), b = pyParse(r);
+      if (a.base === b.base) return a.tone === b.tone ? 'same' : 'tone';
+      var sa = pySplit(a.base), sb = pySplit(b.base);
+      return sa[0] === sb[0] || sa[1] === sb[1] ? 'partial' : 'none';
+    }
+    function soundPart(c) { return c.parts.find(function (p) { return p.role === 'sound'; }); }
+    function meaningPart(c) { return c.parts.find(function (p) { return p.role === 'meaning' && p.cat; }); }
+    function catLabel(k) { return (pack.cats || {})[k] || k; }
+    function say(c, text) {
+      var t = text || c.say || c.glyph;
+      B.speak(t, pack.speech, { audio: c.audio }); // silent when speech is unavailable; the button says so
+    }
+    function note(msg, tone) { var f = body.querySelector('.kb-feedback'); if (f) { f.textContent = msg; f.className = 'kb-feedback ' + (tone || ''); } }
+
+    function readingEl(c) {
+      if (!JA) { var t = pyParse(c.pinyin).tone; return h('span', { class: 'reading tone' + t, text: c.pinyin }); }
+      return h('span', { class: 'reading kana' }, [c.on.join('・'), c.kun.length ? h('span', { class: 'badge' }, '　/　') : null, c.kun.length ? kunEl(c.kun) : null]);
+    }
+    function kunEl(list) {
+      var out = h('span');
+      list.forEach(function (k, i) {
+        var a = k.split('.');
+        if (i) out.append('・');
+        out.append(a[0]); if (a[1]) out.append(h('span', { class: 'oku', text: a[1] }));
+      });
+      return out;
+    }
+    var canSpeak = 'speechSynthesis' in window;
+    function playBtn(c, text, label) { return h('button', { class: 'kb-btn', 'aria-label': '播放读音', disabled: !canSpeak && !c.audio, title: canSpeak ? null : '这个浏览器不能播放语音', onclick: function () { say(c, text); } }, '▶ ' + (label || '听')); }
+
+    /* structure diagram. slots: [{glyph, role, onclick, cls}] — missing glyph = empty slot */
+    function diagram(structure, slots, opts) {
+      opts = opts || {};
+      var spec = IDC[structure] || IDC['独体'];
+      var box = h('div', { class: 'dg', role: 'img', 'aria-label': spec.name });
+      spec.boxes.forEach(function (b, i) {
+        var sl = slots[i] || {};
+        var outer = spec.outer && i === 0;
+        var cls = 'slot ' + (outer ? 'outer' : 'inner') + (sl.glyph ? ' r-' + (sl.role || 'form') : ' empty') + (sl.cls ? ' ' + sl.cls : '');
+        var style = 'left:' + b[0] + '%;top:' + b[1] + '%;width:' + b[2] + '%;height:' + b[3] + '%;' + (outer ? 'align-items:' + spec.outer + ';' : '');
+        var el = h(sl.onclick ? 'button' : 'div', { class: cls, style: style, onclick: sl.onclick || null, 'aria-label': sl.glyph ? sl.glyph + (sl.role ? '，' + ROLE[sl.role] : '') : '空位 ' + (i + 1) },
+          [h('span', { class: 'g', text: sl.glyph || '' }), opts.numbers ? h('span', { class: 'n', text: String(i + 1) }) : null]);
+        box.append(el);
+      });
+      return box;
+    }
+    function partSlots(c) { return c.structure === '独体' ? [{ glyph: c.glyph, role: 'form' }] : c.parts.map(function (p) { return { glyph: p.glyph, role: p.role }; }); }
+
+    /* ---------- side cards ---------- */
+    function legend() {
+      return h('div', { class: 'kb-card' }, [h('b', { text: '颜色' }), h('div', { class: 'legend' }, Object.keys(ROLE).map(function (r) { return h('span', { class: 'role r-' + r, text: ROLE[r] }); })),
+        h('p', { class: 'kb-note', text: '部件只是线索：形旁给意思的大类，声旁给读音的方向，都可能失效。这里不讲字源故事。' })]);
+    }
+    function strokeCard(c) {
+      return h('details', { class: 'kb-card' }, [h('summary', {}, [h('b', { text: '基本笔画' }), c ? '　这个字 ' + c.strokes + ' 画' : '']),
+        h('div', { class: 'strokes' }, STROKES.map(function (s) {
+          var svg = '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="' + s[1] + '" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="' + s[1].split(' ')[0].slice(1) + '" cy="' + s[1].split(' ')[1] + '" r="3.2" fill="var(--t4)"/></svg>';
+          var d = h('div'); d.innerHTML = svg; d.append(s[0]); return d;
+        })),
+        h('p', { class: 'kb-note', text: '红点是起笔处。没有经过授权核对的笔顺数据，这里不演示逐笔笔顺；请对照' + (JA ? '日本学校教学通行笔顺' : '《现代汉语通用字笔顺规范》') + '或字帖。' })]);
+    }
+    function notesFor(pred) {
+      return (pack.notes || []).filter(pred).map(function (n) {
+        return h('div', { class: 'kb-card reverse' }, [h('b', { text: n.kind === 'sound' ? '声旁不总可靠' : '形旁不总可靠' }), h('p', { class: 'kb-note cjk', text: n.note })]);
+      });
+    }
+
+    /* ---------- 拆字 explore ---------- */
+    function pickerBar() {
+      bar.innerHTML = '';
+      bar.append(h('div', { class: 'pick', role: 'group', 'aria-label': '选一个字' }, pack.chars.map(function (c) {
+        return h('button', { 'aria-pressed': st.cur === c ? 'true' : 'false', title: c.meaning.zh, onclick: function () { selectChar(c); } }, c.glyph);
+      })));
+    }
+    function selectChar(c) { st.cur = c; markSeen(c); B.emit('select', { item: c.glyph }); say(c); render(); }
+    function renderExplore() {
+      var c = st.cur; markSeen(c);
+      pickerBar();
+      var meta = h('div', { class: 'meta' }, [
+        h('p', {}, [readingEl(c), ' ', playBtn(c)]),
+        h('p', { class: 'cjk' }, [h('b', { text: c.meaning.zh }), c.meaning.en ? h('span', { class: 'badge' }, '　' + c.meaning.en) : null]),
+        h('p', { class: 'kb-note' }, [(IDC[c.structure] || IDC['独体']).name + (c.structure !== '独体' ? ' ' + c.structure : '') + ' · ' + c.strokes + ' 画'])
+      ]);
+      var card = h('div', { class: 'kb-card' }, [h('div', { class: 'hero' }, [h('div', { class: 'big', text: c.glyph }), diagram(c.structure, partSlots(c)), meta])]);
+      if (c.parts.length) card.append(h('ul', { class: 'parts' }, c.parts.map(function (p) {
+        var cc = comp[p.glyph] || {};
+        return h('li', { class: 'r-' + p.role }, [h('span', { class: 'pg', text: p.glyph }),
+          h('div', {}, [h('b', { text: p.name }), ' ', h('span', { class: 'role', text: ROLE[p.role] }), p.cat ? h('span', { class: 'badge' }, '　义类：' + catLabel(p.cat)) : null,
+            h('div', { class: 'kb-note cjk', text: p.hint + (p.role === 'sound' && relOf(c, p) ? '。这个字：' + REL[relOf(c, p)] : '') + (cc.standsFor ? '（' + cc.standsFor + ' 作偏旁）' : '') })]),
+          (cc.count || 0) >= 2 ? h('button', { class: 'kb-btn', onclick: function () { openFamily(p.glyph); } }, '同族 ' + cc.count) : h('span')]);
+      })));
+      else card.append(h('p', { class: 'kb-note', text: '独体字：不再拆成更小的部件，常常自己作别的字的部件。' }));
+      if ((comp[c.glyph] || {}).count) card.append(h('p', {}, [h('button', { class: 'kb-btn', onclick: function () { openFamily(c.glyph); } }, '它作部件的字 ' + comp[c.glyph].count + ' 个')]));
+      if (JA) card.append(jaBlock(c));
+      body.innerHTML = ''; body.append(card);
+      side.innerHTML = '';
+      side.append(legend(), strokeCard(c));
+      notesFor(function (n) { return n.chars.indexOf(c.glyph) >= 0; }).forEach(function (e) { side.append(e); });
+      side.append(h('p', { class: 'kb-note', text: pack.source }));
+    }
+    function jaBlock(c) {
+      var wrap = h('div', { style: 'margin-top:12px' }, [
+        h('p', {}, [h('b', { text: '音読み（音读）' }), '　', h('span', { class: 'kana', text: c.on.join('・') || '—' })]),
+        h('p', {}, [h('b', { text: '訓読み（训读）' }), '　', c.kun.length ? h('span', { class: 'kana' }, [kunEl(c.kun)]) : '—', c.kun.some(function (k) { return k.indexOf('.') > 0; }) ? h('span', { class: 'badge' }, '　灰色部分是送假名') : null]),
+        h('ul', { class: 'words' }, (c.words || []).map(function (w) {
+          return h('li', {}, [h('button', { class: 'kb-btn', onclick: function () { say(c, w.r); B.emit('select', { item: c.glyph, word: w.w }); } }, '▶ ' + w.w),
+            ' ', h('span', { class: 'kana', text: w.r }), ' ', w.zh, h('span', { class: 'tag', text: { on: '音读', kun: '训读', special: '特殊读法' }[w.type] })]);
+        })),
+        pack.readingNote ? h('p', { class: 'kb-note', text: pack.readingNote }) : null
+      ]);
+      if (c.zhForm || c.zhNote) wrap.append(h('div', { class: 'kb-card', style: 'margin-top:10px' }, [
+        c.zhForm ? h('div', { class: 'compare' }, [h('div', {}, [h('span', { class: 'g', lang: 'ja', text: c.glyph }), '日本字形']), h('div', {}, ['↔']),
+          h('div', {}, [h('span', { class: 'g', lang: 'zh-CN', style: 'font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif', text: c.zhForm }), '中文简体'])]) : null,
+        h('p', { class: 'kb-note', text: (c.zhNote || '') + (c.zhForm ? ' 写日语时用日本字形，不要写成中文简体。' : '') })]));
+      if (c.trap) wrap.append(h('div', { class: 'kb-feedback warn', text: '注意：' + c.trap }));
+      return wrap;
+    }
+
+    /* ---------- 同族 family ---------- */
+    function openFamily(g) { st.fam = g; st.mode = 'family'; ui.setMode('family'); render(); }
+    function renderFamily() {
+      var list = pack.components.filter(function (c) { return c.count >= 2; }).sort(function (a, b) { return b.count - a.count; });
+      if (!st.fam || !comp[st.fam] || comp[st.fam].count < 2) st.fam = list[0].glyph;
+      bar.innerHTML = '';
+      bar.append(h('div', { class: 'chips' }, list.map(function (c) {
+        return h('button', { class: 'chip', 'aria-pressed': c.glyph === st.fam ? 'true' : 'false', onclick: function () { st.fam = c.glyph; render(); } }, [h('b', { text: c.glyph }), c.name + ' ' + c.count]);
+      })));
+      var cc = comp[st.fam];
+      var members = pack.chars.filter(function (c) { return c.parts.some(function (p) { return p.glyph === st.fam; }); });
+      B.emit('compare', { component: st.fam, items: members.map(function (c) { return c.glyph; }) });
+      var tally = { same: 0, tone: 0, partial: 0, near: 0, none: 0 }, nSound = 0;
+      var tiles = members.map(function (c) {
+        markSeen(c);
+        var p = c.parts.find(function (x) { return x.glyph === st.fam; });
+        var rel = p.role === 'sound' ? relOf(c, p) : null;
+        var exc = false, label = ROLE[p.role];
+        if (rel) { nSound++; tally[rel]++; label = REL[rel]; exc = rel === 'partial' || rel === 'near' || rel === 'none'; }
+        if (p.role === 'meaning' && cc.cat && p.cat && p.cat !== cc.cat) { exc = true; label = '义类不同：' + catLabel(p.cat); }
+        if (p.role === 'form' && cc.cat) { exc = true; label = '这里只是字形'; }
+        return h('button', { class: 'ftile' + (exc ? ' exc' : ''), onclick: function () { st.cur = c; st.mode = 'explore'; ui.setMode('explore'); B.emit('select', { item: c.glyph, from: 'family' }); render(); } }, [
+          h('span', { class: 'g', text: c.glyph }), readingEl(c), h('span', { class: 'badge cjk', text: c.meaning.zh }),
+          h('span', { class: 'badge rel', text: (exc ? '⚠ ' : '') + label })]);
+      });
+      var head = h('div', { class: 'hero' }, [h('div', { class: 'big', text: cc.glyph }), h('div', { class: 'meta' }, [
+        h('p', {}, [h('b', { text: cc.name })]),
+        cc.cat ? h('p', { class: 'cjk', text: '作形旁时：' + (cc.hint || catLabel(cc.cat)) }) : null,
+        cc.pinyin ? h('p', {}, ['自己读 ', h('span', { class: 'tone' + pyParse(cc.pinyin).tone, text: cc.pinyin })]) : null,
+        cc.on && cc.on.length ? h('p', {}, ['音读 ', h('span', { class: 'kana', text: cc.on.join('・') })]) : null,
+        cc.standsFor ? h('p', { class: 'kb-note', text: '是“' + cc.standsFor + '”作偏旁时的写法' }) : null])]);
+      var summary = nSound ? h('p', { class: 'kb-feedback' }, ['它当声旁的 ' + nSound + ' 个字里：同音 ' + tally.same + '，只差声调 ' + tally.tone + '，' + (JA ? '相近 ' + tally.near : '声母或韵母相同 ' + tally.partial) + '，不提示读音 ' + tally.none + '。虚线框是例外。']) : h('p', { class: 'kb-note', text: '虚线框是例外：同一个部件在这些字里的作用不一样。' });
+      body.innerHTML = '';
+      body.append(h('div', { class: 'kb-card' }, [head, summary, h('div', { class: 'ftiles' }, tiles)]));
+      side.innerHTML = '';
+      var ns = notesFor(function (n) { return n.part === st.fam; });
+      ns.forEach(function (e) { side.append(e); });
+      if (!ns.length) side.append(h('div', { class: 'kb-card reverse' }, [h('b', { text: '反过来想' }), h('p', { class: 'kb-note', text: '同族字帮你归类记忆，但部件不能机械推出字义或读音。看到熟悉的部件，先猜，再查证。' })]));
+      side.append(legend());
+    }
+
+    /* ---------- 拼字 build ---------- */
+    function newBuild() {
+      var pool = pack.chars.filter(function (c) { return c.parts.length >= 2 && !st.solved[c.glyph]; });
+      if (!pool.length) { B.emit('complete', { mode: 'build' }); st.build = { done: 'all' }; return; }
+      var c = pool[Math.floor(Math.random() * pool.length)];
+      var nd = child() ? 2 : 4;
+      var own = c.parts.map(function (p) { return p.glyph; });
+      var others = KTBlock.shuffle(pack.components.filter(function (x) { return own.indexOf(x.glyph) < 0 && x.count >= 1; }));
+      var mean = others.filter(function (x) { return x.cat; }), rest = others.filter(function (x) { return !x.cat; });
+      var distract = mean.slice(0, Math.ceil(nd / 2)).concat(rest.slice(0, nd)).slice(0, nd).map(function (x) { return x.glyph; });
+      var tiles = KTBlock.shuffle(own.concat(distract)).map(function (g, i) { return { id: i, glyph: g }; });
+      var structs = Object.keys(IDC).filter(function (k) { return k !== c.structure && k !== '独体' && pack.chars.some(function (x) { return x.structure === k; }); });
+      var opts = KTBlock.shuffle([c.structure].concat(KTBlock.shuffle(structs).slice(0, child() ? 1 : 3)));
+      st.build = { c: c, tiles: tiles, structs: opts, structure: null, slots: [], locked: {}, done: false, bad: {} };
+      markSeen(c);
+    }
+    function chooseStructure(k) {
+      var b = st.build; if (b.done || b.lockStruct) return;
+      b.structure = k; b.slots = new Array(IDC[k].boxes.length).fill(null); b.bad = {};
+      B.emit('select', { item: b.c.glyph, structure: k }); render();
+    }
+    function placeTile(t) {
+      var b = st.build; if (b.done || !b.structure || t.used) return;
+      var i = b.target != null && !b.slots[b.target] ? b.target : b.slots.indexOf(null);
+      if (i < 0) { note('格子都满了。点一个格子把部件拿回来。', 'warn'); return; }
+      b.slots[i] = t; t.used = true; b.target = null; b.bad = {};
+      B.emit('drop', { item: b.c.glyph, part: t.glyph, slot: i }); render();
+    }
+    function clickSlot(i) {
+      var b = st.build; if (b.done || b.locked[i]) return;
+      if (b.slots[i]) { b.slots[i].used = false; B.emit('revise', { item: b.c.glyph, removed: b.slots[i].glyph, slot: i }); b.slots[i] = null; }
+      b.target = i; render();
+    }
+    function submitBuild() {
+      var b = st.build, c = b.c;
+      if (!b.structure || b.slots.indexOf(null) >= 0) { note('先选结构，再把每个格子填满。', 'warn'); return; }
+      var parts = b.slots.map(function (t) { return t.glyph; });
+      var structOk = b.structure === c.structure;
+      var partsOk = structOk && parts.every(function (g, i) { return g === c.parts[i].glyph; });
+      var setOk = parts.slice().sort().join() === c.parts.map(function (p) { return p.glyph; }).sort().join();
+      var rec = B.attempt(c.glyph, { correct: partsOk, response: { structure: b.structure, parts: parts } });
+      if (partsOk) {
+        b.done = true; st.solved[c.glyph] = rec.first.correct && !rec.first.assisted ? 'ind' : 'ast'; render();
+        note('对！' + c.glyph + ' = ' + c.parts.map(function (p) { return p.glyph + '（' + ROLE[p.role] + '）'; }).join(' + ') + '。' + (rec.first.correct && !rec.first.assisted ? '第一次就独立拼对。' : '记为提示后或重试后完成。'));
+        say(c);
+      } else {
+        b.bad = {}; if (structOk) parts.forEach(function (g, i) { if (g !== c.parts[i].glyph) b.bad[i] = true; });
+        render();
+        note(!structOk ? (setOk ? '部件选对了，但结构不对：' + c.glyph + ' 不是' + IDC[b.structure].name + '。' : '结构不对，部件也不全对。先想想这个字是怎么排的。')
+          : setOk ? '部件都对，但位置放反了。红框的格子换一换。' : '结构对了。红框里的部件不对：想想意思该由哪个部件提示，读音该由哪个部件提示。', 'bad');
+      }
+    }
+    function hintBuild() {
+      var b = st.build, c = b.c; if (b.done) return;
+      if (!b.lockStruct) {
+        b.lockStruct = true; B.hint(c.glyph, 1);
+        if (b.structure !== c.structure) { b.slots.forEach(function (t) { if (t) t.used = false; }); b.structure = c.structure; b.slots = new Array(c.parts.length).fill(null); }
+        render(); note('提示 1：这是' + IDC[c.structure].name + ' ' + c.structure + '。', 'warn'); return;
+      }
+      var mi = c.parts.findIndex(function (p) { return p.role === 'meaning'; }); if (mi < 0) mi = 0;
+      if (b.locked[mi]) return;
+      B.hint(c.glyph, 2);
+      if (b.slots[mi]) b.slots[mi].used = false;
+      var prev = b.slots.findIndex(function (t) { return t && t.glyph === c.parts[mi].glyph; });
+      if (prev >= 0) { b.slots[prev].used = false; b.slots[prev] = null; }
+      var t = b.tiles.find(function (x) { return x.glyph === c.parts[mi].glyph && !x.used; });
+      b.slots[mi] = t; t.used = true; b.locked[mi] = true; render();
+      note('提示 2：' + c.parts[mi].glyph + '（' + c.parts[mi].name + '）' + c.parts[mi].hint + '。', 'warn');
+    }
+    function revealBuild() {
+      var b = st.build, c = b.c; if (b.done) return;
+      B.reveal(c.glyph); b.done = true; st.solved[c.glyph] = 'ast';
+      b.structure = c.structure; b.tiles.forEach(function (t) { t.used = false; });
+      b.slots = c.parts.map(function (p) { var t = b.tiles.find(function (x) { return x.glyph === p.glyph && !x.used; }); t.used = true; return t; });
+      render(); note('答案：' + c.glyph + '。这一题记为“看过答案”。', 'warn'); say(c);
+    }
+    function renderBuild() {
+      if (!st.build) newBuild();
+      var b = st.build;
+      bar.innerHTML = '';
+      var done = Object.keys(st.solved).length, total = pack.chars.filter(function (c) { return c.parts.length >= 2; }).length;
+      bar.append(h('span', { class: 'kb-note', text: '已拼 ' + done + ' / ' + total + ' 个合体字。第一次提交会被记录；提示和看答案另算。' }));
+      body.innerHTML = ''; side.innerHTML = '';
+      if (b.done === 'all') { body.append(h('div', { class: 'kb-card', text: '这一组合体字都拼过了。' })); return; }
+      var c = b.c;
+      var prompt = h('div', { class: 'kb-card' }, [
+        h('p', { class: 'kb-prompt' }, ['拼出这个字：意思是“', h('b', { class: 'cjk', text: c.meaning.zh }), '”' + (c.meaning.en ? '（' + c.meaning.en + '）' : '') + '，读作 ',
+          readingEl(c), ' ', playBtn(c)]),
+        h('p', { class: 'kb-note', text: '① 选结构　② 点部件放进格子（点格子可以拿回或指定位置）　③ 提交' }),
+        h('div', { class: 'opts' }, b.structs.map(function (k) {
+          return h('button', { 'aria-pressed': b.structure === k ? 'true' : 'false', disabled: b.done || b.lockStruct, onclick: function () { chooseStructure(k); } }, [h('span', { style: 'font-size:1.4em' }, k), ' ' + IDC[k].name]);
+        })),
+        h('div', { class: 'hero' }, [
+          b.structure ? diagram(b.structure, b.slots.map(function (t, i) {
+            var p = b.done ? c.parts[i] : null;
+            return { glyph: t ? t.glyph : '', role: p ? p.role : (t ? 'form' : null), onclick: function () { clickSlot(i); },
+              cls: (b.target === i ? 'target' : '') + (b.bad[i] ? ' bad' : '') + (b.locked[i] ? ' locked' : '') };
+          }), { numbers: true }) : h('div', { class: 'dg slot empty', style: 'position:relative' }, [h('span', { class: 'kb-note', text: '先选结构' })]),
+          b.done ? h('div', { class: 'big', text: c.glyph }) : null
+        ]),
+        h('div', { class: 'tiles' }, b.tiles.map(function (t) {
+          return h('button', { class: 'tile' + (t.used ? ' used' : ''), disabled: t.used || b.done, onclick: function () { placeTile(t); } }, t.glyph);
+        })),
+        h('div', { class: 'kb-bar' }, b.done ? [
+          h('button', { class: 'kb-btn primary', onclick: function () { st.build = null; render(); } }, '下一个'),
+          h('button', { class: 'kb-btn', onclick: function () { st.cur = c; st.mode = 'explore'; ui.setMode('explore'); render(); } }, '拆开看这个字')
+        ] : [
+          h('button', { class: 'kb-btn primary', onclick: submitBuild }, '提交'),
+          h('button', { class: 'kb-btn', disabled: b.locked[0] || b.locked[1] || b.locked[2], onclick: hintBuild }, b.lockStruct ? '提示 2：表意部件' : '提示 1：结构'),
+          h('button', { class: 'kb-btn', onclick: revealBuild }, '看答案'),
+          h('button', { class: 'kb-btn', onclick: function () { st.build = null; render(); } }, '跳过')
+        ]),
+        h('div', { class: 'kb-feedback', text: '有' + (b.tiles.length - c.parts.length) + '个多余的部件。结构和部件位置都要对。' })
+      ]);
+      body.append(prompt);
+      side.append(legend(), strokeCard(null));
+    }
+
+    /* ---------- 猜一猜 transfer ---------- */
+    function guessable(c) { return c.parts.length >= 2 && (meaningPart(c) || (soundPart(c) && relOf(c, soundPart(c)))); }
+    function unreliable(c) { var p = soundPart(c); var r = p && relOf(c, p); return r === 'partial' || r === 'near' || r === 'none'; }
+    function readingKey(c) { return JA ? c.on[0] : c.pinyin; }
+    function newGuess() {
+      var pool = pack.chars.filter(function (c) { return !st.seen[c.glyph] && guessable(c); });
+      if (!pool.length) { st.guess = { empty: true }; return; }
+      var unrel = pool.filter(unreliable);
+      var g = st.gStats;
+      var c = (unrel.length && g.unrel < Math.ceil((g.total + 1) / 3) ? unrel : pool)[Math.floor(Math.random() * (unrel.length && g.unrel < Math.ceil((g.total + 1) / 3) ? unrel : pool).length)];
+      var n = child() ? 3 : 4;
+      var q = { c: c, ans: {}, done: false, hints: 0 };
+      var mp = meaningPart(c);
+      if (mp) {
+        var cats = Object.keys(pack.cats).filter(function (k) { return k !== mp.cat && pack.components.some(function (x) { return x.cat === k; }); });
+        q.catOpts = KTBlock.shuffle([mp.cat].concat(KTBlock.shuffle(cats).slice(0, n - 1)));
+        q.cat = mp.cat;
+      }
+      var sp = soundPart(c);
+      if (sp && relOf(c, sp)) {
+        var truth = readingKey(c), cr = compReading(sp.glyph);
+        var cand = [truth].concat(JA ? cr : [cr]);
+        KTBlock.shuffle(pack.chars).forEach(function (x) {
+          var r = readingKey(x); if (r && x !== c && x.parts.some(function (p) { return p.glyph === sp.glyph || (mp && p.glyph === mp.glyph); })) cand.push(r);
+        });
+        KTBlock.shuffle(pack.chars).forEach(function (x) { var r = readingKey(x); if (r) cand.push(r); });
+        var uniq = []; cand.forEach(function (r) { if (uniq.indexOf(r) < 0 && uniq.length < n) uniq.push(r); });
+        q.readOpts = KTBlock.shuffle(uniq); q.read = truth;
+      }
+      g.total++; if (unreliable(c)) g.unrel++;
+      st.guess = q;
+    }
+    function submitGuess() {
+      var q = st.guess, c = q.c;
+      if ((q.catOpts && !q.ans.cat) || (q.readOpts && !q.ans.read)) { note('两个问题都选一个再提交。猜错没关系。', 'warn'); return; }
+      if (q.catOpts) B.attempt(c.glyph + ':meaning', { correct: q.ans.cat === q.cat, response: q.ans.cat });
+      if (q.readOpts) B.attempt(c.glyph + ':sound', { correct: q.ans.read === q.read, response: q.ans.read });
+      finishGuess();
+    }
+    function finishGuess() { var q = st.guess; q.done = true; markSeen(q.c); render(); say(q.c); }
+    function renderGuess() {
+      if (!st.guess) newGuess();
+      var q = st.guess;
+      bar.innerHTML = '';
+      var left = pack.chars.filter(function (c) { return !st.seen[c.glyph] && guessable(c); }).length;
+      bar.append(h('span', { class: 'kb-note', text: '只出你还没看过的字（剩 ' + left + ' 个）。这是迁移：用部件线索猜，不靠记忆。' }),
+        h('button', { class: 'kb-btn', onclick: function () { st.seen = {}; B.store(seenKey, {}); st.guess = null; render(); } }, '清空“已看过”'));
+      body.innerHTML = ''; side.innerHTML = '';
+      if (q.empty) { body.append(h('div', { class: 'kb-card', text: '这个数据包里的字你都看过了。清空“已看过”后可以再来，但那时就不算迁移了。' })); return; }
+      var c = q.c, mp = meaningPart(c), sp = soundPart(c);
+      var card = h('div', { class: 'kb-card' }, [
+        h('div', { class: 'hero' }, [h('div', { class: 'big', text: c.glyph }), diagram(c.structure, partSlots(c)),
+          h('div', { class: 'meta' }, c.parts.map(function (p) { return h('p', {}, [h('b', { class: 'cjk', text: p.glyph }), ' ', p.name, ' ', h('span', { class: 'role r-' + p.role, text: ROLE[p.role] })]); }))])
+      ]);
+      function optRow(key, opts, truth, labelFn) {
+        return h('div', { class: 'opts' }, opts.map(function (o) {
+          var cls = q.done ? (o === truth ? 'right' : (q.ans[key] === o ? 'wrongpick' : '')) : '';
+          return h('button', { class: cls, 'aria-pressed': q.ans[key] === o ? 'true' : 'false', disabled: q.done,
+            onclick: function () { q.ans[key] = o; B.emit('select', { item: c.glyph, question: key, choice: o }); render(); } }, labelFn(o));
+        }));
+      }
+      if (q.catOpts) card.append(h('p', { class: 'kb-prompt', text: '① 看表意部件：这个字的意思大概和什么有关？' }), optRow('cat', q.catOpts, q.cat, catLabel));
+      if (q.readOpts) card.append(h('p', { class: 'kb-prompt', text: '② 看表音部件：这个字最可能读什么？' }), optRow('read', q.readOpts, q.read, function (o) { return h('span', { class: JA ? 'kana' : 'tone' + pyParse(o).tone, text: o }); }));
+      if (!q.done) {
+        card.append(h('div', { class: 'kb-bar' }, [
+          h('button', { class: 'kb-btn primary', onclick: submitGuess }, '提交'),
+          h('button', { class: 'kb-btn', disabled: q.hints >= (sp ? 2 : 1), onclick: function () {
+            q.hints++; B.hint(c.glyph + (q.hints === 1 && mp ? ':meaning' : ':sound'), q.hints);
+            render();
+          } }, '提示'),
+          h('button', { class: 'kb-btn', onclick: function () { if (q.catOpts) B.reveal(c.glyph + ':meaning'); if (q.readOpts) B.reveal(c.glyph + ':sound'); finishGuess(); } }, '看答案')
+        ]));
+        if (q.hints >= 1) {
+          var hp = mp || sp;
+          var known = pack.chars.filter(function (x) { return x !== c && st.seen[x.glyph] && x.parts.some(function (p) { return p.glyph === hp.glyph; }); });
+          card.append(h('p', { class: 'kb-feedback warn' }, ['提示：这个字的“' + hp.glyph + '”你在哪个字里见过？', known.length ? ' 例如 ' + known.slice(0, 4).map(function (x) { return x.glyph; }).join(' ') : '']));
+        }
+        if (q.hints >= 2 && sp) {
+          var same = pack.chars.find(function (x) { return x !== c && st.seen[x.glyph] && x.parts.some(function (p) { return p.glyph === sp.glyph && p.role === 'sound'; }); });
+          card.append(h('p', { class: 'kb-feedback warn' }, ['提示：“' + sp.glyph + '”自己读 ', h('b', { text: [].concat(compReading(sp.glyph)).join('・') }), same ? '；' + same.glyph + ' 读 ' + readingKey(same) : '', '。']));
+        }
+        card.append(h('div', { class: 'kb-feedback', text: '猜意思和猜读音分开记录；只对一个不算猜中。' }));
+      } else {
+        var rel = sp ? relOf(c, sp) : null;
+        card.append(h('div', { class: 'kb-feedback' + (rel && CLUE[rel] === '失效' ? ' warn' : '') }, [
+          h('p', { style: 'margin:0' }, ['答案：', h('b', { class: 'big', style: 'font-size:1.6rem', text: c.glyph }), ' ', readingEl(c), ' ', playBtn(c), '　', c.meaning.zh + (c.meaning.en ? '（' + c.meaning.en + '）' : '')]),
+          mp ? h('p', {}, ['表意线索 ' + mp.glyph + '（' + catLabel(mp.cat) + '）：', h('b', { text: '有用' }), '——只告诉你大类，不等于认识这个字。']) : null,
+          rel ? h('p', {}, ['表音线索 ' + sp.glyph + '（' + [].concat(compReading(sp.glyph)).join('・') + '）：', h('b', { text: CLUE[rel] }), '——' + REL[rel] + '。']) : null,
+          JA && c.zhForm ? h('p', { class: 'kb-note', text: '中文简体写作 ' + c.zhForm + '。' }) : null
+        ]), h('div', { class: 'kb-bar' }, [h('button', { class: 'kb-btn primary', onclick: function () { st.guess = null; render(); } }, '下一个'),
+          h('button', { class: 'kb-btn', onclick: function () { st.cur = c; st.mode = 'explore'; ui.setMode('explore'); render(); } }, '拆开看这个字')]));
+      }
+      body.append(card);
+      notesFor(function (n) { return q.done && n.chars.indexOf(c.glyph) >= 0; }).forEach(function (e) { side.append(e); });
+      side.append(h('div', { class: 'kb-card reverse' }, [h('b', { text: '为什么要猜' }), h('p', { class: 'kb-note', text: '每三题里至少一题的声旁不可靠。总选“和声旁同音”的读法，会被这些题卡住——这正是要学会的：线索什么时候管用，什么时候失效。' })]));
+    }
+
+    function render() {
+      if (st.mode === 'explore') renderExplore();
+      else if (st.mode === 'family') renderFamily();
+      else if (st.mode === 'build') renderBuild();
+      else renderGuess();
+    }
+    render();
+  }
+})();
+</script>
+</body>
+</html>

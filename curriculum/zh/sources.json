@@ -1,0 +1,26 @@
+{
+ "schemaVersion": 2,
+ "language": "zh",
+ "sources": [
+  {
+   "id": "src:zh:gf0025-2021",
+   "title": "教育部、国家语委《国际中文教育中文水平等级标准》（GF 0025-2021）",
+   "url": "http://www.moe.gov.cn/jyb_xwfb/gzdt_gzdt/s5987/202103/t20210329_523304.html",
+   "authority": "official_framework",
+   "accessStatus": "unavailable",
+   "checkedOn": "2026-11-08",
+   "scope": "本轮未取得正文：教育部公告页抓取失败（重定向），浏览器打开报错；chinesetest.cn 仅链接到该公告。来源单元按该标准公开的\"三等九级\"结构（音节、汉字、词汇、语法十二类、听说读写译）建立，类别与各级字词数量来自通行介绍，未逐项核对。拿到附录 A 原文后须逐条核对语法等级大纲（共 572 个语法点），并把类别级单元细化为逐项单元。",
+   "licenseNote": "只登记类别与级别；说明、例句与掌握标准原创。"
+  },
+  {
+   "id": "src:zh:cefr-2001",
+   "title": "Council of Europe (2001) CEFR",
+   "url": "https://www.coe.int/en/web/common-european-framework-reference-languages",
+   "authority": "official_framework",
+   "accessStatus": "unavailable",
+   "checkedOn": "2026-11-08",
+   "scope": "官方页面返回 403；仅作为跨语言共用补充类别（社交功能、社会文化、语域、中介、策略）的结构参照。",
+   "licenseNote": "只引用类别名称与章节号。"
+  }
+ ]
+}

@@ -1,0 +1,991 @@
+{
+ "schemaVersion": 2,
+ "language": "en",
+ "sections": [
+  {
+   "id": "A1",
+   "label": "A1",
+   "units": [
+    "a1-01",
+    "a1-15",
+    "a1-02",
+    "a1-16",
+    "a1-03",
+    "a1-04",
+    "a1-05",
+    "a1-06",
+    "a1-07",
+    "a1-17",
+    "a1-08",
+    "a1-09",
+    "a1-10",
+    "a1-11",
+    "a1-12",
+    "a1-13",
+    "a1-14"
+   ]
+  },
+  {
+   "id": "A2",
+   "label": "A2",
+   "units": [
+    "a2-01",
+    "a2-02",
+    "a2-03",
+    "a2-04",
+    "a2-05",
+    "a2-06",
+    "a2-07",
+    "a2-08",
+    "a2-09",
+    "a2-10",
+    "a2-11",
+    "a2-12",
+    "a2-13",
+    "a2-14",
+    "a2-15",
+    "a2-16"
+   ]
+  },
+  {
+   "id": "B1",
+   "label": "B1",
+   "units": [
+    "b1-01",
+    "b1-02",
+    "b1-03",
+    "b1-04",
+    "b1-05",
+    "b1-06",
+    "b1-07",
+    "b1-08",
+    "b1-09",
+    "b1-10",
+    "b1-11",
+    "b1-12"
+   ]
+  },
+  {
+   "id": "B2",
+   "label": "B2",
+   "units": [
+    "b2-01",
+    "b2-02",
+    "b2-03",
+    "b2-04",
+    "b2-05",
+    "b2-06",
+    "b2-07",
+    "b2-08",
+    "b2-09",
+    "b2-10"
+   ]
+  },
+  {
+   "id": "C1",
+   "label": "C1",
+   "units": [
+    "c1-01",
+    "c1-02",
+    "c1-03",
+    "c1-04",
+    "c1-05"
+   ]
+  }
+ ],
+ "units": [
+  {
+   "id": "a1-01",
+   "section": "A1",
+   "title": "字母、声音与第一句问候",
+   "goal": "能拼读自己的名字，用固定语块问候、介绍与告别，听不懂时请对方重复",
+   "rationale": "入口：不需要任何语法就能完成真实交际；字母和语音是之后所有读写与听辨的底座",
+   "kcs": [
+    "kt:en-orth-alphabet",
+    "kt:en-phon-sound-inventory",
+    "kt:en-orth-spelling-aloud",
+    "kt:en-fn-greetings",
+    "kt:en-soc-politeness-basic",
+    "kt:en-str-repair-basic",
+    "kt:en-str-gesture-contact",
+    "kt:en-fn-thanks-apologies"
+   ]
+  },
+  {
+   "id": "a1-15",
+   "section": "A1",
+   "title": "字母和声音的对应（自然拼读入门）",
+   "goal": "能听出押韵和首音，拼读 cat、ship 这类规则单词，认读 the、said 等高频词，正确书写字母",
+   "rationale": "紧跟字母名称：先会按字母读出声音，之后每个单元的新词都能自己读出来；低龄学习者从这里进入读写",
+   "kcs": [
+    "kt:en-phon-awareness",
+    "kt:en-orth-letter-sounds",
+    "kt:en-orth-cvc-decoding",
+    "kt:en-orth-digraphs-blends",
+    "kt:en-orth-sight-words",
+    "kt:en-orth-handwriting"
+   ]
+  },
+  {
+   "id": "a1-02",
+   "section": "A1",
+   "title": "我是谁",
+   "goal": "能说出并询问姓名、国籍、年龄、职业等个人信息",
+   "rationale": "身份与归类是最高频的陈述；be 是英语句子的第一个骨架",
+   "kcs": [
+    "kt:en-word-order-svo",
+    "kt:en-personal-pronouns",
+    "kt:en-be-present",
+    "kt:en-be-questions",
+    "kt:en-lex-personal-info",
+    "kt:en-lex-nationalities",
+    "kt:en-fn-personal-info",
+    "kt:en-phon-intonation-questions"
+   ]
+  },
+  {
+   "id": "a1-16",
+   "section": "A1",
+   "title": "课堂用语与听指令做动作",
+   "goal": "能听懂\"坐下、打开书、指一指\"等指令并做出动作，能问\"这个用英语怎么说\"，能说出课堂物品与学科",
+   "rationale": "\"怎么说\"是学习者自己获取新词的工具，越早越好；听指令做动作不依赖读写，是儿童课程的主要入口活动",
+   "kcs": [
+    "kt:en-fn-classroom-language",
+    "kt:en-skill-listen-and-do",
+    "kt:en-lex-school-classroom"
+   ]
+  },
+  {
+   "id": "a1-03",
+   "section": "A1",
+   "title": "这是什么",
+   "goal": "能指着身边的东西问名字、说颜色和大小",
+   "rationale": "指认与命名是最早的词汇扩展工具：学会 What's this? 就能自己问到新词",
+   "kcs": [
+    "kt:en-demonstratives",
+    "kt:en-articles-a-an",
+    "kt:en-noun-plural",
+    "kt:en-orth-inflection-spelling",
+    "kt:en-phon-s-endings",
+    "kt:en-wh-questions",
+    "kt:en-common-adjectives",
+    "kt:en-lex-colours",
+    "kt:en-lex-dimensions",
+    "kt:en-lex-clothes"
+   ]
+  },
+  {
+   "id": "a1-04",
+   "section": "A1",
+   "title": "数字、价格与时间",
+   "goal": "能听懂并说出数字、价格、钟点和日期，完成简单的买票或预约",
+   "rationale": "数字是交易和时间安排的前提；A1 情景里最常出错也最容易测的信息",
+   "kcs": [
+    "kt:en-fn-numbers",
+    "kt:en-numbers-ordinal-dates",
+    "kt:en-lex-days-months",
+    "kt:en-phon-number-discrimination",
+    "kt:en-fn-prices",
+    "kt:en-dummy-it",
+    "kt:en-fn-clock-time"
+   ]
+  },
+  {
+   "id": "a1-05",
+   "section": "A1",
+   "title": "我的家人和我的东西",
+   "goal": "能介绍家人、说明东西属于谁",
+   "rationale": "领属是最基础的关系意义之一，直接支撑介绍家庭",
+   "kcs": [
+    "kt:en-possessive-determiners",
+    "kt:en-possessive-genitive",
+    "kt:en-possessive-pronouns",
+    "kt:en-have-got",
+    "kt:en-topic-family"
+   ]
+  },
+  {
+   "id": "a1-06",
+   "section": "A1",
+   "title": "我的一天",
+   "goal": "能描述自己和别人的日常作息与习惯",
+   "rationale": "一般现在时承担习惯与事实；作息是最容易用自己生活练习的话题",
+   "kcs": [
+    "kt:en-present-simple",
+    "kt:en-third-person-s",
+    "kt:en-do-questions",
+    "kt:en-adverbs-frequency",
+    "kt:en-prepositions-time",
+    "kt:en-lex-basic-verbs",
+    "kt:en-fn-routines",
+    "kt:en-topic-work-jobs",
+    "kt:en-and-but-because"
+   ]
+  },
+  {
+   "id": "a1-07",
+   "section": "A1",
+   "title": "喜欢与想要",
+   "goal": "能说出喜好，点餐，礼貌地说想要什么",
+   "rationale": "表达愿望是交易的核心；I'd like 作为语块先于情态系统学习",
+   "kcs": [
+    "kt:en-like-ing",
+    "kt:en-would-like",
+    "kt:en-countability",
+    "kt:en-some-any",
+    "kt:en-lex-food-drink",
+    "kt:en-topic-hobbies",
+    "kt:en-topic-leisure",
+    "kt:en-lex-sports-games"
+   ]
+  },
+  {
+   "id": "a1-17",
+   "section": "A1",
+   "title": "动物、身体、天气与感受",
+   "goal": "能说出常见动物、身体部位、玩具和形状，用 It's sunny 谈天气，用 I'm hungry/tired 说自己的状态",
+   "rationale": "只用 be 和 have got 就能谈的生活词汇；儿童课程的核心话题，也是成人闲谈天气的起点",
+   "kcs": [
+    "kt:en-lex-animals",
+    "kt:en-lex-body",
+    "kt:en-lex-weather-seasons",
+    "kt:en-lex-feelings-basic",
+    "kt:en-lex-toys-shapes"
+   ]
+  },
+  {
+   "id": "a1-08",
+   "section": "A1",
+   "title": "在城里找路",
+   "goal": "能问路、听懂简单路线，说明东西在哪里",
+   "rationale": "存在句 + 方位介词 + 祈使句组成完整的问路交际",
+   "kcs": [
+    "kt:en-there-is-are",
+    "kt:en-prepositions-place",
+    "kt:en-imperatives",
+    "kt:en-lex-town-shops",
+    "kt:en-article-the-basic",
+    "kt:en-fn-directions",
+    "kt:en-skill-read-signs",
+    "kt:en-skill-listen-directions"
+   ]
+  },
+  {
+   "id": "a1-09",
+   "section": "A1",
+   "title": "我能做什么、能不能帮我",
+   "goal": "能说出会做和不会做的事，礼貌地请求和征求许可",
+   "rationale": "can 是第一个情态动词：形式不变，意义直观",
+   "kcs": [
+    "kt:en-can-ability",
+    "kt:en-can-could-requests",
+    "kt:en-lex-ways-travelling",
+    "kt:en-lex-travel-services",
+    "kt:en-skill-transactions"
+   ]
+  },
+  {
+   "id": "a1-10",
+   "section": "A1",
+   "title": "现在正在发生",
+   "goal": "能描述眼前正在发生的事和暂时的状态",
+   "rationale": "进行体与一般现在时的对立是英语时体系统的第一组对立",
+   "kcs": [
+    "kt:en-present-continuous",
+    "kt:en-skill-describe-picture"
+   ]
+  },
+  {
+   "id": "a1-11",
+   "section": "A1",
+   "title": "昨天和上个周末",
+   "goal": "能讲述过去发生的简单事情并就此提问",
+   "rationale": "有了现在时的对立后再进入过去时；先 was/were，再实义动词",
+   "kcs": [
+    "kt:en-past-be",
+    "kt:en-past-simple",
+    "kt:en-irregular-past",
+    "kt:en-phon-ed-endings",
+    "kt:en-past-questions",
+    "kt:en-past-time-expressions",
+    "kt:en-skill-listen-stories"
+   ]
+  },
+  {
+   "id": "a1-12",
+   "section": "A1",
+   "title": "假期计划",
+   "goal": "能说出接下来的打算",
+   "rationale": "going to 形式透明、与 be 衔接，先于 will 用来表达计划",
+   "kcs": [
+    "kt:en-going-to",
+    "kt:en-topic-holidays"
+   ]
+  },
+  {
+   "id": "a1-13",
+   "section": "A1",
+   "title": "购物与比较",
+   "goal": "能比较两件东西，说出最贵、最好的",
+   "rationale": "比较是选择与购物的核心意义；在形容词之后学习",
+   "kcs": [
+    "kt:en-comparatives",
+    "kt:en-superlatives",
+    "kt:en-basic-intensifiers",
+    "kt:en-topic-shopping"
+   ]
+  },
+  {
+   "id": "a1-14",
+   "section": "A1",
+   "title": "填表、写明信片、听通知",
+   "goal": "能填写个人信息表，写几句话的明信片，听懂慢速通知中的关键信息",
+   "rationale": "把 A1 语言整合成读写听的真实任务（Core Inventory A1 情景：度假）",
+   "kcs": [
+    "kt:en-orth-capitals-punctuation",
+    "kt:en-skill-write-forms",
+    "kt:en-skill-write-messages",
+    "kt:en-skill-read-informational",
+    "kt:en-skill-listen-announcements",
+    "kt:en-skill-spoken-interaction-basic"
+   ]
+  },
+  {
+   "id": "a2-01",
+   "section": "A2",
+   "title": "描述一个人",
+   "goal": "能描述人的外貌、性格和感受",
+   "rationale": "进入 A2 先扩展描述能力，复用 A1 的 be 与形容词",
+   "kcs": [
+    "kt:en-fn-people",
+    "kt:en-lex-personality-adjectives",
+    "kt:en-ed-ing-adjectives",
+    "kt:en-phon-word-stress",
+    "kt:en-reflexive-pronouns"
+   ]
+  },
+  {
+   "id": "a2-02",
+   "section": "A2",
+   "title": "描述地方与物品",
+   "goal": "能描述房间、城镇和物品的位置、样子和用途",
+   "rationale": "空间描述把方位介词扩展到移动与状语",
+   "kcs": [
+    "kt:en-fn-places",
+    "kt:en-fn-things",
+    "kt:en-lex-objects-rooms",
+    "kt:en-prepositions-movement",
+    "kt:en-adverbs-place-manner",
+    "kt:en-adverbial-phrases"
+   ]
+  },
+  {
+   "id": "a2-03",
+   "section": "A2",
+   "title": "讲一段经历",
+   "goal": "能按顺序讲述过去的事件，交代背景",
+   "rationale": "过去进行时在一般过去时之上增加\"背景/事件\"的对立；顺序连接词让叙述成段",
+   "kcs": [
+    "kt:en-past-continuous",
+    "kt:en-before-after",
+    "kt:en-past-sequencing",
+    "kt:en-used-to",
+    "kt:en-fn-past-experience",
+    "kt:en-skill-write-narrative"
+   ]
+  },
+  {
+   "id": "a2-04",
+   "section": "A2",
+   "title": "你做过吗",
+   "goal": "能谈论到目前为止的经历和刚完成的事",
+   "rationale": "现在完成时依赖过去分词和一般过去时的对比，放在过去时稳定之后",
+   "kcs": [
+    "kt:en-past-participles",
+    "kt:en-present-perfect",
+    "kt:en-pp-adverbs"
+   ]
+  },
+  {
+   "id": "a2-05",
+   "section": "A2",
+   "title": "约朋友出去",
+   "goal": "能邀请、提建议、接受或拒绝，并约好时间地点",
+   "rationale": "Core Inventory A2 情景\"一起出去\"：计划类交际集中在这里",
+   "kcs": [
+    "kt:en-present-continuous-future",
+    "kt:en-will-future",
+    "kt:en-fn-invitations",
+    "kt:en-fn-suggestions",
+    "kt:en-fn-offers",
+    "kt:en-fn-arrangements",
+    "kt:en-skill-informal-discussion",
+    "kt:en-fn-congratulate-sympathy"
+   ]
+  },
+  {
+   "id": "a2-06",
+   "section": "A2",
+   "title": "规则、义务与建议",
+   "goal": "能说明规定、必须做和不必做的事，给出建议",
+   "rationale": "义务类情态按\"外部规定（have to）→ 说话人判断（must / should）\"展开",
+   "kcs": [
+    "kt:en-have-to",
+    "kt:en-must-mustnt",
+    "kt:en-should-advice",
+    "kt:en-fn-obligation",
+    "kt:en-fn-advice",
+    "kt:en-fn-requests",
+    "kt:en-soc-softening",
+    "kt:en-make-let-help"
+   ]
+  },
+  {
+   "id": "a2-07",
+   "section": "A2",
+   "title": "也许会、可能是",
+   "goal": "能表达不确定和可能性",
+   "rationale": "可能性情态在义务情态之后：同一组 modal 承担第二种意义",
+   "kcs": [
+    "kt:en-may-might",
+    "kt:en-possibly-probably"
+   ]
+  },
+  {
+   "id": "a2-08",
+   "section": "A2",
+   "title": "如果……就……",
+   "goal": "能说明规律性条件和可能发生的结果",
+   "rationale": "条件句建立在一般现在时和 will 之上",
+   "kcs": [
+    "kt:en-zero-conditional",
+    "kt:en-first-conditional"
+   ]
+  },
+  {
+   "id": "a2-09",
+   "section": "A2",
+   "title": "动词后面接什么",
+   "goal": "能在常见动词后正确选择 -ing 或 to 不定式，说明目的",
+   "rationale": "把 A1 的 like -ing 和 I'd like to 两个语块推广成规则",
+   "kcs": [
+    "kt:en-gerunds",
+    "kt:en-verb-to-infinitive",
+    "kt:en-infinitive-purpose"
+   ]
+  },
+  {
+   "id": "a2-10",
+   "section": "A2",
+   "title": "多少与哪些",
+   "goal": "能准确表达数量和范围",
+   "rationale": "数量限定词与冠词共同依赖可数性",
+   "kcs": [
+    "kt:en-much-many",
+    "kt:en-determiners-wider",
+    "kt:en-articles-the-zero",
+    "kt:en-fewer-less",
+    "kt:en-basic-intensifiers-2",
+    "kt:en-indefinite-pronouns"
+   ]
+  },
+  {
+   "id": "a2-11",
+   "section": "A2",
+   "title": "学习与工作",
+   "goal": "能谈论学校、课程和工作",
+   "rationale": "Core Inventory A2 新增话题\"教育\"",
+   "kcs": [
+    "kt:en-topic-education",
+    "kt:en-phrasal-basic",
+    "kt:en-that-clauses"
+   ]
+  },
+  {
+   "id": "a2-12",
+   "section": "A2",
+   "title": "出门在外",
+   "goal": "能读懂时刻表和指示，处理出行中的常见问题",
+   "rationale": "把交通与服务情景从 A1 的固定语块推进到连续文本",
+   "kcs": [
+    "kt:en-skill-read-instructions",
+    "kt:en-skill-read-correspondence",
+    "kt:en-str-skim-scan",
+    "kt:en-topic-technology",
+    "kt:en-skill-digital-messaging"
+   ]
+  },
+  {
+   "id": "a2-13",
+   "section": "A2",
+   "title": "说一段、问清楚",
+   "goal": "能做简短描述性独白，用固定说法请对方澄清，用不准确的词加手势补救",
+   "rationale": "A2 的策略能力：从依赖对方到主动补救",
+   "kcs": [
+    "kt:en-skill-spoken-monologue",
+    "kt:en-str-ask-clarification",
+    "kt:en-str-approximate",
+    "kt:en-phon-sentence-stress",
+    "kt:en-phon-weak-forms",
+    "kt:en-subject-questions"
+   ]
+  },
+  {
+   "id": "a2-14",
+   "section": "A2",
+   "title": "看病、求助与打电话",
+   "goal": "能向医生或药剂师描述症状，遇到紧急情况能求助，能打电话预约、改约或取消",
+   "rationale": "生存需要：成人在国外最先遇到的高风险场景；依赖 A1 的请求句型、数字和时间",
+   "kcs": [
+    "kt:en-topic-health",
+    "kt:en-fn-emergencies-help",
+    "kt:en-fn-telephone",
+    "kt:en-fn-appointments"
+   ]
+  },
+  {
+   "id": "a2-15",
+   "section": "A2",
+   "title": "住房、钱与日常服务",
+   "goal": "能询问和描述住房、报修，能在银行、邮局等场所办理简单业务",
+   "rationale": "接在求助与电话之后，覆盖剩余的日常服务场景",
+   "kcs": [
+    "kt:en-topic-housing",
+    "kt:en-topic-money-services"
+   ]
+  },
+  {
+   "id": "a2-16",
+   "section": "A2",
+   "title": "拼读进阶与学习工具",
+   "goal": "能拼读长元音和多音节词，能读音标，能查词典找到读音、词性和例句并记录生词",
+   "rationale": "A2 起词汇量快速增长，学习者需要能自己处理生词的读音和用法",
+   "kcs": [
+    "kt:en-orth-long-vowels",
+    "kt:en-orth-vowel-patterns",
+    "kt:en-orth-multisyllable",
+    "kt:en-phon-ipa",
+    "kt:en-str-dictionary-learning"
+   ]
+  },
+  {
+   "id": "b1-01",
+   "section": "B1",
+   "title": "经历与感受",
+   "goal": "能连贯地讲述经历，说明感受及原因",
+   "rationale": "B1 把过去时体系补全：过去完成、现在完成与一般过去的对比",
+   "kcs": [
+    "kt:en-fn-events",
+    "kt:en-fn-feelings",
+    "kt:en-past-perfect",
+    "kt:en-present-perfect-vs-past",
+    "kt:en-present-perfect-continuous",
+    "kt:en-for-since",
+    "kt:en-would-habit",
+    "kt:en-topic-relationships",
+    "kt:en-be-get-used-to"
+   ]
+  },
+  {
+   "id": "b1-02",
+   "section": "B1",
+   "title": "说出你的看法",
+   "goal": "能表达观点、同意与不同意并给出理由",
+   "rationale": "Core Inventory B1 情景\"网络论坛\"：观点与因果对比连接词",
+   "kcs": [
+    "kt:en-fn-opinion",
+    "kt:en-because-so",
+    "kt:en-cause-effect-linkers",
+    "kt:en-however",
+    "kt:en-contrast-linkers",
+    "kt:en-contrasting-opinions",
+    "kt:en-prefer-would-rather"
+   ]
+  },
+  {
+   "id": "b1-03",
+   "section": "B1",
+   "title": "把对话撑下去",
+   "goal": "能开启和结束交谈、确认理解、打断与转换话题，用附加问句和简短回应保持互动",
+   "rationale": "互动管理是 B1 交际自主的标志",
+   "kcs": [
+    "kt:en-fn-open-close",
+    "kt:en-fn-check-understanding",
+    "kt:en-fn-manage-turns",
+    "kt:en-informal-spoken-markers",
+    "kt:en-question-tags",
+    "kt:en-short-responses",
+    "kt:en-str-ask-elaborate",
+    "kt:en-str-self-correct",
+    "kt:en-soc-small-talk"
+   ]
+  },
+  {
+   "id": "b1-04",
+   "section": "B1",
+   "title": "预测未来",
+   "goal": "能对未来做出不同确定程度的预测，描述将来某时正在进行的事",
+   "rationale": "把 will / going to 从\"计划\"推到\"预测\"，并引入将来进行体",
+   "kcs": [
+    "kt:en-future-prediction",
+    "kt:en-certainty-scale",
+    "kt:en-future-continuous",
+    "kt:en-time-clauses"
+   ]
+  },
+  {
+   "id": "b1-05",
+   "section": "B1",
+   "title": "推断与事后评价",
+   "goal": "能根据证据推断，评价过去本该或可能怎样",
+   "rationale": "情态从\"现在\"扩展到\"推断\"和\"过去\"",
+   "kcs": [
+    "kt:en-must-cant-deduction",
+    "kt:en-must-vs-have-to",
+    "kt:en-ought-to",
+    "kt:en-need-to",
+    "kt:en-past-modals-evaluation",
+    "kt:en-had-better"
+   ]
+  },
+  {
+   "id": "b1-06",
+   "section": "B1",
+   "title": "如果当时……",
+   "goal": "能谈论与现实不同的假设和过去未发生的情况",
+   "rationale": "第二、第三条件句依赖过去式与过去完成的\"距离\"用法",
+   "kcs": [
+    "kt:en-second-conditional",
+    "kt:en-third-conditional"
+   ]
+  },
+  {
+   "id": "b1-07",
+   "section": "B1",
+   "title": "电影、书与新闻",
+   "goal": "能讲述书或电影的内容并评价，转述别人说的话",
+   "rationale": "话题扩展到媒体；被动与转述是讲述内容时最常用的两种结构",
+   "kcs": [
+    "kt:en-fn-talk-films-books",
+    "kt:en-topic-film",
+    "kt:en-topic-books",
+    "kt:en-topic-media",
+    "kt:en-topic-news",
+    "kt:en-passive-simple",
+    "kt:en-reported-statements",
+    "kt:en-embedded-questions",
+    "kt:en-topic-environment"
+   ]
+  },
+  {
+   "id": "b1-08",
+   "section": "B1",
+   "title": "说得更准确",
+   "goal": "能用副词、程度词和比较更精确地修饰",
+   "rationale": "修饰系统的扩展：从形容词到副词与程度",
+   "kcs": [
+    "kt:en-adjectives-adverbs",
+    "kt:en-adverbs-degree-probability",
+    "kt:en-adverb-comparison",
+    "kt:en-too-enough",
+    "kt:en-wide-intensifiers",
+    "kt:en-adjective-collocation",
+    "kt:en-relative-defining",
+    "kt:en-determiners-broad",
+    "kt:en-so-such"
+   ]
+  },
+  {
+   "id": "b1-09",
+   "section": "B1",
+   "title": "词汇的自然组合",
+   "goal": "能使用常见搭配、口语说法和扩展短语动词，并从上下文推测生词",
+   "rationale": "词汇从\"认识单词\"转向\"自然地组合\"",
+   "kcs": [
+    "kt:en-collocation",
+    "kt:en-colloquial-language",
+    "kt:en-phrasal-extended",
+    "kt:en-word-formation",
+    "kt:en-str-guess-from-context"
+   ]
+  },
+  {
+   "id": "b1-10",
+   "section": "B1",
+   "title": "在线论坛",
+   "goal": "能读懂文章的要点，在网络讨论中发帖回应，听懂广播新闻的主要内容",
+   "rationale": "Core Inventory B1 情景：读、写、互动在一个任务里整合",
+   "kcs": [
+    "kt:en-skill-read-articles",
+    "kt:en-skill-forum-post",
+    "kt:en-str-key-points",
+    "kt:en-skill-listen-conversation",
+    "kt:en-skill-listen-media",
+    "kt:en-skill-read-narrative",
+    "kt:en-skill-relay-information",
+    "kt:en-phon-linking",
+    "kt:en-phon-word-boundaries",
+    "kt:en-soc-varieties"
+   ]
+  },
+  {
+   "id": "b1-11",
+   "section": "B1",
+   "title": "解决问题：投诉与职场日常",
+   "goal": "能礼貌而坚定地投诉并提出要求，能谈论公司、部门和日常工作",
+   "rationale": "B1 学会表达观点与对话管理之后，才能在冲突场景中保持礼貌；职场课程的起点",
+   "kcs": [
+    "kt:en-fn-complaints",
+    "kt:en-topic-work-business"
+   ]
+  },
+  {
+   "id": "b1-12",
+   "section": "B1",
+   "title": "数字、数据与趋势",
+   "goal": "能读写大数、百分比和小数，能描述图表中的上升、下降与对比",
+   "rationale": "职场、学术与青少年考试都要求描述数据；依赖比较级和过去时",
+   "kcs": [
+    "kt:en-lex-numbers-data",
+    "kt:en-fn-describe-trends"
+   ]
+  },
+  {
+   "id": "b2-01",
+   "section": "B2",
+   "title": "讲述经历：叙事时态",
+   "goal": "能在叙述中灵活组合一般过去、过去进行、过去完成及其进行体，表达希望与计划",
+   "rationale": "Core Inventory B2 把各过去时形式作为\"叙事\"系统重新组织",
+   "kcs": [
+    "kt:en-narrative-tenses",
+    "kt:en-past-perfect-continuous",
+    "kt:en-subsequently",
+    "kt:en-fn-hopes-plans"
+   ]
+  },
+  {
+   "id": "b2-02",
+   "section": "B2",
+   "title": "未来的截止点",
+   "goal": "能说明到某个将来时间点为止已完成或持续了多久",
+   "rationale": "将来完成体是\"截止参照点 + 完成/持续\"的组合",
+   "kcs": [
+    "kt:en-future-perfect",
+    "kt:en-future-perfect-continuous"
+   ]
+  },
+  {
+   "id": "b2-03",
+   "section": "B2",
+   "title": "精确与抽象",
+   "goal": "能给出精确信息，解释抽象概念，概括并加以限定",
+   "rationale": "把描述能力从具体推向抽象：关系从句与复杂名词短语是工具",
+   "kcs": [
+    "kt:en-fn-precise-info",
+    "kt:en-fn-abstract-ideas",
+    "kt:en-fn-generalise-qualify",
+    "kt:en-articles-abstract",
+    "kt:en-relative-nondefining",
+    "kt:en-complex-noun-phrases",
+    "kt:en-participle-clauses",
+    "kt:en-substitution-ellipsis"
+   ]
+  },
+  {
+   "id": "b2-04",
+   "section": "B2",
+   "title": "推测与确定性",
+   "goal": "能区分确定、可能和怀疑，对现在和过去做推测",
+   "rationale": "推测系统：情态 + 情态完成 + 态度副词",
+   "kcs": [
+    "kt:en-fn-certainty",
+    "kt:en-fn-speculate",
+    "kt:en-modal-speculation",
+    "kt:en-past-modal-deduction",
+    "kt:en-neednt-have",
+    "kt:en-attitudinal-adverbs"
+   ]
+  },
+  {
+   "id": "b2-05",
+   "section": "B2",
+   "title": "提出方案并说服",
+   "goal": "能陈述理由、展开论证、回应异议、总结立场",
+   "rationale": "Core Inventory B2 情景\"创业\"：论证、正式结构标记、策略",
+   "kcs": [
+    "kt:en-fn-argument",
+    "kt:en-fn-persuade",
+    "kt:en-although",
+    "kt:en-despite",
+    "kt:en-formal-signposting",
+    "kt:en-summarising",
+    "kt:en-fn-synthesis",
+    "kt:en-intensifier-collocation",
+    "kt:en-complex-sentences",
+    "kt:en-str-plan",
+    "kt:en-str-circumlocution",
+    "kt:en-skill-presentation",
+    "kt:en-str-gain-time",
+    "kt:en-phon-intonation"
+   ]
+  },
+  {
+   "id": "b2-06",
+   "section": "B2",
+   "title": "讨论中的互动",
+   "goal": "能主动推进讨论，邀请他人发言，表达兴趣、同情与惊讶，评论作品与服务",
+   "rationale": "互动管理从\"维持\"进入\"主导\"",
+   "kcs": [
+    "kt:en-fn-initiative",
+    "kt:en-fn-invite-participation",
+    "kt:en-fn-reactions",
+    "kt:en-fn-review",
+    "kt:en-str-follow-up",
+    "kt:en-skill-formal-discussion"
+   ]
+  },
+  {
+   "id": "b2-07",
+   "section": "B2",
+   "title": "被动与转述的全貌",
+   "goal": "能在各种时态和情态中使用被动，准确转述问题、请求与观点",
+   "rationale": "被动与转述系统补全",
+   "kcs": [
+    "kt:en-passive-range",
+    "kt:en-causative",
+    "kt:en-reported-questions",
+    "kt:en-reporting-verbs"
+   ]
+  },
+  {
+   "id": "b2-08",
+   "section": "B2",
+   "title": "愿望与跨时间的假设",
+   "goal": "能表达对现状的不满愿望，组合不同时间的条件",
+   "rationale": "条件系统合并：过去条件 + 现在结果",
+   "kcs": [
+    "kt:en-mixed-conditionals",
+    "kt:en-wish-present",
+    "kt:en-conditional-alternatives"
+   ]
+  },
+  {
+   "id": "b2-09",
+   "section": "B2",
+   "title": "文化、艺术与长篇输入",
+   "goal": "能读评论与社论，听懂讲座要点，写有论证的文章",
+   "rationale": "B2 输入输出的文本类型扩展",
+   "kcs": [
+    "kt:en-topic-arts",
+    "kt:en-adjective-adverb-choice",
+    "kt:en-skill-read-argument",
+    "kt:en-skill-listen-lectures",
+    "kt:en-skill-listen-film",
+    "kt:en-skill-write-essay",
+    "kt:en-skill-write-formal-correspondence",
+    "kt:en-skill-read-documents",
+    "kt:en-skill-paraphrase",
+    "kt:en-skill-summary",
+    "kt:en-skill-interview",
+    "kt:en-phon-context",
+    "kt:en-phon-listen-repeat",
+    "kt:en-orth-punctuation-advanced"
+   ]
+  },
+  {
+   "id": "b2-10",
+   "section": "B2",
+   "title": "职场：谈判、求职与报告",
+   "goal": "能在谈判中提出条件和让步，写简历、求职信和结构清楚的报告",
+   "rationale": "依赖 B2 的说服、正式路标语和被动语态；职场课程的 B2 核心",
+   "kcs": [
+    "kt:en-fn-negotiate",
+    "kt:en-skill-write-cv-cover",
+    "kt:en-skill-write-report"
+   ]
+  },
+  {
+   "id": "c1-01",
+   "section": "C1",
+   "title": "精确表达态度与立场",
+   "goal": "能精确表达态度与感受，给出有细微差别的观点，试探性地表达并强调重点",
+   "rationale": "C1 的功能重心：分寸与强调",
+   "kcs": [
+    "kt:en-fn-precision",
+    "kt:en-fn-shades-opinion",
+    "kt:en-fn-hedging",
+    "kt:en-cleft-sentences",
+    "kt:en-fn-emphasis",
+    "kt:en-negative-inversion"
+   ]
+  },
+  {
+   "id": "c1-02",
+   "section": "C1",
+   "title": "系统论证",
+   "goal": "能系统地组织论证，让步、有说服力地维护立场并回应反驳",
+   "rationale": "Core Inventory C1 功能的主体",
+   "kcs": [
+    "kt:en-fn-systematic-argument",
+    "kt:en-fn-concede",
+    "kt:en-fn-defend-view",
+    "kt:en-fn-counterarguments",
+    "kt:en-fn-constructive-review",
+    "kt:en-logical-markers",
+    "kt:en-signposting-registers"
+   ]
+  },
+  {
+   "id": "c1-03",
+   "section": "C1",
+   "title": "研究与综合",
+   "goal": "能综合多个来源，提出原因与后果的假设，按学术体裁规范起草与修改",
+   "rationale": "Core Inventory C1 情景\"研究\"",
+   "kcs": [
+    "kt:en-fn-hypothesise",
+    "kt:en-fn-define-exemplify",
+    "kt:en-str-infer-attitude",
+    "kt:en-str-outline-sources",
+    "kt:en-str-draft-redraft",
+    "kt:en-soc-academic-conventions",
+    "kt:en-lex-greek-latin",
+    "kt:en-skill-read-complex",
+    "kt:en-skill-write-academic",
+    "kt:en-skill-note-taking",
+    "kt:en-skill-read-literature"
+   ]
+  },
+  {
+   "id": "c1-04",
+   "section": "C1",
+   "title": "语法的成熟控制",
+   "goal": "能在叙述和论证中自如使用全部时态、被动、情态完成和复杂条件",
+   "rationale": "Core Inventory C1 语法以\"复习 + 全部形式\"为主：控制力而非新形式",
+   "kcs": [
+    "kt:en-narrative-control",
+    "kt:en-future-revision",
+    "kt:en-modals-past",
+    "kt:en-mixed-conditionals-advanced",
+    "kt:en-wish-regret",
+    "kt:en-phrasal-splitting"
+   ]
+  },
+  {
+   "id": "c1-05",
+   "section": "C1",
+   "title": "词汇的精度与语域",
+   "goal": "能区分近义、语域与惯用表达，适当使用模糊语和专业话题词汇",
+   "rationale": "C1 词汇：选择最贴切的而不是认识更多的",
+   "kcs": [
+    "kt:en-vague-language",
+    "kt:en-lexical-precision",
+    "kt:en-false-friends",
+    "kt:en-formal-informal-register",
+    "kt:en-idiomatic-expressions",
+    "kt:en-topic-science",
+    "kt:en-topic-technical-legal",
+    "kt:en-lex-topic-collocations"
+   ]
+  }
+ ]
+}

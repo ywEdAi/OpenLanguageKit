@@ -1,0 +1,1169 @@
+{
+  "schemaVersion": 1,
+  "title": "语言学习 pedagogy 与 learning sciences",
+  "language": "shared",
+  "verifiedOn": "2026-11-07",
+  "scope": "有来源和边界的选择性初版。不是系统综述、效应量合成或难度推荐算法。",
+  "kindDefinitions": {
+    "theory": "组织多个主张的解释框架。",
+    "hypothesis": "可争论的学习过程或条件主张。",
+    "effect": "特定比较、测量与条件下的经验结果。",
+    "practice": "教学或练习操作。",
+    "mechanism": "候选过程；固定契约中的构念例外另用 subtype 标明。"
+  },
+  "evidenceStatusDefinitions": {
+    "debated_hypothesis": "原始假说，关键必要性、充分性或操作化仍有争议。",
+    "theory_informed_practice": "由理论启发的操作；本产品效果未检验。",
+    "theoretical_framework": "解释框架，不是单条已证实的教学效果。",
+    "empirical_practice_bounded": "有指定研究的实践，适用范围见 evidenceScope。",
+    "proposed_mechanism": "过程解释候选，不等于已证明因果机制。",
+    "hypothesis_with_bounded_process_evidence": "有过程数据的假说，未推导普遍学习效果。",
+    "hypothesis_with_bounded_experimental_evidence": "有指定实验支持的假说，不能作普遍效果承诺。",
+    "empirical_effect_bounded": "所引实验支持的比较结果，未在本轮重新合成全部证据。",
+    "construct_with_bounded_empirical_evidence": "构念附有限经验示例，非单一机制。",
+    "theory_with_bounded_experimental_evidence": "框架有指定实验支持，不代表唯一解释。",
+    "construct_measurement_bounded": "有指定构念测量研究，具体任务不是纯指标。"
+  },
+  "basisDefinitions": {
+    "theoretical_claim": "来源中的理论命题或作者解释。",
+    "empirical_finding": "限定条件下的原研究结果。",
+    "conceptual_distinction": "本图谱按所引框架划分概念层次，不表示原作者共同发表了比较结论。",
+    "design_inference": "编辑者从研究提出的项目设计，来源不证明该项目效果。"
+  },
+  "relationDefinitions": {
+    "motivates_practice": "为实践方向提供理论动机，不保证效果。",
+    "distinct_from": "不同概念或分析层次，不是互斥或完全无关。",
+    "informs_design": "启发一项待验证的设计。",
+    "qualifies_interpretation": "对目标节点的解释提出限定或争议。",
+    "proposes_process_link": "理论提出一种可能过程联系。",
+    "may_include": "一个活动可能包含另一实践，不是必要条件。",
+    "may_elicit_revision": "某些研究中的反馈后出现修订，非所有学习者的必然反应。",
+    "can_take_form_of": "来源中一种具体的操作形式。",
+    "outcome_not_identical_to_method": "干预类别不能直接决定结果构念。",
+    "yields_bounded_effect": "在来源的实验条件下观察到结果，不作无条件因果外推。",
+    "can_combine_in_design": "可以组合的项目设计，不是已经验证的交互效应。",
+    "supports_bounded_outcome": "来源支持有限结果。",
+    "limits_generalization": "研究结果限制外推。"
+  },
+  "review": {
+    "status": "independent_review_conditions_addressed",
+    "method": "independent_same_model_subagent",
+    "systematicReview": false,
+    "reviewer": "pedagogy_review",
+    "model": "inherited_current_chat_model",
+    "verdict": "适合作为有边界的初版。两个必要修正已落实；不代表学科专家评审或学习效果验证。",
+    "corrections": [
+      "Vygotsky 访问深度改为原文索引摘录，保留 PDF 访问失败信息。",
+      "预测续句候选移除未被任务操作保证的 retrieval-practice 关联。"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "ped:input-hypothesis",
+      "label": "输入假说与 i+1",
+      "kind": "hypothesis",
+      "description": "Krashen 提出，习得来自理解包含略超出当前能力结构的输入。i+1 是该假说中的发展表述。",
+      "evidenceStatus": "debated_hypothesis",
+      "sources": [
+        {
+          "title": "Krashen (1982). Principles and Practice in Second Language Acquisition",
+          "url": "https://sdkrashen.com/content/books/principles_and_practice.pdf",
+          "year": 1982,
+          "role": "original_theory",
+          "access": "full_text_relevant_sections",
+          "locator": "Chapter II, printed pp.20–23; Chapter III, pp.68–70"
+        }
+      ],
+      "limitations": [
+        "不能把 i 或 +1 当作可直接测量的通用难度单位。",
+        "本原书不是本产品有效性的实验。不能由此排除输出、注意与反馈的作用。",
+        "原作者认为充分可理解的交流可包含所需结构，并反对刻意只瞄准每日一个 i+1 结构。"
+      ],
+      "language": "shared",
+      "evidenceScope": "二语习得理论主张，不提供经验证的个体难度计算公式。",
+      "aliases": [
+        "Krashen",
+        "Input Hypothesis",
+        "i+1",
+        "Plus One Theory",
+        "comprehensible input"
+      ]
+    },
+    {
+      "id": "ped:comprehensible-input",
+      "label": "可理解输入的教学安排",
+      "kind": "practice",
+      "description": "通过语境、熟悉内容与必要支持，使学习者能够理解目标语言信息。",
+      "evidenceStatus": "theory_informed_practice",
+      "sources": [
+        {
+          "title": "Krashen (1982). Principles and Practice in Second Language Acquisition",
+          "url": "https://sdkrashen.com/content/books/principles_and_practice.pdf",
+          "year": 1982,
+          "role": "original_theory",
+          "access": "full_text_relevant_sections",
+          "locator": "Chapter II, printed pp.20–23; Chapter III, pp.68–70"
+        }
+      ],
+      "limitations": [
+        "理解意义不等于已学会全部形式。",
+        "可理解度须通过目标学习者的表现核查，不能仅由文本标签断定。"
+      ],
+      "language": "shared",
+      "evidenceScope": "从输入假说提炼的实践方向，具体活动的效果须另测。",
+      "aliases": [
+        "meaning-focused input",
+        "可理解性"
+      ]
+    },
+    {
+      "id": "ped:zpd",
+      "label": "最近发展区 ZPD",
+      "kind": "theory",
+      "description": "Vygotsky 在社会文化发展框架中区分独立解决问题与帮助下所显示的发展可能。",
+      "evidenceStatus": "theoretical_framework",
+      "sources": [
+        {
+          "title": "Vygotsky (1978). Mind in Society: The Development of Higher Psychological Processes",
+          "url": "https://home.fau.edu/musgrove/web/vygotsky1978.pdf",
+          "year": 1978,
+          "role": "original_theory",
+          "access": "indexed_primary_text_excerpt",
+          "locator": "Chapter 6, printed pp.86–87",
+          "accessNote": "独立审核者核对到原文索引摘录。直接打开大学存档 PDF 超时，未声称本轮读取其完整正文。"
+        }
+      ],
+      "limitations": [
+        "不能将帮助下成功直接等同于独立掌握。",
+        "不是输入难度指标，也不是 Krashen i+1 的别名。",
+        "经典论述关注发展中的功能，不是把所有难而能做的任务列成固定清单。"
+      ],
+      "language": "shared",
+      "evidenceScope": "经典发展理论中的构念，成人二语活动的应用需要情境解释。",
+      "aliases": [
+        "Vygotsky",
+        "Zone of Proximal Development",
+        "最近发展区"
+      ]
+    },
+    {
+      "id": "ped:scaffolding",
+      "label": "按表现调整的临时支架",
+      "kind": "practice",
+      "description": "辅导者根据学习者当前表现提供支持，保留学习者承担任务的机会。撤除支持是本项目要另外观察的设计目标。",
+      "evidenceStatus": "empirical_practice_bounded",
+      "sources": [
+        {
+          "title": "Wood, Bruner & Ross (1976). The role of tutoring in problem solving",
+          "url": "https://doi.org/10.1111/j.1469-7610.1976.tb00381.x",
+          "year": 1976,
+          "role": "primary_observational_study",
+          "access": "bibliographic_record_and_original_text_excerpt",
+          "locator": "Journal of Child Psychology and Psychiatry 17, pp.89–100"
+        }
+      ],
+      "limitations": [
+        "原研究是幼儿搭建结构的辅导，不是成人二语写作实验。",
+        "固定模板不必然是按表现调整的支架。",
+        "支持下完成、撤除支持后完成及延迟独立使用是不同结果。"
+      ],
+      "language": "shared",
+      "evidenceScope": "原始辅导研究提供实践概念，具体语言活动和撤架时机仍待验证。",
+      "aliases": [
+        "scaffold",
+        "scaffolding",
+        "支架",
+        "plus-one 支架"
+      ]
+    },
+    {
+      "id": "ped:attention",
+      "label": "注意的选择与检测过程",
+      "kind": "mechanism",
+      "description": "注意可区分警觉、定向与检测等过程。把某种形式置于学习者视野内，并不足以确定这些过程发生。",
+      "evidenceStatus": "proposed_mechanism",
+      "sources": [
+        {
+          "title": "Tomlin & Villa (1994). Attention in Cognitive Science and Second Language Acquisition",
+          "url": "https://doi.org/10.1017/S0272263100012870",
+          "year": 1994,
+          "role": "original_theoretical_model",
+          "access": "publisher_abstract",
+          "locator": "Studies in Second Language Acquisition 16, pp.183–203"
+        }
+      ],
+      "limitations": [
+        "Tomlin 与 Villa 提出的是特定理论划分，不是注意研究的唯一模型。",
+        "视觉高亮、眼动停留、点击记录和有意识报告不能互相替代。"
+      ],
+      "language": "shared",
+      "evidenceScope": "SLA 的注意模型，当前来源核实到出版社摘要。",
+      "aliases": [
+        "attention",
+        "alertness",
+        "orientation",
+        "detection"
+      ]
+    },
+    {
+      "id": "ped:noticing-hypothesis",
+      "label": "察觉假说",
+      "kind": "hypothesis",
+      "description": "Schmidt 将对输入中特定形式的有意识察觉置于 input 转为 intake 的核心位置。必要性与可检验性存在争议。",
+      "evidenceStatus": "debated_hypothesis",
+      "sources": [
+        {
+          "title": "Schmidt (1990). The Role of Consciousness in Second Language Learning",
+          "url": "https://nflrc.hawaii.edu/PDFs/SCHMIDT%20The%20role%20of%20consciousness%20in%20second%20language%20learning.pdf",
+          "year": 1990,
+          "role": "original_theory",
+          "access": "full_text_relevant_sections",
+          "locator": "Applied Linguistics 11, pp.129–158"
+        },
+        {
+          "title": "Truscott (1998). Noticing in second language acquisition: a critical review",
+          "url": "https://doi.org/10.1191/026765898674803209",
+          "year": 1998,
+          "role": "critical_argument",
+          "access": "publisher_abstract_and_notes",
+          "locator": "Second Language Research 14, pp.103–135"
+        }
+      ],
+      "limitations": [
+        "有意识察觉不同于完整理解或能够说出规则。",
+        "不能把 noticing 是所有习得的必要条件作为无争议事实。",
+        "自我报告可能漏掉察觉，也可能改变学习过程。"
+      ],
+      "language": "shared",
+      "evidenceScope": "原始理论与针对该理论的直接批判，不是单一已证实机制。",
+      "aliases": [
+        "Noticing Hypothesis",
+        "Schmidt",
+        "觉察",
+        "intake"
+      ]
+    },
+    {
+      "id": "ped:output-hypothesis",
+      "label": "输出的学习作用假说",
+      "kind": "hypothesis",
+      "description": "Swain 与 Lapkin 提出，表达中的问题可引发察觉与更细的语言处理，并促使学习者修改输出。",
+      "evidenceStatus": "hypothesis_with_bounded_process_evidence",
+      "sources": [
+        {
+          "title": "Swain & Lapkin (1995). Problems in Output and the Cognitive Processes They Generate: A Step Towards Second Language Learning",
+          "url": "https://doi.org/10.1093/applin/16.3.371",
+          "year": 1995,
+          "role": "primary_process_study",
+          "access": "publisher_abstract",
+          "locator": "Applied Linguistics 16, pp.371–391"
+        }
+      ],
+      "limitations": [
+        "过程中的修订不是长期语言发展的充分证据。",
+        "不是说任何产出任务都比输入任务好。"
+      ],
+      "language": "shared",
+      "evidenceScope": "原研究提供产出过程数据，不提供所有技能与语言的普遍效果。",
+      "aliases": [
+        "Output Hypothesis",
+        "Swain",
+        "pushed output"
+      ]
+    },
+    {
+      "id": "ped:pushed-output",
+      "label": "带表达要求的产出与修订",
+      "kind": "practice",
+      "description": "要求学习者尝试表达目标意义，发现表达困难，再对自己的句子作出修改。",
+      "evidenceStatus": "theory_informed_practice",
+      "sources": [
+        {
+          "title": "Swain & Lapkin (1995). Problems in Output and the Cognitive Processes They Generate: A Step Towards Second Language Learning",
+          "url": "https://doi.org/10.1093/applin/16.3.371",
+          "year": 1995,
+          "role": "primary_process_study",
+          "access": "publisher_abstract",
+          "locator": "Applied Linguistics 16, pp.371–391"
+        }
+      ],
+      "limitations": [
+        "给出完整范句后抄写不能作为独立产出证据。",
+        "本项目的任务步骤是设计推论，尚未实验验证。"
+      ],
+      "language": "shared",
+      "evidenceScope": "参考产出研究构造的活动方向，需保存尝试与修改。",
+      "aliases": [
+        "production",
+        "revision",
+        "output practice"
+      ]
+    },
+    {
+      "id": "ped:interaction-hypothesis",
+      "label": "互动与意义协商假说",
+      "kind": "hypothesis",
+      "description": "互动论提出，会话中的协商可把输入、反馈和学习者参与连接起来。Mackey 的实验支持特定语法发展中的互动作用。",
+      "evidenceStatus": "hypothesis_with_bounded_experimental_evidence",
+      "sources": [
+        {
+          "title": "Mackey (1999). Input, interaction and second language development: an empirical study of question formation in ESL",
+          "url": "https://research.lancaster-university.uk/en/publications/input-interaction-and-second-language-development-an-empirical-st/",
+          "year": 1999,
+          "role": "primary_experiment",
+          "access": "author_institution_abstract",
+          "locator": "Studies in Second Language Acquisition 21, pp.557–587"
+        }
+      ],
+      "limitations": [
+        "研究中的互动不是泛指界面可点击。",
+        "学习者发展阶段、参与程度、结构与情境会限制结果。"
+      ],
+      "language": "shared",
+      "evidenceScope": "成人 ESL 问句发展实验。不能由此验证所有对话工具或日语活动。",
+      "aliases": [
+        "Interaction Hypothesis",
+        "negotiation of meaning",
+        "Long",
+        "Mackey"
+      ]
+    },
+    {
+      "id": "ped:negotiated-interaction",
+      "label": "需要澄清与协商的会话活动",
+      "kind": "practice",
+      "description": "让参与者通过澄清、确认与重新表述完成共同沟通任务。",
+      "evidenceStatus": "empirical_practice_bounded",
+      "sources": [
+        {
+          "title": "Mackey (1999). Input, interaction and second language development: an empirical study of question formation in ESL",
+          "url": "https://research.lancaster-university.uk/en/publications/input-interaction-and-second-language-development-an-empirical-st/",
+          "year": 1999,
+          "role": "primary_experiment",
+          "access": "author_institution_abstract",
+          "locator": "Studies in Second Language Acquisition 21, pp.557–587"
+        }
+      ],
+      "limitations": [
+        "只有对话轮数不能证明发生了意义协商。",
+        "人际研究不能无条件外推到学习者与 LLM 的互动。"
+      ],
+      "language": "shared",
+      "evidenceScope": "成人 ESL 任务互动为本轮经验来源。",
+      "aliases": [
+        "clarification",
+        "confirmation",
+        "意义协商"
+      ]
+    },
+    {
+      "id": "ped:corrective-feedback",
+      "label": "纠正性反馈",
+      "kind": "practice",
+      "description": "针对学习者表达提供修正信息或引导其修改。反馈形式、目标结构与评价时点须分别记录。",
+      "evidenceStatus": "empirical_practice_bounded",
+      "sources": [
+        {
+          "title": "Lyster & Ranta (1997). Corrective Feedback and Learner Uptake: Negotiation of Form in Communicative Classrooms",
+          "url": "https://doi.org/10.1017/S0272263197001034",
+          "year": 1997,
+          "role": "primary_observational_study",
+          "access": "original_text_excerpt_and_reviewer_verification",
+          "locator": "Studies in Second Language Acquisition 19, pp.37–66"
+        },
+        {
+          "title": "Ellis, Loewen & Erlam (2006). Implicit and Explicit Corrective Feedback and the Acquisition of L2 Grammar",
+          "url": "https://doi.org/10.1017/S0272263106060141",
+          "year": 2006,
+          "role": "primary_experiment",
+          "access": "publisher_abstract",
+          "locator": "Studies in Second Language Acquisition 28, pp.339–368"
+        }
+      ],
+      "limitations": [
+        "Lyster 与 Ranta 的课堂 uptake 观察不能直接排名长期习得效果。",
+        "某实验中的显性反馈优势不是所有任务上的统一结论。",
+        "需要独立检查反馈的语言正确性，不能由模型自信代替。"
+      ],
+      "language": "shared",
+      "evidenceScope": "课堂观察，以及英语过去时 -ed 的反馈实验，含即时与延迟测量。",
+      "aliases": [
+        "corrective feedback",
+        "recast",
+        "metalinguistic feedback",
+        "uptake",
+        "反馈"
+      ]
+    },
+    {
+      "id": "ped:retrieval-practice",
+      "label": "检索练习",
+      "kind": "practice",
+      "description": "先从记忆尝试提取目标内容，再检查或再次学习。练习条件应记录提示与答案是否可见。",
+      "evidenceStatus": "empirical_practice_bounded",
+      "sources": [
+        {
+          "title": "Karpicke & Roediger (2008). The critical importance of retrieval for learning",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/18276894/",
+          "year": 2008,
+          "role": "primary_experiment",
+          "access": "official_index_abstract",
+          "locator": "Science 319, pp.966–968"
+        },
+        {
+          "title": "Roediger & Karpicke (2006). Test-enhanced learning: taking memory tests improves long-term retention",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/16507066/",
+          "year": 2006,
+          "role": "primary_experiment",
+          "access": "official_index_abstract",
+          "locator": "Psychological Science 17, pp.249–255"
+        }
+      ],
+      "limitations": [
+        "不能把重复阅读或抄写算作同一种操作。",
+        "错误、低成功率和提示依赖需要通过后续纠正与再测处理。"
+      ],
+      "language": "shared",
+      "evidenceScope": "外语词对回忆与英文散文记忆实验，具体语言应用需验证。",
+      "aliases": [
+        "retrieval practice",
+        "active recall",
+        "回忆练习"
+      ]
+    },
+    {
+      "id": "ped:testing-effect",
+      "label": "检索后的保持优势",
+      "kind": "effect",
+      "description": "在所引实验条件下，检索练习相较继续学习带来更好的延迟保持。效应指比较结果，不等于检索的全部机制。",
+      "evidenceStatus": "empirical_effect_bounded",
+      "sources": [
+        {
+          "title": "Roediger & Karpicke (2006). Test-enhanced learning: taking memory tests improves long-term retention",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/16507066/",
+          "year": 2006,
+          "role": "primary_experiment",
+          "access": "official_index_abstract",
+          "locator": "Psychological Science 17, pp.249–255"
+        },
+        {
+          "title": "Karpicke & Roediger (2008). The critical importance of retrieval for learning",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/18276894/",
+          "year": 2008,
+          "role": "primary_experiment",
+          "access": "official_index_abstract",
+          "locator": "Science 319, pp.966–968"
+        }
+      ],
+      "limitations": [
+        "即时成绩与延迟保持可能不同。",
+        "保持词义不证明能在新会话中得体使用。",
+        "不能脱离材料、对照练习和测验延迟宣称固定收益。"
+      ],
+      "language": "shared",
+      "evidenceScope": "实验中的英文散文与外语词汇任务。",
+      "aliases": [
+        "testing effect",
+        "test-enhanced learning",
+        "检索效应"
+      ]
+    },
+    {
+      "id": "ped:spaced-practice",
+      "label": "间隔安排的练习",
+      "kind": "practice",
+      "description": "把再次学习或练习安排在分离的时间，而非集中连续完成。",
+      "evidenceStatus": "empirical_practice_bounded",
+      "sources": [
+        {
+          "title": "Cepeda, Vul, Rohrer, Wixted & Pashler (2008). Spacing Effects in Learning: A Temporal Ridgeline of Optimal Retention",
+          "url": "https://www.evullab.org/pdf/CepedaVulRohrerWixtedPashler-PS-2008.pdf",
+          "year": 2008,
+          "role": "primary_experiment",
+          "access": "full_text_relevant_sections",
+          "locator": "Psychological Science 19, pp.1095–1102"
+        }
+      ],
+      "limitations": [
+        "没有对所有学习者与任务通用的最佳间隔。",
+        "分开间隔与检索操作，不能仅凭日历间距确认检索发生。"
+      ],
+      "language": "shared",
+      "evidenceScope": "本轮来源操纵事实学习的复习间隔与保持时长。",
+      "aliases": [
+        "distributed practice",
+        "spaced practice",
+        "spaced repetition",
+        "间隔练习"
+      ]
+    },
+    {
+      "id": "ped:spacing-effect",
+      "label": "间隔与保持期的交互效应",
+      "kind": "effect",
+      "description": "Cepeda 等人的实验中，复习间隔与目标保持时长共同影响最终记忆表现。",
+      "evidenceStatus": "empirical_effect_bounded",
+      "sources": [
+        {
+          "title": "Cepeda, Vul, Rohrer, Wixted & Pashler (2008). Spacing Effects in Learning: A Temporal Ridgeline of Optimal Retention",
+          "url": "https://www.evullab.org/pdf/CepedaVulRohrerWixtedPashler-PS-2008.pdf",
+          "year": 2008,
+          "role": "primary_experiment",
+          "access": "full_text_relevant_sections",
+          "locator": "Psychological Science 19, pp.1095–1102"
+        }
+      ],
+      "limitations": [
+        "间隔变长并非一直更好。",
+        "不能从该实验导出未经验证的固定 1、3、7 天排程。",
+        "事实记忆的时间规律不能直接充当自然会话训练公式。"
+      ],
+      "language": "shared",
+      "evidenceScope": "事实学习与延迟记忆任务，目标测试间隔可长达一年。",
+      "aliases": [
+        "spacing effect",
+        "distributed practice effect",
+        "间隔效应"
+      ]
+    },
+    {
+      "id": "ped:transfer",
+      "label": "迁移与新情境中的使用",
+      "kind": "mechanism",
+      "description": "迁移在此指学习结果能否用于改变后的材料或情境，是需独立界定与测量的结果构念。",
+      "evidenceStatus": "construct_with_bounded_empirical_evidence",
+      "sources": [
+        {
+          "title": "Butler (2010). Repeated testing produces superior transfer of learning relative to repeated studying",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/20804289/",
+          "year": 2010,
+          "role": "primary_experiment",
+          "access": "official_index_abstract_search_excerpt",
+          "locator": "Journal of Experimental Psychology: Learning, Memory, and Cognition 36, pp.1118–1133"
+        },
+        {
+          "title": "DeKeyser (1997). Beyond Explicit Rule Learning: Automatizing Second Language Morphosyntax",
+          "url": "https://doi.org/10.1017/S0272263197002040",
+          "year": 1997,
+          "role": "primary_experiment",
+          "access": "publisher_abstract",
+          "locator": "Studies in Second Language Acquisition 19, pp.195–221"
+        }
+      ],
+      "limitations": [
+        "不是一个单一已确证的因果机制。",
+        "散文推理题的迁移不证明二语自然交际或跨语言迁移。",
+        "练习技能的专属性可能限制理解任务向产出任务的推广。"
+      ],
+      "language": "shared",
+      "evidenceScope": "Butler 的散文与推理实验，加上二语技能练习专属性证据。",
+      "aliases": [
+        "transfer",
+        "generalization",
+        "近迁移",
+        "远迁移"
+      ],
+      "subtype": "outcome_construct"
+    },
+    {
+      "id": "ped:skill-acquisition",
+      "label": "技能习得框架",
+      "kind": "theory",
+      "description": "把练习中的表现变化解释为知识使用逐步熟练的过程。DeKeyser 的研究发现二语规则练习有逐步发展和技能专属性。",
+      "evidenceStatus": "theory_with_bounded_experimental_evidence",
+      "sources": [
+        {
+          "title": "DeKeyser (1997). Beyond Explicit Rule Learning: Automatizing Second Language Morphosyntax",
+          "url": "https://doi.org/10.1017/S0272263197002040",
+          "year": 1997,
+          "role": "primary_experiment",
+          "access": "publisher_abstract",
+          "locator": "Studies in Second Language Acquisition 19, pp.195–221"
+        }
+      ],
+      "limitations": [
+        "人工语言和受控练习不能代表所有自然二语习得。",
+        "支持该框架不等于已证明所有显性规则必然变成隐性知识。"
+      ],
+      "language": "shared",
+      "evidenceScope": "人工语言中的理解与产出练习实验，练习持续八周。",
+      "aliases": [
+        "Skill Acquisition Theory",
+        "SAT",
+        "DeKeyser",
+        "技能习得"
+      ]
+    },
+    {
+      "id": "ped:proceduralization",
+      "label": "程序化与自动化的解释",
+      "kind": "mechanism",
+      "description": "技能习得框架用程序化解释知识在练习中变得可用于执行。自动化涉及处理效率，两者不能仅凭变快就视为同一个过程。",
+      "evidenceStatus": "proposed_mechanism",
+      "sources": [
+        {
+          "title": "DeKeyser (1997). Beyond Explicit Rule Learning: Automatizing Second Language Morphosyntax",
+          "url": "https://doi.org/10.1017/S0272263197002040",
+          "year": 1997,
+          "role": "primary_experiment",
+          "access": "publisher_abstract",
+          "locator": "Studies in Second Language Acquisition 19, pp.195–221"
+        }
+      ],
+      "limitations": [
+        "单独的反应时下降不能识别导致变化的机制。",
+        "正确率、任务熟悉度、实例记忆与策略改变均须考虑。",
+        "技能理论中的程序化不直接证明 Ullman 模型中的神经记忆系统发生转化。"
+      ],
+      "language": "shared",
+      "evidenceScope": "解释受控语言练习表现变化的机制候选，未测量本项目学习者。",
+      "aliases": [
+        "proceduralization",
+        "automatization",
+        "automaticity",
+        "程序化",
+        "自动化"
+      ]
+    },
+    {
+      "id": "ped:explicit-implicit-knowledge",
+      "label": "显性与隐性知识的区别",
+      "kind": "mechanism",
+      "description": "此节点记录 SLA 对知识可意识访问性与使用方式的构念区别。它不直接给出学习过程或神经记忆系统的分类。",
+      "evidenceStatus": "construct_measurement_bounded",
+      "sources": [
+        {
+          "title": "Ellis (2005). Measuring Implicit and Explicit Knowledge of a Second Language: A Psychometric Study",
+          "url": "https://www.cambridge.org/core/journals/studies-in-second-language-acquisition/article/measuring-implicit-and-explicit-knowledge-of-a-second-language-a-psychometric-study/0708428E45AEA716C06E47ED37785D4E",
+          "year": 2005,
+          "role": "primary_construct_measurement_study",
+          "access": "publisher_abstract",
+          "locator": "Studies in Second Language Acquisition 27, pp.141–172"
+        },
+        {
+          "title": "Ellis, Loewen & Erlam (2006). Implicit and Explicit Corrective Feedback and the Acquisition of L2 Grammar",
+          "url": "https://doi.org/10.1017/S0272263106060141",
+          "year": 2006,
+          "role": "primary_experiment",
+          "access": "publisher_abstract",
+          "locator": "Studies in Second Language Acquisition 28, pp.339–368"
+        }
+      ],
+      "limitations": [
+        "该节点是构念区别，不是单个因果机制。",
+        "限时任务、流利表现或不能说出规则，都不是纯粹隐性知识的充分诊断。",
+        "教学方式、学习时的意识与最终知识类型须分别描述。"
+      ],
+      "language": "shared",
+      "evidenceScope": "Ellis 的英语语法多任务测量研究及反馈实验中的测验解释。",
+      "aliases": [
+        "explicit knowledge",
+        "implicit knowledge",
+        "显性知识",
+        "隐性知识"
+      ],
+      "subtype": "knowledge_construct_distinction"
+    },
+    {
+      "id": "ped:declarative-procedural-model",
+      "label": "陈述与程序记忆模型",
+      "kind": "theory",
+      "description": "Ullman 提出，词项知识与组合规则的部分差异可联系到陈述与程序记忆系统。该映射是神经认知模型的主张。",
+      "evidenceStatus": "theoretical_framework",
+      "sources": [
+        {
+          "title": "Ullman (2004). Contributions of memory circuits to language: the declarative/procedural model",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/15037131/",
+          "year": 2004,
+          "role": "original_model_and_evidence_review",
+          "access": "official_index_abstract",
+          "locator": "Cognition 92, pp.231–270"
+        }
+      ],
+      "limitations": [
+        "这是模型及其证据综述，不能给本产品的行为数据贴上脑系统标签。",
+        "陈述与显性、程序与隐性在一些框架中有重叠，但不能自动替代 SLA 的操作性测量。",
+        "不要将词汇与语法理解成互不重叠的两类存储，也不要与技能理论的表征术语直接等同。"
+      ],
+      "language": "shared",
+      "evidenceScope": "神经认知语言模型。这里核实到官方索引中的作者摘要。",
+      "aliases": [
+        "declarative memory",
+        "procedural memory",
+        "DP model",
+        "Ullman",
+        "陈述知识",
+        "程序知识"
+      ]
+    },
+    {
+      "id": "ped:explicit-instruction",
+      "label": "显性的规则说明与元语言反馈",
+      "kind": "practice",
+      "description": "直接说明目标形式或表达规则。本节点描述教学操作，不能据此判定学习者只获得哪一种知识。",
+      "evidenceStatus": "empirical_practice_bounded",
+      "sources": [
+        {
+          "title": "Ellis, Loewen & Erlam (2006). Implicit and Explicit Corrective Feedback and the Acquisition of L2 Grammar",
+          "url": "https://doi.org/10.1017/S0272263106060141",
+          "year": 2006,
+          "role": "primary_experiment",
+          "access": "publisher_abstract",
+          "locator": "Studies in Second Language Acquisition 28, pp.339–368"
+        }
+      ],
+      "limitations": [
+        "本轮直接实证是过去时反馈，不是所有显性教学方法的比较。",
+        "收益可能出现在被解释为不同知识类型的测验上，仍需保留构念效度限制。"
+      ],
+      "language": "shared",
+      "evidenceScope": "低中级 ESL 学习者英语 -ed 反馈实验中的元语言解释条件。",
+      "aliases": [
+        "explicit instruction",
+        "metalinguistic explanation",
+        "显性教学"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "source": "ped:input-hypothesis",
+      "target": "ped:comprehensible-input",
+      "relation": "motivates_practice",
+      "note": "理解意义与输入安排是该假说的实践方向，不表示具体产品有效。",
+      "basis": "theoretical_claim",
+      "sources": [
+        {
+          "title": "Krashen (1982). Principles and Practice in Second Language Acquisition",
+          "url": "https://sdkrashen.com/content/books/principles_and_practice.pdf",
+          "year": 1982,
+          "role": "original_theory",
+          "access": "full_text_relevant_sections",
+          "locator": "Chapter II, printed pp.20–23; Chapter III, pp.68–70"
+        }
+      ]
+    },
+    {
+      "source": "ped:input-hypothesis",
+      "target": "ped:zpd",
+      "relation": "distinct_from",
+      "note": "两者分别解释输入与习得、社会帮助与发展。本边是概念比较，不声称二者有直接实证竞争。",
+      "basis": "conceptual_distinction",
+      "sources": [
+        {
+          "title": "Krashen (1982). Principles and Practice in Second Language Acquisition",
+          "url": "https://sdkrashen.com/content/books/principles_and_practice.pdf",
+          "year": 1982,
+          "role": "original_theory",
+          "access": "full_text_relevant_sections",
+          "locator": "Chapter II, printed pp.20–23; Chapter III, pp.68–70"
+        },
+        {
+          "title": "Vygotsky (1978). Mind in Society: The Development of Higher Psychological Processes",
+          "url": "https://home.fau.edu/musgrove/web/vygotsky1978.pdf",
+          "year": 1978,
+          "role": "original_theory",
+          "access": "indexed_primary_text_excerpt",
+          "locator": "Chapter 6, printed pp.86–87",
+          "accessNote": "独立审核者核对到原文索引摘录。直接打开大学存档 PDF 超时，未声称本轮读取其完整正文。"
+        }
+      ]
+    },
+    {
+      "source": "ped:zpd",
+      "target": "ped:scaffolding",
+      "relation": "informs_design",
+      "note": "本项目将帮助下表现用于设计支持。ZPD 与 scaffolding 不等同，本边不是原始作者共同验证的命题。",
+      "basis": "design_inference",
+      "sources": [
+        {
+          "title": "Vygotsky (1978). Mind in Society: The Development of Higher Psychological Processes",
+          "url": "https://home.fau.edu/musgrove/web/vygotsky1978.pdf",
+          "year": 1978,
+          "role": "original_theory",
+          "access": "indexed_primary_text_excerpt",
+          "locator": "Chapter 6, printed pp.86–87",
+          "accessNote": "独立审核者核对到原文索引摘录。直接打开大学存档 PDF 超时，未声称本轮读取其完整正文。"
+        },
+        {
+          "title": "Wood, Bruner & Ross (1976). The role of tutoring in problem solving",
+          "url": "https://doi.org/10.1111/j.1469-7610.1976.tb00381.x",
+          "year": 1976,
+          "role": "primary_observational_study",
+          "access": "bibliographic_record_and_original_text_excerpt",
+          "locator": "Journal of Child Psychology and Psychiatry 17, pp.89–100"
+        }
+      ]
+    },
+    {
+      "source": "ped:attention",
+      "target": "ped:noticing-hypothesis",
+      "relation": "distinct_from",
+      "note": "注意的过程划分与有意识察觉的必要性主张不同，不构成可互换的观测指标。",
+      "basis": "conceptual_distinction",
+      "sources": [
+        {
+          "title": "Tomlin & Villa (1994). Attention in Cognitive Science and Second Language Acquisition",
+          "url": "https://doi.org/10.1017/S0272263100012870",
+          "year": 1994,
+          "role": "original_theoretical_model",
+          "access": "publisher_abstract",
+          "locator": "Studies in Second Language Acquisition 16, pp.183–203"
+        },
+        {
+          "title": "Schmidt (1990). The Role of Consciousness in Second Language Learning",
+          "url": "https://nflrc.hawaii.edu/PDFs/SCHMIDT%20The%20role%20of%20consciousness%20in%20second%20language%20learning.pdf",
+          "year": 1990,
+          "role": "original_theory",
+          "access": "full_text_relevant_sections",
+          "locator": "Applied Linguistics 11, pp.129–158"
+        },
+        {
+          "title": "Truscott (1998). Noticing in second language acquisition: a critical review",
+          "url": "https://doi.org/10.1191/026765898674803209",
+          "year": 1998,
+          "role": "critical_argument",
+          "access": "publisher_abstract_and_notes",
+          "locator": "Second Language Research 14, pp.103–135"
+        }
+      ]
+    },
+    {
+      "source": "ped:noticing-hypothesis",
+      "target": "ped:comprehensible-input",
+      "relation": "qualifies_interpretation",
+      "note": "Schmidt 的理论对 input 如何成为 intake 提出意识相关主张。此边保留争议，不宣称所有输入都必须经历同一过程。",
+      "basis": "theoretical_claim",
+      "sources": [
+        {
+          "title": "Schmidt (1990). The Role of Consciousness in Second Language Learning",
+          "url": "https://nflrc.hawaii.edu/PDFs/SCHMIDT%20The%20role%20of%20consciousness%20in%20second%20language%20learning.pdf",
+          "year": 1990,
+          "role": "original_theory",
+          "access": "full_text_relevant_sections",
+          "locator": "Applied Linguistics 11, pp.129–158"
+        },
+        {
+          "title": "Truscott (1998). Noticing in second language acquisition: a critical review",
+          "url": "https://doi.org/10.1191/026765898674803209",
+          "year": 1998,
+          "role": "critical_argument",
+          "access": "publisher_abstract_and_notes",
+          "locator": "Second Language Research 14, pp.103–135"
+        }
+      ]
+    },
+    {
+      "source": "ped:output-hypothesis",
+      "target": "ped:pushed-output",
+      "relation": "motivates_practice",
+      "note": "表达困难与修订启发先尝试再修改的活动。此步骤组合的产品效果仍待测。",
+      "basis": "design_inference",
+      "sources": [
+        {
+          "title": "Swain & Lapkin (1995). Problems in Output and the Cognitive Processes They Generate: A Step Towards Second Language Learning",
+          "url": "https://doi.org/10.1093/applin/16.3.371",
+          "year": 1995,
+          "role": "primary_process_study",
+          "access": "publisher_abstract",
+          "locator": "Applied Linguistics 16, pp.371–391"
+        }
+      ]
+    },
+    {
+      "source": "ped:output-hypothesis",
+      "target": "ped:noticing-hypothesis",
+      "relation": "proposes_process_link",
+      "note": "产出问题可能引发对表达缺口的察觉，这不证明 noticing 对所有习得必要。",
+      "basis": "theoretical_claim",
+      "sources": [
+        {
+          "title": "Swain & Lapkin (1995). Problems in Output and the Cognitive Processes They Generate: A Step Towards Second Language Learning",
+          "url": "https://doi.org/10.1093/applin/16.3.371",
+          "year": 1995,
+          "role": "primary_process_study",
+          "access": "publisher_abstract",
+          "locator": "Applied Linguistics 16, pp.371–391"
+        }
+      ]
+    },
+    {
+      "source": "ped:interaction-hypothesis",
+      "target": "ped:negotiated-interaction",
+      "relation": "motivates_practice",
+      "note": "有意义的协商活动符合该研究方向，不能将任何界面交互视作同一干预。",
+      "basis": "theoretical_claim",
+      "sources": [
+        {
+          "title": "Mackey (1999). Input, interaction and second language development: an empirical study of question formation in ESL",
+          "url": "https://research.lancaster-university.uk/en/publications/input-interaction-and-second-language-development-an-empirical-st/",
+          "year": 1999,
+          "role": "primary_experiment",
+          "access": "author_institution_abstract",
+          "locator": "Studies in Second Language Acquisition 21, pp.557–587"
+        }
+      ]
+    },
+    {
+      "source": "ped:negotiated-interaction",
+      "target": "ped:corrective-feedback",
+      "relation": "may_include",
+      "note": "协商可能包含反馈。具体是否发生、学习者如何处理，须有互动记录。",
+      "basis": "theoretical_claim",
+      "sources": [
+        {
+          "title": "Mackey (1999). Input, interaction and second language development: an empirical study of question formation in ESL",
+          "url": "https://research.lancaster-university.uk/en/publications/input-interaction-and-second-language-development-an-empirical-st/",
+          "year": 1999,
+          "role": "primary_experiment",
+          "access": "author_institution_abstract",
+          "locator": "Studies in Second Language Acquisition 21, pp.557–587"
+        }
+      ]
+    },
+    {
+      "source": "ped:corrective-feedback",
+      "target": "ped:pushed-output",
+      "relation": "may_elicit_revision",
+      "note": "课堂记录中部分反馈后出现学习者修正。即时修正不证明持久习得。",
+      "basis": "empirical_finding",
+      "sources": [
+        {
+          "title": "Lyster & Ranta (1997). Corrective Feedback and Learner Uptake: Negotiation of Form in Communicative Classrooms",
+          "url": "https://doi.org/10.1017/S0272263197001034",
+          "year": 1997,
+          "role": "primary_observational_study",
+          "access": "original_text_excerpt_and_reviewer_verification",
+          "locator": "Studies in Second Language Acquisition 19, pp.37–66"
+        }
+      ]
+    },
+    {
+      "source": "ped:explicit-instruction",
+      "target": "ped:corrective-feedback",
+      "relation": "can_take_form_of",
+      "note": "元语言解释是所引反馈实验中的一种显性教学操作。",
+      "basis": "empirical_finding",
+      "sources": [
+        {
+          "title": "Ellis, Loewen & Erlam (2006). Implicit and Explicit Corrective Feedback and the Acquisition of L2 Grammar",
+          "url": "https://doi.org/10.1017/S0272263106060141",
+          "year": 2006,
+          "role": "primary_experiment",
+          "access": "publisher_abstract",
+          "locator": "Studies in Second Language Acquisition 28, pp.339–368"
+        }
+      ]
+    },
+    {
+      "source": "ped:explicit-instruction",
+      "target": "ped:explicit-implicit-knowledge",
+      "relation": "outcome_not_identical_to_method",
+      "note": "显性反馈的测验收益不只限于被设计为测显性知识的任务。教学显性程度不等于结果知识类型。",
+      "basis": "empirical_finding",
+      "sources": [
+        {
+          "title": "Ellis, Loewen & Erlam (2006). Implicit and Explicit Corrective Feedback and the Acquisition of L2 Grammar",
+          "url": "https://doi.org/10.1017/S0272263106060141",
+          "year": 2006,
+          "role": "primary_experiment",
+          "access": "publisher_abstract",
+          "locator": "Studies in Second Language Acquisition 28, pp.339–368"
+        }
+      ]
+    },
+    {
+      "source": "ped:retrieval-practice",
+      "target": "ped:testing-effect",
+      "relation": "yields_bounded_effect",
+      "note": "在所引实验的材料、比较与延迟条件下，检索练习产生保持优势。",
+      "basis": "empirical_finding",
+      "sources": [
+        {
+          "title": "Karpicke & Roediger (2008). The critical importance of retrieval for learning",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/18276894/",
+          "year": 2008,
+          "role": "primary_experiment",
+          "access": "official_index_abstract",
+          "locator": "Science 319, pp.966–968"
+        },
+        {
+          "title": "Roediger & Karpicke (2006). Test-enhanced learning: taking memory tests improves long-term retention",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/16507066/",
+          "year": 2006,
+          "role": "primary_experiment",
+          "access": "official_index_abstract",
+          "locator": "Psychological Science 17, pp.249–255"
+        }
+      ]
+    },
+    {
+      "source": "ped:spaced-practice",
+      "target": "ped:spacing-effect",
+      "relation": "yields_bounded_effect",
+      "note": "在事实学习实验中，复习间隔影响延迟保持，并与最终测验延迟交互。",
+      "basis": "empirical_finding",
+      "sources": [
+        {
+          "title": "Cepeda, Vul, Rohrer, Wixted & Pashler (2008). Spacing Effects in Learning: A Temporal Ridgeline of Optimal Retention",
+          "url": "https://www.evullab.org/pdf/CepedaVulRohrerWixtedPashler-PS-2008.pdf",
+          "year": 2008,
+          "role": "primary_experiment",
+          "access": "full_text_relevant_sections",
+          "locator": "Psychological Science 19, pp.1095–1102"
+        }
+      ]
+    },
+    {
+      "source": "ped:spaced-practice",
+      "target": "ped:retrieval-practice",
+      "relation": "can_combine_in_design",
+      "note": "本项目可以安排分时回忆，但间隔操作和提取操作须分别记录。此边没有声称本组合已获产品实验验证。",
+      "basis": "design_inference",
+      "sources": [
+        {
+          "title": "Cepeda, Vul, Rohrer, Wixted & Pashler (2008). Spacing Effects in Learning: A Temporal Ridgeline of Optimal Retention",
+          "url": "https://www.evullab.org/pdf/CepedaVulRohrerWixtedPashler-PS-2008.pdf",
+          "year": 2008,
+          "role": "primary_experiment",
+          "access": "full_text_relevant_sections",
+          "locator": "Psychological Science 19, pp.1095–1102"
+        },
+        {
+          "title": "Karpicke & Roediger (2008). The critical importance of retrieval for learning",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/18276894/",
+          "year": 2008,
+          "role": "primary_experiment",
+          "access": "official_index_abstract",
+          "locator": "Science 319, pp.966–968"
+        }
+      ]
+    },
+    {
+      "source": "ped:retrieval-practice",
+      "target": "ped:transfer",
+      "relation": "supports_bounded_outcome",
+      "note": "Butler 的实验支持散文学习后在不同推理题上的迁移，不能替代二语交际迁移检验。",
+      "basis": "empirical_finding",
+      "sources": [
+        {
+          "title": "Butler (2010). Repeated testing produces superior transfer of learning relative to repeated studying",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/20804289/",
+          "year": 2010,
+          "role": "primary_experiment",
+          "access": "official_index_abstract_search_excerpt",
+          "locator": "Journal of Experimental Psychology: Learning, Memory, and Cognition 36, pp.1118–1133"
+        }
+      ]
+    },
+    {
+      "source": "ped:skill-acquisition",
+      "target": "ped:proceduralization",
+      "relation": "proposes_process_link",
+      "note": "程序化是该框架的解释候选，行为变化符合框架不等于已独立识别机制。",
+      "basis": "theoretical_claim",
+      "sources": [
+        {
+          "title": "DeKeyser (1997). Beyond Explicit Rule Learning: Automatizing Second Language Morphosyntax",
+          "url": "https://doi.org/10.1017/S0272263197002040",
+          "year": 1997,
+          "role": "primary_experiment",
+          "access": "publisher_abstract",
+          "locator": "Studies in Second Language Acquisition 19, pp.195–221"
+        }
+      ]
+    },
+    {
+      "source": "ped:skill-acquisition",
+      "target": "ped:transfer",
+      "relation": "limits_generalization",
+      "note": "理解与产出练习的技能专属性限制将熟练度直接外推到未练任务。",
+      "basis": "empirical_finding",
+      "sources": [
+        {
+          "title": "DeKeyser (1997). Beyond Explicit Rule Learning: Automatizing Second Language Morphosyntax",
+          "url": "https://doi.org/10.1017/S0272263197002040",
+          "year": 1997,
+          "role": "primary_experiment",
+          "access": "publisher_abstract",
+          "locator": "Studies in Second Language Acquisition 19, pp.195–221"
+        }
+      ]
+    },
+    {
+      "source": "ped:explicit-implicit-knowledge",
+      "target": "ped:declarative-procedural-model",
+      "relation": "distinct_from",
+      "note": "SLA 知识构念与神经记忆系统解释属于不同分析层次。术语有重叠，不能无条件替换。",
+      "basis": "conceptual_distinction",
+      "sources": [
+        {
+          "title": "Ellis (2005). Measuring Implicit and Explicit Knowledge of a Second Language: A Psychometric Study",
+          "url": "https://www.cambridge.org/core/journals/studies-in-second-language-acquisition/article/measuring-implicit-and-explicit-knowledge-of-a-second-language-a-psychometric-study/0708428E45AEA716C06E47ED37785D4E",
+          "year": 2005,
+          "role": "primary_construct_measurement_study",
+          "access": "publisher_abstract",
+          "locator": "Studies in Second Language Acquisition 27, pp.141–172"
+        },
+        {
+          "title": "Ullman (2004). Contributions of memory circuits to language: the declarative/procedural model",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/15037131/",
+          "year": 2004,
+          "role": "original_model_and_evidence_review",
+          "access": "official_index_abstract",
+          "locator": "Cognition 92, pp.231–270"
+        }
+      ]
+    },
+    {
+      "source": "ped:proceduralization",
+      "target": "ped:declarative-procedural-model",
+      "relation": "distinct_from",
+      "note": "技能习得的表征与自动化解释不等于已测得神经系统中的程序记忆改变。",
+      "basis": "conceptual_distinction",
+      "sources": [
+        {
+          "title": "DeKeyser (1997). Beyond Explicit Rule Learning: Automatizing Second Language Morphosyntax",
+          "url": "https://doi.org/10.1017/S0272263197002040",
+          "year": 1997,
+          "role": "primary_experiment",
+          "access": "publisher_abstract",
+          "locator": "Studies in Second Language Acquisition 19, pp.195–221"
+        },
+        {
+          "title": "Ullman (2004). Contributions of memory circuits to language: the declarative/procedural model",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/15037131/",
+          "year": 2004,
+          "role": "original_model_and_evidence_review",
+          "access": "official_index_abstract",
+          "locator": "Cognition 92, pp.231–270"
+        }
+      ]
+    },
+    {
+      "source": "ped:scaffolding",
+      "target": "ped:transfer",
+      "relation": "informs_design",
+      "note": "设置撤除提示后的新材料任务，分别观察支持下成功和独立推广。此方案是待验证的设计推论。",
+      "basis": "design_inference",
+      "sources": [
+        {
+          "title": "Wood, Bruner & Ross (1976). The role of tutoring in problem solving",
+          "url": "https://doi.org/10.1111/j.1469-7610.1976.tb00381.x",
+          "year": 1976,
+          "role": "primary_observational_study",
+          "access": "bibliographic_record_and_original_text_excerpt",
+          "locator": "Journal of Child Psychology and Psychiatry 17, pp.89–100"
+        },
+        {
+          "title": "DeKeyser (1997). Beyond Explicit Rule Learning: Automatizing Second Language Morphosyntax",
+          "url": "https://doi.org/10.1017/S0272263197002040",
+          "year": 1997,
+          "role": "primary_experiment",
+          "access": "publisher_abstract",
+          "locator": "Studies in Second Language Acquisition 19, pp.195–221"
+        }
+      ]
+    }
+  ]
+}

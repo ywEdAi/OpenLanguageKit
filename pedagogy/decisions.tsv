@@ -1,0 +1,10 @@
+ts	phase	decision	why	evidence	result
+2026-11-07T20:05:00Z	frame	只写 pedagogy 研究数据与文档	两个 chat 共用工作区且职责不同	pedagogy/README.md	范围固定
+2026-11-07T20:06:00Z	model	分开假说、实践、效应与边的设计推论	避免把研究启发当作产品效果证明	pedagogy/evaluation.md	已写入契约
+2026-11-07T20:07:00Z	research	拆开 i+1、ZPD 与 scaffolding	三者对象与证据范围不同	https://sdkrashen.com/content/books/principles_and_practice.pdf	限制已记录
+2026-11-07T20:08:00Z	research	拒绝英语必须显式标出语篇关系的普遍断言	官方语料也标注英语隐含关系	https://catalog.ldc.upenn.edu/LDC2008T05	只保留活动层设计解释
+2026-11-07T19:54:46+00:00	log-correction	前四行时间戳是误填的预估值，本行取代其时间信息	保留决定内容但不伪造事件发生时刻	pedagogy/decisions.tsv	本行及后续使用实际写入时间
+2026-11-07T19:54:46+00:00	artifact	生成 21 个研究节点、21 条内部边和 4 个无内容 ID 的候选	保持来源、边界与内容命名空间独立	pedagogy/graph.json	等待结构校验与独立全文复核
+2026-11-07T19:57:17+00:00	review	落实独立审核的两项必要修正	如实记录访问深度并避免把预测任务等同检索	pedagogy/graph.json; pedagogy/content-links.json	有条件通过的条件已处理
+2026-11-07T19:57:17+00:00	verification	真实 JSON 通过断言且六种错误副本被拒绝	检查端点、来源、类型与命名空间	pedagogy/validate.py	结构通过，不代表科学有效性通过
+2026-11-07T19:58:27+00:00	complete	在真实文件重跑结构校验并增加两项纠偏检查的负例	直接证明来源记录一致且构念例外不丢失	pedagogy/validate.py; pedagogy/evaluation.md	21 节点、21 边通过；累计八类错误副本被拒绝

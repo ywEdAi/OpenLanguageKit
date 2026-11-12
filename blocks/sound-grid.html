@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sound Grid</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .sg-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .sg-layout { grid-template-columns: 1fr; } }
+  .sg-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+  .sg-tabs button { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 4px 10px; }
+  .sg-tabs button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+  .sg-scroll { overflow-x: auto; padding-bottom: 4px; }
+  table.sg { border-collapse: separate; border-spacing: var(--gap); }
+  table.sg th { font-weight: 600; font-size: .8rem; color: var(--muted); white-space: nowrap; padding: 0 4px; }
+  table.sg th.rowh { text-align: right; }
+  table.sg th button { border: 0; background: none; color: inherit; font: inherit; padding: 2px 4px; border-radius: 6px; }
+  table.sg th button[aria-pressed="false"] { opacity: .35; text-decoration: line-through; }
+  .sg-lines { display: grid; gap: var(--gap); }
+  .sg-line { display: flex; gap: var(--gap); align-items: center; flex-wrap: wrap; }
+  .sg-line > span { width: 7em; text-align: right; font-size: .8rem; color: var(--muted); }
+  .cell { width: var(--cell); min-height: var(--cell); border: 1px solid var(--line); background: var(--panel); border-radius: 10px;
+    display: inline-flex; flex-direction: column; align-items: center; justify-content: center; padding: 2px; transition: transform .12s, background .12s; }
+  .cell .g { font-size: var(--glyph); line-height: 1.1; }
+  .cell .r { font-size: .7rem; color: var(--muted); min-height: 1em; }
+  .hide-roman .cell .r { visibility: hidden; }
+  .cell.wide { width: auto; min-width: var(--cell); padding: 2px 8px; }
+  td.gap { width: var(--cell); height: var(--cell); border-radius: 10px; background: repeating-linear-gradient(45deg, transparent 0 6px, var(--line) 6px 7px); opacity: .5; }
+  .cell.in-row, .cell.in-col { background: var(--accent-soft); }
+  .cell.in-row.in-col, .cell.sel { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+  .cell.solved { background: var(--accent-soft); border-color: var(--accent); }
+  .cell.solved-assisted { background: var(--warn-soft); border-color: var(--warn); }
+  .cell.solved-wrong { background: var(--bad-soft); border-color: var(--bad); }
+  .cell.solved-self { border-style: dashed; border-color: var(--accent); }
+  .cell.wrong { animation: shake .3s; background: var(--bad-soft); }
+  .cell.hint { background: var(--warn-soft); }
+  .cell.covered .g { visibility: hidden; }
+  .cell.covered::after { content: '?'; position: absolute; font-size: var(--glyph); color: var(--muted); }
+  .cell.covered { position: relative; }
+  .cell.off { opacity: .25; }
+  @keyframes shake { 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+  .sg-side { position: sticky; top: 12px; display: grid; gap: 12px; }
+  .big { font-size: 4rem; text-align: center; line-height: 1.2; }
+  [data-variant="child"] .big { font-size: 5rem; }
+  .tone-row { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
+  .conf { display: flex; gap: 10px; justify-content: center; margin: 10px 0; flex-wrap: wrap; }
+  .conf button { font-size: 2.6rem; width: 84px; height: 84px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); }
+  .conf button.right { background: var(--accent-soft); border-color: var(--accent); }
+  .conf button.wrongpick { background: var(--bad-soft); }
+  .reverse { border-left: 4px solid var(--warn); }
+  .progress { font-size: .85rem; color: var(--muted); }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function () {
+  'use strict';
+  var h = KTBlock.h;
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'kana-hiragana';
+  var entry = KT_REGISTRY.packs[setId] || {};
+  var file = entry.file;
+  if (!file) { document.getElementById('app').textContent = '未知的数据包：' + setId; return; }
+  if (entry.block !== 'sound-grid') { document.getElementById('app').textContent = '数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在音节表里打开。'; return; }
+  var s = document.createElement('script');
+  s.src = file;
+  s.onload = function () { start(KT_DATA[setId]); };
+  s.onerror = function () { document.getElementById('app').textContent = '数据包加载失败：' + file; };
+  document.head.appendChild(s);
+
+  function start(pack) {
+    var B = KTBlock.init({ id: 'sound-grid', primitive: 'prim:sound-spelling-blend', title: pack.title, set: pack.id });
+    document.title = pack.title + ' · Sound Grid';
+    var modes = [{ id: 'explore', label: '浏览' }, { id: 'listen', label: '听音找字' }];
+    if (pack.confusables && pack.confusables.length) modes.push({ id: 'confusable', label: pack.confusableLabel || '形近辨认' });
+    if (pack.recall !== false) modes.push({ id: 'recall', label: '遮住回想' });
+    var st = {
+      mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : 'explore',
+      table: pack.tables[0].id,
+      showRoman: params.get('roman') !== '0',
+      off: {},            // tableId:rowId -> true when excluded from practice
+      solved: {},         // cellId -> 'ind' | 'ast'
+      q: null, sel: null
+    };
+    if (params.get('focus')) {
+      var keep = params.get('focus').split(',');
+      pack.tables.forEach(function (t) { t.rows.forEach(function (r) { if (keep.indexOf(r.id) < 0) st.off[t.id + ':' + r.id] = true; }); });
+    }
+    var cellsById = {};
+    var STATUS_CLASS = { independent: 'solved', assisted: 'solved-assisted', revealed: 'solved-assisted', wrong: 'solved-wrong', 'self-yes': 'solved-self', 'self-no': 'solved-wrong' };
+    // homophones: glyphs that sound identical (じ/ぢ, ず/づ, お/を). Hearing alone cannot pick the spelling.
+    var homo = {};
+    (pack.homophones || []).forEach(function (g) { g.forEach(function (x) { homo[x] = g; }); });
+    // evidence and progress are kept per mode: a cell found by ear and the same cell recalled are different items
+    function I(id) { return st.mode === 'recall' ? 'recall:' + id : id; }
+    function sameSound(a, b) { return a === b || (homo[a.glyph] && homo[a.glyph].indexOf(b.glyph) >= 0); }
+    pack.tables.forEach(function (t) { t.cells.forEach(function (c) { c._t = t.id; cellsById[c.id] = c; }); });
+
+    var ui = KTBlock.chrome(B, { title: pack.title, subtitle: pack.subtitle, modes: modes, mode: st.mode,
+      onMode: function (m) { st.mode = m; st.q = null; ui.setMode(m); B.emit('view', { mode: m }); render(); }, onVariant: render });
+    var grid = h('div', { class: 'sg-scroll' });
+    var side = h('aside', { class: 'sg-side' });
+    var bar = h('div', { class: 'kb-bar' });
+    var main = h('main', { class: 'kb-main' }, [bar, h('div', { class: 'sg-layout' }, [h('div', {}, [grid]), side])]);
+    document.getElementById('app').append(ui.header, main, ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id });
+
+    function table() { return pack.tables.find(function (t) { return t.id === st.table; }); }
+    function say(cell, tone) {
+      var t = tone || (cell.tones ? cell.tones[0] : null);
+      var text = t ? t.say : (cell.say || cell.glyph);
+      if (!B.speak(text, pack.speech, { audio: (t && t.audio) || cell.audio })) flash('这个浏览器不能播放语音。');
+    }
+    function pool() {
+      var t = table();
+      return t.cells.filter(function (c) { return !st.off[t.id + ':' + c.row]; });
+    }
+    function flash(msg, tone) { var f = side.querySelector('.kb-feedback'); if (f) { f.textContent = msg; f.className = 'kb-feedback ' + (tone || ''); } }
+
+    function renderBar() {
+      bar.innerHTML = '';
+      if (pack.tables.length > 1) bar.append(h('div', { class: 'sg-tabs' }, pack.tables.map(function (t) {
+        return h('button', { 'aria-pressed': t.id === st.table ? 'true' : 'false', onclick: function () { st.table = t.id; st.q = null; st.sel = null; render(); } }, t.label);
+      })));
+      bar.append(h('label', { class: 'kb-variant' }, [h('input', { type: 'checkbox', checked: st.showRoman,
+        onchange: function (e) { st.showRoman = e.target.checked; B.emit('highlight', { showRoman: st.showRoman }); render(); } }), ' 显示' + (pack.romanLabel || '读音')]));
+      var p = pool(); var done = p.filter(function (c) { return st.solved[I(c.id)]; }).length;
+      if (st.mode !== 'explore') bar.append(h('span', { class: 'progress' }, '本表练习范围 ' + p.length + ' 个，已完成 ' + done + '。点行名可以把整行排除或加回。'));
+    }
+
+    function cellButton(c) {
+      var cls = ['cell'];
+      if ((c.glyph || '').length > 2) cls.push('wide');
+      if (st.solved[I(c.id)]) cls.push(STATUS_CLASS[B.status(I(c.id))] || 'solved-assisted');
+      if (st.off[c._t + ':' + c.row] && st.mode !== 'explore') cls.push('off');
+      if (st.mode === 'recall' && !(st.solved[I(c.id)]) && !(st.q && st.q.cell === c && st.q.revealed)) cls.push('covered');
+      if (st.sel && st.mode === 'explore') {
+        if (st.sel.row === c.row) cls.push('in-row');
+        if (st.sel.col && st.sel.col === c.col) cls.push('in-col');
+        if (st.sel === c) cls.push('sel');
+      }
+      if (st.q && st.q.hintRow && c.row === st.q.cell.row) cls.push('hint');
+      if (st.q && st.q.hintCol && c.col === st.q.cell.col) cls.push('hint');
+      return h('button', { class: cls.join(' '), dataset: { id: c.id }, 'aria-label': c.glyph + (c.roman ? '，' + c.roman : ''),
+        onclick: function (e) { onCell(c, e.currentTarget); } }, [h('span', { class: 'g', text: c.glyph }), h('span', { class: 'r', text: c.roman || '' })]);
+    }
+
+    function rowToggle(t, r) {
+      var key = t.id + ':' + r.id;
+      if (st.mode === 'explore') return r.label;
+      return h('button', { 'aria-pressed': st.off[key] ? 'false' : 'true', title: '把这一行加入或排除练习',
+        onclick: function () { st.off[key] = !st.off[key]; if (st.q && st.q.cell.row === r.id) st.q = null; render(); } }, r.label);
+    }
+
+    function renderGrid() {
+      var t = table();
+      grid.className = 'sg-scroll' + (st.showRoman ? '' : ' hide-roman');
+      grid.innerHTML = '';
+      if (t.cols) {
+        var at = {};
+        t.cells.forEach(function (c) { at[c.row + '|' + c.col] = c; });
+        var head = h('tr', {}, [h('th')].concat(t.cols.map(function (c) { return h('th', { scope: 'col', text: c.label }); })));
+        var body = t.rows.map(function (r) {
+          return h('tr', {}, [h('th', { class: 'rowh', scope: 'row' }, [rowToggle(t, r)])].concat(t.cols.map(function (col) {
+            var c = at[r.id + '|' + col.id];
+            return c ? h('td', {}, [cellButton(c)]) : h('td', { class: 'gap', title: '这个组合不存在' });
+          })));
+        });
+        grid.append(h('table', { class: 'sg', 'aria-label': t.label }, [h('thead', {}, [head]), h('tbody', {}, body)]));
+      } else {
+        grid.append(h('div', { class: 'sg-lines' }, t.rows.map(function (r) {
+          return h('div', { class: 'sg-line' }, [h('span', {}, [rowToggle(t, r)])].concat(t.cells.filter(function (c) { return c.row === r.id; }).map(cellButton)));
+        })));
+      }
+    }
+
+    function detail(c) {
+      var conf = (pack.confusables || []).filter(function (g) { return g.glyphs.indexOf(c.glyph) >= 0; });
+      return h('div', { class: 'kb-card' }, [
+        h('div', { class: 'big', text: c.glyph }),
+        h('p', { style: 'text-align:center;margin:0' }, [c.roman ? h('b', { text: c.roman }) : null, c.alt ? '　' + c.alt : null]),
+        c.tones ? h('div', { class: 'tone-row' }, c.tones.map(function (t) {
+          return h('button', { class: 'kb-btn tone' + t.tone, onclick: function () { say(c, t); B.emit('select', { item: c.id, tone: t.tone }); } }, t.mark + (t.say ? '（' + t.say + '）' : ''));
+        })) : h('p', { style: 'text-align:center' }, [h('button', { class: 'kb-btn primary', onclick: function () { say(c); } }, '▶ 再听一次')]),
+        c.example ? h('p', {}, ['例：', h('button', { class: 'kb-btn', onclick: function () { B.speak(c.example.say || c.example.text, pack.speech); } }, '▶ ' + c.example.text), ' ', c.example.gloss || '']) : null,
+        c.note ? h('p', { class: 'kb-note', text: c.note }) : null,
+        conf.length ? h('div', {}, conf.map(function (g) { return h('p', { class: 'kb-note' }, ['易混：' + g.glyphs.join(' / ') + '。' + g.note]); })) : null,
+        h('p', { class: 'kb-note' }, [rowLabel(c) + (c.col ? ' · ' + colLabel(c) : '')])
+      ]);
+    }
+    function rowLabel(c) { var t = pack.tables.find(function (x) { return x.id === c._t; }); var r = t.rows.find(function (x) { return x.id === c.row; }); return r ? r.label : ''; }
+    function colLabel(c) { var t = pack.tables.find(function (x) { return x.id === c._t; }); var r = (t.cols || []).find(function (x) { return x.id === c.col; }); return r ? r.label : ''; }
+
+    function newQuestion() {
+      var p = pool().filter(function (c) { return !st.solved[I(c.id)]; });
+      if (!p.length) { st.q = null; B.emit('complete', { table: st.table, mode: st.mode }); return; }
+      var c = p[Math.floor(Math.random() * p.length)];
+      st.q = { cell: c, tone: c.tones ? c.tones[Math.floor(Math.random() * c.tones.length)] : null };
+      if (st.mode === 'listen') say(c, st.q.tone);
+    }
+
+    function renderSide() {
+      side.innerHTML = '';
+      if (st.mode === 'explore') {
+        side.append(st.sel ? detail(st.sel) : h('div', { class: 'kb-card' }, [h('p', { class: 'kb-prompt', text: '点任意一格听读音。' }),
+          h('p', { class: 'kb-note', text: pack.tables[0].cols ? '同一行的格子会一起亮起来，同一列也会。先看横竖两条规律，再记单个字。' : '点一个字母，看它常见的读音和例词。' })]));
+      } else if (st.mode === 'listen') {
+        if (!st.q) newQuestion();
+        side.append(st.q ? h('div', { class: 'kb-card' }, [
+          h('p', { class: 'kb-prompt', text: '听一听，在表里点出这个音。' }),
+          h('div', { class: 'kb-bar' }, [
+            h('button', { class: 'kb-btn primary', onclick: function () { say(st.q.cell, st.q.tone); B.emit('view', { item: st.q.cell.id, replay: true }); } }, '▶ 再听'),
+            table().cols ? h('button', { class: 'kb-btn', disabled: st.q.hintCol, onclick: function () { st.q.hintCol = true; B.hint(st.q.cell.id, 1); render(); } }, '提示：哪一列') : null,
+            h('button', { class: 'kb-btn', disabled: st.q.hintRow, onclick: function () { st.q.hintRow = true; B.hint(st.q.cell.id, 2); render(); } }, '提示：哪一行'),
+            h('button', { class: 'kb-btn', onclick: function () { B.reveal(st.q.cell.id); st.solved[I(st.q.cell.id)] = true; var c = st.q.cell; st.q = null; st.sel = c; render(); flash('答案是 ' + c.glyph + (c.roman ? '（' + c.roman + '）' : '') + '。' + (B.status(c.id) === 'wrong' ? '第一次答错的记录保留。' : '这一格记为"看过答案"。'), 'warn'); } }, '看答案')
+          ]),
+          h('div', { class: 'kb-feedback', text: '第一次点的格子会被记录；提示和看答案都会记下来，和独立答对分开算。' })
+        ]) : h('div', { class: 'kb-card' }, [h('p', { text: '这一范围都练完了。换一张表，或在行名上加回几行。' }), h('div', { class: 'kb-feedback' })]));
+      } else if (st.mode === 'confusable') {
+        side.append(confusableCard());
+      } else if (st.mode === 'recall') {
+        side.append(h('div', { class: 'kb-card' }, st.q && st.q.revealed ? [
+          h('div', { class: 'big', text: st.q.cell.glyph }),
+          h('p', { class: 'kb-prompt', text: '和你心里想的（或纸上写的）一样吗？' }),
+          h('div', { class: 'kb-bar' }, [
+            h('button', { class: 'kb-btn primary', onclick: function () { selfMark(true); } }, '想对了'),
+            h('button', { class: 'kb-btn', onclick: function () { selfMark(false); } }, '没想到 / 想错了')]),
+          h('p', { class: 'kb-note', text: '这是自评，证据比点选弱，只记作"自报"。' }), h('div', { class: 'kb-feedback' })
+        ] : [h('p', { class: 'kb-prompt', text: '字被盖住了，只留' + (pack.romanLabel || '读音') + '。点一格，先在心里想出（最好写在纸上），再翻开对照。' }), h('div', { class: 'kb-feedback' })]));
+      }
+      if (pack.reverse) side.append(h('div', { class: 'kb-card reverse' }, [h('b', { text: '表外的情况' }), h('p', { class: 'kb-note', text: pack.reverse })]));
+    }
+
+    function selfMark(ok) {
+      var c = st.q.cell;
+      B.attempt(I(c.id), { correct: ok, response: 'self', selfReport: true });
+      st.solved[I(c.id)] = true;
+      st.q = null; render();
+    }
+
+    var cq = null;
+    function confusableCard() {
+      if (!cq) {
+        // groups of homophones are spelling facts, not listening contrasts: never drill them by ear
+        var groups = pack.confusables.filter(function (g) {
+          return !g.homophone && g.glyphs.every(function (x) { return findGlyph(x); }) &&
+            !g.glyphs.some(function (x, i) { return g.glyphs.some(function (y, j) { return i !== j && homo[x] && homo[x].indexOf(y) >= 0; }); });
+        });
+        if (!groups.length) return h('div', { class: 'kb-card', text: '这个数据包没有可用的易混组。' });
+        var g = groups[Math.floor(Math.random() * groups.length)];
+        cq = { group: g, target: findGlyph(g.glyphs[Math.floor(Math.random() * g.glyphs.length)]), opts: KTBlock.shuffle(g.glyphs), done: false };
+        setTimeout(function () { say(cq.target); }, 50);
+      }
+      var card = h('div', { class: 'kb-card' }, [
+        h('p', { class: 'kb-prompt', text: '听到的是哪一个？' }),
+        h('div', { class: 'conf' }, cq.opts.map(function (gl) {
+          return h('button', { dataset: { g: gl }, onclick: function (e) { pickConf(gl, e.currentTarget); } }, gl);
+        })),
+        h('div', { class: 'kb-bar' }, [h('button', { class: 'kb-btn', onclick: function () { say(cq.target); } }, '▶ 再听'),
+          h('button', { class: 'kb-btn primary', onclick: function () { cq = null; renderSide(); } }, '下一组')]),
+        h('div', { class: 'kb-feedback', text: pack.confusableHint || '形近字放在一起比，才知道该看哪一笔。' })
+      ]);
+      return card;
+    }
+    function findGlyph(g) { for (var k in cellsById) if (cellsById[k].glyph === g) return cellsById[k]; return null; }
+    function pickConf(gl, btn) {
+      var ok = gl === cq.target.glyph;
+      B.attempt('conf:' + cq.target.id, { correct: ok, response: gl });
+      btn.classList.add(ok ? 'right' : 'wrongpick');
+      if (!ok) { var picked = findGlyph(gl); setTimeout(function () { say(picked); }, 600); }
+      flash((ok ? '对。' : '不是 ' + gl + '，是 ' + cq.target.glyph + '。刚才放的是你选的那个，听听差别。') + cq.group.note, ok ? '' : 'bad');
+    }
+
+    function onCell(c, el) {
+      if (st.mode === 'explore') {
+        st.sel = c; say(c); B.emit('select', { item: c.id }); render(); return;
+      }
+      if (st.off[c._t + ':' + c.row]) return;
+      if (st.mode === 'listen') {
+        if (!st.q) return;
+        var target = st.q.cell;
+        var ok = sameSound(c, target);
+        B.attempt(target.id, { correct: ok, response: c.id });
+        if (ok) {
+          st.solved[I(target.id)] = true;
+          st.q = null; render();
+          var alt = c !== target ? '你点的 ' + c.glyph + ' 和 ' + target.glyph + ' 读音完全相同，只听声音分不出写法，算对。' : '';
+          flash(alt + '对，是 ' + target.glyph + (target.roman ? '（' + target.roman + '）' : '') + '。' + (target.note || ''));
+          setTimeout(function () { if (st.mode === 'listen') { newQuestion(); render(); } }, 1100);
+        } else {
+          el.classList.remove('wrong'); void el.offsetWidth; el.classList.add('wrong');
+          say(c);
+          setTimeout(function () { if (st.q) say(st.q.cell, st.q.tone); }, 900);
+          flash('你点的是 ' + c.glyph + (c.roman ? '（' + c.roman + '）' : '') + '。先放你点的，再放目标音，比一比。', 'bad');
+        }
+        return;
+      }
+      if (st.mode === 'recall') {
+        if (st.solved[I(c.id)]) { say(c); return; }
+        st.q = { cell: c, revealed: true }; B.emit('reveal', { item: c.id, afterRecall: true }); say(c); render();
+      }
+    }
+
+    function render() { renderBar(); renderGrid(); renderSide(); }
+    render();
+  }
+})();
+</script>
+</body>
+</html>

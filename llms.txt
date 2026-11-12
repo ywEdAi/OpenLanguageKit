@@ -1,0 +1,17 @@
+# OpenLanguageKit
+
+> Licence: CC BY-NC 4.0 (non-commercial; commercial use needs a separate licence, see COMMERCIAL.md). Blueprints and building blocks for language-learning apps: 950 knowledge points for English, Japanese and Chinese with learning paths and learner tracks, 56 pedagogical primitives (teaching-design contracts), embeddable script-and-sound blocks, and a planner that turns a learner profile into a course blueprint a coding AI can build from.
+
+## Start here
+- [BLUEPRINT.en.md](BLUEPRINT.en.md): how to go from a one-line request to a plan and an app
+- [blueprint/plan.js](blueprint/plan.js): `node blueprint/plan.js --list`, then `--lang … --track … --out dir` writes blueprint.json and PLAN.md
+
+## Data
+- [curriculum/SCHEMA.en.md](curriculum/SCHEMA.en.md): knowledge-point, path and track schema
+- [curriculum/primitives/README.en.md](curriculum/primitives/README.en.md): primitive contract fields
+- [blocks/README.en.md](blocks/README.en.md): block URL parameters, embedding, evidence events, adding a language
+- [pedagogy/README.en.md](pedagogy/README.en.md): learning-sciences graph with evidence status and limits
+
+## Maintaining
+- [CLAUDE.md](CLAUDE.md): validators, generated files, ownership boundaries
+- [README.zh-CN.md](README.zh-CN.md): 中文说明; the Chinese docs (same names without `.en`) are canonical
