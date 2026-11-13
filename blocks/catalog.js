@@ -6,6 +6,11 @@
  *   cat.coverage(kc, 'ja')        // 'block' | 'impl' | 'borrow' | 'spec'
  *   cat.artifactsForKC(kc, 'ja')  // [{key, kind, title, src, why, embeddable, reference?}]
  *
+ * Interface language: pass `lang: 'en' | 'zh'` (default: window.ATLAS_LANG if the host page set it, else 'zh').
+ * In English the coverage labels, language names, `title`, `why` and `note` come out in English, using the
+ * registry's titleEn / noteEn, the primitives' nameEn and the asset index's `en` (each falls back to the Chinese).
+ * cat.text(obj, 'title') picks obj.titleEn or obj.title the same way, e.g. for a registry block's title / does.
+ *
  * Rules (keep them strict; the workspace review depends on them):
  *  - 'block': an artifact in blocks/registry.js lists this KC — the page really practises it.
  *  - 'impl': the KC's PRIMARY primitive has an asset-library page in this language.
@@ -16,22 +21,35 @@
  *  without the KC id, so its evidence is never attributed to this KC. */
 (function (global) {
   'use strict';
-  var LANGS = { en: '英语', ja: '日语', zh: '中文', fr: '法语' };
-  var COV = {
+  var LANGS_ZH = { en: '英语', ja: '日语', zh: '中文', fr: '法语' };
+  var LANGS_EN = { en: 'English', ja: 'Japanese', zh: 'Chinese', fr: 'French' };
+  var COV_ZH = {
     block: { label: '有现成的学习页面', short: '现成页面' },
     impl: { label: '主要原语有可直接用的页面', short: '可直接用' },
     borrow: { label: '有别处的实现，可借用改写', short: '可借用' },
     spec: { label: '只有设计契约，还没有页面', short: '只有契约' }
   };
+  var COV_EN = {
+    block: { label: 'A learning page is ready', short: 'Page ready' },
+    impl: { label: 'The main pattern has a page you can use as is', short: 'Usable as is' },
+    borrow: { label: 'Implemented elsewhere; can be borrowed and adapted', short: 'Borrowable' },
+    spec: { label: 'Design contract only, no page yet', short: 'Contract only' }
+  };
 
   function KTCatalog(o) {
+    var EN = (o.lang || global.ATLAS_LANG) === 'en';
+    var LANGS = EN ? LANGS_EN : LANGS_ZH, COV = EN ? COV_EN : COV_ZH;
+    function L(zh, en) { return EN && en !== null && en !== undefined ? en : zh; }
+    /** obj[key + 'En'] in English when present, else obj[key]. */
+    function text(obj, key) { return obj ? L(obj[key], obj[key + 'En']) : undefined; }
+    function pname(p) { return L(p.name, p.nameEn); }
     var P = o.primitives || { primitives: [], families: {} };
     var AL = o.assets || { assets: [] };
     var R = o.registry || { blocks: {}, packs: {}, artifacts: [] };
     var root = o.root || '';
     var PRIM = {}; P.primitives.forEach(function (p) { PRIM[p.id] = p; });
     var ASSET = {}; AL.assets.forEach(function (a) { ASSET[a.id] = a; });
-    var cat = { LANGS: LANGS, COV: COV, PRIM: PRIM, assetLocal: false };
+    var cat = { LANGS: LANGS, COV: COV, PRIM: PRIM, assetLocal: false, lang: EN ? 'en' : 'zh', text: text };
 
     function blockOf(a) {
       var page = a.href.split('?')[0];
@@ -40,14 +58,14 @@
     }
     function fromBlock(a, kcId, why, reference) {
       var b = blockOf(a) || {};
-      return { key: 'block:' + a.id, kind: 'block', id: a.id, title: a.title, lang: a.lang, primitive: b.primitive,
-        src: root + 'blocks/' + a.href + (kcId ? '&kc=' + encodeURIComponent(kcId) : ''), why: why, note: a.note,
+      return { key: 'block:' + a.id, kind: 'block', id: a.id, title: text(a, 'title'), lang: a.lang, primitive: b.primitive,
+        src: root + 'blocks/' + a.href + (kcId ? '&kc=' + encodeURIComponent(kcId) : ''), why: why, note: text(a, 'note'),
         embeddable: true, reference: !!reference };
     }
     function fromAsset(id, why, primitive) {
       var a = ASSET[id];
       var local = cat.assetLocal && a;
-      return { key: 'asset:' + id, kind: 'asset', id: id, title: a ? a.zh + '（' + (a.code || id) + '）' : id, lang: 'en', primitive: primitive,
+      return { key: 'asset:' + id, kind: 'asset', id: id, title: a ? L(a.zh + '（' + (a.code || id) + '）', (a.en || a.zh) + ' (' + (a.code || id) + ')') : id, lang: 'en', primitive: primitive,
         src: a ? (local ? '/asset-library/' + a.open : (AL.repo || '') + '/blob/main/' + a.open) : null,
         why: why, embeddable: !!local };
     }
@@ -63,15 +81,17 @@
     cat.artifactsForKC = function (k, lang) {
       var out = [], seen = {};
       function add(a) { if (!seen[a.key]) { seen[a.key] = 1; out.push(a); } }
-      cat.directArtifacts(k.id).forEach(function (a) { add(fromBlock(a, k.id, '专门为这个知识点配置')); });
+      cat.directArtifacts(k.id).forEach(function (a) { add(fromBlock(a, k.id, L('专门为这个知识点配置', 'Set up for this knowledge point'))); });
       (k.primitives || []).forEach(function (u) {
         var p = PRIM[u.primitive]; if (!p) return;
         (p.implementations || []).forEach(function (i) {
-          if (i.asset) add(fromAsset(i.asset, (u.role === 'primary' ? '主要' : '辅助') + '原语「' + p.name + '」的英语页面' + (i.note ? '：' + i.note : ''), p.id));
+          if (i.asset) add(fromAsset(i.asset, L((u.role === 'primary' ? '主要' : '辅助') + '原语「' + p.name + '」的英语页面' + (i.note ? '：' + i.note : ''),
+            'English page for the ' + (u.role === 'primary' ? 'main' : 'supporting') + ' teaching pattern “' + pname(p) + '”' + (i.note ? ': ' + i.note : '')), p.id));
         });
         R.artifacts.forEach(function (a) {
           var b = blockOf(a);
-          if (b && b.primitive === u.primitive && a.lang === lang) add(fromBlock(a, null, '复用参考：同一原语（' + p.name + '）的积木，没有覆盖这个知识点，要换数据才能用', true));
+          if (b && b.primitive === u.primitive && a.lang === lang) add(fromBlock(a, null, L('复用参考：同一原语（' + p.name + '）的积木，没有覆盖这个知识点，要换数据才能用',
+            'For reuse: a block for the same teaching pattern (' + pname(p) + '). It does not cover this knowledge point and needs different data before it can be used'), true));
         });
       });
       return out;
@@ -79,7 +99,7 @@
     cat.artifactsForPrim = function (p) {
       var out = [];
       R.artifacts.forEach(function (a) { var b = blockOf(a); if (b && b.primitive === p.id) out.push(fromBlock(a, null, LANGS[a.lang] || a.lang)); });
-      (p.implementations || []).forEach(function (i) { if (i.asset) out.push(fromAsset(i.asset, i.note || '英语页面', p.id)); });
+      (p.implementations || []).forEach(function (i) { if (i.asset) out.push(fromAsset(i.asset, i.note || L('英语页面', 'English page'), p.id)); });
       return out;
     };
     cat.allArtifacts = function () {

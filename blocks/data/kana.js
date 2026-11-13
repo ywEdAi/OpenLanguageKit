@@ -4,9 +4,9 @@ KT_DATA["kana-hiragana"] = {
  "id": "kana-hiragana",
  "lang": "ja",
  "speech": "ja-JP",
- "title": "平假名",
- "subtitle": "五十音按「行」（辅音）和「段」（元音）排列：同一行辅音相同，同一段元音相同。",
- "romanLabel": "罗马字",
+ "title": "平假名", "titleEn": "Hiragana",
+ "subtitle": "五十音按「行」（辅音）和「段」（元音）排列：同一行辅音相同，同一段元音相同。", "subtitleEn": "The fifty sounds are arranged by row (行, consonant) and column (段, vowel): kana in the same row share a consonant, and kana in the same column share a vowel.",
+ "romanLabel": "罗马字", "romanLabelEn": "romaji",
  "kcs": [
   "kt:ja-script-hiragana",
   "kt:ja-script-dakuten",
@@ -15,47 +15,47 @@ KT_DATA["kana-hiragana"] = {
  "tables": [
   {
    "id": "seion",
-   "label": "清音（五十音）",
+   "label": "清音（五十音）", "labelEn": "Basic kana (the fifty sounds)",
    "rows": [
     {
      "id": "a",
-     "label": "あ行"
+     "label": "あ行", "labelEn": "あ row"
     },
     {
      "id": "k",
-     "label": "か行"
+     "label": "か行", "labelEn": "か row"
     },
     {
      "id": "s",
-     "label": "さ行"
+     "label": "さ行", "labelEn": "さ row"
     },
     {
      "id": "t",
-     "label": "た行"
+     "label": "た行", "labelEn": "た row"
     },
     {
      "id": "n",
-     "label": "な行"
+     "label": "な行", "labelEn": "な row"
     },
     {
      "id": "h",
-     "label": "は行"
+     "label": "は行", "labelEn": "は row"
     },
     {
      "id": "m",
-     "label": "ま行"
+     "label": "ま行", "labelEn": "ま row"
     },
     {
      "id": "y",
-     "label": "や行"
+     "label": "や行", "labelEn": "や row"
     },
     {
      "id": "r",
-     "label": "ら行"
+     "label": "ら行", "labelEn": "ら row"
     },
     {
      "id": "w",
-     "label": "わ行"
+     "label": "わ行", "labelEn": "わ row"
     },
     {
      "id": "nn",
@@ -65,23 +65,23 @@ KT_DATA["kana-hiragana"] = {
    "cols": [
     {
      "id": "a",
-     "label": "あ段 a"
+     "label": "あ段 a", "labelEn": "あ column (a)"
     },
     {
      "id": "i",
-     "label": "い段 i"
+     "label": "い段 i", "labelEn": "い column (i)"
     },
     {
      "id": "u",
-     "label": "う段 u"
+     "label": "う段 u", "labelEn": "う column (u)"
     },
     {
      "id": "e",
-     "label": "え段 e"
+     "label": "え段 e", "labelEn": "え column (e)"
     },
     {
      "id": "o",
-     "label": "お段 o"
+     "label": "お段 o", "labelEn": "お column (o)"
     }
    ],
    "cells": [
@@ -168,7 +168,7 @@ KT_DATA["kana-hiragana"] = {
      "roman": "shi",
      "row": "s",
      "col": "i",
-     "note": "不是 si：舌面音，接近汉语 xi"
+     "note": "不是 si：舌面音，接近汉语 xi", "noteEn": "Not si: made with the flat of the tongue, close to pinyin xi"
     },
     {
      "id": "s-u",
@@ -204,7 +204,7 @@ KT_DATA["kana-hiragana"] = {
      "roman": "chi",
      "row": "t",
      "col": "i",
-     "note": "不是 ti / qi 的拼音读法，接近 qi 但更短"
+     "note": "不是 ti / qi 的拼音读法，接近 qi 但更短", "noteEn": "Not read like pinyin ti or qi; close to qi but shorter"
     },
     {
      "id": "t-u",
@@ -212,7 +212,7 @@ KT_DATA["kana-hiragana"] = {
      "roman": "tsu",
      "row": "t",
      "col": "u",
-     "note": "汉语没有这个音，接近 ci 加 u 口型，不是 cu/tu"
+     "note": "汉语没有这个音，接近 ci 加 u 口型，不是 cu/tu", "noteEn": "Chinese has no such sound; close to pinyin ci with the lips shaped for u, not cu or tu"
     },
     {
      "id": "t-e",
@@ -283,7 +283,7 @@ KT_DATA["kana-hiragana"] = {
      "roman": "fu",
      "row": "h",
      "col": "u",
-     "note": "上下唇轻轻靠拢送气，不咬下唇，不是英语 f"
+     "note": "上下唇轻轻靠拢送气，不咬下唇，不是英语 f", "noteEn": "Bring the lips lightly together and let the air out; do not bite the lower lip. Not the English f"
     },
     {
      "id": "h-e",
@@ -361,7 +361,7 @@ KT_DATA["kana-hiragana"] = {
      "roman": "ra",
      "row": "r",
      "col": "a",
-     "note": "ら行是闪音，介于 l 和 r 之间"
+     "note": "ら行是闪音，介于 l 和 r 之间", "noteEn": "The ら row is a tap, between l and r"
     },
     {
      "id": "r-i",
@@ -404,7 +404,7 @@ KT_DATA["kana-hiragana"] = {
      "roman": "o",
      "row": "w",
      "col": "o",
-     "note": "を 只当助词用，现代读 o"
+     "note": "を 只当助词用，现代读 o", "noteEn": "を is used only as a particle; today it is read o"
     },
     {
      "id": "nn-a",
@@ -412,55 +412,55 @@ KT_DATA["kana-hiragana"] = {
      "roman": "n",
      "row": "nn",
      "col": "a",
-     "note": "ん 自己占一拍，不是前一个假名的韵尾"
+     "note": "ん 自己占一拍，不是前一个假名的韵尾", "noteEn": "ん takes a beat of its own; it is not the ending of the kana before it"
     }
    ]
   },
   {
    "id": "dakuten",
-   "label": "浊音・半浊音",
+   "label": "浊音・半浊音", "labelEn": "Voiced and semi-voiced",
    "rows": [
     {
      "id": "g",
-     "label": "が行"
+     "label": "が行", "labelEn": "が row"
     },
     {
      "id": "z",
-     "label": "ざ行"
+     "label": "ざ行", "labelEn": "ざ row"
     },
     {
      "id": "d",
-     "label": "だ行"
+     "label": "だ行", "labelEn": "だ row"
     },
     {
      "id": "b",
-     "label": "ば行"
+     "label": "ば行", "labelEn": "ば row"
     },
     {
      "id": "p",
-     "label": "ぱ行"
+     "label": "ぱ行", "labelEn": "ぱ row"
     }
    ],
    "cols": [
     {
      "id": "a",
-     "label": "あ段 a"
+     "label": "あ段 a", "labelEn": "あ column (a)"
     },
     {
      "id": "i",
-     "label": "い段 i"
+     "label": "い段 i", "labelEn": "い column (i)"
     },
     {
      "id": "u",
-     "label": "う段 u"
+     "label": "う段 u", "labelEn": "う column (u)"
     },
     {
      "id": "e",
-     "label": "え段 e"
+     "label": "え段 e", "labelEn": "え column (e)"
     },
     {
      "id": "o",
-     "label": "お段 o"
+     "label": "お段 o", "labelEn": "お column (o)"
     }
    ],
    "cells": [
@@ -547,7 +547,7 @@ KT_DATA["kana-hiragana"] = {
      "roman": "ji",
      "row": "d",
      "col": "i",
-     "note": "じ 和 ぢ 读音相同，一般写 じ"
+     "note": "じ 和 ぢ 读音相同，一般写 じ", "noteEn": "じ and ぢ sound the same; じ is the usual spelling"
     },
     {
      "id": "d-u",
@@ -555,7 +555,7 @@ KT_DATA["kana-hiragana"] = {
      "roman": "zu",
      "row": "d",
      "col": "u",
-     "note": "ず 和 づ 读音相同，一般写 ず"
+     "note": "ず 和 づ 读音相同，一般写 ず", "noteEn": "ず and づ sound the same; ず is the usual spelling"
     },
     {
      "id": "d-e",
@@ -645,7 +645,7 @@ KT_DATA["kana-hiragana"] = {
   },
   {
    "id": "yoon",
-   "label": "拗音（小ゃゅょ）",
+   "label": "拗音（小ゃゅょ）", "labelEn": "Contracted sounds (small ゃゅょ)",
    "rows": [
     {
      "id": "k",
@@ -695,15 +695,15 @@ KT_DATA["kana-hiragana"] = {
    "cols": [
     {
      "id": "a",
-     "label": "ya 列"
+     "label": "ya 列", "labelEn": "ya column"
     },
     {
      "id": "u",
-     "label": "yu 列"
+     "label": "yu 列", "labelEn": "yu column"
     },
     {
      "id": "o",
-     "label": "yo 列"
+     "label": "yo 列", "labelEn": "yo column"
     }
    ],
    "cells": [
@@ -713,7 +713,7 @@ KT_DATA["kana-hiragana"] = {
      "roman": "kya",
      "row": "k",
      "col": "a",
-     "note": "两个字合成一拍，小字要写小"
+     "note": "两个字合成一拍，小字要写小", "noteEn": "Two characters make one beat; the small one must be written small"
     },
     {
      "id": "yk-u",
@@ -948,14 +948,14 @@ KT_DATA["kana-hiragana"] = {
     "さ",
     "ち"
    ],
-   "note": "左右镜像：さ 开口朝左下，ち 开口朝右"
+   "note": "左右镜像：さ 开口朝左下，ち 开口朝右", "noteEn": "Mirror images: さ opens toward the lower left, ち opens toward the right"
   },
   {
    "glyphs": [
     "ぬ",
     "め"
    ],
-   "note": "ぬ 末笔有个小圈，め 没有"
+   "note": "ぬ 末笔有个小圈，め 没有", "noteEn": "ぬ ends in a small loop; め does not"
   },
   {
    "glyphs": [
@@ -963,49 +963,49 @@ KT_DATA["kana-hiragana"] = {
     "れ",
     "わ"
    ],
-   "note": "看最后一笔：ね 打圈，れ 向外甩，わ 向内收"
+   "note": "看最后一笔：ね 打圈，れ 向外甩，わ 向内收", "noteEn": "Look at the last stroke: ね ends in a loop, れ flicks outward, わ curves inward"
   },
   {
    "glyphs": [
     "は",
     "ほ"
    ],
-   "note": "ほ 右边顶上多一横"
+   "note": "ほ 右边顶上多一横", "noteEn": "ほ has an extra horizontal stroke at the top right"
   },
   {
    "glyphs": [
     "る",
     "ろ"
    ],
-   "note": "る 末尾有小圈，ろ 没有"
+   "note": "る 末尾有小圈，ろ 没有", "noteEn": "る ends in a small loop; ろ does not"
   },
   {
    "glyphs": [
     "い",
     "り"
    ],
-   "note": "り 右笔更长、向下拉"
+   "note": "り 右笔更长、向下拉", "noteEn": "In り the right stroke is longer and pulled downward"
   },
   {
    "glyphs": [
     "こ",
     "に"
    ],
-   "note": "に 左边多一竖"
+   "note": "に 左边多一竖", "noteEn": "に has an extra vertical stroke on the left"
   },
   {
    "glyphs": [
     "き",
     "さ"
    ],
-   "note": "き 两横，さ 一横"
+   "note": "き 两横，さ 一横", "noteEn": "き has two horizontal strokes, さ has one"
   },
   {
    "glyphs": [
     "じ",
     "ぢ"
    ],
-   "note": "读音相同；一般写 じ，ぢ 只在少数词里出现",
+   "note": "读音相同；一般写 じ，ぢ 只在少数词里出现", "noteEn": "Same sound; じ is the usual spelling, and ぢ appears in only a few words",
    "homophone": true
   },
   {
@@ -1013,11 +1013,11 @@ KT_DATA["kana-hiragana"] = {
     "ず",
     "づ"
    ],
-   "note": "读音相同；一般写 ず",
+   "note": "读音相同；一般写 ず", "noteEn": "Same sound; ず is the usual spelling",
    "homophone": true
   }
  ],
- "reverse": "表里的读音不是全部：助词 は 读 wa、へ 读 e、を 读 o；ぢ/づ 和 じ/ず 同音。长音、促音（小っ）不在表里，见 kt:ja-script-small-kana。",
+ "reverse": "表里的读音不是全部：助词 は 读 wa、へ 读 e、を 读 o；ぢ/づ 和 じ/ず 同音。长音、促音（小っ）不在表里，见 kt:ja-script-small-kana。", "reverseEn": "The readings in the table are not the whole story: the particles は, へ and を are read wa, e and o; ぢ/づ sound the same as じ/ず. Long vowels and the doubled-consonant mark (small っ) are not in the table; see kt:ja-script-small-kana.",
  "homophones": [
   [
    "じ",
@@ -1042,56 +1042,56 @@ KT_DATA["kana-katakana"] = {
  "id": "kana-katakana",
  "lang": "ja",
  "speech": "ja-JP",
- "title": "片假名",
- "subtitle": "片假名和平假名一一对应，读音相同，主要写外来语、拟声词和强调。",
- "romanLabel": "罗马字",
+ "title": "片假名", "titleEn": "Katakana",
+ "subtitle": "片假名和平假名一一对应，读音相同，主要写外来语、拟声词和强调。", "subtitleEn": "Katakana matches hiragana one to one, with the same readings; it is mainly used to write loanwords, sound-imitating words and emphasis.",
+ "romanLabel": "罗马字", "romanLabelEn": "romaji",
  "kcs": [
   "kt:ja-script-katakana"
  ],
  "tables": [
   {
    "id": "seion",
-   "label": "清音（五十音）",
+   "label": "清音（五十音）", "labelEn": "Basic kana (the fifty sounds)",
    "rows": [
     {
      "id": "a",
-     "label": "あ行"
+     "label": "あ行", "labelEn": "あ row"
     },
     {
      "id": "k",
-     "label": "か行"
+     "label": "か行", "labelEn": "か row"
     },
     {
      "id": "s",
-     "label": "さ行"
+     "label": "さ行", "labelEn": "さ row"
     },
     {
      "id": "t",
-     "label": "た行"
+     "label": "た行", "labelEn": "た row"
     },
     {
      "id": "n",
-     "label": "な行"
+     "label": "な行", "labelEn": "な row"
     },
     {
      "id": "h",
-     "label": "は行"
+     "label": "は行", "labelEn": "は row"
     },
     {
      "id": "m",
-     "label": "ま行"
+     "label": "ま行", "labelEn": "ま row"
     },
     {
      "id": "y",
-     "label": "や行"
+     "label": "や行", "labelEn": "や row"
     },
     {
      "id": "r",
-     "label": "ら行"
+     "label": "ら行", "labelEn": "ら row"
     },
     {
      "id": "w",
-     "label": "わ行"
+     "label": "わ行", "labelEn": "わ row"
     },
     {
      "id": "nn",
@@ -1101,23 +1101,23 @@ KT_DATA["kana-katakana"] = {
    "cols": [
     {
      "id": "a",
-     "label": "あ段 a"
+     "label": "あ段 a", "labelEn": "あ column (a)"
     },
     {
      "id": "i",
-     "label": "い段 i"
+     "label": "い段 i", "labelEn": "い column (i)"
     },
     {
      "id": "u",
-     "label": "う段 u"
+     "label": "う段 u", "labelEn": "う column (u)"
     },
     {
      "id": "e",
-     "label": "え段 e"
+     "label": "え段 e", "labelEn": "え column (e)"
     },
     {
      "id": "o",
-     "label": "お段 o"
+     "label": "お段 o", "labelEn": "お column (o)"
     }
    ],
    "cells": [
@@ -1204,7 +1204,7 @@ KT_DATA["kana-katakana"] = {
      "roman": "shi",
      "row": "s",
      "col": "i",
-     "note": "不是 si：舌面音，接近汉语 xi"
+     "note": "不是 si：舌面音，接近汉语 xi", "noteEn": "Not si: made with the flat of the tongue, close to pinyin xi"
     },
     {
      "id": "s-u",
@@ -1240,7 +1240,7 @@ KT_DATA["kana-katakana"] = {
      "roman": "chi",
      "row": "t",
      "col": "i",
-     "note": "不是 ti / qi 的拼音读法，接近 qi 但更短"
+     "note": "不是 ti / qi 的拼音读法，接近 qi 但更短", "noteEn": "Not read like pinyin ti or qi; close to qi but shorter"
     },
     {
      "id": "t-u",
@@ -1248,7 +1248,7 @@ KT_DATA["kana-katakana"] = {
      "roman": "tsu",
      "row": "t",
      "col": "u",
-     "note": "汉语没有这个音，接近 ci 加 u 口型，不是 cu/tu"
+     "note": "汉语没有这个音，接近 ci 加 u 口型，不是 cu/tu", "noteEn": "Chinese has no such sound; close to pinyin ci with the lips shaped for u, not cu or tu"
     },
     {
      "id": "t-e",
@@ -1319,7 +1319,7 @@ KT_DATA["kana-katakana"] = {
      "roman": "fu",
      "row": "h",
      "col": "u",
-     "note": "上下唇轻轻靠拢送气，不咬下唇，不是英语 f"
+     "note": "上下唇轻轻靠拢送气，不咬下唇，不是英语 f", "noteEn": "Bring the lips lightly together and let the air out; do not bite the lower lip. Not the English f"
     },
     {
      "id": "h-e",
@@ -1397,7 +1397,7 @@ KT_DATA["kana-katakana"] = {
      "roman": "ra",
      "row": "r",
      "col": "a",
-     "note": "ら行是闪音，介于 l 和 r 之间"
+     "note": "ら行是闪音，介于 l 和 r 之间", "noteEn": "The ら row is a tap, between l and r"
     },
     {
      "id": "r-i",
@@ -1440,7 +1440,7 @@ KT_DATA["kana-katakana"] = {
      "roman": "o",
      "row": "w",
      "col": "o",
-     "note": "を 只当助词用，现代读 o"
+     "note": "を 只当助词用，现代读 o", "noteEn": "を is used only as a particle; today it is read o"
     },
     {
      "id": "nn-a",
@@ -1448,55 +1448,55 @@ KT_DATA["kana-katakana"] = {
      "roman": "n",
      "row": "nn",
      "col": "a",
-     "note": "ん 自己占一拍，不是前一个假名的韵尾"
+     "note": "ん 自己占一拍，不是前一个假名的韵尾", "noteEn": "ん takes a beat of its own; it is not the ending of the kana before it"
     }
    ]
   },
   {
    "id": "dakuten",
-   "label": "浊音・半浊音",
+   "label": "浊音・半浊音", "labelEn": "Voiced and semi-voiced",
    "rows": [
     {
      "id": "g",
-     "label": "が行"
+     "label": "が行", "labelEn": "が row"
     },
     {
      "id": "z",
-     "label": "ざ行"
+     "label": "ざ行", "labelEn": "ざ row"
     },
     {
      "id": "d",
-     "label": "だ行"
+     "label": "だ行", "labelEn": "だ row"
     },
     {
      "id": "b",
-     "label": "ば行"
+     "label": "ば行", "labelEn": "ば row"
     },
     {
      "id": "p",
-     "label": "ぱ行"
+     "label": "ぱ行", "labelEn": "ぱ row"
     }
    ],
    "cols": [
     {
      "id": "a",
-     "label": "あ段 a"
+     "label": "あ段 a", "labelEn": "あ column (a)"
     },
     {
      "id": "i",
-     "label": "い段 i"
+     "label": "い段 i", "labelEn": "い column (i)"
     },
     {
      "id": "u",
-     "label": "う段 u"
+     "label": "う段 u", "labelEn": "う column (u)"
     },
     {
      "id": "e",
-     "label": "え段 e"
+     "label": "え段 e", "labelEn": "え column (e)"
     },
     {
      "id": "o",
-     "label": "お段 o"
+     "label": "お段 o", "labelEn": "お column (o)"
     }
    ],
    "cells": [
@@ -1583,7 +1583,7 @@ KT_DATA["kana-katakana"] = {
      "roman": "ji",
      "row": "d",
      "col": "i",
-     "note": "じ 和 ぢ 读音相同，一般写 じ"
+     "note": "じ 和 ぢ 读音相同，一般写 じ", "noteEn": "じ and ぢ sound the same; じ is the usual spelling"
     },
     {
      "id": "d-u",
@@ -1591,7 +1591,7 @@ KT_DATA["kana-katakana"] = {
      "roman": "zu",
      "row": "d",
      "col": "u",
-     "note": "ず 和 づ 读音相同，一般写 ず"
+     "note": "ず 和 づ 读音相同，一般写 ず", "noteEn": "ず and づ sound the same; ず is the usual spelling"
     },
     {
      "id": "d-e",
@@ -1681,7 +1681,7 @@ KT_DATA["kana-katakana"] = {
   },
   {
    "id": "yoon",
-   "label": "拗音（小ゃゅょ）",
+   "label": "拗音（小ゃゅょ）", "labelEn": "Contracted sounds (small ゃゅょ)",
    "rows": [
     {
      "id": "k",
@@ -1731,15 +1731,15 @@ KT_DATA["kana-katakana"] = {
    "cols": [
     {
      "id": "a",
-     "label": "ya 列"
+     "label": "ya 列", "labelEn": "ya column"
     },
     {
      "id": "u",
-     "label": "yu 列"
+     "label": "yu 列", "labelEn": "yu column"
     },
     {
      "id": "o",
-     "label": "yo 列"
+     "label": "yo 列", "labelEn": "yo column"
     }
    ],
    "cells": [
@@ -1749,7 +1749,7 @@ KT_DATA["kana-katakana"] = {
      "roman": "kya",
      "row": "k",
      "col": "a",
-     "note": "两个字合成一拍，小字要写小"
+     "note": "两个字合成一拍，小字要写小", "noteEn": "Two characters make one beat; the small one must be written small"
     },
     {
      "id": "yk-u",
@@ -1984,14 +1984,14 @@ KT_DATA["kana-katakana"] = {
     "シ",
     "ツ"
    ],
-   "note": "シ 两点横排、末笔从下往上挑；ツ 两点竖排、末笔从上往下撇"
+   "note": "シ 两点横排、末笔从下往上挑；ツ 两点竖排、末笔从上往下撇", "noteEn": "シ: the two short strokes lie flat, and the last stroke sweeps up from the bottom; ツ: the two short strokes stand upright, and the last stroke sweeps down from the top"
   },
   {
    "glyphs": [
     "ソ",
     "ン"
    ],
-   "note": "ソ 点在上方竖排、撇从上往下；ン 点在左边、末笔从下往上挑"
+   "note": "ソ 点在上方竖排、撇从上往下；ン 点在左边、末笔从下往上挑", "noteEn": "ソ: the short stroke stands upright at the top, and the long stroke sweeps down from the top; ン: the short stroke is on the left, and the last stroke sweeps up from the bottom"
   },
   {
    "glyphs": [
@@ -1999,7 +1999,7 @@ KT_DATA["kana-katakana"] = {
     "ケ",
     "タ"
    ],
-   "note": "タ 里面多一点；ケ 是横出头"
+   "note": "タ 里面多一点；ケ 是横出头", "noteEn": "タ has an extra short stroke inside; in ケ the horizontal stroke sticks out"
   },
   {
    "glyphs": [
@@ -2007,49 +2007,49 @@ KT_DATA["kana-katakana"] = {
     "ワ",
     "フ"
    ],
-   "note": "ウ 上面有点，ワ 左边有竖，フ 只有一笔"
+   "note": "ウ 上面有点，ワ 左边有竖，フ 只有一笔", "noteEn": "ウ has a short stroke on top, ワ has a vertical stroke on the left, フ is a single stroke"
   },
   {
    "glyphs": [
     "ノ",
     "メ"
    ],
-   "note": "メ 多一笔交叉"
+   "note": "メ 多一笔交叉", "noteEn": "メ has one more stroke, crossing the first"
   },
   {
    "glyphs": [
     "チ",
     "テ"
    ],
-   "note": "チ 顶上是撇，テ 顶上是横"
+   "note": "チ 顶上是撇，テ 顶上是横", "noteEn": "チ has a slanted stroke at the top, テ has a horizontal one"
   },
   {
    "glyphs": [
     "ユ",
     "コ"
    ],
-   "note": "ユ 下横出头"
+   "note": "ユ 下横出头", "noteEn": "In ユ the bottom horizontal stroke sticks out"
   },
   {
    "glyphs": [
     "マ",
     "ム"
    ],
-   "note": "マ 下面开口朝右下，ム 下面封口"
+   "note": "マ 下面开口朝右下，ム 下面封口", "noteEn": "マ is open toward the lower right at the bottom; ム is closed at the bottom"
   },
   {
    "glyphs": [
     "ロ",
     "口"
    ],
-   "note": "ロ 是片假名，口 是汉字，印刷时看大小"
+   "note": "ロ 是片假名，口 是汉字，印刷时看大小", "noteEn": "ロ is katakana and 口 is a kanji; in print, tell them apart by size"
   },
   {
    "glyphs": [
     "ジ",
     "ヂ"
    ],
-   "note": "读音相同；一般写 ジ",
+   "note": "读音相同；一般写 ジ", "noteEn": "Same sound; ジ is the usual spelling",
    "homophone": true
   },
   {
@@ -2057,11 +2057,11 @@ KT_DATA["kana-katakana"] = {
     "ズ",
     "ヅ"
    ],
-   "note": "读音相同；一般写 ズ",
+   "note": "读音相同；一般写 ズ", "noteEn": "Same sound; ズ is the usual spelling",
    "homophone": true
   }
  ],
- "reverse": "片假名单词里有平假名表里没有的组合，如 ティ、ファ、ヴ，以及长音符 ー。这些见 kt:ja-script-katakana 的外来语部分。",
+ "reverse": "片假名单词里有平假名表里没有的组合，如 ティ、ファ、ヴ，以及长音符 ー。这些见 kt:ja-script-katakana 的外来语部分。", "reverseEn": "Katakana words use combinations that are not in the hiragana table, such as ティ, ファ and ヴ, and the long-vowel mark ー. For these see the loanword part of kt:ja-script-katakana.",
  "homophones": [
   [
    "ジ",

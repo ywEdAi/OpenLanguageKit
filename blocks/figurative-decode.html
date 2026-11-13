@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Figurative decode</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .fd-layout { display: grid; grid-template-columns: minmax(0, 1fr) 270px; gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .fd-layout { grid-template-columns: 1fr; } }
+  .fd-side { display: grid; gap: 12px; }
+  .fd-stage { display: grid; gap: 14px; }
+  .fd-stage .kb-prompt { margin: 0; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; color: var(--muted); font-size: .85rem; }
+  .ctx { font-size: 1.08rem; line-height: 1.9; display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: baseline; }
+  .seg { border: 1px solid transparent; background: transparent; border-radius: 8px; padding: 1px 4px; text-align: left; line-height: 1.6; font-size: inherit; display: inline-flex; flex-direction: column; }
+  .seg .rd { font-size: .68rem; color: var(--muted); line-height: 1.2; }
+  span.seg { cursor: default; }
+  button.seg { border-color: var(--line); background: var(--panel); }
+  button.seg:hover { border-color: var(--accent); }
+  .seg.tgt { background: var(--accent-soft); }
+  .seg.sel { border: 2px solid var(--accent); }
+  .seg.ok { border: 2px solid var(--t2); }
+  .seg.nosup { border: 2px dashed var(--bad); }
+  .seg.hl { box-shadow: 0 0 0 3px var(--warn); }
+  .seg .why { font-size: .72rem; color: var(--bad); }
+  .layers { display: grid; gap: 6px; padding: 12px; border: 1px solid var(--line); border-radius: var(--radius); }
+  .layer { display: grid; grid-template-columns: 6.5em 1fr; gap: 8px; align-items: baseline; font-size: .95rem; }
+  .layer .lab { color: var(--muted); font-size: .8rem; }
+  .layer.empty .val { color: var(--muted); font-style: italic; }
+  .big { font-size: calc(var(--glyph) * .95); line-height: 1.5; }
+  .big u { text-decoration-thickness: 3px; text-decoration-color: var(--accent); text-underline-offset: 4px; }
+  .gap { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: .85rem; }
+  .gap::before, .gap::after { content: ""; flex: 1; border-top: 2px dashed var(--line); }
+  .gap.on { color: var(--accent); }
+  .gap.on::before, .gap.on::after { border-top-color: var(--accent); }
+  .opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 8px; }
+  .opts.types { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+  .opt { border: 1px solid var(--line); background: var(--panel); border-radius: var(--radius); padding: 8px 10px; display: flex; gap: 8px; align-items: flex-start; min-height: 44px; text-align: left; }
+  .opt .num { font-size: .72rem; color: var(--muted); min-width: 1em; padding-top: 3px; }
+  .opt[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+  .opt.right { border-color: var(--t2); box-shadow: inset 0 0 0 1px var(--t2); }
+  .opt.wrongpick { border-color: var(--bad); background: var(--bad-soft); }
+  .opt.rev { border-left: 4px solid var(--warn); }
+  .opt:disabled { cursor: default; }
+  .step h3 { margin: 0 0 6px; font-size: .95rem; }
+  .step { display: grid; gap: 8px; }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  textarea, input[type=text] { width: 100%; font-size: 1rem; padding: 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); }
+  textarea { min-height: 60px; }
+  .follow { border-left: 4px solid var(--warn); padding: 8px 12px; background: var(--warn-soft); border-radius: 8px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; }
+  .chip { font-size: .78rem; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); }
+  .chip.ind { background: var(--accent-soft); border-color: var(--accent); }
+  .chip.ast { background: var(--warn-soft); border-color: var(--warn); }
+  .chip.bad { background: var(--bad-soft); border-color: var(--bad); }
+  .pairs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 640px) { .pairs { grid-template-columns: 1fr; } }
+  .pcard { border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; display: grid; gap: 8px; align-content: start; }
+  .pcard .ctx { font-size: 1.02rem; }
+  .pcard .chip { justify-self: start; }
+  .pics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .pic { font-size: 3rem; line-height: 1.2; }
+  [data-variant="child"] .pic { font-size: 4rem; }
+  .litpic { text-align: center; padding: 10px; border: 2px dashed var(--line); border-radius: var(--radius); }
+  .picopt { flex-direction: column; align-items: center; text-align: center; }
+  .done { font-size: 2.4rem; text-align: center; }
+  .warnbox { border-left: 4px solid var(--warn); padding: 6px 10px; font-size: .88rem; }
+  .kb-bar select { max-width: 100%; }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* Figurative decode (prim:figurative-decode). Packs: data/figurative-decode.js (format in its header).
+ * Modes:
+ *   decode — one context per item, three locked steps: 1 the literal layer (what the words say), 2 the gap type
+ *            (metaphor / exaggeration / irony / hint / idiom / just literal) + what the speaker really means,
+ *            3 point to the clue segments in the context. About a quarter of items are just literal (reverse half).
+ *   pair   — the same expression in two contexts: literal or not? (reverse half as its own mode)
+ *   use    — is the expression used right here: fixed part changed, borrowed idiom, wrong register, wrong meaning, or fine.
+ *   pics   — child version: a funny literal picture, then pick the picture the speaker means (metaphor/idiom/literal only).
+ * Evidence: lit:<id>, gap:<id>, clue:<id>, pair:<id>:<a|b>, use:<id>, pics:<id>. First attempt kept; hints in
+ * steps 1–2 are offered only after the first attempt; the free text the learner writes is saved, never judged. */
+(function () {
+  'use strict';
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t;
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'figurative-decode-en';
+  var entry = (window.KT_REGISTRY && KT_REGISTRY.packs && KT_REGISTRY.packs[setId]) || { file: 'data/figurative-decode.js', block: 'figurative-decode' };
+  var app = document.getElementById('app');
+  if (entry.block !== 'figurative-decode') { app.textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  var s = document.createElement('script');
+  s.src = entry.file;
+  s.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else app.textContent = L('数据包里没有 ' + setId, 'The data pack file does not contain ' + setId); };
+  s.onerror = function () { app.textContent = L('数据包加载失败：', 'Could not load the data pack: ') + entry.file; };
+  document.head.appendChild(s);
+
+  var TYPES = [
+    { id: 'metaphor', zh: '比喻', en: 'Metaphor or simile' },
+    { id: 'hyperbole', zh: '夸张', en: 'Exaggeration' },
+    { id: 'irony', zh: '反讽或反话', en: 'Irony (saying the opposite)' },
+    { id: 'hint', zh: '委婉拒绝或暗示', en: 'Polite refusal or hint' },
+    { id: 'idiom', zh: '固定习语，意思不能从字面推出', en: 'Fixed idiom (meaning not from the words)' },
+    { id: 'literal', zh: '就是字面意思，没有言外之意', en: 'Just literal: no hidden meaning' }
+  ];
+  var USE = [
+    { id: 'ok', zh: '用得对', en: 'Used correctly' },
+    { id: 'form', zh: '固定成分被改了', en: 'A fixed part was changed' },
+    { id: 'borrow', zh: '搬了别的语言的说法', en: 'Borrowed from another language' },
+    { id: 'register', zh: '场合不对（太随便）', en: 'Wrong situation (too casual)' },
+    { id: 'meaning', zh: '意思用反了或不合语境', en: 'Meaning reversed or does not fit' }
+  ];
+  function typeLabel(id) { var t = TYPES.filter(function (x) { return x.id === id; })[0]; return t ? L(t.zh, t.en) : id; }
+
+  function start(pack) {
+    var title = T(pack, 'title');
+    var B = KTBlock.init({ id: 'figurative-decode', primitive: 'prim:figurative-decode', title: title, set: pack.id });
+    document.title = title + ' · Figurative decode';
+    function child() { return B.variant === 'child'; }
+    var hasChild = (pack.child || []).length > 0;
+    var modes = [{ id: 'decode', label: L('字面→真意→线索', 'Literal → meaning → clue') }, { id: 'pair', label: L('同一句，两个语境', 'Same words, two contexts') }, { id: 'use', label: L('用对了吗', 'Used right?') }];
+    if (hasChild) modes.push({ id: 'pics', label: L('看图（儿童）', 'Pictures (children)') });
+    var pm = params.get('mode');
+    var st = {
+      mode: modes.some(function (m) { return m.id === pm; }) ? pm : (child() && hasChild ? 'pics' : 'decode'),
+      focus: (pack.kcLabels || {})[params.get('focus')] ? params.get('focus') : 'all',
+      showRd: false, queue: [], idx: 0, cur: null, streak: {}, msg: null
+    };
+    var tlang = pack.speech || pack.lang;
+    var ui = KTBlock.chrome(B, { title: title, subtitle: T(pack, 'subtitle'), modes: modes, mode: st.mode,
+      onMode: function (m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m }); enterMode(); },
+      onVariant: function () { if (child() && hasChild && st.mode === 'decode') { st.mode = 'pics'; ui.setMode('pics'); } enterMode(); } });
+    var bar = h('div', { class: 'kb-bar' });
+    var stage = h('div', { class: 'kb-card fd-stage', 'aria-live': 'polite' });
+    var side = h('aside', { class: 'fd-side' });
+    app.append(ui.header, h('main', { class: 'kb-main' }, [bar, h('div', { class: 'fd-layout' }, [stage, side])]), ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id });
+
+    var warned = false;
+    function say(text) {
+      var r = B.speak(text, tlang);
+      if (r === false && !warned) { warned = true; st.msg = { t: L('这个浏览器不能播放语音。', 'This browser cannot play speech.'), tone: 'warn' }; render(); }
+    }
+    function hasRd(list) { return list && list.some(function (x) { return !!x; }); }
+    function packHasRd() { return pack.items.some(function (i) { return hasRd(i.rd); }); }
+
+    /* ---------- queues ---------- */
+    function focusOk(it) { return st.focus === 'all' || it.kc === st.focus; }
+    function enterMode() {
+      st.msg = null; st.idx = 0;
+      if (st.mode === 'decode') {
+        var pool = pack.items.filter(focusOk);
+        if (child()) pool = pool.filter(function (it) { return !it.type.some(function (t) { return t === 'irony' || t === 'hint'; }); });
+        st.queue = KTBlock.shuffle(pool.length ? pool : pack.items);
+      } else if (st.mode === 'pair') st.queue = KTBlock.shuffle((pack.pairs || []).filter(focusOk));
+      else if (st.mode === 'use') st.queue = KTBlock.shuffle((pack.use || []).filter(focusOk));
+      else st.queue = KTBlock.shuffle(pack.child || []);
+      if (!st.queue.length && st.mode !== 'pics') st.queue = KTBlock.shuffle(st.mode === 'pair' ? pack.pairs : st.mode === 'use' ? pack.use : pack.items);
+      begin();
+    }
+    function begin() {
+      var it = st.queue[st.idx];
+      st.msg = null;
+      if (!it) { st.cur = null; B.emit('complete', { mode: st.mode, items: st.queue.length }); render(); return; }
+      if (st.mode === 'decode') st.cur = { it: it, step: 'lit', litOrder: KTBlock.shuffle([0, 1, 2]), meanOrder: KTBlock.shuffle([0, 1, 2]), litPick: null, type: null, mean: null, clues: [], checked: null, follow: false, hint: 0, own: '', note: '' };
+      else if (st.mode === 'pair') st.cur = { it: it, order: Math.random() < 0.5 ? ['a', 'b'] : ['b', 'a'], ans: {}, wrong: {} };
+      else if (st.mode === 'use') st.cur = { it: it, picked: [], solved: false };
+      else st.cur = { it: it, opts: KTBlock.shuffle(it.opts), picked: [], solved: false };
+      B.emit('view', { item: it.id, mode: st.mode });
+      if (st.mode === 'pics') setTimeout(function () { say(it.say || it.s); }, 250);
+      render();
+    }
+    function next() { st.idx++; begin(); }
+
+    /* ---------- shared bits ---------- */
+    function feedbackEl() { return st.msg ? h('div', { class: 'kb-feedback ' + (st.msg.tone || '') }, st.msg.t) : null; }
+    function statusCls(id) { var s = B.status(id); return s === 'independent' ? 'ind' : s === 'assisted' || s === 'revealed' ? 'ast' : s === 'wrong' ? 'bad' : s === 'self-yes' ? 'ind' : ''; }
+    function segEl(text, rd, attrs, extra) {
+      var kids = [h('span', { text: text })];
+      if (st.showRd && rd) kids.unshift(h('span', { class: 'rd', text: rd }));
+      if (extra) kids.push(extra);
+      return attrs && attrs.onclick ? h('button', Object.assign({ class: 'seg' }, attrs), kids) : h('span', Object.assign({ class: 'seg' }, attrs || {}), kids);
+    }
+    function speakBtn(text) { return h('button', { class: 'kb-btn', onclick: function () { say(text); B.emit('select', { item: st.cur && st.cur.it.id, action: 'listen' }); } }, L('🔊 听', '🔊 Listen')); }
+
+    /* ---------- bar ---------- */
+    function renderBar() {
+      bar.innerHTML = '';
+      if (st.mode !== 'pics' && pack.kcLabels) {
+        var sel = h('select', { 'aria-label': L('只练一部分', 'Focus'), onchange: function (e) { st.focus = e.target.value; enterMode(); } },
+          [h('option', { value: 'all', text: L('全部知识点', 'All topics') })].concat(Object.keys(pack.kcLabels).map(function (k) {
+            return h('option', { value: k, text: T(pack.kcLabels[k], 'zh') });
+          })));
+        sel.value = st.focus;
+        bar.append(sel);
+      }
+      if (packHasRd() && st.mode !== 'pics') {
+        bar.append(h('label', { class: 'kb-variant' }, [h('input', { type: 'checkbox', checked: st.showRd, onchange: function (e) { st.showRd = e.target.checked; B.emit('select', { action: 'readings', on: st.showRd }); render(); } }), L(' 显示假名读音', ' Show kana readings')]));
+      }
+      if (st.queue.length) bar.append(h('span', { class: 'kb-note', text: L('第 ' + Math.min(st.idx + 1, st.queue.length) + ' / ' + st.queue.length + ' 题', 'Item ' + Math.min(st.idx + 1, st.queue.length) + ' of ' + st.queue.length) }));
+    }
+
+    /* ---------- decode ---------- */
+    function ids(it) { return { lit: 'lit:' + it.id, gap: 'gap:' + it.id, clue: 'clue:' + it.id }; }
+    function stepId(c) { return ids(c.it)[c.step === 'done' ? 'clue' : c.step]; }
+    function attempted(id) { var x = B.items().filter(function (i) { return i.id === id; })[0]; return !!(x && x.first); }
+    function isFig(it) { return it.type.indexOf('literal') < 0; }
+    function exprNode(it) {
+      var seg = it.ctx[it.target], i = seg.indexOf(it.expr);
+      if (i < 0) return h('span', { text: seg });
+      return h('span', {}, [seg.slice(0, i), h('u', { text: it.expr }), seg.slice(i + it.expr.length)]);
+    }
+    function renderDecode() {
+      var c = st.cur, it = c.it, inClue = c.step === 'clue';
+      var kcl = pack.kcLabels && pack.kcLabels[it.kc];
+      stage.append(h('div', { class: 'meta' }, [kcl ? h('span', { class: 'chip', text: T(kcl, 'zh') }) : null, speakBtn(it.ctx.join(' '))]));
+      // context
+      var hlIdx = c.hint >= 2 ? it.clues[0] : -1;
+      stage.append(h('div', { class: 'ctx', 'aria-label': L('语境', 'Context') }, it.ctx.map(function (t, i) {
+        var cls = 'seg' + (i === it.target ? ' tgt' : '');
+        var chosen = c.clues.indexOf(i) >= 0, extra = null;
+        if (chosen) {
+          if (c.checked && c.checked[i] === 'ok') cls += ' ok';
+          else if (c.checked && c.checked[i]) { cls += ' nosup'; extra = h('span', { class: 'why', text: c.checked[i] === 'target' ? L('表达本身不算线索', 'The expression itself is not a clue') : L('这一处不支持这个判断', 'This does not support your judgement') }); }
+          else cls += ' sel';
+        }
+        if (i === hlIdx) cls += ' hl';
+        var attrs = { class: cls, 'aria-pressed': inClue ? String(chosen) : null };
+        if (inClue) attrs.onclick = function () { toggleClue(i); };
+        return segEl(t, it.rd && it.rd[i], attrs, extra);
+      })));
+      // layers
+      var litTxt = c.litPick !== null && attemptedRight(ids(it).lit) ? T(it.lit[it.litOk], 'zh') : null;
+      var meanTxt = (c.step === 'clue' || c.step === 'done') ? T(it.mean[it.meanOk], 'zh') : null;
+      stage.append(h('div', { class: 'layers' }, [
+        h('div', { class: 'layer' + (litTxt ? '' : ' empty') }, [h('span', { class: 'lab', text: L('字面层', 'Literal layer') }), h('span', { class: 'val', text: litTxt || L('（第 1 步）', '(step 1)') })]),
+        h('div', { class: 'big' }, [st.showRd && it.rd ? h('div', { class: 'kb-note', text: it.rd[it.target] }) : null, exprNode(it)]),
+        h('div', { class: 'gap' + (meanTxt ? ' on' : ''), 'aria-label': L('字面和真意之间的落差', 'Gap between literal and meaning') }, meanTxt ? typeLabel(c.type) : L('落差：第 2 步', 'gap: step 2')),
+        h('div', { class: 'layer' + (meanTxt ? '' : ' empty') }, [h('span', { class: 'lab', text: L('真正的意思', 'Real meaning') }), h('span', { class: 'val', text: meanTxt || L('（第 2 步）', '(step 2)') })])
+      ]));
+      // step body
+      if (c.step === 'lit') {
+        stage.append(h('div', { class: 'step' }, [
+          h('h3', { text: L('第 1 步 字面：只按每个词的本义，这句话字面上说了什么？', 'Step 1 Literal: using only the basic meaning of each word, what does the underlined part literally say?') }),
+          h('input', { type: 'text', value: c.own, placeholder: L('可以先用自己的话写（不写也行，页面不判断）', 'You can first write it in your own words (optional, not checked)'), oninput: function (e) { c.own = e.target.value; } }),
+          optList(it.lit, c.litOrder, function (i) { return litPick(i); }, c.litPick, it.litOk, attemptedRight(ids(it).lit))
+        ]));
+      } else if (c.step === 'gap') {
+        stage.append(h('div', { class: 'step' }, [
+          h('h3', { text: L('第 2 步 落差：字面和说话人真正的意思是什么关系？（数字键 1–6）', 'Step 2 Gap: how does the literal layer relate to what the speaker means? (keys 1–6)') }),
+          h('div', { class: 'opts types', role: 'group' }, TYPES.map(function (t, i) {
+            return h('button', { class: 'opt' + (t.id === 'literal' ? ' rev' : ''), 'aria-pressed': String(c.type === t.id), onclick: function () { c.type = t.id; B.emit('select', { item: ids(it).gap, type: t.id }); render(); } },
+              [h('span', { class: 'num', text: String(i + 1) }), h('span', { text: L(t.zh, t.en) })]);
+          })),
+          h('h3', { text: L('说话人真正想说的是：', 'What the speaker really means:') }),
+          h('div', { class: 'opts', role: 'group' }, c.meanOrder.map(function (i, n) {
+            var o = it.mean[i];
+            return h('button', { class: 'opt', 'aria-pressed': String(c.mean === i), dataset: { i: i }, onclick: function () { c.mean = i; B.emit('select', { item: ids(it).gap, mean: i }); render(); } },
+              [h('span', { class: 'num', text: 'abc'[n] }), h('span', { text: T(o, 'zh') })]);
+          })),
+          c.follow && it.follow ? h('div', { class: 'follow' }, [h('strong', { text: L('接下来发生了什么：', 'What happened next: ') }), T(it.follow, 'zh')]) : null,
+          h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', disabled: c.type === null || c.mean === null, onclick: submitGap }, L('提交判断', 'Submit'))])
+        ]));
+      } else if (c.step === 'clue') {
+        stage.append(h('div', { class: 'step' }, [
+          h('h3', { text: L('第 3 步 线索：在上面的语境里点出支持你判断的地方（可以点几处），再确认。', 'Step 3 Clues: click the parts of the context above that support your judgement (one or more), then confirm.') }),
+          h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', disabled: !c.clues.length, onclick: submitClue }, L('确认线索', 'Confirm clues'))])
+        ]));
+      } else {
+        stage.append(h('div', { class: 'step' }, [
+          h('p', { class: 'kb-prompt' }, [h('strong', { text: L('线索：', 'Clues: ') }), T(it.clueWhy, 'zh')]),
+          h('p', { class: 'kb-prompt' }, [h('strong', { text: L('说明：', 'Note: ') }), T(it.note, 'zh')]),
+          h('h3', { text: L('在一个新情境里用一次这个表达，或说明为什么不该用（只保存，页面不判断）', 'Use the expression once in a new situation, or say why you should not (saved only, not checked)') }),
+          h('textarea', { oninput: function (e) { c.note = e.target.value; } }, c.note),
+          h('div', { class: 'tools' }, [
+            h('button', { class: 'kb-btn', onclick: function () { if (c.note.trim()) { B.emit('explain', { item: it.id, text: c.note.trim(), judged: false }); st.msg = { t: L('已保存。这一句页面不判断，可以请老师看。', 'Saved. The page does not check this sentence; ask a teacher to look at it.') }; render(); } } }, L('保存这一句', 'Save sentence')),
+            h('button', { class: 'kb-btn primary', onclick: next }, L('下一段 →', 'Next →'))
+          ])
+        ]));
+      }
+      // hints
+      if (c.step !== 'done') {
+        var sid = stepId(c), open = c.step === 'clue' || attempted(sid);
+        var maxLvl = (st.streak[it.type[0]] || 0) >= 4 ? 1 : 3;
+        var hints = [];
+        if (c.hint >= 1) hints.push(h('p', { class: 'kb-note', text: L('如果真的照字面发生，在这个场景里合理吗？', 'If it literally happened, would it make sense in this scene?') }));
+        if (c.hint >= 3) hints.push(h('p', { class: 'kb-note', text: L('同类的例子：', 'A parallel example: ') + T(it.parallel, 'zh') }));
+        stage.append(h('div', { class: 'tools' }, [
+          h('button', { class: 'kb-btn', disabled: !open || c.hint >= maxLvl, onclick: function () { c.hint++; B.hint(sid, c.hint); render(); } },
+            !open ? L('提示（先作答一次）', 'Hint (answer once first)') : c.hint >= maxLvl ? L('没有更多提示', 'No more hints') : L('提示 ' + (c.hint + 1), 'Hint ' + (c.hint + 1))),
+          maxLvl === 1 ? h('span', { class: 'kb-note', text: L('这一类你已连续 4 段独立判断对，只给第一级提示。', 'You have got 4 of this kind right in a row on your own, so only the first hint is offered.') }) : null
+        ]));
+        hints.forEach(function (x) { stage.append(x); });
+      }
+      var f = feedbackEl(); if (f) stage.append(f);
+    }
+    function attemptedRight(id) { var x = B.items().filter(function (i) { return i.id === id; })[0]; return !!(x && x.correct); }
+    function optList(list, order, onPick, picked, ok, solved) {
+      return h('div', { class: 'opts', role: 'group' }, order.map(function (i, n) {
+        var o = list[i];
+        var cls = 'opt';
+        if (solved && i === ok) cls += ' right';
+        else if (picked === i && i !== ok) cls += ' wrongpick';
+        return h('button', { class: cls, disabled: solved, dataset: { i: i }, onclick: function () { onPick(i); } }, [h('span', { class: 'num', text: String(n + 1) }), h('span', { text: T(o, 'zh') })]);
+      }));
+    }
+    function litPick(i) {
+      var c = st.cur, it = c.it, ok = i === it.litOk;
+      c.litPick = i;
+      B.attempt(ids(it).lit, { correct: ok, response: { pick: i, own: c.own || undefined } });
+      if (ok) { c.step = 'gap'; c.hint = 0; st.msg = null; }
+      else st.msg = { t: L('这不是字面层。字面层只按每个词的本义说，不加推断，也不换成引申义。再选一次。', 'That is not the literal layer. The literal layer uses only the basic meaning of each word: no inference, no figurative sense. Try again.'), tone: 'bad' };
+      render();
+    }
+    function submitGap() {
+      var c = st.cur, it = c.it, typeOk = it.type.indexOf(c.type) >= 0, meanOk = c.mean === it.meanOk;
+      var mo = it.mean[c.mean];
+      B.attempt(ids(it).gap, { correct: typeOk && meanOk, response: { type: c.type, mean: c.mean } });
+      var first = B.items().filter(function (x) { return x.id === ids(it).gap; })[0];
+      if (typeOk && meanOk) {
+        if (first.first.correct && !first.first.assisted) st.streak[it.type[0]] = (st.streak[it.type[0]] || 0) + 1;
+        else st.streak[it.type[0]] = 0;
+        st.msg = it.type.length > 1 ? { t: L('可以。这一句也可以看作：', 'Accepted. This one can also be seen as: ') + it.type.filter(function (t) { return t !== c.type; }).map(typeLabel).join(L('、', ', ')) } : null;
+        c.step = 'clue'; c.hint = 0;
+        render(); return;
+      }
+      st.streak[it.type[0]] = 0;
+      if (c.type === 'literal' && isFig(it)) {
+        c.follow = true; B.hint(ids(it).gap, 'follow');
+        st.msg = { t: L('先别急着改，看看接下来发生了什么，再判断一次。', 'Before you change anything, look at what happened next, then decide again.'), tone: 'warn' };
+      } else if (!typeOk && !isFig(it)) {
+        st.msg = { t: L('再想想：上下文里有没有哪一处说明这句话另有意思？如果真的照字面发生，在这里合理吗？', 'Think again: does anything in the context show a hidden meaning? If it happened literally, would it make sense here?'), tone: 'bad' };
+      } else if (typeOk && mo && mo.lit) {
+        st.msg = { t: L('类型对了，但这个“意思”只是把字面又说了一遍，不是说话人真正想说的。', 'The type is right, but this "meaning" only repeats the literal layer; it is not what the speaker means.'), tone: 'bad' };
+      } else if (typeOk) {
+        st.msg = { t: L('类型对了，意思不对。再看看语境。', 'The type is right, the meaning is not. Look at the context again.'), tone: 'bad' };
+      } else {
+        st.msg = { t: L('落差类型还不对。', 'The gap type is not right yet.') + (meanOk ? L('意思选对了。', ' The meaning is right.') : ''), tone: 'bad' };
+      }
+      render();
+    }
+    function toggleClue(i) {
+      var c = st.cur, k = c.clues.indexOf(i);
+      if (k >= 0) c.clues.splice(k, 1); else c.clues.push(i);
+      c.checked = null; st.msg = null;
+      B.emit(k >= 0 ? 'disconnect' : 'highlight', { item: ids(c.it).clue, segment: i });
+      render();
+    }
+    function submitClue() {
+      var c = st.cur, it = c.it, chk = {}, bad = 0, good = 0;
+      c.clues.forEach(function (i) {
+        if (i === it.target) { chk[i] = 'target'; bad++; }
+        else if (it.clues.indexOf(i) >= 0) { chk[i] = 'ok'; good++; }
+        else { chk[i] = 'no'; bad++; }
+      });
+      c.checked = chk;
+      var ok = good > 0 && bad === 0;
+      B.attempt(ids(it).clue, { correct: ok, response: { segments: c.clues.slice().sort(), position: c.clues.map(function (i) { return i < it.target ? 'before' : i > it.target ? 'after' : 'self'; }) } });
+      B.emit('connect', { item: it.id, from: 'clues', to: 'gap:' + c.type, valid: ok });
+      if (ok) {
+        c.step = 'done';
+        st.msg = { t: L('线索成立。', 'The clues hold.') + (it.clues.length > good ? L('还有一处也能支持：见下面的说明。', ' One more place also supports it: see the note below.') : '') };
+      } else st.msg = { t: bad ? L('虚线框的地方不支持这个判断，取消它再确认。', 'The dashed parts do not support this judgement. Unselect them and confirm again.') : L('至少点一处线索。', 'Select at least one clue.'), tone: 'bad' };
+      render();
+    }
+
+    /* ---------- pair ---------- */
+    function renderPair() {
+      var c = st.cur, it = c.it;
+      stage.append(h('p', { class: 'kb-prompt' }, [L('同一个说法出现在两个语境里。每一处：是就是字面意思，还是另有意思？', 'The same words appear in two contexts. In each one: is it meant literally, or does it mean something else?')]));
+      stage.append(h('div', { class: 'big' }, [h('u', { text: it.expr })]));
+      stage.append(h('div', { class: 'pairs' }, c.order.map(function (side, n) {
+        var ctx = it[side], id = 'pair:' + it.id + ':' + side, done = c.ans[side] !== undefined && c.ans[side] === ctx.literal;
+        return h('div', { class: 'pcard' }, [
+          h('div', { class: 'meta' }, [h('strong', { text: L('语境 ', 'Context ') + 'AB'[n] }), speakBtn(ctx.ctx.join(' '))]),
+          h('div', { class: 'ctx' }, ctx.ctx.map(function (t, i) { return segEl(t, ctx.rd && ctx.rd[i], { class: 'seg' }); })),
+          h('div', { class: 'opts' }, [true, false].map(function (v) {
+            var cls = 'opt' + (v ? ' rev' : '');
+            if (done && v === ctx.literal) cls += ' right';
+            else if (c.wrong[side] && c.wrong[side].indexOf(v) >= 0) cls += ' wrongpick';
+            return h('button', { class: cls, disabled: done, onclick: function () { pairPick(side, v, id); } }, [h('span', { text: v ? L('就是字面意思', 'Literal') : L('另有意思（习语、反话等）', 'Something else (idiom, irony…)') })]);
+          })),
+          done ? h('p', { class: 'kb-note', text: T(ctx.note, 'zh') }) : null,
+          h('span', { class: 'chip ' + statusCls(id), text: done ? L('完成', 'done') : L('未完成', 'to do') })
+        ]);
+      })));
+      var f = feedbackEl(); if (f) stage.append(f);
+      if (c.ans.a === it.a.literal && c.ans.b === it.b.literal) stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: next }, L('下一组 →', 'Next →'))]));
+    }
+    function pairPick(side, v, id) {
+      var c = st.cur, ok = v === c.it[side].literal;
+      B.attempt(id, { correct: ok, response: { literal: v } });
+      c.ans[side] = v;
+      if (!ok) { (c.wrong[side] = c.wrong[side] || []).push(v); st.msg = { t: L('再看看这个语境里发生了什么。', 'Look again at what is happening in this context.'), tone: 'bad' }; }
+      else st.msg = null;
+      render();
+    }
+
+    /* ---------- use ---------- */
+    function renderUse() {
+      var c = st.cur, it = c.it;
+      stage.append(h('p', { class: 'kb-prompt' }, [h('strong', { text: L('场合：', 'Situation: ') }), T(it.sit, 'zh')]));
+      stage.append(h('div', { class: 'big' }, [st.showRd && it.rd ? h('div', { class: 'kb-note', text: it.rd }) : null, it.s]));
+      stage.append(h('div', { class: 'meta' }, [speakBtn(it.s)]));
+      stage.append(h('p', { class: 'kb-prompt', text: L('这里用得对吗？（数字键 1–5）', 'Is it used right here? (keys 1–5)') }));
+      stage.append(h('div', { class: 'opts types' }, USE.map(function (o, i) {
+        var cls = 'opt';
+        if (c.solved && o.id === it.ok) cls += ' right';
+        else if (c.picked.indexOf(o.id) >= 0) cls += ' wrongpick';
+        return h('button', { class: cls, disabled: c.solved, onclick: function () { usePick(o.id); } }, [h('span', { class: 'num', text: String(i + 1) }), h('span', { text: L(o.zh, o.en) })]);
+      })));
+      var f = feedbackEl(); if (f) stage.append(f);
+      if (c.solved) stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: next }, L('下一句 →', 'Next →'))]));
+    }
+    function usePick(id) {
+      var c = st.cur, ok = id === c.it.ok;
+      if (c.solved || c.picked.indexOf(id) >= 0) return;
+      B.attempt('use:' + c.it.id, { correct: ok, response: { pick: id } });
+      c.picked.push(id);
+      if (ok) { c.solved = true; st.msg = { t: T(c.it.why, 'zh') }; }
+      else st.msg = { t: id === 'ok' ? L('这里有问题。看看词有没有被改动、是不是从别的语言搬来的、场合合不合适。', 'Something is wrong here. Check whether a word was changed, whether it comes from another language, and whether it suits the situation.') : L('不是这个问题。再看一遍。', 'That is not the problem. Look again.'), tone: 'bad' };
+      render();
+    }
+
+    /* ---------- pics (child) ---------- */
+    function renderPics() {
+      var c = st.cur, it = c.it;
+      stage.append(h('div', { class: 'big' }, [it.s]));
+      stage.append(h('div', { class: 'meta' }, [speakBtn(it.say || it.s)]));
+      stage.append(h('div', { class: 'litpic' }, [h('div', { class: 'kb-note', text: L('如果照字面画出来：', 'If you drew the words exactly:') }), h('div', { class: 'pic', role: 'img', 'aria-label': T(it.litText, 'zh'), text: it.picLit }), h('div', { text: T(it.litText, 'zh') })]));
+      stage.append(h('p', { class: 'kb-prompt', text: L('说话的人想说的是哪一张？', 'Which picture is what the speaker means?') }));
+      stage.append(h('div', { class: 'pics' }, c.opts.map(function (o) {
+        var cls = 'opt picopt';
+        if (c.solved && o.ok) cls += ' right';
+        else if (c.picked.indexOf(o) >= 0) cls += ' wrongpick';
+        return h('button', { class: cls, disabled: c.solved, onclick: function () { picPick(o); } }, [h('span', { class: 'pic', role: 'img', 'aria-hidden': 'true', text: o.pic }), h('span', { text: T(o, 'zh') })]);
+      })));
+      var f = feedbackEl(); if (f) stage.append(f);
+      if (c.solved) stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: next }, L('下一张 →', 'Next →'))]));
+    }
+    function picPick(o) {
+      var c = st.cur;
+      if (c.solved || c.picked.indexOf(o) >= 0) return;
+      B.attempt('pics:' + c.it.id, { correct: !!o.ok, response: { pick: o.pic } });
+      c.picked.push(o);
+      if (o.ok) { c.solved = true; st.msg = { t: '🙂 ' + T(c.it.note, 'zh') }; }
+      else st.msg = { t: L('再听一遍，想一想：真的会这样吗？', 'Listen again and think: could that really happen?'), tone: 'warn' };
+      render();
+    }
+
+    /* ---------- side ---------- */
+    function renderSide() {
+      side.innerHTML = '';
+      if (st.mode === 'decode') {
+        var seen = pack.items.filter(function (it) { return attempted('gap:' + it.id); });
+        var litSeen = seen.filter(function (it) { return !isFig(it); }), litMiss = litSeen.filter(function (it) { return B.status('gap:' + it.id) === 'wrong'; });
+        var figSeen = seen.filter(isFig), figMiss = figSeen.filter(function (it) { var x = B.items().filter(function (i) { return i.id === 'gap:' + it.id; })[0]; return x && x.first && x.first.response && x.first.response.type === 'literal'; });
+        side.append(h('div', { class: 'kb-card' }, [
+          h('strong', { text: L('第 2 步首次判断', 'Step 2, first judgement') }),
+          h('div', { class: 'chips' }, st.queue.map(function (it) { return h('span', { class: 'chip ' + statusCls('gap:' + it.id), title: it.expr, text: it.expr.length > 14 ? it.expr.slice(0, 13) + '…' : it.expr }); })),
+          h('p', { class: 'kb-note', text: L('字面题：' + litSeen.length + ' 段，第一次误读出言外之意 ' + litMiss.length + ' 段。言外题：' + figSeen.length + ' 段，第一次判成字面 ' + figMiss.length + ' 段。', 'Literal items: ' + litSeen.length + ', read as hidden meaning on first try: ' + litMiss.length + '. Figurative items: ' + figSeen.length + ', judged literal on first try: ' + figMiss.length + '.') }),
+          litSeen.length >= 2 && litMiss.length / litSeen.length > 0.5 ? h('p', { class: 'warnbox', text: L('你常把字面句也读出言外之意。不是每句话都有比喻：先看上下文是否真的支持。', 'You often find a hidden meaning in literal sentences. Not every sentence is figurative: check that the context really supports it.') }) : null
+        ]));
+      }
+      side.append(h('div', { class: 'kb-card' }, [
+        h('strong', { text: L('怎么算通过', 'What counts') }),
+        h('ul', { class: 'kb-note' }, (st.mode === 'decode' ? [
+          L('字面层只按词的本义，先锁定再往下。', 'The literal layer uses only the basic word meanings and is locked first.'),
+          L('“真正的意思”不能只是把字面再说一遍。', 'The "real meaning" may not just repeat the literal layer.'),
+          L('线索要在上下文里，表达本身不算；点了不支持的地方就不算过。', 'Clues must be in the context, not the expression itself; selecting a part that does not support it fails.'),
+          L('第 1、2 步先作答一次才有提示；看过提示或“接下来发生了什么”后答对，算提示后完成。', 'Steps 1–2 offer hints only after a first answer; right after a hint or after seeing "what happened next" counts as assisted.')
+        ] : st.mode === 'pair' ? [
+          L('同一个说法，换个语境意思就可能变。每一处单独判断。', 'The same words can change meaning in a new context. Judge each one separately.')
+        ] : st.mode === 'use' ? [
+          L('有的句子用得完全对。', 'Some sentences are used exactly right.'),
+          L('页面只判断选项，不评判你自己写的句子。', 'The page checks only the options, never your own sentences.')
+        ] : [
+          L('有的句子就是字面意思。', 'Some sentences mean just what they say.')
+        ]).map(function (t) { return h('li', { text: t }); }))
+      ]));
+    }
+
+    function render() {
+      stage.innerHTML = '';
+      renderBar();
+      if (!st.cur) {
+        stage.append(h('div', { class: 'done', text: '✓' }), h('p', { class: 'kb-prompt', text: st.queue.length ? L('这一组做完了。打开“学习证据”看首次作答。', 'This set is done. Open "Learning evidence" to see the first attempts.') : L('这个数据包里没有这个模式的题。', 'This pack has no items for this mode.') }),
+          h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: enterMode }, L('再来一组', 'Another round'))]));
+      } else if (st.mode === 'decode') renderDecode();
+      else if (st.mode === 'pair') renderPair();
+      else if (st.mode === 'use') renderUse();
+      else renderPics();
+      renderSide();
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (!st.cur || /^(INPUT|TEXTAREA|SELECT)$/.test((e.target && e.target.tagName) || '')) return;
+      var n = parseInt(e.key, 10);
+      if (isNaN(n)) return;
+      if (st.mode === 'decode' && st.cur.step === 'gap' && n >= 1 && n <= 6) { st.cur.type = TYPES[n - 1].id; B.emit('select', { item: 'gap:' + st.cur.it.id, type: st.cur.type }); render(); }
+      else if (st.mode === 'decode' && st.cur.step === 'lit' && n >= 1 && n <= st.cur.litOrder.length) litPick(st.cur.litOrder[n - 1]);
+      else if (st.mode === 'use' && n >= 1 && n <= 5) usePick(USE[n - 1].id);
+    });
+
+    enterMode();
+  }
+})();
+</script>
+</body>
+</html>

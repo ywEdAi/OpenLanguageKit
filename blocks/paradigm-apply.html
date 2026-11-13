@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Paradigm apply</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .pa-layout { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .pa-layout { grid-template-columns: 1fr; } }
+  .pa-side { display: grid; gap: 12px; }
+  .pa-stage { display: grid; gap: 12px; }
+  .pa-stage .kb-prompt { margin: 0; }
+  .word { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .word .base { font-size: calc(var(--glyph) * 1.4); font-weight: 600; line-height: 1.1; }
+  .word .read { color: var(--muted); font-size: .95rem; }
+  .word .gl { color: var(--muted); font-size: .9rem; }
+  .arrowto { color: var(--muted); }
+  .slots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  @media (max-width: 640px) { .slots { grid-template-columns: 1fr; } }
+  .slot { border: 1px dashed var(--line); border-radius: 10px; padding: 8px 10px; min-height: 86px; display: grid; gap: 6px; align-content: start; }
+  .slot h3 { margin: 0; font-size: .8rem; color: var(--muted); font-weight: 600; }
+  .slot.filled { border-style: solid; border-color: var(--accent); }
+  .slot.fork { border: 2px solid var(--bad); background: var(--bad-soft); }
+  .slot.okstep { border-color: var(--t2); }
+  .cls { display: flex; flex-wrap: wrap; gap: 6px; }
+  .cls button { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 4px 8px; font-size: .88rem; text-align: left; }
+  .cls button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .cls button .n { font-size: .7rem; opacity: .7; margin-right: 4px; }
+  .typed { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .typed input { flex: 1 1 140px; min-width: 0; border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 6px 8px; font-size: 1.05rem; }
+  .chain { display: flex; flex-wrap: wrap; gap: 6px; align-items: stretch; }
+  .chain .st { border: 1px solid var(--line); border-radius: 8px; padding: 4px 8px; font-size: .88rem; background: var(--panel); }
+  .chain .st small { display: block; color: var(--muted); font-size: .7rem; }
+  .chain .st.fork { border: 2px solid var(--bad); background: var(--bad-soft); }
+  .chain .st.ok { border-color: var(--t2); }
+  .chain .sep { align-self: center; color: var(--muted); }
+  .row { width: 100%; border-collapse: collapse; font-size: .9rem; }
+  .row th, .row td { border: 1px solid var(--line); padding: 4px 6px; text-align: center; }
+  .row th { font-weight: 600; color: var(--muted); font-size: .78rem; }
+  .row td.cur { background: var(--accent-soft); }
+  .row td.empty { color: var(--muted); }
+  .rowwrap { overflow-x: auto; }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font-size: .8rem; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); }
+  .chip.ind { background: var(--accent-soft); border-color: var(--accent); }
+  .chip.ast { background: var(--warn-soft); border-color: var(--warn); }
+  .chip.bad { background: var(--bad-soft); border-color: var(--bad); }
+  .chip.self { border-style: dashed; }
+  .card-rule { border-left: 4px solid var(--t1); padding: 4px 8px; margin: 6px 0; }
+  .card-rule b { display: block; font-size: .9rem; }
+  .card-rule span { font-size: .82rem; color: var(--muted); }
+  .shelf { border-left: 4px solid var(--warn); }
+  .pairs { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pair { border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 6px 10px; font-size: 1rem; }
+  .pair[aria-pressed="true"] { outline: 3px solid var(--accent); }
+  .pair.good { background: var(--accent-soft); border-color: var(--accent); }
+  .pair.bad { background: var(--bad-soft); border-color: var(--bad); }
+  .buckets { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
+  .bucket { border: 1px dashed var(--line); border-radius: var(--radius); padding: 8px; display: grid; gap: 6px; align-content: start; min-height: 110px; background: var(--panel); text-align: left; }
+  .bucket .bh { font-weight: 600; font-size: .9rem; }
+  .bucket .br { font-size: .8rem; color: var(--muted); }
+  .bucket .pairs { gap: 6px; }
+  .bucket .pair { font-size: .88rem; padding: 3px 8px; }
+  .sentence { font-size: 1.15rem; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .sentence input { width: 9em; border: 0; border-bottom: 2px solid var(--accent); background: transparent; font-size: 1.1rem; padding: 2px 4px; }
+  .cue { color: var(--muted); font-size: .9rem; }
+  .opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+  .opt { border: 1px solid var(--line); background: var(--panel); border-radius: var(--radius); padding: 10px; text-align: left; }
+  .opt .num { font-size: .72rem; color: var(--muted); margin-right: 4px; }
+  .opt.right { background: var(--accent-soft); border-color: var(--accent); }
+  .opt.wrongpick { background: var(--bad-soft); border-color: var(--bad); }
+  .opt:disabled { cursor: default; }
+  .edge { font-size: 1.3rem; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .edge .shown { border: 2px dashed var(--warn); border-radius: 8px; padding: 2px 10px; }
+  .flag { display: inline-block; font-size: .78rem; padding: 1px 8px; border-radius: 999px; background: var(--warn-soft); color: var(--warn); }
+  .wug { display: grid; justify-items: center; gap: 10px; text-align: center; }
+  .wug svg { width: min(260px, 70vw); height: auto; }
+  .wug .line { font-size: 1.4rem; }
+  [data-variant="child"] .wug .line { font-size: 1.7rem; }
+  .done { font-size: 2.6rem; }
+  .muted { color: var(--muted); }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function () {
+  'use strict';
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t;
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'paradigm-apply-en';
+  var reg = (window.KT_REGISTRY && window.KT_REGISTRY.packs) || {};
+  // while the registry does not list this block's packs yet, fall back to the block's own data file
+  var entry = reg[setId] || (/^paradigm-apply-/.test(setId) ? { file: 'data/paradigm-apply.js', block: 'paradigm-apply' } : {});
+  var app = document.getElementById('app');
+  if (entry.file && entry.block !== 'paradigm-apply') { app.textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  if (!entry.file) { app.textContent = L('未知的数据包：', 'Unknown data pack: ') + setId; return; }
+  var sc = document.createElement('script');
+  sc.src = entry.file;
+  sc.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else app.textContent = L('数据包里没有 ' + setId, 'The data pack file does not contain ' + setId); };
+  sc.onerror = function () { app.textContent = L('数据包加载失败：', 'Could not load the data pack: ') + entry.file; };
+  document.head.appendChild(sc);
+
+  function start(pack) {
+    var title = T(pack, 'title');
+    var B = KTBlock.init({ id: 'paradigm-apply', primitive: 'prim:paradigm-apply', title: title, set: pack.id });
+    document.title = title + ' · Paradigm';
+    var isEn = pack.lang === 'en', isJa = pack.lang === 'ja';
+    var showGloss = pack.lang !== KTBlock.lang;
+    var LEX = pack.lexicon;
+    var setsById = {};
+    pack.sets.forEach(function (s) { setsById[s.id] = s; });
+    var modes = [{ id: 'induce', label: L('① 归纳', '① Find the rule') }, { id: 'apply', label: L('② 用到新词', '② New words') },
+      { id: 'use', label: L('③ 放进句子', '③ In a sentence') }, { id: 'edge', label: L('规则的边界', 'Where it stops') }];
+    if (pack.wug) modes.push({ id: 'wug', label: L('儿童：怪物词', 'Child: wug words') });
+    var want = params.get('rule') || params.get('focus');
+    var st = {
+      set: setsById[want] ? setsById[want] : pack.sets[0],
+      mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : (B.variant === 'child' && pack.wug ? 'wug' : 'induce'),
+      kanaOnly: false, queue: [], idx: 0, item: null,
+      rows: {}, shelf: {}, induce: {}, streak: {}, record: {}, selPair: null
+    };
+
+    var ui = KTBlock.chrome(B, { title: title, subtitle: T(pack, 'subtitle'), modes: modes, mode: st.mode,
+      onMode: function (m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m, rule: st.set.id }); newRound(); },
+      onVariant: function () { newRound(); } });
+    var bar = h('div', { class: 'kb-bar' });
+    var stage = h('div', { class: 'kb-card pa-stage' });
+    var side = h('aside', { class: 'pa-side' });
+    app.append(ui.header, h('main', { class: 'kb-main' }, [bar, h('div', { class: 'pa-layout' }, [stage, side])]), ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id, rule: st.set.id });
+
+    /* ---- forms ---- */
+    function cls(set, id) { return set.classes.filter(function (c) { return c.id === id; })[0]; }
+    function gloss(w) { return showGloss ? (KTBlock.lang === 'en' ? LEX[w].glossEn : LEX[w].gloss) || '' : ''; }
+    function baseText(w) { return st.kanaOnly && LEX[w].read ? LEX[w].read : LEX[w].base; }
+    /** Apply class `cid` of `set` to word `w`: {forms: all accepted strings, show, kana, ending} or null when the rule does not reach the word. */
+    function derive(set, cid, w) {
+      var c = cls(set, cid), lex = LEX[w];
+      if (!c || !c.rewrite) return null;
+      var out = [], show = null, kana = null, ending = null;
+      [lex.base, lex.read].forEach(function (s, i) {
+        if (!s) return;
+        for (var k = 0; k < c.rewrite.length; k++) {
+          var re = new RegExp(c.rewrite[k][0]), m = re.exec(s);
+          if (m) {
+            c.rewrite[k].slice(1).forEach(function (rep) { out.push(s.replace(re, rep)); });
+            if (i === 0) { show = s.replace(re, c.rewrite[k][1]); ending = m[0]; } else kana = s.replace(re, c.rewrite[k][1]);
+            break;
+          }
+        }
+      });
+      if (!out.length) return null;
+      return { forms: uniq(out), show: show || kana, kana: kana, ending: ending };
+    }
+    function uniq(a) { var s = {}; return a.filter(function (x) { if (s[x]) return false; s[x] = 1; return true; }); }
+    /** Every entry (induce or item) of a set for word w. */
+    function entryFor(set, w) { return set.items.filter(function (i) { return i.w === w; })[0] || set.induce.filter(function (i) { return i.w === w; })[0]; }
+    /** The right answer for an entry: {forms, show, kana} ({forms: []} for a noForm class). */
+    function answerOf(set, e) {
+      var c = cls(set, e.c);
+      if (c.noForm) return { forms: [], show: '—', kana: null };
+      if (e.form) return { forms: [e.form].concat(e.accept || []), show: e.form, kana: null };
+      var d = derive(set, e.c, e.w) || { forms: [], show: '?', kana: null };
+      return { forms: uniq(d.forms.concat(e.accept || [])), show: d.show, kana: d.kana };
+    }
+    function fmt(a) { return a.show + (a.kana && a.kana !== a.show && !st.kanaOnly ? L('（' + a.kana + '）', ' (' + a.kana + ')') : ''); }
+    function shownForm(a) { return st.kanaOnly && a.kana ? a.kana : fmt(a); }
+    function norm(s) {
+      s = String(s || '').trim().replace(/[\s。．.！!？?、,，]+$/g, '').replace(/^[\s「“"]+|[」”"]+$/g, '');
+      return isEn ? s.toLowerCase().replace(/\s+/g, ' ') : s.replace(/\s+/g, '');
+    }
+    function matches(typed, forms) { var t = norm(typed); return !!t && forms.some(function (f) { return norm(f) === t; }); }
+    function sayText(w, a) { return (a && a.kana) || (a && a.show) || LEX[w].read || LEX[w].base; }
+    var warned = false;
+    function speak(text) { if (!text || text === '—') return; var r = B.speak(text, pack.speech); if (!r && !warned) { warned = true; feedback(L('这个浏览器不能播放语音。', 'This browser cannot play speech.'), 'warn'); } }
+    function child() { return B.variant === 'child'; }
+
+    /* ---- rounds ---- */
+    function newRound() {
+      var set = st.set, q = [];
+      st.selPair = null;
+      if (st.mode === 'apply') {
+        var n = child() ? 5 : 8, traps = KTBlock.shuffle(set.items.filter(function (i) { return i.trap; })).slice(0, 2);
+        var groups = {}, order = [];
+        KTBlock.shuffle(set.items).forEach(function (i) { if (traps.indexOf(i) >= 0) return; if (!groups[i.c]) { groups[i.c] = []; order.push(i.c); } groups[i.c].push(i); });
+        var pick = traps.slice();
+        while (pick.length < n && order.some(function (c) { return groups[c].length; })) order.forEach(function (c) { if (pick.length < n && groups[c].length) pick.push(groups[c].shift()); });
+        q = KTBlock.shuffle(pick).map(function (i) { return { kind: 'apply', e: i, id: 'apply:' + set.id + ':' + i.w }; });
+      } else if (st.mode === 'use') {
+        q = KTBlock.shuffle(set.use || []).map(function (u) { return { kind: 'use', u: u, id: 'use:' + set.id + ':' + u.id }; });
+      } else if (st.mode === 'edge') {
+        q = KTBlock.shuffle(set.edges || []).map(function (e) { return { kind: 'edge', e: e, id: 'edge:' + set.id + ':' + e.id }; });
+      } else if (st.mode === 'wug') {
+        q = (child() ? KTBlock.shuffle(pack.wug).slice(0, 4) : pack.wug.slice()).map(function (w) { return { kind: 'wug', g: w, id: 'wug:' + w.id }; });
+      } else q = [{ kind: 'induce', id: 'induce:' + set.id }];
+      st.queue = q; st.idx = 0;
+      begin();
+    }
+    function begin() {
+      var it = st.queue[st.idx];
+      st.item = it ? Object.assign(it, { chosen: null, typed: '', submitted: false, solved: false, path: null, hints: 0, showCards: false, showClass: false, picked: null }) : null;
+      if (it) {
+        if (it.kind === 'apply') { var sk = st.streak[st.set.id + ':' + it.e.c] || 0; it.faded = sk >= 5; }
+        B.emit('view', { item: it.id, mode: st.mode, rule: st.set.id });
+      } else B.emit('complete', { mode: st.mode, rule: st.set.id, items: st.queue.length });
+      render();
+    }
+    function next() { st.idx++; begin(); }
+    function feedback(t, tone) { var f = stage.querySelector('.kb-feedback'); if (f) { f.textContent = t; f.className = 'kb-feedback ' + (tone || ''); f.hidden = !t; } }
+    function mark(it, label) {
+      var s = B.status(it.id);
+      st.record[it.id] = { text: label, cls: s === 'independent' ? 'ind' : s === 'assisted' || s === 'revealed' ? 'ast' : s === 'self-yes' || s === 'self-no' ? 'self' : 'bad' };
+    }
+    function setRow(w, setIdx, a) { (st.rows[w] = st.rows[w] || {})[setIdx] = a; }
+
+    /* ---- ① induce ---- */
+    function induceState(set) {
+      return st.induce[set.id] || (st.induce[set.id] = { placed: {}, order: KTBlock.shuffle(set.induce.map(function (p) { return p.w; })), done: false, wrong: {} });
+    }
+    function placePair(w, cid) {
+      var s = induceState(st.set);
+      if (s.done) return;
+      s.placed[w] = cid; delete s.wrong[w]; st.selPair = null;
+      B.emit('drop', { item: 'induce:' + st.set.id + ':' + w, bucket: cid });
+      render();
+    }
+    function checkInduce() {
+      var set = st.set, s = induceState(set), allOk = true;
+      s.checked = s.checked || {};
+      set.induce.forEach(function (p) {
+        var id = 'induce:' + set.id + ':' + p.w, ok = s.placed[p.w] === p.c;
+        // record a pair only when it is checked for the first time or was moved since the last check
+        if (s.checked[p.w] !== s.placed[p.w]) B.attempt(id, { correct: ok, response: { placed: s.placed[p.w], rule: set.id } });
+        s.checked[p.w] = s.placed[p.w];
+        if (!ok) { s.wrong[p.w] = true; allOk = false; }
+      });
+      if (allOk) { s.done = true; B.emit('complete', { mode: 'induce', rule: set.id }); }
+      render();
+      if (allOk) feedback(L('分组都对了。右边“我的规则卡”就是你刚归纳出的规则，后面推导新词时可以回来看。', 'All groups are right. “My rule cards” on the right are the rules you just found; you can look back at them when you work on new words.'));
+      else feedback(L('红色的词放错了组。看它变化前后最后几个字母或假名有什么不同，再挪一挪。第一次的分组已经记下。', 'The red words are in the wrong group. Compare how the ending changes, then move them. Your first grouping is already on record.'), 'bad');
+    }
+    function renderInduce() {
+      var set = st.set, s = induceState(set);
+      stage.append(h('p', { class: 'kb-prompt', text: L('这些是学过的词和它们的' + set.title + '。按“怎么变的”把它们放进下面的组：先点一个词，再点一个组（或按数字键）。', 'These are words you know with their ' + T(set, 'title') + '. Sort them by how they change: click a word, then click a group (or press its number).') }));
+      var loose = s.order.filter(function (w) { return !s.placed[w]; });
+      function pairBtn(w) {
+        var e = set.induce.filter(function (p) { return p.w === w; })[0], a = answerOf(set, e);
+        var cl = 'pair' + (s.wrong[w] ? ' bad' : (s.done ? ' good' : ''));
+        return h('button', { class: cl, 'aria-pressed': st.selPair === w ? 'true' : 'false', disabled: s.done,
+          onclick: function (ev) { ev.stopPropagation(); st.selPair = st.selPair === w ? null : w; B.emit('select', { item: 'induce:' + set.id + ':' + w }); render(); } },
+          baseText(w) + ' → ' + (cls(set, e.c).noForm ? L('（不能）', '(cannot)') : shownForm(a)));
+      }
+      stage.append(h('div', { class: 'pairs', 'aria-label': L('还没分组的词', 'Words not yet sorted') }, loose.length ? loose.map(pairBtn) : [h('span', { class: 'kb-note', text: L('都放好了。', 'All placed.') })]));
+      stage.append(h('div', { class: 'buckets' }, set.classes.map(function (c, i) {
+        var inside = s.order.filter(function (w) { return s.placed[w] === c.id; });
+        return h('div', { class: 'bucket' }, [
+          h('button', { class: 'kb-btn', disabled: s.done || !st.selPair, onclick: function () { if (st.selPair) placePair(st.selPair, c.id); } }, (i + 1) + '. ' + L('放进这一组', 'Put it here')),
+          h('span', { class: 'bh', text: T(c, 'label') }), h('span', { class: 'br', text: T(c, 'rule') }),
+          h('div', { class: 'pairs' }, inside.map(pairBtn))]);
+      })));
+      stage.append(h('div', { class: 'tools' }, [
+        h('button', { class: 'kb-btn primary', disabled: s.done || loose.length > 0, onclick: checkInduce }, L('检查分组', 'Check the groups')),
+        s.done ? h('button', { class: 'kb-btn primary', onclick: function () { st.mode = 'apply'; ui.setMode('apply'); newRound(); } }, L('去用到新词 →', 'On to new words →')) : null]));
+      stage.append(h('p', { class: 'kb-note', text: L('有的组可能是空的，也可能一个组里有好几个词。', 'Some groups may stay empty, and one group may hold several words.') }));
+    }
+
+    /* ---- ② apply ---- */
+    function itemClassLabel(c) { return T(c, 'label'); }
+    function choose(cid) {
+      var it = st.item;
+      if (!it || it.solved) return;
+      it.chosen = cid;
+      B.emit('select', { item: it.id, step: 'class', class: cid });
+      render();
+      var inp = stage.querySelector('.typed input'); if (inp && !inp.disabled) inp.focus();
+    }
+    function submitApply() {
+      var it = st.item, set = st.set, e = it.e, right = cls(set, e.c);
+      if (it.solved) return;
+      var input = stage.querySelector('.typed input');
+      it.typed = input ? input.value : '';
+      if (!it.faded && !it.chosen) { feedback(L('先在第①格判类。', 'Choose a class in box ① first.'), 'warn'); return; }
+      var chosen = it.faded ? null : cls(set, it.chosen);
+      var ans = answerOf(set, e);
+      if (!it.typed.trim() && !(chosen && chosen.noForm)) { feedback(L('在第③格写出形式。', 'Type the form in box ③.'), 'warn'); return; }
+      var classOk = it.faded ? null : it.chosen === e.c;
+      var formOk = right.noForm ? !!(chosen && chosen.noForm) || (it.faded && !it.typed.trim()) : matches(it.typed, ans.forms);
+      if (chosen && chosen.noForm && !right.noForm) formOk = false;
+      var ok = formOk && classOk !== false;
+      var rec = B.attempt(it.id, { correct: ok, response: { class: it.chosen, typed: it.typed, classOk: classOk, formOk: formOk, trap: e.trap || null, exception: !!right.exception, rule: set.id, faded: !!it.faded } });
+      it.submitted = true; mark(it, LEX[e.w].base);
+      var key = set.id + ':' + e.c;
+      if (rec.attempts === 1) st.streak[key] = ok && !rec.first.assisted ? (st.streak[key] || 0) + 1 : 0;
+      if (ok) { solve(it, ans); return; }
+      if (it.faded) { it.faded = false; st.streak[key] = 0; }
+      // trace back along the learner's own path and name the step where it forked
+      var path = chosen ? derive(set, chosen.id, e.w) : null, fork, msg;
+      if (classOk === false) {
+        fork = 1;
+        if (formOk) msg = L('形式写对了，但第①步判类不对：' + LEX[e.w].base + ' 不是“' + itemClassLabel(chosen) + '”。判类错、形式碰巧对，这次不算通过。', 'The form is right, but the class in step ① is not: ' + LEX[e.w].base + ' is not “' + itemClassLabel(chosen) + '”. A wrong class with a lucky form does not count as a pass.');
+        else if (path && matches(it.typed, path.forms)) msg = L('你按“' + itemClassLabel(chosen) + '”的规则变得很一致——问题出在第①步：这个词不属于这一类。', 'You applied “' + itemClassLabel(chosen) + '” consistently; the problem is step ①: this word is not in that class.');
+        else msg = L('分叉在第①步：判类不对。再想想它属于哪一类。', 'It went off track at step ①: the class is wrong. Think again about which class it belongs to.');
+        if (e.trap && chosen && chosen.id === e.trap) msg += L(' 这个词是“看上去像，其实不是”的那种。', ' This is one of the words that look like one class but belong to another.');
+      } else {
+        fork = 3;
+        var other = set.classes.filter(function (c) { if (c.id === e.c) return false; var d = derive(set, c.id, e.w); return d && matches(it.typed, d.forms); })[0];
+        msg = other ? L('判类对了，但第③步用的是“' + itemClassLabel(other) + '”的变法。对照第②格的规则再写一次。', 'The class is right, but step ③ used the change for “' + itemClassLabel(other) + '”. Check the rule in box ② and type it again.')
+          : it.faded ? L('这一类刚才收起了中间步骤；这次错了，步骤槽回来了。先判类，再写。', 'The middle steps for this class were folded away; since this one was wrong, they are back. Choose the class, then type the form.')
+          : L('判类对了，分叉在第③步：变换或拼写有一处不对。对照第②格的规则逐个字母（假名）检查。', 'The class is right; it went off track at step ③: something in the change or the spelling is off. Check it letter by letter (kana by kana) against the rule in box ②.');
+      }
+      it.path = { fork: fork, chosen: chosen ? chosen.id : null, typed: it.typed, derived: path };
+      render();
+      feedback(msg + L('（第一次作答已记下）', ' (Your first attempt is on record.)'), 'bad');
+    }
+    function solve(it, ans) {
+      var set = st.set, e = it.e, c = cls(set, e.c);
+      it.solved = true; it.path = null;
+      setRow(e.w, set.id, ans);
+      if (c.exception) st.shelf[set.id + ':' + e.w] = { w: e.w, set: set.id, ans: ans };
+      mark(it, LEX[e.w].base);
+      render();
+      speak(sayText(e.w, ans));
+      var s = B.status(it.id);
+      var msg = (s === 'independent' ? L('对！', 'Correct! ') : s === 'assisted' ? L('对了（用过提示）。', 'Right (after a hint). ') : L('这次对了；第一次作答没对，已记下。', 'Right this time; the first attempt was wrong and stays on record. ')) + baseText(e.w) + ' → ' + (c.noForm ? L('（不能' + (set.title.indexOf('重叠') >= 0 ? '重叠' : '变') + '）', '(' + T(c, 'label') + ')') : shownForm(ans)) + L('。', '.');
+      if (e.note) msg += ' ' + T(e, 'note');
+      if (c.exception) msg += L(' 它放上了例外架：记住例外不等于会用规则。', ' It goes on the exception shelf: remembering an exception is not the same as using the rule.');
+      feedback(msg, s === 'independent' ? '' : 'warn');
+    }
+    function revealApply() {
+      var it = st.item, set = st.set, e = it.e;
+      B.reveal(it.id); it.showClass = true;
+      solve(it, answerOf(set, e));
+      feedback(L('答案：', 'Answer: ') + baseText(e.w) + ' → ' + shownForm(answerOf(set, e)) + L('（' + itemClassLabel(cls(set, e.c)) + '）。这一题记为“看过答案”。', ' (' + itemClassLabel(cls(set, e.c)) + '). This item is recorded as “answer shown”.') + (e.note ? ' ' + T(e, 'note') : ''), 'warn');
+    }
+    function chainView(set, e, path) {
+      // solved: the right derivation; otherwise the learner's own path with the fork marked
+      var steps;
+      if (!path) {
+        var c = cls(set, e.c), a = answerOf(set, e), d = c.rewrite ? derive(set, e.c, e.w) : null;
+        steps = [[L('① 判类', '① class'), itemClassLabel(c), 'ok'], [L('② 词尾', '② ending'), c.exception || !d ? L('整词', 'whole word') : (d.ending || L('（整个词）', '(whole word)')), 'ok'],
+          [L('③ 规则', '③ rule'), T(c, 'rule'), 'ok'], [L('④ 结果', '④ result'), shownForm(a), 'ok']];
+      } else {
+        var ch = path.chosen ? cls(set, path.chosen) : null;
+        steps = [[L('① 你的判类', '① your class'), ch ? itemClassLabel(ch) : '—', path.fork === 1 ? 'fork' : 'ok'],
+          [L('② 词尾', '② ending'), path.derived ? (path.derived.ending || L('（整个词）', '(whole word)')) : ch && ch.exception ? L('整词记，没有可套的规则', 'learned whole: no rule to apply') : L('这条规则够不着这个词', 'this rule does not reach the word'), ''],
+          [L('③ 规则', '③ rule'), ch ? T(ch, 'rule') : '—', path.fork === 3 ? 'fork' : ''], [L('④ 你写的', '④ you typed'), path.typed || '—', path.fork ? 'fork' : '']];
+      }
+      var out = [];
+      steps.forEach(function (s, i) { if (i) out.push(h('span', { class: 'sep', text: '→' })); out.push(h('span', { class: 'st ' + s[2] }, [h('small', { text: s[0] }), s[1]])); });
+      return h('div', {}, [h('p', { class: 'kb-note', text: path ? L('沿着你的推导往回看（红框是分叉的那一步）：', 'Your derivation, traced back (the red box is where it forked):') : L('推导链：', 'Derivation:') }), h('div', { class: 'chain' }, out)]);
+    }
+    function rowView(w) {
+      var lex = LEX[w], cols = pack.sets.filter(function (s) { return s.pos === lex.pos; }), r = st.rows[w] || {};
+      if (cols.length < 2) return null;
+      var ths = [h('th', { text: L('原形', 'base') })].concat(cols.map(function (s) { return h('th', { text: T(s, 'short') }); }));
+      var tds = [h('td', { text: baseText(w) })].concat(cols.map(function (s) {
+        return h('td', { class: (s.id === st.set.id ? 'cur ' : '') + (r[s.id] ? '' : 'empty'), text: r[s.id] ? shownForm(r[s.id]) : '…' });
+      }));
+      var note = isJa && r.te && r.ta ? h('p', { class: 'kb-note', text: L('看：て形和た形用的是同一种音便。', 'Look: the te-form and the ta-form share the same sound change.') }) : null;
+      return h('div', {}, [h('b', { text: L('这个词的变形行', 'This word’s row of forms') }), h('div', { class: 'rowwrap' }, h('table', { class: 'row' }, [h('tr', {}, ths), h('tr', {}, tds)])),
+        h('p', { class: 'kb-note', text: L('你在各组里推出的形式会留在这一行上。', 'Forms you derive in each rule set stay on this row.') }), note]);
+    }
+    function wordHead(w) {
+      var lex = LEX[w];
+      return h('div', { class: 'word' }, [h('span', { class: 'base', lang: pack.lang, text: baseText(w) }),
+        isJa && !st.kanaOnly && lex.read !== lex.base ? h('span', { class: 'read', text: lex.read }) : null,
+        gloss(w) ? h('span', { class: 'gl', text: gloss(w) }) : null,
+        h('button', { class: 'kb-btn', 'aria-label': L('听原形', 'Hear the base form'), onclick: function () { speak(lex.read || lex.base); B.emit('select', { item: st.item && st.item.id, listen: 'base' }); } }, '▶')]);
+    }
+    function renderApply() {
+      var it = st.item, set = st.set, e = it.e;
+      stage.append(h('p', { class: 'kb-prompt', text: L('新词：', 'New word: ') + T(set, 'prompt') + (it.faded ? L('（这一类已连续 5 次独立做对，中间步骤收起）', ' (5 in a row right for this class: the middle steps are folded away)') : '') }), wordHead(e.w));
+      var chosen = it.chosen ? cls(set, it.chosen) : null;
+      var slots = [];
+      if (!it.faded) {
+        var fork = it.path ? it.path.fork : 0;
+        slots.push(h('div', { class: 'slot' + (chosen ? ' filled' : '') + (fork === 1 ? ' fork' : '') + (it.solved ? ' okstep' : '') }, [h('h3', { text: L('① 判类（数字键）', '① Class (number keys)') }),
+          h('div', { class: 'cls', role: 'group', 'aria-label': L('类别', 'Class') }, set.classes.map(function (c, i) {
+            return h('button', { 'aria-pressed': it.chosen === c.id ? 'true' : 'false', disabled: it.solved, onclick: function () { choose(c.id); } }, [h('span', { class: 'n', text: String(i + 1) }), itemClassLabel(c)]);
+          }))]));
+        slots.push(h('div', { class: 'slot' + (chosen ? ' filled' : '') }, [h('h3', { text: L('② 用到的规则', '② Rule used') }),
+          h('span', { class: chosen ? '' : 'muted', text: chosen ? T(chosen, 'rule') : L('选好类别后，这里显示那一类的规则。', 'Once you choose a class, its rule appears here.') })]));
+      }
+      var noForm = chosen && chosen.noForm;
+      var inp = h('input', { type: 'text', lang: pack.lang, value: it.typed, autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', disabled: it.solved || noForm,
+        'aria-label': L('写出形式', 'Type the form'), placeholder: noForm ? L('这一类不用写', 'nothing to type for this class') : (isJa ? L('假名或汉字都可以', 'kana or kanji') : '') ,
+        oninput: function (ev) { it.typed = ev.target.value; } });
+      slots.push(h('form', { class: 'slot' + (it.path && it.path.fork === 3 ? ' fork' : '') + (it.solved ? ' okstep' : ''), onsubmit: function (ev) { ev.preventDefault(); if (it.solved) next(); else submitApply(); } }, [
+        h('h3', { text: it.faded ? L('写出形式', 'Type the form') : L('③ 写出形式（必须打字）', '③ Type the form') }),
+        h('div', { class: 'typed' }, [inp, h('button', { class: 'kb-btn primary', type: 'submit', disabled: it.solved }, noForm ? L('确认', 'Confirm') : L('提交', 'Submit'))])]));
+      stage.append(h('div', { class: 'slots' }, slots));
+      if (it.path || it.solved) stage.append(chainView(set, e, it.solved ? null : it.path));
+      if (it.solved && e.trap) stage.append(h('p', {}, [h('span', { class: 'flag', text: L('看上去像，其实不是', 'Looks like one class, is another') }), ' ', L('看上去像“' + itemClassLabel(cls(set, e.trap)) + '”', 'Looks like “' + itemClassLabel(cls(set, e.trap)) + '”')]));
+      if (it.showCards && !it.solved) stage.append(cardsView(set, true));
+      if (it.showClass && !it.solved) stage.append(h('p', { class: 'kb-feedback warn', text: L('提示 3：它属于“' + itemClassLabel(cls(set, e.c)) + '”。', 'Hint 3: it belongs to “' + itemClassLabel(cls(set, e.c)) + '”.') }));
+      stage.append(h('div', { class: 'tools' }, [
+        h('button', { class: 'kb-btn', disabled: it.solved, onclick: function () { B.hint(it.id, 1); feedback(L('提示 1：', 'Hint 1: ') + T(set, 'hint1'), 'warn'); } }, L('提示 1：问一个问题', 'Hint 1: a question')),
+        h('button', { class: 'kb-btn', disabled: it.solved || it.showCards, onclick: function () { B.hint(it.id, 2); it.showCards = true; render(); } }, L('提示 2：看我的规则卡', 'Hint 2: my rule cards')),
+        // the class is only offered after a submitted form, so nobody waits for it before trying
+        it.submitted ? h('button', { class: 'kb-btn', disabled: it.solved || it.showClass, onclick: function () { B.hint(it.id, 3); it.showClass = true; render(); } }, L('提示 3：正确的类别', 'Hint 3: the right class')) : null,
+        it.submitted ? h('button', { class: 'kb-btn', disabled: it.solved, onclick: revealApply }, L('看答案', 'Show the answer')) : null]));
+      var rv = rowView(e.w); if (rv) stage.append(rv);
+    }
+
+    /* ---- ③ use in a sentence ---- */
+    function useAnswer(u) {
+      if (u.answer) return { forms: u.answer, show: u.answer[0], kana: null };
+      var e = entryFor(st.set, u.w);
+      return e ? answerOf(st.set, e) : { forms: [], show: '?' };
+    }
+    function submitUse() {
+      var it = st.item, u = it.u, a = useAnswer(u), inp = stage.querySelector('.sentence input');
+      if (it.solved || !inp) return;
+      it.typed = inp.value;
+      if (!it.typed.trim()) return;
+      var ok = matches(it.typed, a.forms);
+      B.attempt(it.id, { correct: ok, response: { typed: it.typed, rule: st.set.id } });
+      it.submitted = true; mark(it, it.typed);
+      if (ok) {
+        it.solved = true; setRow(u.w, st.set.id, a); mark(it, it.typed); render();
+        speak(u.before + (a.kana || a.show) + u.after);
+        feedback(L('对：', 'Right: ') + u.before + a.show + u.after, B.status(it.id) === 'independent' ? '' : 'warn');
+      } else {
+        render();
+        feedback(L('这里要的形式不对。先想它属于哪一类，再按那一类的规则推一遍。（第一次作答已记下）', 'That is not the form needed here. Work out its class first, then derive it with that class’s rule. (Your first attempt is on record.)'), 'bad');
+      }
+    }
+    function renderUse() {
+      var it = st.item, u = it.u, a = useAnswer(u);
+      var e = entryFor(st.set, u.w);
+      stage.append(h('p', { class: 'kb-prompt', text: L('任务：', 'Task: ') + T(u, 'task') }),
+        h('p', { class: 'kb-note', text: L('把括号里的词变成合适的' + st.set.title + '，写进空格。', 'Turn the word in brackets into the ' + T(st.set, 'title') + ' and type it in the gap.') }));
+      var inp = h('input', { type: 'text', lang: pack.lang, value: it.solved ? a.show : it.typed, disabled: it.solved, autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', 'aria-label': L('空格', 'Gap'), oninput: function (ev) { it.typed = ev.target.value; } });
+      stage.append(h('form', { onsubmit: function (ev) { ev.preventDefault(); if (it.solved) next(); else submitUse(); } }, [
+        h('div', { class: 'sentence', lang: pack.lang }, [h('span', { text: u.before }), inp, h('span', { text: u.after })]),
+        h('p', { class: 'cue' }, ['（' + baseText(u.w) + (gloss(u.w) ? ' · ' + gloss(u.w) : '') + '）']),
+        h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', type: 'submit', disabled: it.solved }, L('提交', 'Submit')),
+          h('button', { class: 'kb-btn', type: 'button', disabled: it.solved || !e, onclick: function () { B.hint(it.id, 1); feedback(L('提示：它属于“' + itemClassLabel(cls(st.set, e.c)) + '”：' + cls(st.set, e.c).rule, 'Hint: it belongs to “' + itemClassLabel(cls(st.set, e.c)) + '”: ' + T(cls(st.set, e.c), 'rule')), 'warn'); } }, L('提示：它属于哪一类', 'Hint: its class')),
+          h('button', { class: 'kb-btn', type: 'button', disabled: it.solved, onclick: function () {
+            B.reveal(it.id); it.solved = true; mark(it, a.show); render(); feedback(L('答案：', 'Answer: ') + u.before + a.show + u.after + L('。这一题记为“看过答案”。', '. This item is recorded as “answer shown”.'), 'warn'); } }, L('看答案', 'Show the answer'))])]));
+      stage.append(h('p', { class: 'kb-note', text: L('页面只核对空格里的形式，和变形表一字不差才算对；整句是否得体由你或老师判断。', 'The page only checks the form in the gap, letter for letter; whether the whole sentence fits the situation is for you or a teacher to judge.') }));
+    }
+
+    /* ---- reverse half: where the rule stops ---- */
+    var VERDICTS = [{ id: 'rule', zh: '对，规则在这里管用', en: 'Right: the rule works here' }, { id: 'break', zh: '不对，这里不能套这条规则', en: 'Wrong: the rule does not apply here' }, { id: 'both', zh: '这个形式对，另一种说法也对', en: 'This form is right, and another one is too' }];
+    function edgeShown(e) { if (e.shown) return { show: e.shown, kana: null }; return derive(st.set, e.c, e.w) || { show: '?', kana: null }; }
+    function edgeReal(e) {
+      if (e.real) return e.real.map(function (r) { return r === '—' ? L('（没有这个形式）', '(no such form)') : r; }).join(' / ');
+      var en = entryFor(st.set, e.w); return en ? shownForm(answerOf(st.set, en)) : '';
+    }
+    function judgeEdge(v) {
+      var it = st.item, e = it.e;
+      if (it.solved) return;
+      var ok = v === e.verdict;
+      B.attempt(it.id, { correct: ok, response: { verdict: v, expected: e.verdict, rule: st.set.id } });
+      it.solved = true; it.picked = v; mark(it, LEX[e.w].base);
+      render();
+      var real = edgeReal(e);
+      feedback((ok ? L('对。', 'Right. ') : L('不是这样。', 'Not quite. ')) + T(e, 'note') + (e.verdict !== 'rule' && real ? L(' 正确：', ' Right form: ') + real + L('。', '.') : ''), ok ? '' : 'bad');
+    }
+    function renderEdge() {
+      var it = st.item, e = it.e, c = cls(st.set, e.c), sh = edgeShown(e);
+      stage.append(h('p', { class: 'kb-prompt', text: e.shown ? L('有人写了下面这个形式。它对吗？', 'Someone wrote the form below. Is it right?') : L('按“' + itemClassLabel(c) + '”的规则（' + c.rule + '），会得到下面这个形式。它对吗？', 'By the rule for “' + itemClassLabel(c) + '” (' + T(c, 'rule') + '), you get the form below. Is it right?') }));
+      stage.append(h('div', { class: 'edge', lang: pack.lang }, [h('span', { text: baseText(e.w) }), h('span', { class: 'arrowto', text: '→' }), h('span', { class: 'shown', text: st.kanaOnly && sh.kana ? sh.kana : sh.show })]));
+      if (gloss(e.w)) stage.append(h('p', { class: 'kb-note', text: gloss(e.w) }));
+      stage.append(h('div', { class: 'opts' }, VERDICTS.map(function (v, i) {
+        var cl = 'opt' + (it.solved && v.id === e.verdict ? ' right' : '') + (it.solved && it.picked === v.id && v.id !== e.verdict ? ' wrongpick' : '');
+        return h('button', { class: cl, disabled: it.solved, onclick: function () { judgeEdge(v.id); } }, [h('span', { class: 'num', text: String(i + 1) }), KTBlock.lang === 'en' ? v.en : v.zh]);
+      })));
+      stage.append(h('p', { class: 'kb-note', text: L('规则有边界：形似一类其实属于另一类的词、整词例外，以及两种说法都通的情况。一律选“不对”或一律选“对”都会被卡住。', 'Rules have edges: words that look like one class but belong to another, whole-word exceptions, and cases where two forms are both fine. Always answering “wrong” or always “right” will not get through.') }));
+    }
+
+    /* ---- child: wug words (an adult clicks what the child said) ---- */
+    function creature(kind, n) {
+      var col = kind === 'spike' ? '#e08a3c' : kind === 'round' ? '#4f9d69' : '#5b7be0';
+      function one(x) {
+        var body = kind === 'spike' ? '<path d="M' + (x - 34) + ' 120 L' + (x - 24) + ' 70 L' + (x - 12) + ' 92 L' + x + ' 58 L' + (x + 12) + ' 92 L' + (x + 24) + ' 70 L' + (x + 34) + ' 120 Z" fill="' + col + '"/>'
+          : kind === 'round' ? '<circle cx="' + x + '" cy="96" r="32" fill="' + col + '"/><circle cx="' + (x - 18) + '" cy="64" r="8" fill="' + col + '"/><circle cx="' + (x + 18) + '" cy="64" r="8" fill="' + col + '"/>'
+          : '<path d="M' + (x - 34) + ' 122 Q' + (x - 38) + ' 66 ' + x + ' 64 Q' + (x + 38) + ' 66 ' + (x + 34) + ' 122 Z" fill="' + col + '"/><path d="M' + (x - 8) + ' 64 l-4 -16 M' + (x + 8) + ' 64 l4 -16" stroke="' + col + '" stroke-width="4" stroke-linecap="round"/>';
+        return body + '<circle cx="' + (x - 10) + '" cy="94" r="7" fill="#fff"/><circle cx="' + (x + 10) + '" cy="94" r="7" fill="#fff"/><circle cx="' + (x - 9) + '" cy="95" r="3" fill="#222"/><circle cx="' + (x + 11) + '" cy="95" r="3" fill="#222"/>' +
+          '<path d="M' + (x - 8) + ' 110 q8 6 16 0" fill="none" stroke="#222" stroke-width="2.5" stroke-linecap="round"/>';
+      }
+      var inner = n === 2 ? one(90) + one(190) : one(140);
+      var wrap = h('div', {}); wrap.innerHTML = '<svg viewBox="0 0 280 140" role="img" aria-label="' + (n === 2 ? 'two made-up creatures' : 'a made-up creature') + '"><ellipse cx="140" cy="128" rx="120" ry="8" fill="rgba(0,0,0,.08)"/>' + inner + '</svg>';
+      return wrap.firstChild;
+    }
+    function renderWug() {
+      var it = st.item, g = it.g, two = /two/.test(g.line2);
+      stage.append(h('p', { class: 'kb-note', text: L('给大人：读出上面两句（或点 ▶），让孩子把句子说完。孩子说了什么，就点哪个。页面不听录音，这一题记为“搭档判断”，不算孩子自己作答。', 'For the adult: read the two lines (or press ▶) and let the child finish the sentence. Click what the child said. The page does not listen; this is recorded as partner-judged, not as the child’s own answer.') }));
+      stage.append(h('div', { class: 'wug' }, [creature(g.pic, two ? 2 : 1), h('p', { class: 'line', lang: 'en', text: g.line1 }), h('p', { class: 'line', lang: 'en', text: g.line2 }),
+        h('button', { class: 'kb-btn primary', onclick: function () { B.speakSequence([{ text: g.line1, pause: 300 }, { text: g.line2 }], pack.speech); B.emit('select', { item: it.id, listen: true }); } }, L('▶ 听句子', '▶ Hear the lines'))]));
+      stage.append(h('div', { class: 'opts' }, g.options.map(function (o, i) {
+        var cl = 'opt' + (it.solved && o === g.answer ? ' right' : '') + (it.solved && it.picked === o && o !== g.answer ? ' wrongpick' : '');
+        return h('button', { class: cl, lang: 'en', disabled: it.solved, onclick: function () { judgeWug(o); } }, [h('span', { class: 'num', text: String(i + 1) }), o]);
+      }).concat([h('button', { class: 'opt' + (it.solved && it.picked === '-' ? ' wrongpick' : ''), disabled: it.solved, onclick: function () { judgeWug('-'); } }, L('没说出来／说了别的', 'Said nothing / something else'))])));
+    }
+    function judgeWug(o) {
+      var it = st.item, g = it.g;
+      if (it.solved) return;
+      var ok = o === g.answer;
+      B.attempt(it.id, { correct: ok, selfReport: true, response: { said: o, judgedBy: 'partner', rule: g.set } });
+      it.solved = true; it.picked = o; mark(it, g.answer); render();
+      speak(g.line2.replace('…', '') + ' ' + g.answer);
+      feedback(ok ? L('说对了：' + g.answer + '。这是个编出来的词，孩子没听过，说对说明在用规则。', 'Right: ' + g.answer + '. It is a made-up word the child has never heard, so getting it right means the rule is being used.')
+        : L('目标形式是 ' + g.answer + '。不急，过几天再试；这一题只记为搭档判断。', 'The target form is ' + g.answer + '. No hurry, try again in a few days; this is recorded only as partner-judged.'), ok ? '' : 'warn');
+    }
+
+    /* ---- side ---- */
+    function cardsView(set, asHint) {
+      var s = st.induce[set.id];
+      var cards = set.classes.map(function (c) {
+        var ex = set.induce.filter(function (p) { return p.c === c.id; }).map(function (p) { return baseText(p.w) + '→' + (c.noForm ? '—' : shownForm(answerOf(set, p))); });
+        return h('div', { class: 'card-rule' }, [h('b', { text: T(c, 'label') }), h('span', { text: T(c, 'rule') + (ex.length ? L('　例：', ' — e.g. ') + ex.join(L('，', ', ')) : '') })]);
+      });
+      return h('div', { class: 'kb-card' }, [h('b', { text: asHint ? L('提示 2：规则卡和归纳时的例词', 'Hint 2: rule cards with the words from step ①') : L('我的规则卡：' + set.title, 'My rule cards: ' + T(set, 'title')) }),
+        !asHint && !(s && s.done) ? h('p', { class: 'kb-note', text: L('先在“① 归纳”里把词分好组，这里会出现你归纳出的规则。', 'Sort the words in “① Find the rule” first; the rules you find will appear here.') }) : h('div', {}, cards)]);
+    }
+    function renderSide() {
+      side.innerHTML = '';
+      var chips = st.queue.filter(function (q) { return st.record[q.id]; }).map(function (q) { var r = st.record[q.id]; return h('span', { class: 'chip ' + r.cls, lang: pack.lang, text: r.text }); });
+      side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('这一轮', 'This round') }),
+        chips.length ? h('div', { class: 'chips' }, chips) : h('p', { class: 'kb-note', text: L('还没有作答。', 'No answers yet.') }),
+        h('p', { class: 'kb-note', text: L('绿 = 第一次就独立做对；黄 = 用过提示或看过答案；红 = 第一次做错；虚线 = 搭档判断。第一次作答不会被覆盖。', 'Green = right independently the first time; yellow = after a hint or the answer; red = wrong the first time; dashed = partner-judged. First attempts are never overwritten.') })]));
+      if (st.mode === 'wug') return;
+      side.append(cardsView(st.set, false));
+      var shelf = Object.keys(st.shelf).map(function (k) { return st.shelf[k]; });
+      side.append(h('div', { class: 'kb-card shelf' }, [h('b', { text: L('例外架', 'Exception shelf') }),
+        shelf.length ? h('div', { class: 'chips' }, shelf.map(function (x) { return h('span', { class: 'chip', lang: pack.lang, text: baseText(x.w) + ' → ' + shownForm(x.ans) }); })) : null,
+        h('p', { class: 'kb-note', text: L('整词例外放在这里。它们写对了只说明记住了例外，不算“会把规则用到新词上”。', 'Whole-word exceptions go here. Getting them right shows you remember the exception; it does not count as applying the rule to new words.') })]));
+      var traps = st.set.items.filter(function (i) { return i.trap; }), seen = traps.filter(function (i) { var s = B.status('apply:' + st.set.id + ':' + i.w); return s && s !== 'revealed'; });
+      if (traps.length) {
+        var good = seen.filter(function (i) { return B.status('apply:' + st.set.id + ':' + i.w) === 'independent'; }).length;
+        side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('看上去像 A、其实是 B 的词', 'Words that look like A but are B') }),
+          h('p', { class: 'kb-note', text: L('单独统计：做过 ' + seen.length + ' 个，第一次独立做对 ' + good + ' 个。', 'Counted separately: ' + seen.length + ' tried, ' + good + ' right independently the first time.') })]));
+      }
+    }
+
+    /* ---- bar and stage ---- */
+    function renderBar() {
+      bar.innerHTML = '';
+      bar.append(h('label', { class: 'kb-variant' }, [L('规则组 ', 'Rule set '), h('select', { onchange: function (e) { st.set = setsById[e.target.value]; B.emit('highlight', { rule: st.set.id }); newRound(); } },
+        pack.sets.map(function (s) { return h('option', { value: s.id, text: T(s, 'title'), selected: s === st.set }); }))]));
+      if (isJa) bar.append(h('label', { class: 'kb-variant' }, [h('input', { type: 'checkbox', checked: st.kanaOnly, onchange: function (e) { st.kanaOnly = e.target.checked; render(); } }), L(' 只显示假名', ' Kana only')]));
+      if (st.item && st.mode !== 'induce') bar.append(h('span', { class: 'kb-note', text: L('第 ' + (st.idx + 1) + ' / ' + st.queue.length + ' 题', 'Item ' + (st.idx + 1) + ' / ' + st.queue.length) }));
+      if (st.mode !== 'induce') bar.append(h('button', { class: 'kb-btn', onclick: newRound }, L('换一轮', 'New round')));
+    }
+    function renderStage() {
+      stage.innerHTML = '';
+      var it = st.item;
+      if (!it) {
+        var done = st.queue.filter(function (q) { return st.record[q.id] && st.record[q.id].cls === 'ind'; }).length;
+        stage.append(h('div', { class: 'done', text: st.queue.length ? '✓' : '·' }),
+          h('p', { class: 'kb-prompt', text: st.queue.length ? L('这一轮做完了：' + done + ' 题第一次就独立做对。', 'Round finished: ' + done + ' right independently on the first attempt.') : L('这个规则组在这个模式下没有题。', 'This rule set has no items in this mode.') }),
+          h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: newRound }, L('再来一轮', 'Another round'))]));
+        return;
+      }
+      if (it.kind === 'induce') renderInduce();
+      else if (it.kind === 'apply') renderApply();
+      else if (it.kind === 'use') renderUse();
+      else if (it.kind === 'edge') renderEdge();
+      else if (it.kind === 'wug') renderWug();
+      stage.append(h('div', { class: 'kb-feedback', hidden: true, 'aria-live': 'polite' }));
+      if (it.kind !== 'induce') stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn' + (it.solved ? ' primary' : ''), onclick: next }, it.solved ? L('下一题 →', 'Next →') : L('跳过', 'Skip'))]));
+    }
+    function render() { renderBar(); renderStage(); renderSide(); }
+
+    document.addEventListener('keydown', function (e) {
+      var tag = e.target.tagName;
+      if (tag === 'SELECT' || tag === 'INPUT' || tag === 'TEXTAREA' || e.metaKey || e.ctrlKey || e.altKey) return;
+      var it = st.item; if (!it) return;
+      var n = parseInt(e.key, 10);
+      if (n >= 1 && n <= 9) {
+        if (it.kind === 'apply' && !it.faded && st.set.classes[n - 1]) choose(st.set.classes[n - 1].id);
+        else if (it.kind === 'edge' && VERDICTS[n - 1]) judgeEdge(VERDICTS[n - 1].id);
+        else if (it.kind === 'wug' && it.g.options[n - 1]) judgeWug(it.g.options[n - 1]);
+        else if (it.kind === 'induce' && st.selPair && st.set.classes[n - 1]) placePair(st.selPair, st.set.classes[n - 1].id);
+      } else if (e.key === 'Enter' && it.solved && it.kind !== 'induce') { e.preventDefault(); next(); }
+    });
+
+    newRound();
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dictionary sense picking</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .es-wrap { display: grid; gap: 14px; min-width: 0; }
+  .sent { font-size: 1.35rem; line-height: 2; padding: 10px 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); }
+  .tok { border: 0; background: transparent; padding: 0 1px; font: inherit; border-radius: 4px; }
+  button.tok:hover { background: var(--accent-soft); }
+  .tok.target { background: var(--accent-soft); border-bottom: 3px solid var(--accent); font-weight: 700; }
+  .tok.clue { background: var(--warn-soft); border-bottom: 3px solid var(--warn); }
+  .chain { font-size: 1rem; padding: 6px 10px; border-left: 4px solid var(--accent); background: var(--accent-soft); border-radius: 0 8px 8px 0; }
+  .find { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .find input { border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 8px; padding: 7px 10px; font-size: 1.05rem; min-width: 12em; }
+  .entry { border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); padding: 10px 12px; display: grid; gap: 6px; }
+  .hw { font-size: 1.3rem; font-weight: 700; margin: 4px 0 0; }
+  .hw .py { font-weight: 400; color: var(--muted); font-size: 1rem; margin-left: 8px; }
+  .sense { display: grid; grid-template-columns: 2.2em minmax(0, 1fr); gap: 4px 8px; align-items: start; border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; background: var(--bg); }
+  .sense.sel { outline: 3px solid var(--accent); background: var(--accent-soft); }
+  .sense.dim { opacity: .4; }
+  .sense.ok { border-color: var(--accent); border-width: 2px; }
+  .sense .no { font-weight: 700; font-size: 1.05rem; background: transparent; border: 1px solid var(--line); border-radius: 8px; padding: 2px 0; }
+  .sense .pos { font-size: .75rem; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 0 6px; margin-right: 6px; }
+  .sense .def { font-size: 1rem; }
+  .sense .gl { color: var(--muted); font-size: .88rem; margin-left: 6px; }
+  .sense .ex { font-size: .92rem; color: var(--muted); font-style: italic; }
+  .reasons { grid-column: 2; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+  .reasons .lbl { font-size: .78rem; color: var(--muted); }
+  .rbtn { font-size: .8rem; border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 2px 9px; }
+  .rbtn[aria-pressed="true"] { background: var(--warn-soft); border-color: var(--warn); }
+  .rbtn.good { background: var(--accent-soft); border-color: var(--accent); }
+  .rbtn.badpick { background: var(--bad-soft); border-color: var(--bad); }
+  .verdict { grid-column: 2; font-size: .85rem; }
+  .preview { padding: 8px 12px; border: 1px dashed var(--accent); border-radius: 10px; font-size: 1.1rem; }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .opts { display: grid; gap: 8px; }
+  .opt { border: 1px solid var(--line); background: var(--panel); border-radius: var(--radius); padding: 8px 12px; text-align: left; font-size: 1.05rem; width: 100%; }
+  .opt.right { background: var(--accent-soft); border-color: var(--accent); }
+  .opt.wrongpick { background: var(--bad-soft); border-color: var(--bad); }
+  .own textarea, .own input { width: 100%; border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 8px; padding: 8px; font-size: 1.02rem; }
+  .own textarea { min-height: 56px; }
+  .step { border-top: 1px solid var(--line); padding-top: 10px; display: grid; gap: 8px; }
+  .step h3 { margin: 0; font-size: .95rem; }
+  .nb { display: grid; gap: 8px; }
+  .nbrow { border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; background: var(--panel); font-size: .92rem; display: grid; gap: 2px; }
+  .nbrow .w { font-weight: 700; font-size: 1.05rem; }
+  .done { font-size: 2.4rem; }
+  .warnline { font-size: .88rem; color: var(--warn); }
+  [data-variant="child"] .sent { font-size: 1.6rem; }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function () {
+  'use strict';
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t;
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'entry-sense-pick-en';
+  var reg = (window.KT_REGISTRY && window.KT_REGISTRY.packs) || {};
+  // while the registry does not list this block's packs yet, fall back to the block's own data file
+  var entry = reg[setId] || (/^entry-sense-pick-/.test(setId) ? { file: 'data/entry-sense-pick.js', block: 'entry-sense-pick' } : {});
+  var app = document.getElementById('app');
+  if (entry.file && entry.block !== 'entry-sense-pick') { app.textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  if (!entry.file) { app.textContent = L('未知的数据包：', 'Unknown data pack: ') + setId; return; }
+  var sc = document.createElement('script');
+  sc.src = entry.file;
+  sc.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else app.textContent = L('数据包里没有 ' + setId, 'The data pack file does not contain ' + setId); };
+  sc.onerror = function () { app.textContent = L('数据包加载失败：', 'Could not load the data pack: ') + entry.file; };
+  document.head.appendChild(sc);
+
+  function start(pack) {
+    var title = T(pack, 'title');
+    var B = KTBlock.init({ id: 'entry-sense-pick', primitive: 'prim:entry-sense-pick', title: title, set: pack.id });
+    document.title = title + ' · Dictionary sense picking';
+    var EN = KTBlock.lang === 'en';
+    var ZH = pack.lang === 'zh';
+    var kcFocus = params.get('kc');
+    var CHILD = function () { return B.variant === 'child'; };
+    var REASONS = ['pos', 'collocation', 'register', 'meaning', 'alsoFits'];
+    var RNAME = { pos: L('词性不对', 'wrong part of speech'), collocation: L('搭配不对', 'wrong collocation'), register: L('语域不对', 'wrong register'), meaning: L('意思在这里讲不通', 'meaning does not fit here'), alsoFits: L('这一个也说得通', 'this one also fits') };
+    var NB = 'kt-sense-notebook-' + pack.id;
+    var notebook = B.store(NB) || [];
+    function saveNb() { B.store(NB, notebook); }
+
+    var modes = [{ id: 'look', label: L('① 查词条、选义项', '① Look up and pick a sense') }, { id: 'keep', label: L('② 带走', '② Take it with you') }, { id: 'book', label: L('③ 生词本', '③ Notebook') }];
+    var st = { mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : 'look', queue: [], idx: 0, item: null, firstPicks: [], streak: 0, done: {} };
+
+    var ui = KTBlock.chrome(B, { title: title, subtitle: T(pack, 'subtitle'), modes: modes, mode: st.mode,
+      onMode: function (m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m }); newRound(); },
+      onVariant: function () { newRound(); } });
+    var bar = h('div', { class: 'kb-bar' });
+    var stage = h('div', { class: 'kb-card es-wrap' });
+    app.append(ui.header, h('main', { class: 'kb-main' }, [bar, stage]), ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id });
+
+    /* ---- helpers ---- */
+    function feedback(t, tone) { var f = stage.querySelector('.kb-feedback.main'); if (f) { f.textContent = t; f.className = 'kb-feedback main ' + (tone || ''); f.hidden = !t; } }
+    function speak(text) { if (!B.speak(text, pack.speech)) feedback(L('这个浏览器不能播放语音。', 'This browser cannot play speech.'), 'warn'); }
+    function ent(x) { return pack.entries[x.entry]; }
+    // all senses of an entry in dictionary order, numbered ①②③ across homographs; phrase senses separately
+    function senses(e) { var out = []; e.homs.forEach(function (hm, hi) { hm.senses.forEach(function (s) { out.push({ s: s, hom: hi }); }); }); return out; }
+    function phraseSenses(e) { var out = []; (e.phrases || []).forEach(function (p, pi) { p.senses.forEach(function (s) { out.push({ s: s, phrase: pi }); }); }); return out; }
+    function findSense(e, id) { var all = senses(e).concat(phraseSenses(e)); for (var i = 0; i < all.length; i++) if (all[i].s.id === id) return all[i].s; return null; }
+    var CIRC = '①②③④⑤⑥⑦⑧⑨';
+    function num(e, id) {
+      var i = senses(e).map(function (o) { return o.s.id; }).indexOf(id);
+      if (i >= 0) return CIRC[i];
+      var p = (e.phrases || []).filter(function (ph) { return ph.senses.some(function (s) { return s.id === id; }); })[0];
+      return p ? p.head + ' ' + CIRC[p.senses.map(function (s) { return s.id; }).indexOf(id)] : '?';
+    }
+    // glosses are in the interface language; an English pack's Chinese glosses are not shown in English mode
+    function gloss(s, x) {
+      if (x && x.noGloss) return null;
+      if (ZH) return EN ? s.en : null;
+      return EN ? null : s.zh;
+    }
+    function tokens(x) { return x.s.indexOf('/') >= 0 ? x.s.split('/') : x.s.split(/(\s+)/); }
+    function bare(t) { return t.replace(/^[^\wÀ-ɏ一-鿿぀-ヿ]+|[^\wÀ-ɏ一-鿿぀-ヿ']+$/g, '').toLowerCase(); }
+    function isTarget(x, t) { return x.target.toLowerCase().split(' ').indexOf(bare(t)) >= 0; }
+    function plain(x) { return tokens(x).join(''); }
+    function kcOk(x) { return !kcFocus || x.kc === kcFocus; }
+    function pool() { var p = pack.items.filter(kcOk); return p.length ? p : pack.items; }
+    // pinyin compare: letters without tones + the order of tones 1-4 (neutral tone ignored); works for marks or numbers
+    var MARKS = { 'ā': 'a1', 'á': 'a2', 'ǎ': 'a3', 'à': 'a4', 'ē': 'e1', 'é': 'e2', 'ě': 'e3', 'è': 'e4', 'ī': 'i1', 'í': 'i2', 'ǐ': 'i3', 'ì': 'i4', 'ō': 'o1', 'ó': 'o2', 'ǒ': 'o3', 'ò': 'o4', 'ū': 'u1', 'ú': 'u2', 'ǔ': 'u3', 'ù': 'u4', 'ǖ': 'v1', 'ǘ': 'v2', 'ǚ': 'v3', 'ǜ': 'v4', 'ü': 'v0' };
+    function pyKey(s) {
+      var letters = '', tones = '';
+      s.toLowerCase().normalize('NFC').split('').forEach(function (c) {
+        if (MARKS[c]) { letters += MARKS[c][0]; if (MARKS[c][1] !== '0') tones += MARKS[c][1]; }
+        else if (/[1-4]/.test(c)) tones += c;
+        else if (/[a-z]/.test(c)) letters += c;
+      });
+      return letters + '|' + tones;
+    }
+    function norm(s) { return ZH ? pyKey(s) : s.trim().toLowerCase().replace(/[^a-z' -]/g, ''); }
+
+    /* ---- rounds ---- */
+    function newRound() {
+      var p = pool();
+      if (st.mode === 'look') {
+        var n = CHILD() ? 4 : 8;
+        // every round carries the reverse half: one item where two senses fit and one fixed phrase
+        var amb = KTBlock.shuffle(p.filter(function (x) { return x.answer.length > 1; })).slice(0, CHILD() ? 0 : 1);
+        var phr = KTBlock.shuffle(p.filter(function (x) { return x.phrase; })).slice(0, CHILD() ? 0 : 1);
+        var rest = KTBlock.shuffle(p.filter(function (x) { return amb.indexOf(x) < 0 && phr.indexOf(x) < 0 && (!CHILD() || (x.answer.length === 1 && !x.phrase)); })).slice(0, n - amb.length - phr.length);
+        st.queue = KTBlock.shuffle(amb.concat(phr, rest)).map(function (x) { return { kind: 'look', x: x, id: x.id }; });
+      } else if (st.mode === 'keep') {
+        // items where two senses fit are not used here: there is no single sense to take away
+        var one = p.filter(function (x) { return x.answer.length === 1; });
+        var doneFirst = one.filter(function (x) { return st.done[x.id]; });
+        var others = KTBlock.shuffle(one.filter(function (x) { return !st.done[x.id]; }));
+        st.queue = doneFirst.concat(others).slice(0, CHILD() ? 3 : 5).map(function (x) { return { kind: 'keep', x: x, id: x.id }; });
+      } else st.queue = [];
+      st.idx = 0; begin();
+    }
+    function begin() {
+      var it = st.queue[st.idx];
+      if (it && it.kind === 'look') Object.assign(it, { phase: 'find', tries: 0, input: '', foundMsg: '', pick: null, phraseOpen: false, reasons: {}, clue: null, hint: 0, preview: false, result: null });
+      if (it && it.kind === 'keep') Object.assign(it, { para: '', paraShown: false, paraSelf: null, opts: sameOpts(it.x), samePick: null, own: '', ownChecked: null, ownSelf: null, col: '', saved: false });
+      st.item = it || null;
+      if (it) B.emit('view', { item: it.id, mode: st.mode });
+      else if (st.queue.length) B.emit('complete', { mode: st.mode, items: st.queue.length });
+      render();
+      var f = stage.querySelector('.find input'); if (f) f.focus();
+    }
+    function next() { st.idx++; begin(); }
+
+    /* ---- ① step 1: back to the dictionary form ---- */
+    function tryFind() {
+      var it = st.item, x = it.x, val = (it.input || '').trim();
+      if (!val) return;
+      var ok = x.lookup.answers.some(function (a) { return norm(a) === norm(val); });
+      it.tries++;
+      B.attempt('find:' + x.id, { correct: ok, response: { typed: val, tries: it.tries } });
+      if (ok) { it.phase = 'pick'; render(); feedback(L('找到了。', 'Found it.'), ''); return; }
+      // the learner may land on another homograph: show what that entry says, as a real dictionary would
+      var other = null;
+      ent(x).homs.forEach(function (hm) { if (hm.py && norm(hm.py) === norm(val)) other = hm; });
+      var msg = other ? L('按这个读音查到的词条说的是：', 'Under this reading the dictionary says: ') + other.senses.map(function (s) { return s.def; }).join(' / ') + L('。放进句子说得通吗？再试一次。', '. Does that fit the sentence? Try again.')
+        : (x.lookup.wrong && x.lookup.wrong[val.toLowerCase()] ? T(x.lookup.wrong[val.toLowerCase()], 'msg') : (ZH ? L('按这个拼音查不到要的词条。', 'This pinyin does not lead to the entry you need.') : L('词典里没有这个形式。', 'The dictionary has no headword in this form.')));
+      if (it.tries >= 3) {
+        B.reveal('find:' + x.id);
+        it.phase = 'pick'; it.revealedFind = true; render();
+        feedback(msg + ' ' + L('试了三次，先把词典形给你：', 'Three tries; here is the dictionary form: ') + x.lookup.answers[0] + L('（这一步记为提示后完成）', ' (this step is recorded as completed with help)'), 'warn');
+        return;
+      }
+      render(); feedback(msg, 'bad');
+    }
+    function renderFind(x, it) {
+      stage.append(h('p', { class: 'kb-prompt', text: ZH ? L('先找词条：写出“' + x.target + '”在这句话里的拼音（带声调，符号或数字都行，如 dìdao 或 di4dao）。', 'Find the entry first: type the pinyin of “' + x.target + '” as it is read in this sentence (with tones, marks or numbers, e.g. dìdao or di4dao).')
+        : L('先找词条：句子里的“' + x.target + '”要按哪个词典形去查？', 'Find the entry first: which dictionary form do you look up for “' + x.target + '” in this sentence?') }));
+      var inp = h('input', { type: 'text', 'aria-label': L('词典形', 'Dictionary form'), lang: ZH ? 'zh-Latn-pinyin' : pack.lang, value: it.input, autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false',
+        oninput: function (e) { it.input = e.target.value; }, onkeydown: function (e) { if (e.key === 'Enter') { e.preventDefault(); tryFind(); } } });
+      stage.append(h('div', { class: 'find' }, [inp, h('button', { class: 'kb-btn primary', onclick: tryFind }, L('查', 'Look up')),
+        h('span', { class: 'kb-note', text: L('已试 ' + it.tries + ' / 3 次', 'Tries: ' + it.tries + ' / 3') })]));
+    }
+
+    /* ---- ① step 2: pick the sense and rule out the others ---- */
+    function accepted(x, sid) {
+      if (x.answer.indexOf(sid) >= 0) return ['alsoFits'];
+      if (x.why && x.why[sid]) return x.why[sid];
+      var s = findSense(ent(x), sid);
+      if (x.pos === 'phrase') return ['meaning', 'collocation'];
+      if (s.pos && x.pos && s.pos.split(/[,，\/]\s*/).indexOf(x.pos) < 0) return ['pos', 'meaning'];
+      return ['meaning', 'collocation'].concat(s.reg ? ['register'] : []);
+    }
+    function others(x, it) { return senses(ent(x)).map(function (o) { return o.s.id; }).filter(function (id) { return id !== it.pick; }); }
+    function pick(id) {
+      var it = st.item; if (it.result && it.result.senseOk) return;
+      it.pick = id; delete it.reasons[id]; it.preview = false;
+      B.emit('select', { item: 'sense:' + it.x.id, sense: id });
+      render();
+    }
+    function setReason(sid, r) { var it = st.item; if (it.result && it.result.senseOk && it.result.whyOk !== false && it.result.final) return; it.reasons[sid] = r; B.emit('select', { item: 'why:' + it.x.id, sense: sid, reason: r }); render(); }
+    function setClue(i, t) { var it = st.item; if (it.phase !== 'pick' || isTarget(it.x, t) || !bare(t)) return; it.clue = bare(t); B.emit('highlight', { item: 'why:' + it.x.id, clue: it.clue }); render(); }
+    function submit() {
+      var it = st.item, x = it.x;
+      if (!it.pick) { feedback(L('先选一个义项。', 'Pick a sense first.'), 'warn'); return; }
+      var need = CHILD() ? [] : others(x, it);
+      if (!CHILD()) {
+        var missing = need.filter(function (sid) { return !it.reasons[sid]; });
+        if (missing.length) { feedback(L('每个没选的义项都要给一个排除理由（还差 ' + missing.length + ' 个）。', 'Give a reason for every sense you did not pick (' + missing.length + ' missing).'), 'warn'); return; }
+        if (!it.clue) { feedback(L('再点一下原句里帮你判断的那个词（线索）。', 'Also click the word in the sentence that helped you decide (the clue).'), 'warn'); return; }
+      }
+      var senseOk = x.answer.indexOf(it.pick) >= 0;
+      var firstPick = !it.result;
+      if (firstPick) {
+        var pos = senses(ent(x)).map(function (o) { return o.s.id; }).indexOf(it.pick);
+        st.firstPicks.push({ pos: pos, ok: senseOk });
+      }
+      if (!firstPick) B.emit('revise', { item: 'sense:' + x.id, to: it.pick });
+      B.attempt('sense:' + x.id, { correct: senseOk, response: { sense: it.pick, expected: x.answer, preview: it.preview } });
+      var whyOk = null, bad = [];
+      if (!CHILD()) {
+        need.forEach(function (sid) { if (accepted(x, sid).indexOf(it.reasons[sid]) < 0) bad.push(sid); });
+        var clueOk = (x.clues || []).indexOf(it.clue) >= 0;
+        whyOk = senseOk && !bad.length && clueOk;
+        B.attempt('why:' + x.id, { correct: whyOk, response: { reasons: it.reasons, clue: it.clue, clueAccepted: clueOk, wrongReasons: bad } });
+        B.emit('explain', { item: x.id, reasons: it.reasons, clue: it.clue });
+        it.result = { senseOk: senseOk, whyOk: whyOk, bad: bad, clueOk: clueOk, final: senseOk };
+      } else it.result = { senseOk: senseOk, whyOk: null, bad: [], clueOk: true, final: senseOk };
+      if (senseOk) st.done[x.id] = true;
+      st.streak = senseOk && firstPick && !it.hint && !it.preview ? st.streak + 1 : (firstPick ? 0 : st.streak);
+      render();
+      var e = ent(x), msg;
+      if (!senseOk) msg = L('这个义项放进句子讲不通。看看代入后的意思，再选一次（记为重试）。', 'This sense does not fit the sentence. Look at what it means in place, then pick again (recorded as a retry).');
+      else {
+        msg = (x.answer.length > 1 ? L('对。这句话里两个义项都说得通：', 'Right. Two senses both fit this sentence: ') + x.answer.map(function (a) { return num(e, a); }).join(L('和', ' and ')) + L('。要靠更大的语境才能定。', '. Only a wider context can decide.')
+          : x.phrase ? L('对。这里是固定短语，单词的义项都不对。', 'Right. This is a fixed phrase; none of the single-word senses fit.') : L('义项选对了。', 'Right sense.'));
+        if (!CHILD()) msg += ' ' + (whyOk ? L('排除理由和线索也都对得上。', 'Your reasons and clue fit too.') : L('不过排除理由或线索有对不上的地方，见下面标红的。', 'But some reasons or the clue do not fit; see the red marks below.') + (it.result.clueOk ? '' : ' ' + L('页面认得的线索词：', 'Clue words the page knows: ') + (x.clues || []).join(L('、', ', '))));
+        if (T(x, 'note')) msg += ' ' + T(x, 'note');
+      }
+      feedback(msg, senseOk ? (whyOk === false ? 'warn' : '') : 'bad');
+    }
+    function hint(level) {
+      var it = st.item; if (it.hint >= level) return;
+      it.hint = level; B.hint('sense:' + it.x.id, level); if (!CHILD()) B.hint('why:' + it.x.id, level); render();
+    }
+    function showPreview() {
+      var it = st.item; if (!it.pick) return;
+      it.preview = true; B.hint('sense:' + it.x.id, 'preview'); if (!CHILD()) B.hint('why:' + it.x.id, 'preview');
+      B.emit('compare', { item: it.x.id, sense: it.pick }); render();
+    }
+    function previewText(x, s) {
+      var done = false;
+      return tokens(x).map(function (t) {
+        if (!isTarget(x, t)) return t;
+        if (done) return '';
+        done = true;
+        return '【' + s.def + '】' + (t.match(/[^\w一-鿿']+$/) || [''])[0];
+      }).join('');
+    }
+    function renderSenseRow(x, it, o, idx, isPhrase) {
+      var s = o.s, sel = it.pick === s.id, res = it.result;
+      var posMismatch = it.hint >= 2 && x.pos && x.pos !== 'phrase' && !isPhrase && s.pos && s.pos.split(/[,，\/]\s*/).indexOf(x.pos) < 0;
+      var showOk = res && res.senseOk && x.answer.indexOf(s.id) >= 0;
+      var row = h('div', { class: 'sense' + (sel ? ' sel' : '') + (posMismatch ? ' dim' : '') + (showOk ? ' ok' : '') }, [
+        h('button', { class: 'no', 'aria-pressed': sel ? 'true' : 'false', 'aria-label': L('选义项 ', 'Pick sense ') + (isPhrase ? '' : CIRC[idx]), disabled: !!(res && res.senseOk), onclick: function () { pick(s.id); } }, isPhrase ? '·' : CIRC[idx]),
+        h('div', {}, [s.pos ? h('span', { class: 'pos', text: T(s, 'pos') }) : null, s.reg ? h('span', { class: 'pos', text: T(s, 'reg') }) : null,
+          h('span', { class: 'def', lang: pack.lang, text: s.def }), gloss(s, x) ? h('span', { class: 'gl', text: gloss(s, x) }) : null,
+          h('div', { class: 'ex', lang: pack.lang, text: s.ex })])]);
+      if (!isPhrase && it.pick && !sel && !CHILD()) {
+        var acc = res ? accepted(x, s.id) : null;
+        row.append(h('div', { class: 'reasons' }, [h('span', { class: 'lbl', text: L('排除理由：', 'Rule out because: ') })].concat(REASONS.map(function (r) {
+          var cl = 'rbtn' + (res && res.senseOk && acc.indexOf(r) >= 0 ? ' good' : '') + (res && res.senseOk && it.reasons[s.id] === r && acc.indexOf(r) < 0 ? ' badpick' : '');
+          return h('button', { class: cl, 'aria-pressed': it.reasons[s.id] === r ? 'true' : 'false', disabled: !!(res && res.senseOk), onclick: function () { setReason(s.id, r); } }, RNAME[r]);
+        }))));
+      }
+      return row;
+    }
+    function renderPick(x, it) {
+      var e = ent(x);
+      var mine = notebook.filter(function (r) { return r.entry === x.entry; });
+      if (mine.length) stage.append(h('p', { class: 'kb-note', text: L('生词本里已经有这个词条的记录：', 'Your notebook already has this entry: ') + mine.map(function (r) { return r.num + ' ' + r.sentence; }).join(L('；', '; ')) }));
+      stage.append(h('div', { class: 'chain', lang: null }, [h('span', { lang: pack.lang, text: x.target }), ' → ', h('b', { lang: pack.lang, text: x.lookup.answers[0] }), x.lookup.chain && x.lookup.chain !== x.lookup.answers[0] ? h('span', { class: 'kb-note', text: '  ' + T(x.lookup, 'chain') }) : null]));
+      stage.append(h('p', { class: 'kb-prompt', text: CHILD() ? L('点一个最符合这句话的义项。', 'Pick the sense that fits this sentence best.')
+        : L('选一个最符合这句话的义项；其余每个义项给一个排除理由；再点原句里帮你判断的那个词。', 'Pick the sense that fits this sentence best, give a reason for ruling out each of the others, and click the word in the sentence that helped you decide.') }));
+      var card = h('div', { class: 'entry' });
+      var all = senses(e), i = 0;
+      e.homs.forEach(function (hm, hi) {
+        card.append(h('div', { class: 'hw', lang: pack.lang }, [e.head + (e.homs.length > 1 ? ['¹', '²', '³'][hi] : ''), hm.py ? h('span', { class: 'py', text: hm.py }) : null]));
+        hm.senses.forEach(function () { card.append(renderSenseRow(x, it, all[i], i, false)); i++; });
+      });
+      if (e.phrases && e.phrases.length) {
+        if (!it.phraseOpen) card.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () { it.phraseOpen = true; B.emit('view', { item: 'sense:' + x.id, phrases: true }); render(); } }, L('单词的义项都不对？查短语条目', 'None of the word senses fit? Look at the phrase entries'))]));
+        else e.phrases.forEach(function (p) {
+          card.append(h('div', { class: 'hw', lang: pack.lang }, [p.head, p.py ? h('span', { class: 'py', text: p.py }) : null]));
+          p.senses.forEach(function (s) { card.append(renderSenseRow(x, it, { s: s }, 0, true)); });
+        });
+      }
+      stage.append(card);
+      if (it.pick && (it.preview || (it.result && !it.result.senseOk))) {
+        var s = findSense(e, it.pick);
+        stage.append(h('div', { class: 'preview' }, [h('span', { class: 'kb-note', text: L('代入原句：', 'Put into the sentence: ') }), h('span', { lang: pack.lang, text: previewText(x, s) })]));
+      }
+      if (!(it.result && it.result.senseOk)) {
+        var hs = [];
+        if (it.hint < 1) hs.push(h('button', { class: 'kb-btn', onclick: function () { hint(1); } }, L('提示 1：问自己', 'Hint 1: ask yourself')));
+        if (it.hint < 2) hs.push(st.streak >= 5 ? h('button', { class: 'kb-btn', onclick: function () { hint(2); } }, L('提示 2：按词性筛（要时再开）', 'Hint 2: filter by part of speech (on request)')) : h('button', { class: 'kb-btn', onclick: function () { hint(2); } }, L('提示 2：词性对不上的变灰', 'Hint 2: grey out senses with the wrong part of speech')));
+        hs.push(h('button', { class: 'kb-btn', disabled: !it.pick, onclick: showPreview }, L('代入原句看看（算提示）', 'Put it into the sentence (counts as a hint)')));
+        hs.push(h('button', { class: 'kb-btn primary', onclick: submit }, it.result ? L('改选后再交', 'Submit again') : L('提交', 'Submit')));
+        stage.append(h('div', { class: 'tools' }, hs));
+        if (it.hint >= 1) stage.append(h('p', { class: 'kb-note', text: ZH ? L('问自己：这个词在句子里是名词、动词还是形容词？前后跟着什么词？', 'Ask yourself: is the word a noun, verb or adjective here? What comes before and after it?') : L('问自己：这个词在句子里是名词、动词还是形容词？后面跟着什么？', 'Ask yourself: is the word a noun, verb or adjective here? What follows it?') }));
+        if (it.hint >= 2 && x.pos === 'phrase') stage.append(h('p', { class: 'kb-note', text: L('这几个义项的词性都对得上，问题不在词性。', 'All these senses have the right part of speech; the problem is not there.') }));
+      }
+      if (it.result && it.result.senseOk) stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () { speak(plain(x)); } }, L('▶ 听原句', '▶ Hear the sentence'))]));
+      var fp = st.firstPicks;
+      if (fp.length >= 5) {
+        var firsts = fp.filter(function (p) { return p.pos === 0; }).length, acc = fp.filter(function (p) { return p.ok; }).length;
+        if (firsts / fp.length > 0.6 && acc / fp.length < 0.6) stage.append(h('p', { class: 'warnline', text: L('你可能在按顺序选：大多数时候选了第一个义项。正确义项在条目里的位置是分散的。', 'You may be picking in order: most of the time you chose the first sense. The right sense can be anywhere in the entry.') }));
+      }
+    }
+    function renderLook() {
+      var it = st.item, x = it.x;
+      var toks = tokens(x);
+      stage.append(h('div', { class: 'sent', lang: pack.lang }, toks.map(function (t, i) {
+        if (/^\s+$/.test(t)) return t;
+        var cls = 'tok' + (isTarget(x, t) ? ' target' : '') + (it.clue && bare(t) === it.clue && !isTarget(x, t) ? ' clue' : '');
+        return it.phase === 'pick' && !isTarget(x, t) && !CHILD() ? h('button', { class: cls, onclick: function () { setClue(i, t); } }, t) : h('span', { class: cls, text: t });
+      })));
+      if (it.phase === 'find') renderFind(x, it); else renderPick(x, it);
+    }
+
+    /* ---- ② take it with you ---- */
+    function answerSense(x) { return findSense(ent(x), x.answer[0]); }
+    function sameOpts(x) {
+      var e = ent(x), a = answerSense(x);
+      var pool2 = senses(e).concat(phraseSenses(e)).map(function (o) { return o.s; }).filter(function (s) { return x.answer.indexOf(s.id) < 0 && s.ex2; });
+      return KTBlock.shuffle([{ t: a.ex2, ok: true }].concat(KTBlock.shuffle(pool2).slice(0, 2).map(function (s) { return { t: s.ex2, ok: false, sid: s.id }; })));
+    }
+    function renderKeep() {
+      var it = st.item, x = it.x, e = ent(x), a = answerSense(x);
+      stage.append(h('div', { class: 'sent', lang: pack.lang }, tokens(x).map(function (t) { return /^\s+$/.test(t) ? t : h('span', { class: 'tok' + (isTarget(x, t) ? ' target' : ''), text: t }); })));
+      stage.append(h('p', { class: 'kb-note' }, [L('这句里的义项：', 'The sense in this sentence: '), h('b', { lang: pack.lang, text: e.head + ' ' + num(e, a.id) + ' ' + a.def })]));
+      // a) paraphrase and put it back
+      var s1 = h('div', { class: 'step' }, [h('h3', { text: L('1. 用自己的话说这个义项，放回原句', '1. Say the sense in your own words and put it back') })]);
+      s1.append(h('div', { class: 'own' }, h('input', { type: 'text', lang: pack.lang, value: it.para, 'aria-label': L('我的改写', 'My paraphrase'), oninput: function (ev) { it.para = ev.target.value; it.paraShown = false; } })));
+      s1.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () { if (!it.para.trim()) return; it.paraShown = true; B.emit('explain', { item: 'para:' + x.id, paraphrase: it.para }); render(); } }, L('放回原句', 'Put it back'))]));
+      if (it.paraShown) {
+        s1.append(h('div', { class: 'preview', lang: pack.lang, text: previewText(x, { def: it.para.trim() }) }));
+        s1.append(h('div', { class: 'tools' }, [h('span', { class: 'kb-note', text: L('页面判断不了，你自己读：', 'The page cannot judge this; read it yourself: ') }),
+          h('button', { class: 'kb-btn' + (it.paraSelf === true ? ' primary' : ''), onclick: function () { it.paraSelf = true; B.attempt('para:' + x.id, { correct: true, selfReport: true, response: { paraphrase: it.para } }); render(); } }, L('换进去说得通', 'It fits')),
+          h('button', { class: 'kb-btn' + (it.paraSelf === false ? ' primary' : ''), onclick: function () { it.paraSelf = false; B.attempt('para:' + x.id, { correct: false, selfReport: true, response: { paraphrase: it.para } }); render(); } }, L('换进去不通', 'It does not fit'))]));
+      }
+      stage.append(s1);
+      // b) which new sentence uses the same sense (entry examples are not shown here)
+      var s2 = h('div', { class: 'step' }, [h('h3', { text: L('2. 哪一句用的是同一个义项？', '2. Which sentence uses the same sense?') })]);
+      s2.append(h('div', { class: 'opts' }, it.opts.map(function (o) {
+        var cl = 'opt' + (it.samePick && o.ok ? ' right' : '') + (it.samePick === o && !o.ok ? ' wrongpick' : '');
+        return h('button', { class: cl, lang: pack.lang, disabled: !!it.samePick, onclick: function () {
+          it.samePick = o; B.attempt('same:' + x.id, { correct: o.ok, response: { picked: o.t } }); render();
+          feedback(o.ok ? L('对，同一个义项。', 'Right, the same sense.') : L('这一句用的是另一个义项：', 'This one uses another sense: ') + (o.ok ? '' : num(e, o.sid) + ' ' + findSense(e, o.sid).def), o.ok ? '' : 'bad');
+        } }, o.t);
+      })));
+      stage.append(s2);
+      // c) own sentence with the same sense
+      var s3 = h('div', { class: 'step' }, [h('h3', { text: L('3. 自己写一句，用同一个义项', '3. Write your own sentence with the same sense') })]);
+      var ta = h('textarea', { lang: pack.lang, 'aria-label': L('我的句子', 'My sentence'), oninput: function (ev) { it.own = ev.target.value; it.ownChecked = null; it.ownSelf = null; } }); ta.value = it.own;
+      s3.append(h('div', { class: 'own' }, ta), h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () {
+        var txt = it.own.trim(); if (!txt) return;
+        var re = new RegExp(e.forms || e.head.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+        it.ownChecked = { has: re.test(txt) }; B.emit('submit', { item: 'own:' + x.id, step: 'check-form', text: txt, hasWord: it.ownChecked.has }); render();
+      } }, L('检查', 'Check'))]));
+      if (it.ownChecked) {
+        if (!it.ownChecked.has) s3.append(h('p', { class: 'kb-feedback warn', text: L('句子里没找到这个词。', 'The word is not in your sentence.') }));
+        else s3.append(h('p', { class: 'kb-note', text: L('页面只能确认你用了这个词，判断不了是哪个义项。你自己对照上面的义项：', 'The page can only confirm you used the word, not which sense. Compare with the sense above yourself:') }),
+          h('div', { class: 'tools' }, [h('button', { class: 'kb-btn' + (it.ownSelf === true ? ' primary' : ''), onclick: function () { it.ownSelf = true; B.attempt('own:' + x.id, { correct: true, selfReport: true, response: { text: it.own } }); render(); } }, L('是同一个义项', 'Same sense')),
+            h('button', { class: 'kb-btn' + (it.ownSelf === false ? ' primary' : ''), onclick: function () { it.ownSelf = false; B.attempt('own:' + x.id, { correct: false, selfReport: true, response: { text: it.own } }); render(); } }, L('其实是别的义项', 'Actually another sense'))]));
+      }
+      stage.append(s3);
+      // d) notebook record
+      var s4 = h('div', { class: 'step' }, [h('h3', { text: L('4. 记进生词本：原句、义项编号、一个搭配', '4. Save to the notebook: the sentence, the sense number, one collocation') })]);
+      s4.append(h('div', { class: 'own' }, h('input', { type: 'text', lang: pack.lang, value: it.col, placeholder: x.col || '', 'aria-label': L('一个搭配', 'One collocation'), oninput: function (ev) { it.col = ev.target.value; } })));
+      s4.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', disabled: it.saved, onclick: function () {
+        var rec = { entry: x.entry, item: x.id, head: e.head, num: num(e, a.id), def: a.def, sentence: plain(x), paraphrase: it.para, collocation: it.col.trim(), own: it.ownSelf ? it.own.trim() : '', t: Date.now() };
+        notebook = notebook.filter(function (r) { return r.item !== x.id; }).concat([rec]); saveNb(); it.saved = true;
+        B.emit('complete', { item: x.id, notebook: true }); render(); feedback(L('已记进生词本。', 'Saved to the notebook.'), '');
+      } }, it.saved ? L('已保存', 'Saved') : L('保存', 'Save'))]));
+      stage.append(s4);
+    }
+
+    /* ---- ③ notebook ---- */
+    function renderBook() {
+      stage.append(h('p', { class: 'kb-prompt', text: L('生词本：每条带着原句和义项编号。同一个词条出现在不同句子里时会排在一起。', 'Notebook: every record keeps the sentence and the sense number. Records of the same entry are grouped together.') }));
+      if (!notebook.length) { stage.append(h('p', { class: 'kb-note', text: L('还没有记录。在“带走”里保存一条。', 'Nothing yet. Save a record in “Take it with you”.') })); return; }
+      var heads = []; notebook.forEach(function (r) { if (heads.indexOf(r.entry) < 0) heads.push(r.entry); });
+      stage.append(h('div', { class: 'nb' }, heads.map(function (k) {
+        var rs = notebook.filter(function (r) { return r.entry === k; });
+        return h('div', { class: 'nbrow' }, [h('span', { class: 'w', lang: pack.lang, text: rs[0].head + (rs.length > 1 ? L('（' + rs.length + ' 条）', ' (' + rs.length + ' records)') : '') })].concat(rs.map(function (r) {
+          return h('div', {}, [h('b', { lang: pack.lang, text: r.num + ' ' + r.def }), h('div', { lang: pack.lang, text: r.sentence }),
+            r.paraphrase ? h('div', { class: 'kb-note', text: L('我的说法：', 'In my words: ') + r.paraphrase }) : null,
+            r.collocation ? h('div', { class: 'kb-note', text: L('搭配：', 'Collocation: ') + r.collocation }) : null,
+            r.own ? h('div', { class: 'kb-note', text: L('我的句子：', 'My sentence: ') + r.own }) : null]);
+        })));
+      })));
+      stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () { notebook = []; saveNb(); B.emit('revise', { item: 'notebook', action: 'clear' }); render(); } }, L('清空生词本', 'Clear the notebook'))]));
+      stage.append(h('p', { class: 'kb-note', text: L('生词本只存在这个浏览器里。条数不代表词汇量。', 'The notebook is stored only in this browser. The number of records is not a measure of vocabulary size.') }));
+    }
+
+    function renderBar() {
+      bar.innerHTML = '';
+      if (st.mode !== 'book' && st.item) bar.append(h('span', { class: 'kb-note', text: L('第 ' + (st.idx + 1) + ' / ' + st.queue.length + ' 句', 'Sentence ' + (st.idx + 1) + ' / ' + st.queue.length) }));
+      if (st.mode !== 'book') bar.append(h('button', { class: 'kb-btn', onclick: newRound }, L('换一组', 'New set')));
+      if (kcFocus) bar.append(h('span', { class: 'kb-note', text: L('知识点：', 'Knowledge point: ') + kcFocus }));
+    }
+    function render() {
+      renderBar(); stage.innerHTML = '';
+      if (st.mode === 'book') { renderBook(); return; }
+      var it = st.item;
+      if (!it) {
+        stage.append(h('div', { class: 'done', text: '✓' }), h('p', { class: 'kb-prompt', text: L('这一组做完了。', 'Set finished.') }),
+          h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: newRound }, L('再来一组', 'Another set'))]));
+        return;
+      }
+      if (it.kind === 'look') renderLook(); else renderKeep();
+      stage.append(h('div', { class: 'kb-feedback main', hidden: true, 'aria-live': 'polite' }));
+      var done = it.kind === 'look' ? !!(it.result && it.result.senseOk) : it.saved;
+      stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn' + (done ? ' primary' : ''), onclick: next }, done ? L('下一句 →', 'Next →') : L('跳过', 'Skip'))]));
+    }
+
+    document.addEventListener('keydown', function (e) {
+      var tag = e.target.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || e.metaKey || e.ctrlKey || e.altKey) return;
+      var it = st.item; if (!it || it.kind !== 'look' || it.phase !== 'pick' || (it.result && it.result.senseOk)) return;
+      var ids = senses(ent(it.x)).map(function (o) { return o.s.id; });
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault(); var p = ids.indexOf(it.pick);
+        pick(ids[p < 0 ? 0 : (p + (e.key === 'ArrowDown' ? 1 : ids.length - 1)) % ids.length]);
+      } else if (e.key === 'Enter' && tag !== 'BUTTON' && it.pick) { e.preventDefault(); showPreview(); }
+    });
+
+    newRound();
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Template write</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .tw-layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 16px; align-items: start; }
+  @media (max-width: 900px) { .tw-layout { display: flex; flex-direction: column; gap: 12px; } .tw-layout > .tw-side { display: contents; } .tw-layout .card-sit { order: -1; } }
+  .tw-stage { display: grid; gap: 12px; min-width: 0; }
+  .tw-side { display: grid; gap: 12px; }
+  .card-sit { border-left: 4px solid var(--accent); }
+  .card-sit dl { margin: 6px 0 0; display: grid; grid-template-columns: minmax(0, 40%) minmax(0, 1fr); gap: 2px 10px; font-size: .92rem; }
+  .card-sit dt { color: var(--muted); }
+  .card-sit dd { margin: 0; }
+  .priv { font-size: .78rem; color: var(--muted); margin: 8px 0 0; }
+  /* templates */
+  .tpl { --paper: #fffdf8; --ink2: #1d1e24; --rule: #cfc8b8; --band: #2c3a8a; --band-ink: #fff;
+    background: var(--paper); color: var(--ink2); border: 1px solid var(--rule); border-radius: 6px; padding: 16px clamp(10px, 3vw, 24px); box-shadow: 0 6px 18px rgba(0,0,0,.06); }
+  :root[data-theme="dark"] .tpl { --paper: #22242f; --ink2: #ecedf4; --rule: #3a3d50; --band: #3a4596; }
+  .tpl h2 { margin: 0 0 4px; font-size: 1.15rem; }
+  .tpl .tsub { margin: 0 0 12px; font-size: .88rem; opacity: .8; }
+  .tpl input, .tpl textarea { width: 100%; border: 1px solid var(--rule); background: transparent; color: inherit; border-radius: 3px; padding: 6px 8px; font-size: 1.05rem; }
+  .tpl input:disabled, .tpl textarea:disabled { opacity: 1; background: rgba(127,127,127,.06); }
+  .tpl textarea { min-height: 120px; line-height: 1.6; resize: vertical; }
+  .fld { display: grid; gap: 2px; margin-bottom: 10px; position: relative; }
+  .fld label { font-weight: 600; font-size: .86rem; letter-spacing: .02em; }
+  .fld .fh { font-size: .76rem; opacity: .75; }
+  .fld.flag-bad input, .fld.flag-bad textarea { border: 2px solid var(--bad); }
+  .fld.flag-ok input, .fld.flag-ok textarea { border: 2px solid var(--t2); }
+  .fld.flag-unk input, .fld.flag-unk textarea { border: 2px dashed var(--warn); }
+  .tpl.form .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+  @media (max-width: 560px) { .tpl.form .grid { grid-template-columns: 1fr; } }
+  .tpl.form .fld.wide { grid-column: 1 / -1; }
+  .tpl.form h2 { border-bottom: 2px solid var(--ink2); padding-bottom: 4px; }
+  .tpl.note { background-image: repeating-linear-gradient(transparent, transparent 31px, var(--rule) 32px); background-color: var(--paper); transform: rotate(-.4deg); }
+  .tpl.note textarea { border: 0; background: transparent; font-size: 1.15rem; line-height: 32px; padding: 0 4px; min-height: 192px; }
+  .tpl.chat { max-width: 420px; margin: 0 auto; width: 100%; border-radius: 22px; padding: 0; overflow: hidden; }
+  .tpl.chat .bar { background: var(--band); color: var(--band-ink); padding: 10px 14px; font-weight: 600; }
+  .tpl.chat .conv { padding: 12px; display: grid; gap: 8px; }
+  .bubble { max-width: 85%; padding: 8px 12px; border-radius: 14px; background: rgba(127,127,127,.14); justify-self: start; white-space: pre-wrap; }
+  .tpl.chat textarea { min-height: 90px; border-radius: 12px; }
+  .tpl.email .fld { grid-template-columns: 5.5em 1fr; align-items: center; gap: 6px; }
+  .tpl.email .fld.body { grid-template-columns: 1fr; }
+  .tpl.email .to { padding: 6px 0; }
+  /* side */
+  .units { display: grid; gap: 8px; }
+  .unit { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; display: grid; gap: 6px; }
+  .unit .un { font-weight: 600; font-size: .92rem; }
+  .unit .uv { font-size: .86rem; color: var(--muted); overflow-wrap: anywhere; }
+  .judg { display: flex; flex-wrap: wrap; gap: 4px; }
+  .judg .kb-btn { padding: 3px 9px; font-size: .82rem; }
+  .judg .kb-btn[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .verdict { font-size: .88rem; padding: 6px 8px; border-radius: 8px; background: var(--accent-soft); }
+  .verdict.bad { background: var(--bad-soft); }
+  .verdict.unk { background: var(--warn-soft); }
+  .verdict .mark { font-weight: 700; margin-right: 4px; }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tools.small .kb-btn { padding: 3px 10px; font-size: .82rem; }
+  .hintbox { font-size: .86rem; border-left: 3px solid var(--warn); padding: 2px 8px; }
+  .hintbox .ex { white-space: pre-wrap; }
+  .model { white-space: pre-wrap; font-size: 1rem; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+  .notif { border-radius: 14px; background: var(--bg); border: 1px solid var(--line); padding: 8px 12px; font-size: .92rem; }
+  .notif b { display: block; }
+  .notif .np { color: var(--muted); white-space: pre-wrap; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 560px) { .two { grid-template-columns: 1fr; } }
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; }
+  .chip { font-size: .78rem; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); }
+  .chip.ind { background: var(--accent-soft); border-color: var(--accent); }
+  .chip.ast { background: var(--warn-soft); border-color: var(--warn); }
+  .chip.bad { background: var(--bad-soft); border-color: var(--bad); }
+  .chip.self { border-style: dashed; }
+  .kb-bar select { max-width: 100%; border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 5px 8px; }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* Template write (prim:template-write). Packs: data/template-write.js (format in its header).
+ * Modes: write (step 1: fill in the template from a situation card; the first draft is locked. Step 2: judge each
+ * field or element yourself — fine / format wrong / content wrong / wrong box / missing / should be left blank — then
+ * see the page's deterministic checks, the reader's view and a model text, open hints, and revise), rewrite (step 3:
+ * the same matter for another recipient, with no constraints or examples; two identical versions do not pass).
+ * Only the pack's controlled checks are machine-judged (required, equal to the card, capitals, katakana, date order,
+ * position, forbidden phrases, character forms, blank, length). Register and grammar are not judged: they are a
+ * self/partner check against the model text and are recorded as self-reports, never as correct answers. */
+(function () {
+  'use strict';
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t;
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'template-write-en';
+  var entry = (window.KT_REGISTRY && KT_REGISTRY.packs && KT_REGISTRY.packs[setId]) || { file: 'data/template-write.js', block: 'template-write' };
+  var app = document.getElementById('app');
+  if (entry.block !== 'template-write') { app.textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  var s = document.createElement('script');
+  s.src = entry.file;
+  s.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else app.textContent = L('数据包里没有 ' + setId, 'The data pack file does not contain ' + setId); };
+  s.onerror = function () { app.textContent = L('数据包加载失败：', 'Could not load the data pack: ') + entry.file; };
+  document.head.appendChild(s);
+
+  function start(pack) {
+    var title = T(pack, 'title');
+    var B = KTBlock.init({ id: 'template-write', primitive: 'prim:template-write', title: title, set: pack.id });
+    document.title = title + ' · Template write';
+    var tlang = pack.lang === 'zh' ? 'zh-CN' : pack.lang;
+    var tpls = pack.templates.slice();
+    if (B.kc && tpls.some(function (t) { return t.kc === B.kc; })) tpls = tpls.filter(function (t) { return t.kc === B.kc; });
+    var byId = {}; pack.templates.forEach(function (t) { byId[t.id] = t; });
+    function child() { return B.variant === 'child'; }
+    var modes = [{ id: 'write', label: L('先写，再逐栏核对', 'Write, then check each part') }, { id: 'rewrite', label: L('换个收件人重写', 'Rewrite for someone else') }];
+    var CATS = [
+      { v: 'ok', zh: '合格', en: 'Fine' }, { v: 'format', zh: '格式不对', en: 'Format wrong' }, { v: 'content', zh: '内容不对', en: 'Content wrong' },
+      { v: 'place', zh: '放错栏', en: 'Wrong box' }, { v: 'missing', zh: '缺了', en: 'Missing' }, { v: 'blank', zh: '该留空／可省掉', en: 'Should be blank / left out' }];
+    var CHILD_CATS = [{ v: 'ok', zh: '写对了', en: 'Done right' }, { v: 'missing', zh: '还缺', en: 'Something missing' }];
+    var st = {
+      mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : 'write',
+      ti: 0, ri: 0, drafts: {}, fade: {}, w: null, r: null
+    };
+    var ui = KTBlock.chrome(B, { title: title, subtitle: T(pack, 'subtitle'), modes: modes, mode: st.mode,
+      onMode: function (m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m }); enter(); },
+      onVariant: function () { render(); } });
+    var bar = h('div', { class: 'kb-bar' });
+    var stage = h('div', { class: 'tw-stage' });
+    var side = h('aside', { class: 'tw-side' });
+    app.append(ui.header, h('main', { class: 'kb-main' }, [bar, h('div', { class: 'tw-layout' }, [stage, side])]), ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id });
+
+    /* ---------- deterministic checks ---------- */
+    function nf(x) { return String(x == null ? '' : x).normalize('NFKC'); }
+    function key(x) { return nf(x).toLowerCase().replace(/[\s　·・.,，、]+/g, ''); }
+    function isAscii(x) { return /^[a-z0-9' ]+$/i.test(x); }
+    function found(hay, alt) {
+      var a = nf(alt).toLowerCase().replace(/[\u2018\u2019]/g, "'"), hs = nf(hay).toLowerCase().replace(/[\u2018\u2019]/g, "'");
+      if (isAscii(a)) return new RegExp('(^|[^a-z0-9])' + a.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?=[^a-z0-9]|$)').test(hs);
+      return hs.indexOf(a) >= 0;
+    }
+    function chunks(text) {
+      var x = nf(text).replace(/\b(mr|ms|mrs|dr|st)\./gi, '$1').replace(/\b([ap])\.m\./gi, '$1m');
+      return x.replace(/([.!?。！？\n])/g, '$1\u0001').split('\u0001').map(function (c) { return c.trim(); }).filter(Boolean);
+    }
+    function scope(text, rule) {
+      var c = chunks(text);
+      if (rule.where === 'start') return c.slice(0, 1).join(' ');
+      if (rule.where === 'end') return c.slice(-2).join(' ');
+      if (rule.where === 'first') return c.slice(0, rule.n || 2).join(' ');
+      return nf(text);
+    }
+    function whereText(rule) {
+      return rule.where === 'start' ? L('开头', 'at the start') : rule.where === 'end' ? L('结尾', 'at the end') : rule.where === 'first' ? L('前 ' + (rule.n || 2) + ' 句', 'in the first ' + (rule.n || 2) + ' sentences') : '';
+    }
+    function parseDate(v, rule) {
+      var x = nf(v).trim(), want = rule.date, m;
+      var mk = function (y, mo, d) { return y + L('年', '-') + mo + L('月', '-') + d + L('日', ''); };
+      if (rule.fmt === 'dmy') {
+        m = /^(\d{1,2})\s*[\/.\-]\s*(\d{1,2})\s*[\/.\-]\s*(\d{4})$/.exec(x);
+        if (!m) return { cat: 'format', t: L('这一格要求 日/月/年 的数字格式，例如 05/11/1999。', 'This box asks for day/month/year in numbers, for example 05/11/1999.') };
+        var a = +m[1], b = +m[2], y = +m[3];
+        if (a === want.d && b === want.m && y === want.y) return null;
+        if (a === want.m && b === want.d && y === want.y) return { cat: 'format', t: b > 12 ? L('读表的人按“日/月/年”读：第二个数是月，没有 ' + b + ' 月，这张表会被退回。', 'The reader takes day/month/year: the second number is the month, and there is no month ' + b + '. The form would come back.') : L('读表的人按“日/月/年”读，会读成 ' + b + ' 月 ' + a + ' 日，不是你的生日 ' + want.m + ' 月 ' + want.d + ' 日。', 'The reader takes day/month/year and would read ' + a + '/' + b + ' as ' + a + ' ' + monthEn(b) + ', not your birthday, ' + want.d + ' ' + monthEn(want.m) + '.') };
+        return { cat: 'content', t: L('日期和情境卡上的生日对不上。', 'The date does not match the birthday on the card.') };
+      }
+      if (/(平成|令和|昭和)/.test(x)) return { cat: 'format', t: L('这一格要求西历（公历）年份，不用和历年号。', 'This box asks for the Western year, not a Japanese era year.') };
+      m = /^(\d{4})\s*(?:年|[\/.\-])\s*(\d{1,2})\s*(?:月|[\/.\-])\s*(\d{1,2})\s*(?:日|号)?$/.exec(x);
+      if (m) return (+m[1] === want.y && +m[2] === want.m && +m[3] === want.d) ? null : { cat: 'content', t: L('日期和情境卡上的对不上。', 'The date does not match the card.') };
+      m = /^(\d{1,2})\s*[\/.\-]\s*(\d{1,2})\s*[\/.\-]\s*(\d{4})$/.exec(x);
+      if (m) return { cat: 'format', t: L('这里按 年→月→日 写。' + m[1] + '/' + m[2] + '/' + m[3] + ' 可能被读成 ' + m[3] + ' 年 ' + (+m[1]) + ' 月 ' + (+m[2]) + ' 日，也可能是 ' + m[3] + ' 年 ' + (+m[2]) + ' 月 ' + (+m[1]) + ' 日。', 'Here the order is year → month → day. ' + m[1] + '/' + m[2] + '/' + m[3] + ' could be read as ' + (+m[2]) + ' ' + monthEn(+m[1]) + ' or ' + (+m[1]) + ' ' + monthEn(+m[2]) + '.') };
+      return { cat: 'format', t: L('写成 年、月、日 的格式，例如 2000年1月1日。', 'Write it as year, month, day, for example 2000年1月1日.') };
+    }
+    function monthEn(n) { return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][n - 1] || ('month ' + n); }
+    /** One rule → null (passes) or {cat, t}. */
+    function runRule(rule, v) {
+      var x = nf(v).trim();
+      if (rule.req) return x ? null : { cat: 'missing', t: L('这一栏是空的。', 'This is empty.') };
+      if (rule.blank) return (!x || rule.blank.some(function (b) { return key(b) === key(x); })) ? null : { cat: 'blank', t: L('这一栏不该由你填：留空（或写 ' + rule.blank[0] + '）。', 'You should not fill this in: leave it blank (or write ' + rule.blank[0] + ').') };
+      if (!x) return { cat: 'missing', t: L('这一栏是空的。', 'This is empty.') };
+      if (rule.eq) {
+        if (rule.eq.some(function (e) { return key(e) === key(x); })) return null;
+        if (rule.swap && rule.swap.some(function (e) { return key(e) === key(x); })) return { cat: 'place', t: L('“' + x + '”是另一栏的内容，读表的人会把它当成这一栏的信息。', '“' + x + '” belongs in another box; whoever reads the form will take it as this box.') };
+        return { cat: 'content', t: L('和情境卡上的信息不一致。', 'Does not match the situation card.') };
+      }
+      if (rule.upper) return /[a-z]/.test(x) ? { cat: 'format', t: L('这张表要求全部用大写字母。', 'This form asks for capital letters.') } : null;
+      if (rule.kata) return /^[゠-ヿ\s　・ー]+$/.test(x) ? null : { cat: 'format', t: /[぀-ゟ]/.test(x) ? L('フリガナ 要用片假名；用平假名写的是“ふりがな”。', 'フリガナ must be in katakana; hiragana is for ふりがな.') : L('フリガナ 只能用片假名。', 'フリガナ must be katakana only.') };
+      if (rule.date) return parseDate(x, rule);
+      if (rule.bad) { var b = rule.bad.filter(function (p) { return x.indexOf(p[0]) >= 0; })[0]; return b ? { cat: 'format', t: L('“' + b[0] + '”应写作“' + b[1] + '”。', '“' + b[0] + '” should be “' + b[1] + '”.') } : null; }
+      if (rule.order) {
+        var pos = rule.order.map(function (o) { return x.indexOf(o); });
+        if (pos.some(function (p) { return p < 0; })) return { cat: 'content', t: L('缺了地址里的一部分：' + rule.order.filter(function (o, i) { return pos[i] < 0; }).join('、'), 'Part of the address is missing: ' + rule.order.filter(function (o, i) { return pos[i] < 0; }).join(', ')) };
+        return pos.every(function (p, i) { return i === 0 || p > pos[i - 1]; }) ? null : { cat: 'format', t: L('顺序不对：要从大到小写：' + rule.order.join(' → '), 'Wrong order: write from the largest unit to the smallest: ' + rule.order.join(' → ')) };
+      }
+      if (rule.has) {
+        var sc = scope(x, rule);
+        for (var i = 0; i < rule.has.length; i++) {
+          var g = rule.has[i];
+          if (g.some(function (a) { return found(sc, a); })) continue;
+          if (rule.where && g.some(function (a) { return found(x, a); })) return { cat: 'format', t: L('写了，但位置不对：要放在' + whereText(rule) + '。', 'It is there, but in the wrong place: it should be ' + whereText(rule) + '.'), rule: rule };
+          return { cat: 'missing', t: rule.has.length > 1 ? L('缺了一部分（' + g[0] + ' 之类）。', 'Part of it is missing (something like ' + g[0] + ').') : L('缺了这一项。', 'This is missing.'), has: true };
+        }
+        return null;
+      }
+      if (rule.not) { var n = rule.not.filter(function (a) { return found(x, a); })[0]; return n ? { cat: 'format', t: L('这里不该出现“' + n + '”。', '“' + n + '” should not be here.') } : null; }
+      if (rule.only) return rule.only.some(function (o) { return key(o) === key(x); }) ? { cat: 'content', t: L('只有一个“' + x + '”，读的人不知道你明白了什么。', 'Just “' + x + '”: the reader cannot tell what you understood.') } : null;
+      if (rule.max) return x.length > rule.max ? { cat: 'format', t: L('太长了：这种格式最多 ' + rule.max + ' 个字符左右。', 'Too long: this kind of text is about ' + rule.max + ' characters at most.') } : null;
+      if (rule.min) return x.length < rule.min ? { cat: 'missing', t: L('太短了，信息不够。', 'Too short: not enough information.') } : null;
+      return null;
+    }
+    /** Unit verdict: {v: 'ok' | cat | 'unknown', t, warn}. */
+    function judgeUnit(unit, vals) {
+      var v = vals[unit.input] || '';
+      if (unit.self) return { v: 'unknown', t: L('这一项页面判断不了，对照范文自己或请搭档判断。', 'The page cannot judge this. Compare with the model yourself or ask a partner.') };
+      var warn = [];
+      for (var i = 0; i < unit.rules.length; i++) {
+        var r = runRule(unit.rules[i], v);
+        if (!r) continue;
+        if (unit.rules[i].warn) { warn.push(r.t); continue; }
+        if (unit.soft && r.has && nf(v).trim()) return { v: 'unknown', t: L('页面的词表里没认出这一项（可能是换了说法）。对照范文自己判断。', 'The page did not recognise this in its word list (you may have said it another way). Judge it yourself against the model.'), warn: warn };
+        return { v: r.cat, t: r.t, warn: warn };
+      }
+      return { v: 'ok', t: '', warn: warn };
+    }
+
+    /* ---------- step 1–2: write ---------- */
+    function enter() {
+      if (st.mode === 'rewrite') { loadRewrite(); return; }
+      loadTpl();
+    }
+    function cur() { return tpls[st.ti % tpls.length]; }
+    function uid(t, u) { return t.id + ':' + u.id; }
+    function loadTpl() {
+      var t = cur();
+      st.w = { phase: 'write', vals: {}, judg: {}, res: null, hints: {}, selfDone: {}, rounds: 0 };
+      B.emit('view', { item: t.id, kind: t.kind });
+      render();
+    }
+    function faded(t) { return (st.fade[t.kind] || 0) >= 2; }
+    function lockDraft() {
+      var t = cur(), w = st.w;
+      if (!t.inputs.some(function (i) { return nf(w.vals[i.id]).trim(); })) { w.msg = { t: L('还什么都没写。', 'Nothing written yet.'), tone: 'warn' }; render(); return; }
+      w.phase = 'judge'; w.msg = null;
+      w.draft = JSON.parse(JSON.stringify(w.vals));
+      var txt = t.inputs.filter(function (i) { return i.type === 'text'; })[0];
+      if (txt) st.drafts[t.id] = w.vals[txt.id] || '';
+      w.res = {};
+      t.units.forEach(function (u) { w.res[u.id] = judgeUnit(u, w.vals); });
+      B.emit('submit', { item: t.id, draft: w.draft, step: 'first-draft' });
+      t.units.forEach(function (u) {
+        var r = w.res[u.id];
+        if (r.v !== 'unknown') B.attempt(uid(t, u), { correct: r.v === 'ok', response: { value: w.vals[u.input] || '', page: r.v } });
+      });
+      var machine = t.units.filter(function (u) { return w.res[u.id].v !== 'unknown'; });
+      var clean = machine.every(function (u) { return w.res[u.id].v === 'ok'; });
+      st.fade[t.kind] = clean ? (st.fade[t.kind] || 0) + 1 : 0;
+      render();
+    }
+    function setJudg(u, v) {
+      var t = cur(), w = st.w; if (w.phase !== 'judge') return;
+      w.judg[u.id] = v; B.emit('select', { item: uid(t, u), selfJudged: v });
+      render();
+    }
+    function toCompare() {
+      var t = cur(), w = st.w;
+      var missing = t.units.filter(function (u) { return !w.judg[u.id]; });
+      if (missing.length) { w.msg = { t: L('每一项都先自己判断一下。', 'Judge every part yourself first.'), tone: 'warn' }; render(); return; }
+      w.phase = 'compare'; w.msg = null;
+      t.units.forEach(function (u) {
+        var page = w.res[u.id].v, me = w.judg[u.id];
+        var agree = page === 'unknown' ? null : child() ? ((page === 'ok') === (me === 'ok')) : page === me;
+        B.emit('explain', { item: uid(t, u), selfJudged: me, page: page, agree: agree });
+      });
+      B.emit('compare', { item: t.id, view: 'reader' });
+      render();
+    }
+    function recheck() {
+      var t = cur(), w = st.w;
+      w.rounds++;
+      t.units.forEach(function (u) {
+        var before = w.res[u.id], r = judgeUnit(u, w.vals), changed = (w.vals[u.input] || '') !== ((w.lastVals || w.draft)[u.input] || '');
+        w.res[u.id] = r;
+        if (r.v !== 'unknown' && changed && before.v !== 'ok') B.attempt(uid(t, u), { correct: r.v === 'ok', response: { value: w.vals[u.input] || '', page: r.v, revision: w.rounds } });
+      });
+      w.lastVals = JSON.parse(JSON.stringify(w.vals));
+      B.emit('revise', { item: t.id, round: w.rounds, values: w.lastVals });
+      var allOk = t.units.every(function (u) { return w.res[u.id].v === 'ok' || w.res[u.id].v === 'unknown'; });
+      w.msg = allOk ? { t: L('页面能核对的都过了。页面判断不了的部分，对照范文自己看。', 'Everything the page can check now passes. For what it cannot judge, compare with the model yourself.'), tone: '' } : { t: L('还有标红的项。', 'Some parts are still marked.'), tone: 'warn' };
+      if (allOk) B.emit('complete', { item: t.id, rounds: w.rounds });
+      render();
+    }
+    function hint(u, n) {
+      var t = cur(), w = st.w, k = u.id + ':' + n; if (w.hints[k]) return;
+      w.hints[k] = true; B.hint(uid(t, u), n); render();
+    }
+    function selfCheck(u, yes) {
+      var t = cur(), w = st.w; if (w.selfDone[u.id]) return;
+      w.selfDone[u.id] = yes ? 'yes' : 'no';
+      B.attempt(uid(t, u), { correct: yes, selfReport: true, response: { value: w.vals[u.input] || '', against: 'model' } });
+      render();
+    }
+
+    /* ---------- step 3: rewrite ---------- */
+    var rws = (pack.rewrites || []).slice();
+    if (B.kc && rws.some(function (r) { return r.kc === B.kc; })) rws = rws.filter(function (r) { return r.kc === B.kc; });
+    function curR() { return rws[st.ri % rws.length]; }
+    function loadRewrite() {
+      var r = curR(); st.r = { text: '', res: null, done: false, self: null };
+      if (r) B.emit('view', { item: 'rw:' + r.id, base: r.base });
+      render();
+    }
+    function firstVersion(r) { return st.drafts[r.base] ? { text: st.drafts[r.base], mine: true } : { text: byId[r.base].model, mine: false }; }
+    function submitRewrite() {
+      var r = curR(), R = st.r, fv = firstVersion(r);
+      if (!nf(R.text).trim()) { R.msg = { t: L('还什么都没写。', 'Nothing written yet.'), tone: 'warn' }; render(); return; }
+      var same = key(R.text) === key(fv.text);
+      var vals = { text: R.text };
+      R.res = {}; r.units.forEach(function (u) { R.res[u.id] = judgeUnit(u, vals); });
+      var fails = r.units.filter(function (u) { var v = R.res[u.id].v; return v !== 'ok' && v !== 'unknown'; });
+      var ok = !same && !fails.length;
+      B.attempt('rw:' + r.id, { correct: ok, response: { text: R.text, first: fv.text, firstIsMine: fv.mine, identical: same, failed: fails.map(function (u) { return u.id; }) } });
+      R.done = ok;
+      R.msg = same ? { t: L('两版完全一样。换了收件人，称呼、语气或请求的说法至少要变一处。', 'The two versions are identical. For a different reader, the greeting, the tone or the way you ask has to change somewhere.'), tone: 'bad' }
+        : ok ? { t: L('页面能核对的都过了。', 'Everything the page can check passes.') + statusNote(B.status('rw:' + r.id)), tone: '' }
+        : { t: L('还有不合适的地方，见下面。', 'Some parts do not fit yet: see below.'), tone: 'bad' };
+      render();
+    }
+    function statusNote(stt) { return stt === 'wrong' ? L('（第一次没过，这次改过了。）', ' (Did not pass the first time; passes now.)') : ''; }
+
+    /* ---------- render ---------- */
+    function cardEl(c, heading) {
+      return h('div', { class: 'kb-card card-sit' }, [h('b', { text: heading || L('情境卡', 'Situation card') }),
+        h('p', { style: 'margin:6px 0 0', text: T(c, 'role') }),
+        c.to ? h('p', { style: 'margin:4px 0 0' }, [h('span', { class: 'kb-note', text: L('写给：', 'To: ') }), T(c, 'to')]) : null,
+        c.want ? h('p', { style: 'margin:4px 0 0' }, [h('span', { class: 'kb-note', text: L('要办的事：', 'What it is for: ') }), T(c, 'want')]) : null,
+        c.facts && c.facts.length ? h('dl', {}, [].concat.apply([], c.facts.map(function (f) { return [h('dt', { text: T(f, 'k') }), h('dd', { text: T(f, 'v') })]; }))) : null,
+        h('p', { class: 'priv', text: L('这是虚构身份。不要在页面里写你自己的真实姓名、证件号、电话或地址。', 'This is a made-up identity. Do not type your own real name, ID number, phone number or address here.') })]);
+    }
+    function tplEl(t, w) {
+      var locked = w.phase === 'judge', showFlags = w.phase === 'compare';
+      function flag(inputId) {
+        if (!showFlags) return '';
+        var us = t.units.filter(function (u) { return u.input === inputId; });
+        if (us.some(function (u) { var v = w.res[u.id].v; return v !== 'ok' && v !== 'unknown'; })) return ' flag-bad';
+        if (us.some(function (u) { return w.res[u.id].v === 'unknown'; })) return ' flag-unk';
+        return ' flag-ok';
+      }
+      function field(inp) {
+        var id = 'f-' + t.id + '-' + inp.id;
+        var ctl = inp.type === 'text'
+          ? h('textarea', { id: id, lang: tlang, disabled: locked, autocomplete: 'off', spellcheck: 'false', oninput: function (e) { w.vals[inp.id] = e.target.value; } })
+          : h('input', { id: id, type: 'text', lang: tlang, disabled: locked, autocomplete: 'off', spellcheck: 'false', oninput: function (e) { w.vals[inp.id] = e.target.value; } });
+        ctl.value = w.vals[inp.id] || '';
+        return h('div', { class: 'fld' + (inp.wide || inp.type === 'text' ? ' wide' : '') + (inp.type === 'text' ? ' body' : '') + flag(inp.id) }, [
+          inp.label ? h('label', { for: id, lang: tlang, text: inp.label }) : h('label', { for: id, class: 'sr-only', text: L('正文', 'Text') }),
+          ctl, inp.hint ? h('span', { class: 'fh', lang: tlang, text: inp.hint }) : null]);
+      }
+      var el = h('div', { class: 'tpl ' + t.kind, lang: tlang });
+      if (t.kind === 'chat') {
+        el.append(h('div', { class: 'bar', text: t.head }));
+        var conv = h('div', { class: 'conv' }, [t.incoming ? h('div', { class: 'bubble', text: t.incoming }) : null]);
+        t.inputs.forEach(function (i) { conv.append(field(i)); });
+        el.append(conv);
+        return el;
+      }
+      if (t.head) el.append(h('h2', { text: t.head }));
+      if (t.sub) el.append(h('p', { class: 'tsub', text: t.sub }));
+      if (t.kind === 'email' && t.toLine) el.append(h('div', { class: 'fld' }, [h('label', { text: t.toLine[0] }), h('span', { class: 'to', text: t.toLine[1] })]));
+      var grid = h('div', { class: t.kind === 'form' ? 'grid' : '' });
+      t.inputs.forEach(function (i) { grid.append(field(i)); });
+      el.append(grid);
+      return el;
+    }
+    function previewEl(t, w) {
+      if (!t.preview) return null;
+      var txt = t.inputs.filter(function (i) { return i.type === 'text'; })[0], body = nf(w.vals[txt.id] || '').replace(/\s+/g, ' ').trim();
+      var subj = t.preview.subject ? (w.vals[t.preview.subject] || '') : '';
+      var cut = body.slice(0, t.preview.chars || 60);
+      return h('div', { class: 'kb-card' }, [h('b', { text: L('收件人看到的', 'What the reader sees') }),
+        h('p', { class: 'kb-note', text: L('手机通知只显示开头这一点：', 'A phone notification shows only the beginning:') }),
+        h('div', { class: 'notif', lang: tlang }, [h('b', { text: t.preview.from }), subj ? h('span', { text: subj }) : null, h('span', { class: 'np', text: cut + (body.length > cut.length ? '…' : '') })]),
+        h('p', { class: 'kb-note', text: L('你要对方知道或去做的事，在这几行里看得到吗？', 'Can the reader see what you need from them in these lines?') })]);
+    }
+    function catLabel(v) {
+      if (v === 'unknown') return L('页面判断不了', 'The page cannot judge');
+      var c = CATS.concat(CHILD_CATS).filter(function (x) { return x.v === v; })[0];
+      return c ? L(c.zh, c.en) : v;
+    }
+    function unitsEl(t, w) {
+      var box = h('div', { class: 'units' });
+      var cats = child() ? CHILD_CATS : CATS;
+      t.units.forEach(function (u) {
+        var r = w.res[u.id], me = w.judg[u.id], val = nf(w.vals[u.input] || '').trim();
+        var kids = [h('span', { class: 'un', text: T(u, 'name') })];
+        if (w.phase === 'judge') {
+          kids.push(h('span', { class: 'uv', lang: tlang, text: val ? (val.length > 60 ? val.slice(0, 60) + '…' : val) : L('（空）', '(empty)') }));
+          kids.push(h('div', { class: 'judg', role: 'group', 'aria-label': T(u, 'name') }, cats.map(function (c) {
+            return h('button', { class: 'kb-btn', 'aria-pressed': me === c.v ? 'true' : 'false', onclick: function () { setJudg(u, c.v); } }, L(c.zh, c.en));
+          })));
+        } else {
+          var bad = r.v !== 'ok' && r.v !== 'unknown';
+          kids.push(h('div', { class: 'verdict' + (bad ? ' bad' : r.v === 'unknown' ? ' unk' : '') }, [
+            h('span', { class: 'mark', text: r.v === 'ok' ? '✓' : r.v === 'unknown' ? '?' : '✗' }),
+            L('页面：', 'Page: ') + catLabel(r.v) + (me ? L(' · 你判断：', ' · You said: ') + catLabel(me) : '') + (r.t ? L('。', '. ') + r.t : ''),
+            bad && T(u, 'fix') ? h('div', { text: T(u, 'fix') }) : null,
+            r.warn && r.warn.length ? h('div', { class: 'kb-note', text: L('提醒：', 'Note: ') + r.warn.join(' ') }) : null]));
+          if (r.v === 'unknown') {
+            var sd = w.selfDone[u.id];
+            kids.push(sd ? h('span', { class: 'kb-note', text: L('自评：', 'Self-check: ') + (sd === 'yes' ? L('写到了', 'covered') : L('没写到', 'not covered')) + L('（不算作答）', ' (not scored)') }) :
+              h('div', { class: 'tools small' }, [h('button', { class: 'kb-btn', onclick: function () { selfCheck(u, true); } }, L('对照范文：写到了', 'Against the model: covered')), h('button', { class: 'kb-btn', onclick: function () { selfCheck(u, false); } }, L('没写到', 'Not covered'))]));
+          }
+          if (bad && !faded(t)) {
+            var hk = function (n) { return w.hints[u.id + ':' + n]; };
+            kids.push(h('div', { class: 'tools small' }, [
+              T(u, 'ask') ? h('button', { class: 'kb-btn', disabled: !!hk(1), onclick: function () { hint(u, 1); } }, L('提示 1：问一句', 'Hint 1: a question')) : null,
+              T(u, 'why') ? h('button', { class: 'kb-btn', disabled: !!hk(2), onclick: function () { hint(u, 2); } }, L('提示 2：这一栏的要求', 'Hint 2: what this part needs')) : null,
+              u.ex ? h('button', { class: 'kb-btn', disabled: !!hk(3), onclick: function () { hint(u, 3); } }, L('提示 3：别的情境下的范例', 'Hint 3: an example from another situation')) : null]));
+            [1, 2, 3].forEach(function (n) {
+              if (!hk(n)) return;
+              var txt = n === 1 ? T(u, 'ask') : n === 2 ? T(u, 'why') : null;
+              kids.push(h('div', { class: 'hintbox' }, n === 3 ? [L('范例（另一个人、另一件事）：', 'Example (someone else, another situation): '), h('span', { class: 'ex', lang: tlang, text: u.ex })] : [txt]));
+            });
+          }
+        }
+        box.append(h('div', { class: 'unit' }, kids));
+      });
+      return box;
+    }
+    function renderWrite() {
+      var t = cur(), w = st.w;
+      stage.append(h('div', { class: 'kb-card' }, [h('span', { class: 'kb-note', text: T(t, 'label') + ' · ' + (w.phase === 'write' ? L('第 1 步：照情境卡直接写。第一稿交了就锁定。', 'Step 1: write straight from the situation card. Your first draft is locked when you hand it in.') : w.phase === 'judge' ? L('第 2 步：第一稿已锁定。先自己逐项判断。', 'Step 2: your first draft is locked. Judge each part yourself first.') : L('第 2 步：对照页面的核对和读的人看到的，改一改。', 'Step 2: compare with the page\'s checks and the reader\'s view, and revise.')) })]));
+      stage.append(tplEl(t, w));
+      if (w.phase === 'compare') {
+        var pv = previewEl(t, w); if (pv) stage.append(pv);
+        stage.append(h('div', { class: 'kb-card' }, [h('b', { text: L('范文（对照用，不是唯一答案）', 'Model text (to compare with; not the only right answer)') }), h('div', { class: 'model', lang: tlang, text: t.model }),
+          h('p', { class: 'kb-note', text: T(t, 'cannot') || L('页面判断不了：语法是否正确、语气是否合适。这些请自己或请搭档对照范文判断。', 'The page cannot judge grammar or tone. Check those yourself or with a partner against the model.') })]));
+      }
+      side.append(cardEl(t.card));
+      var box = h('div', { class: 'kb-card' });
+      if (w.phase === 'write') {
+        box.append(h('p', { class: 'kb-note', text: L('写完按“交第一稿”。之后才能看到每一栏的要求和提示。', 'When you are done, hand in your first draft. Only then can you see what each part needs and get hints.') }));
+        box.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: lockDraft }, L('交第一稿', 'Hand in first draft'))]));
+      } else {
+        box.append(h('b', { text: w.phase === 'judge' ? L('逐项自己判断', 'Judge each part yourself') : L('逐项核对', 'Part by part') }));
+        if (faded(t) && w.phase === 'compare') box.append(h('p', { class: 'kb-note', text: L('这类格式你已经连续两份第一稿都合格，不再提供提示和范例。', 'Your last two first drafts of this kind all passed, so hints and examples are no longer offered.') }));
+        box.append(unitsEl(t, w));
+        if (w.phase === 'judge') box.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: toCompare }, L('看页面的核对', 'See the page\'s checks'))]));
+        else box.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: recheck }, L('改好了，再核对', 'Revised: check again')), h('button', { class: 'kb-btn', onclick: function () { st.ti++; loadTpl(); } }, L('下一份 →', 'Next template →'))]));
+      }
+      if (w.msg) box.append(h('div', { class: 'kb-feedback ' + (w.msg.tone || ''), role: 'status', text: w.msg.t }));
+      side.append(box);
+    }
+    function renderRewrite() {
+      var r = curR(), R = st.r;
+      if (!r) { stage.append(h('p', { class: 'kb-note', text: L('这个数据包没有重写题。', 'This pack has no rewrite tasks.') })); return; }
+      var base = byId[r.base], fv = firstVersion(r);
+      stage.append(h('div', { class: 'kb-card' }, [h('span', { class: 'kb-note', text: L('第 3 步：同一件事，换一个收件人。这一步不展开要求，也没有范例。', 'Step 3: the same matter for a different reader. No requirements are shown and there is no example.') })]));
+      stage.append(h('div', { class: 'kb-card' }, [h('b', { text: fv.mine ? L('你的第一版（写给：' + T(base.card, 'to') + '）', 'Your first version (to: ' + T(base.card, 'to') + ')') : L('第一版（示范，写给：' + T(base.card, 'to') + '；你在第 1 步写过的话会换成你的）', 'First version (a model, to: ' + T(base.card, 'to') + '; once you have done step 1, yours appears here)') }), h('div', { class: 'model', lang: tlang, text: fv.text })]));
+      var ta = h('textarea', { lang: tlang, autocomplete: 'off', spellcheck: 'false', 'aria-label': L('第二版', 'Second version'), disabled: R.done, oninput: function (e) { R.text = e.target.value; } });
+      ta.value = R.text;
+      stage.append(h('div', { class: 'tpl ' + (r.kind || 'note') }, [h('h2', { text: r.head || '' }), h('div', { class: 'fld body' }, [ta])]));
+      side.append(cardEl(r.card, L('新的收件人', 'The new reader')));
+      var box = h('div', { class: 'kb-card' });
+      box.append(h('div', { class: 'tools' }, R.done ? [h('button', { class: 'kb-btn primary', onclick: function () { st.ri++; loadRewrite(); } }, L('下一题 →', 'Next →'))] : [h('button', { class: 'kb-btn primary', onclick: submitRewrite }, L('交第二版', 'Hand in second version')), h('button', { class: 'kb-btn', onclick: function () { st.ri++; loadRewrite(); } }, L('跳过', 'Skip'))]));
+      if (R.msg) box.append(h('div', { class: 'kb-feedback ' + (R.msg.tone || ''), role: 'status', text: R.msg.t }));
+      if (R.res) {
+        r.units.forEach(function (u) {
+          var x = R.res[u.id]; if (x.v === 'ok') return;
+          box.append(h('div', { class: 'verdict' + (x.v === 'unknown' ? ' unk' : ' bad') }, [h('span', { class: 'mark', text: x.v === 'unknown' ? '?' : '✗' }), T(u, 'name') + L('：', ': ') + x.t + (x.v !== 'unknown' && T(u, 'fix') ? ' ' + T(u, 'fix') : '')]));
+        });
+      }
+      side.append(box);
+      if (R.res) {
+        stage.append(h('div', { class: 'kb-card' }, [h('b', { text: L('两份范文对照', 'The two model texts side by side') }),
+          h('div', { class: 'two' }, [h('div', {}, [h('span', { class: 'kb-note', text: L('写给：', 'To: ') + T(base.card, 'to') }), h('div', { class: 'model', lang: tlang, text: base.model })]),
+            h('div', {}, [h('span', { class: 'kb-note', text: L('写给：', 'To: ') + T(r.card, 'to') }), h('div', { class: 'model', lang: tlang, text: r.model })])]),
+          h('p', { class: 'kb-note', text: T(r, 'diff') }),
+          h('p', { class: 'kb-note', text: L('页面判断不了你的语气是否真的合适、语法对不对。请自己或请搭档看：你的两版之间，称呼、语气、请求的说法是不是按收件人变了？', 'The page cannot tell whether your tone really fits or whether the grammar is right. Check yourself or with a partner: between your two versions, did the greeting, the tone and the way you ask change for the reader?') }),
+          R.self ? h('p', { class: 'kb-note', text: L('自评已记录（不算作答）。', 'Self-check recorded (not scored).') }) : h('div', { class: 'tools' }, [
+            h('button', { class: 'kb-btn', onclick: function () { R.self = 'yes'; B.attempt('rwself:' + r.id, { correct: true, selfReport: true, response: { text: R.text } }); render(); } }, L('我说得清两版差在哪', 'I can say how my two versions differ')),
+            h('button', { class: 'kb-btn', onclick: function () { R.self = 'no'; B.attempt('rwself:' + r.id, { correct: false, selfReport: true, response: { text: R.text } }); render(); } }, L('还说不清', 'Not yet'))])]));
+      }
+    }
+    function renderBar() {
+      bar.innerHTML = '';
+      if (st.mode === 'write') {
+        bar.append(h('label', { class: 'kb-variant' }, [L('格式 ', 'Template '), h('select', { onchange: function (e) { st.ti = +e.target.value; B.emit('highlight', { item: cur().id }); loadTpl(); } },
+          tpls.map(function (t, i) { return h('option', { value: String(i), text: T(t, 'label'), selected: i === st.ti % tpls.length }); }))]));
+      } else if (rws.length) {
+        bar.append(h('label', { class: 'kb-variant' }, [L('题目 ', 'Task '), h('select', { onchange: function (e) { st.ri = +e.target.value; loadRewrite(); } },
+          rws.map(function (r, i) { return h('option', { value: String(i), text: T(r, 'label'), selected: i === st.ri % rws.length }); }))]));
+      }
+    }
+    function renderSummary() {
+      var its = B.items();
+      var names = {};
+      pack.templates.forEach(function (t) { t.units.forEach(function (u) { names[uid(t, u)] = T(t, 'label') + ' · ' + T(u, 'name'); }); });
+      (pack.rewrites || []).forEach(function (r) { names['rw:' + r.id] = T(r, 'label'); names['rwself:' + r.id] = T(r, 'label') + L('（自评）', ' (self-check)'); });
+      var chips = its.map(function (it, i) { var s0 = B.status(it.id); if (!s0 || s0 === 'revealed') return null; return h('span', { class: 'chip ' + (s0 === 'independent' ? 'ind' : s0 === 'wrong' ? 'bad' : s0 === 'assisted' ? 'ast' : 'self'), title: names[it.id] || it.id, 'aria-label': names[it.id] || it.id, text: String(i + 1) }); }).filter(Boolean);
+      side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('第一稿的结果', 'First-draft results') }), chips.length ? h('div', { class: 'chips' }, chips) : h('p', { class: 'kb-note', text: L('还没有。', 'None yet.') }),
+        h('p', { class: 'kb-note', text: L('蓝 = 第一稿就合格；黄 = 看过提示后改对；红 = 第一稿不合格；虚线 = 自评（不算作答）。格式合格不等于语言正确，会填这一种表也不等于会填任何表。', 'Blue = right in the first draft; yellow = fixed after a hint; red = wrong in the first draft; dashed = self-check (not scored). A correct format does not mean the language is correct, and one form is not every form.') })]));
+    }
+    function render() {
+      renderBar(); stage.innerHTML = ''; side.innerHTML = '';
+      if (st.mode === 'rewrite') renderRewrite(); else renderWrite();
+      renderSummary();
+    }
+    enter();
+  }
+})();
+</script>
+</body>
+</html>

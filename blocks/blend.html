@@ -75,17 +75,17 @@
 <script>
 (function () {
   'use strict';
-  var h = KTBlock.h;
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t;
   var params = new URLSearchParams(location.search);
   var setId = params.get('set') || 'blend-en';
   var entry = KT_REGISTRY.packs[setId] || {};
   var file = entry.file;
-  if (file && entry.block !== 'blend') { document.getElementById('app').textContent = '数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。'; return; }
-  if (!file) { document.getElementById('app').textContent = '未知的数据包：' + setId; return; }
+  if (file && entry.block !== 'blend') { document.getElementById('app').textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  if (!file) { document.getElementById('app').textContent = L('未知的数据包：', 'Unknown data pack: ') + setId; return; }
   var s = document.createElement('script');
   s.src = file;
-  s.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else document.getElementById('app').textContent = '数据包里没有 ' + setId; };
-  s.onerror = function () { document.getElementById('app').textContent = '数据包加载失败：' + file; };
+  s.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else document.getElementById('app').textContent = L('数据包里没有 ' + setId, 'The data pack file does not contain ' + setId); };
+  s.onerror = function () { document.getElementById('app').textContent = L('数据包加载失败：', 'Could not load the data pack: ') + file; };
   document.head.appendChild(s);
 
   /* ---- pure helpers ---- */
@@ -107,11 +107,16 @@
   }
 
   function start(pack) {
-    var B = KTBlock.init({ id: 'blend', primitive: 'prim:sound-spelling-blend', title: pack.title, set: pack.id });
-    document.title = pack.title + ' · Blend';
+    var title = T(pack, 'title'), tags = T(pack, 'tags');
+    // a gloss only helps in a language other than the one being taught: an English pack shows none in English mode
+    var showGloss = !(KTBlock.lang === 'en' && pack.lang === 'en');
+    function gl(w) { return showGloss ? T(w, 'gloss') : ''; }
+    function eq(w) { return showGloss ? ' = ' + gl(w) : ''; }
+    var B = KTBlock.init({ id: 'blend', primitive: 'prim:sound-spelling-blend', title: title, set: pack.id });
+    document.title = title + ' · Blend';
     var isZh = pack.lang === 'zh';
-    var modes = [{ id: 'read', label: '拼读' }, { id: 'chain', label: '换一个音' }, { id: 'spell', label: '听音摆字' }];
-    if (pack.exceptions && pack.exceptions.length) modes.push({ id: 'rule', label: '规则外' });
+    var modes = [{ id: 'read', label: L('拼读', 'Blend and read') }, { id: 'chain', label: L('换一个音', 'Change one sound') }, { id: 'spell', label: L('听音摆字', 'Hear and spell') }];
+    if (pack.exceptions && pack.exceptions.length) modes.push({ id: 'rule', label: L('规则外', 'Irregular words') });
     var regular = pack.words.filter(function (w) { return !w.pseudo; });
     var byId = {};
     pack.words.concat(pack.exceptions || []).forEach(function (w) { byId[w.id] = w; });
@@ -121,7 +126,7 @@
       queue: [], idx: 0, item: null, record: {}
     };
 
-    var ui = KTBlock.chrome(B, { title: pack.title, subtitle: pack.subtitle, modes: modes, mode: st.mode,
+    var ui = KTBlock.chrome(B, { title: title, subtitle: T(pack, 'subtitle'), modes: modes, mode: st.mode,
       onMode: function (m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m }); newRound(); },
       onVariant: function () { if (st.item) { st.item.opts = null; st.item.bank = null; } render(); } });
     var bar = h('div', { class: 'kb-bar' });
@@ -142,7 +147,7 @@
     var warned = false;
     function speak(text, opts) {
       if (!text && !(opts && opts.audio)) return;
-      if (!B.speak(text, pack.speech, opts) && !warned) { warned = true; caption('这个浏览器不能播放语音：可以由家长读，或在数据包里放录音（audio）。'); }
+      if (!B.speak(text, pack.speech, opts) && !warned) { warned = true; caption(L('这个浏览器不能播放语音：可以由家长读，或在数据包里放录音（audio）。', 'This browser cannot play speech: a parent can read aloud, or put recordings (audio) in the data pack.')); }
     }
     function speakUnit(key) { var u = unit(key); speak(u.say, { audio: u.audio }); }
     function wordText(w) { return w.say || w.text; }
@@ -209,15 +214,15 @@
     }
     function boxRow(w, opt) {
       opt = opt || {};
-      return h('div', { class: 'boxes' + (opt.small ? ' small' : '') + (opt.main ? ' main' : ''), 'aria-label': opt.aria || '音格' }, w.boxes.map(function (k, i) {
+      return h('div', { class: 'boxes' + (opt.small ? ' small' : '') + (opt.main ? ' main' : ''), 'aria-label': opt.aria || L('音格', 'Sound boxes') }, w.boxes.map(function (k, i) {
         var cls = ['bx', 'k-' + unit(k).kind];
         if (opt.tricky === i) cls.push('tricky');
         if (opt.changed && opt.changed.indexOf(i) >= 0) cls.push('chg');
         if (opt.diff && opt.diff[i]) cls.push('d-' + opt.diff[i]);
         var kind = unit(k).kind;
-        return h('button', { class: cls.join(' '), dataset: { i: i }, 'aria-label': '第 ' + (i + 1) + ' 格 ' + label(k) + (kind === 'silent' ? '（不发音）' : kind === 'pause' ? '（停一拍）' : ''),
+        return h('button', { class: cls.join(' '), dataset: { i: i }, 'aria-label': L('第 ' + (i + 1) + ' 格 ', 'Box ' + (i + 1) + ': ') + label(k) + (kind === 'silent' ? L('（不发音）', ' (silent)') : kind === 'pause' ? L('（停一拍）', ' (pause one beat)') : ''),
           onclick: opt.onTap ? function () { opt.onTap(i, k); } : null, tabindex: opt.onTap ? null : '-1' },
-          [label(k), kind === 'silent' ? h('small', { text: '不发音' }) : kind === 'pause' ? h('small', { text: '停一拍' }) : (isZh ? h('small', { text: kind === 'ini' ? '声母' : kind === 'fin' ? '韵母' : '声调' }) : null)]);
+          [label(k), kind === 'silent' ? h('small', { text: L('不发音', 'silent') }) : kind === 'pause' ? h('small', { text: L('停一拍', 'pause') }) : (isZh ? h('small', { text: kind === 'ini' ? L('声母', 'initial') : kind === 'fin' ? L('韵母', 'final') : L('声调', 'tone') }) : null)]);
       }));
     }
     function light(i, on) {
@@ -226,13 +231,13 @@
     }
     function tapBox(i, key) {
       var it = st.item;
-      if (it.kind === 'rule' && !it.answered) { caption('先判断，再点格子听。'); return; }
+      if (it.kind === 'rule' && !it.answered) { caption(L('先判断，再点格子听。', 'Decide first, then click the boxes to listen.')); return; }
       it.taps++;
       clearSeq();
       light(i, true); later(function () { light(i, false); }, unitMs(key));
       speakUnit(key);
       var u = unit(key);
-      caption(label(key) + (u.ipa && !child() ? ' ' + u.ipa : '') + (u.cap ? ' · ' + u.cap : ''));
+      caption(label(key) + (u.ipa && !child() ? ' ' + u.ipa : '') + (u.cap ? ' · ' + T(u, 'cap') : ''));
       B.emit('select', { item: it.id, box: i, unit: key });
     }
     /** Light boxes one by one, speaking each unit (hint 1). */
@@ -273,8 +278,8 @@
         if (it.prev.pic) base.push(it.prev);
         list = base.concat(nearest(w, Math.max(0, pics - base.length), base.map(function (x) { return x.id; })));
       }
-      it.opts = KTBlock.shuffle(list).map(function (x) { return { id: x.id, pic: x.pic, gloss: x.gloss }; });
-      if (it.kind === 'chain') it.opts.push({ id: 'notword', pic: '🤔', gloss: '读得出来，但不是一个词' });
+      it.opts = KTBlock.shuffle(list).map(function (x) { return { id: x.id, pic: x.pic, gloss: x.gloss, show: gl(x) }; });
+      if (it.kind === 'chain') it.opts.push({ id: 'notword', pic: '🤔', gloss: '读得出来，但不是一个词', show: L('读得出来，但不是一个词', 'Readable, but not a word') });
     }
     function answerId(it) { return it.word.pseudo ? 'notword' : it.word.id; }
     function optButtons(it) {
@@ -283,8 +288,8 @@
         var cls = 'opt' + (o.id === 'notword' ? ' notword' : '');
         if (it.picked.indexOf(o.id) >= 0) cls += o.id === answerId(it) ? ' right' : ' wrongpick';
         else if (it.solved && o.id === answerId(it)) cls += ' right';
-        return h('button', { class: cls, disabled: it.solved, 'aria-label': (i + 1) + '：' + o.gloss, onclick: function () { pick(o.id); } },
-          [h('span', { class: 'pic', text: o.pic }), h('span', { class: 'gl', text: o.gloss }), h('span', { class: 'num', text: String(i + 1) })]);
+        return h('button', { class: cls, disabled: it.solved, 'aria-label': (i + 1) + L('：', ': ') + (showGloss ? o.show : o.show || o.pic), onclick: function () { pick(o.id); } },
+          [h('span', { class: 'pic', text: o.pic }), h('span', { class: 'gl', text: o.show }), h('span', { class: 'num', text: String(i + 1) })]);
       }));
     }
     function pick(id) {
@@ -296,15 +301,15 @@
       if (ok) {
         it.solved = true; mark(it, rec); it.compare = null;
         render();
-        if (it.word.pseudo) { feedback('对：' + it.word.text + ' 能按规则读出来，但不是一个词。会读假词，说明用的是规则，不是背下来的。'); blendWord(it.word); }
-        else { feedback('对！' + showText(it.word) + ' = ' + it.word.gloss + (rec.first.assisted ? '（提示后答对）' : '')); blendWord(it.word); }
+        if (it.word.pseudo) { feedback(L('对：' + it.word.text + ' 能按规则读出来，但不是一个词。会读假词，说明用的是规则，不是背下来的。', 'Correct: ' + it.word.text + ' can be read by the rules, but it is not a word. Reading a made-up word shows you are using the rules, not memory.')); blendWord(it.word); }
+        else { feedback(L('对！', 'Correct! ') + showText(it.word) + eq(it.word) + (rec.first.assisted ? L('（提示后答对）', ' (correct after a hint)') : '')); blendWord(it.word); }
       } else {
         var other = id === 'notword' ? null : byId[id];
         it.compare = other;
         if (other) B.emit('compare', { item: it.id, with: other.id });
         render();
-        if (other) { speakWord(other); feedback('你选的是“' + other.gloss + '”，它是 ' + showText(other) + '。上下两行比一比，红色的格子不一样。再读一遍上面那行。', 'bad'); }
-        else feedback('它是一个真词，有图。再一格一格读一遍。', 'bad');
+        if (other) { speakWord(other); feedback(L('你选的是“' + other.gloss + '”，它是 ' + showText(other) + '。上下两行比一比，红色的格子不一样。再读一遍上面那行。', 'You chose ' + (showGloss ? '“' + gl(other) + '”' : other.pic) + ', which is ' + showText(other) + '. Compare the two rows: the red boxes differ. Read the top row again.'), 'bad'); }
+        else feedback(L('它是一个真词，有图。再一格一格读一遍。', 'It is a real word, and it has a picture. Read it again box by box.'), 'bad');
       }
     }
     function showText(w) { return isZh ? (w.py + ' ' + w.text) : w.text; }
@@ -312,8 +317,8 @@
       var ops = align(target.boxes.map(glyphOf), other.boxes.map(glyphOf));
       var dt = {}, dO = {};
       ops.forEach(function (o) { if (o.op === 'sub') { dt[o.a] = 'sub'; dO[o.b] = 'sub'; } if (o.op === 'del') dt[o.a] = 'sub'; if (o.op === 'ins') dO[o.b] = 'sub'; });
-      return h('div', { class: 'compare' }, [h('span', { class: 'lbl', text: '你选的词：' + other.pic + ' ' + other.gloss }),
-        boxRow(other, { small: true, diff: dO, onTap: function (i, k) { speakUnit(k); } }), h('span', { class: 'lbl', text: '和上面题目的格子对齐，红色是不同的格。' })]);
+      return h('div', { class: 'compare' }, [h('span', { class: 'lbl', text: L('你选的词：', 'Your choice: ') + other.pic + ' ' + gl(other) }),
+        boxRow(other, { small: true, diff: dO, onTap: function (i, k) { speakUnit(k); } }), h('span', { class: 'lbl', text: L('和上面题目的格子对齐，红色是不同的格。', 'Lined up with the boxes of the item above; red marks the boxes that differ.') })]);
     }
 
     /* ---- spell ---- */
@@ -375,33 +380,34 @@
       it.answered = true;
       if (ok) {
         it.solved = true; mark(it, rec); it.diff = null; render(); blendWord(w);
-        feedback('对！' + showText(w) + (w.pseudo ? '——这是个假词，能拼出来说明用的是规则。' : ' = ' + w.gloss) + (rec.first.correct ? '' : '（第一次没摆对，已记下）'));
+        feedback(L('对！', 'Correct! ') + showText(w) + (w.pseudo ? L('——这是个假词，能拼出来说明用的是规则。', ': a made-up word; spelling it shows you are using the rules.') : eq(w)) + (rec.first.correct ? '' : L('（第一次没摆对，已记下）', ' (the first attempt was wrong and stays on record)')));
         return;
       }
       it.diff = ops;
       render();
       var msg = [];
-      if (got.length !== target.length) msg.push('目标有 ' + target.length + ' 格，你摆了 ' + got.length + ' 格。');
-      if (!isZh && got.join('') === target.join('')) msg.push('字母都对，但分格不对：' + w.boxes.filter(function (k) { return glyphOf(k).length > 1; }).map(glyphOf).join('、') + ' 是一个音，放在一格里。');
-      msg.push('红色是摆错的格，黄色划线是多出来的，虚线框是缺的。点格子可以拿掉，再听一遍。');
-      feedback(msg.join(''), 'bad');
+      if (got.length !== target.length) msg.push(L('目标有 ' + target.length + ' 格，你摆了 ' + got.length + ' 格。', 'The target has ' + target.length + (target.length === 1 ? ' box' : ' boxes') + '; you placed ' + got.length + '.'));
+      var multi = w.boxes.filter(function (k) { return glyphOf(k).length > 1; }).map(glyphOf);
+      if (!isZh && got.join('') === target.join('')) msg.push(L('字母都对，但分格不对：' + multi.join('、') + ' 是一个音，放在一格里。', 'The letters are right, but the boxes are not: ' + (multi.length > 1 ? multi.join(', ') + ' are each one sound and each go in one box.' : multi.length ? multi[0] + ' is one sound and goes in one box.' : 'put one sound in each box.')));
+      msg.push(L('红色是摆错的格，黄色划线是多出来的，虚线框是缺的。点格子可以拿掉，再听一遍。', 'Red boxes are wrong, yellow struck-through ones are extra, and dashed frames are missing. Click a box to remove it, then listen again.'));
+      feedback(msg.join(L('', ' ')), 'bad');
     }
     function spellRow(it) {
       var w = it.word, cells = [];
       if (it.diff) {
         it.diff.forEach(function (o) {
-          if (o.op === 'del') cells.push(h('span', { class: 'bx d-del', text: '缺' }));
+          if (o.op === 'del') cells.push(h('span', { class: 'bx d-del', text: L('缺', 'missing') }));
           else cells.push(h('button', { class: 'bx d-' + o.op, onclick: function () { it.diff = null; unplace(o.b); } }, tileLabel(it.placed[o.b])));
         });
       } else {
         var n = Math.max(it.placed.length + (it.showCount || child() ? 0 : 1), it.showCount || child() ? w.boxes.length : 0);
         for (var i = 0; i < n; i++) {
           var v = it.placed[i];
-          if (v) cells.push(h('button', { class: 'bx' + (it.solved ? ' d-ok' : ''), dataset: { i: i }, 'aria-label': '第 ' + (i + 1) + ' 格 ' + v + '，点一下拿掉', onclick: (function (j) { return function () { unplace(j); }; })(i) }, tileLabel(v)));
+          if (v) cells.push(h('button', { class: 'bx' + (it.solved ? ' d-ok' : ''), dataset: { i: i }, 'aria-label': L('第 ' + (i + 1) + ' 格 ' + v + '，点一下拿掉', 'Box ' + (i + 1) + ': ' + v + ', click to remove'), onclick: (function (j) { return function () { unplace(j); }; })(i) }, tileLabel(v)));
           else cells.push(h('span', { class: 'bx slot' + (it.showTricky && i === trickyIndex(w) ? ' tricky' : '') + (child() && i === it.missing ? ' gap' : ''), text: it.showTricky && i === trickyIndex(w) ? tileLabel(val(w.boxes[i])) : '' }));
         }
       }
-      return h('div', { class: 'boxes main', 'aria-label': '你摆的格子' }, cells);
+      return h('div', { class: 'boxes main', 'aria-label': L('你摆的格子', 'Your boxes') }, cells);
     }
 
     /* ---- rule (reverse half) ---- */
@@ -413,30 +419,30 @@
       it.answered = true; it.solved = true; it.judged = irregular; mark(it, rec);
       render();
       speakWord(it.word);
-      if (isEx) feedback((ok ? '对，' : '其实不能硬拼。') + it.word.rule + '；' + it.word.actual + '。这种词要整体记。', ok ? 'warn' : 'bad');
-      else feedback((ok ? '对，' : '其实可以。') + '按规则一格一格拼，就是 ' + showText(it.word) + '。', ok ? '' : 'bad');
+      if (isEx) feedback(L(ok ? '对，' : '其实不能硬拼。', ok ? 'Right. ' : 'Actually, it cannot be sounded out. ') + T(it.word, 'rule') + L('；', '; ') + T(it.word, 'actual') + L('。这种词要整体记。', '. Words like this have to be learned whole.'), ok ? 'warn' : 'bad');
+      else feedback(L(ok ? '对，' : '其实可以。', ok ? 'Right. ' : 'Actually, it can. ') + L('按规则一格一格拼，就是 ', 'Blended box by box by the rules, it is ') + showText(it.word) + L('。', '.'), ok ? '' : 'bad');
     }
 
     /* ---- render ---- */
     function renderBar() {
       bar.innerHTML = '';
       if (pack.tags) {
-        bar.append(h('label', { class: 'kb-variant' }, ['范围 ', h('select', { onchange: function (e) { st.tag = e.target.value; B.emit('highlight', { focus: st.tag }); newRound(); } },
-          [h('option', { value: 'all', text: '全部', selected: st.tag === 'all' })].concat(Object.keys(pack.tags).map(function (k) { return h('option', { value: k, text: pack.tags[k], selected: st.tag === k }); })))]));
+        bar.append(h('label', { class: 'kb-variant' }, [L('范围 ', 'Scope '), h('select', { onchange: function (e) { st.tag = e.target.value; B.emit('highlight', { focus: st.tag }); newRound(); } },
+          [h('option', { value: 'all', text: L('全部', 'All'), selected: st.tag === 'all' })].concat(Object.keys(pack.tags).map(function (k) { return h('option', { value: k, text: tags[k], selected: st.tag === k }); })))]));
       }
-      if (st.item) bar.append(h('span', { class: 'kb-note', text: '第 ' + (st.idx + 1) + ' / ' + st.queue.length + ' 题' }));
-      bar.append(h('button', { class: 'kb-btn', onclick: newRound }, '换一轮'));
+      if (st.item) bar.append(h('span', { class: 'kb-note', text: L('第 ' + (st.idx + 1) + ' / ' + st.queue.length + ' 题', 'Item ' + (st.idx + 1) + ' / ' + st.queue.length) }));
+      bar.append(h('button', { class: 'kb-btn', onclick: newRound }, L('换一轮', 'New round')));
     }
     function hintTools(it, extra) {
       var w = it.word;
       return h('div', { class: 'tools' }, [
-        h('button', { class: 'kb-btn', disabled: it.solved, onclick: function () { B.hint(it.id, 1); playBoxes(w); } }, '提示 1：一格一格放'),
+        h('button', { class: 'kb-btn', disabled: it.solved, onclick: function () { B.hint(it.id, 1); playBoxes(w); } }, L('提示 1：一格一格放', 'Hint 1: play box by box')),
         h('button', { class: 'kb-btn', disabled: it.solved || it.showTricky, onclick: function () {
           it.showTricky = true; B.hint(it.id, 2); render(); var k = w.boxes[trickyIndex(w)]; var u = unit(k);
-          caption('注意这一格：' + label(k) + (u.cap ? ' · ' + u.cap : '')); } }, '提示 2：难点在哪'),
+          caption(L('注意这一格：', 'Watch this box: ') + label(k) + (u.cap ? ' · ' + T(u, 'cap') : '')); } }, L('提示 2：难点在哪', 'Hint 2: where the tricky part is')),
         h('button', { class: 'kb-btn', disabled: it.solved, onclick: function () {
           B.reveal(it.id); it.solved = true; st.record[it.id] = { text: w.text, cls: B.status(it.id) === 'wrong' ? 'bad' : 'ast' }; render(); blendWord(w);
-          feedback('答案：' + (w.pseudo ? w.text + '（假词，不是一个词）' : showText(w) + ' = ' + w.gloss) + '。这一题记为“看过答案”。', 'warn'); } }, '看答案')
+          feedback(L('答案：', 'Answer: ') + (w.pseudo ? w.text + L('（假词，不是一个词）', ' (a made-up word, not a real word)') : showText(w) + eq(w)) + L('。这一题记为“看过答案”。', '. This item is recorded as “answer shown”.'), 'warn'); } }, L('看答案', 'Show the answer'))
       ].concat(extra || []));
     }
     function renderStage() {
@@ -444,9 +450,10 @@
       var it = st.item;
       if (!it) {
         var done = st.queue.filter(function (q) { return st.record[q.id]; });
+        var nInd = done.filter(function (q) { return st.record[q.id].cls === 'ind'; }).length;
         stage.append(h('div', { class: 'done', text: st.queue.length ? '🎉' : '📭' }),
-          h('p', { class: 'kb-prompt', text: st.queue.length ? '这一轮做完了：' + done.filter(function (q) { return st.record[q.id].cls === 'ind'; }).length + ' 题第一次就独立做对。' : '这个范围没有可练的题，换一个范围。' }),
-          h('button', { class: 'kb-btn primary', onclick: newRound }, '再来一轮'));
+          h('p', { class: 'kb-prompt', text: st.queue.length ? L('这一轮做完了：' + nInd + ' 题第一次就独立做对。', 'Round finished: ' + nInd + (nInd === 1 ? ' item' : ' items') + ' correct independently on the first attempt.') : L('这个范围没有可练的题，换一个范围。', 'Nothing to practise in this scope; choose another one.') }),
+          h('button', { class: 'kb-btn primary', onclick: newRound }, L('再来一轮', 'Another round')));
         return;
       }
       var w = it.word, tricky = it.showTricky || (it.solved && it.kind === 'rule' && w.rule) ? trickyIndex(w) : -1;
@@ -455,65 +462,65 @@
           var ops = align(it.prev.boxes.map(glyphOf), w.boxes.map(glyphOf)), chg = [];
           ops.forEach(function (o) { if (o.op === 'sub' || o.op === 'ins') chg.push(o.b); });
           var removed = ops.some(function (o) { return o.op === 'del'; });
-          stage.append(h('p', { class: 'kb-prompt', text: child() ? '换了一格，变成什么了？' : '换了一格（绿框）' + (removed ? '，或少了一格' : '') + '。先自己读出来，再选它是什么。' }),
-            h('div', { class: 'known' }, [h('span', { text: '刚才是' }), boxRow(it.prev, { small: true, onTap: function (i, k) { speakUnit(k); } }), it.prev.pic ? h('span', { class: 'pic', text: it.prev.pic }) : h('span', { text: '（假词）' }), h('span', { class: 'arrow', text: '↓' })]),
-            boxRow(w, { onTap: tapBox, tricky: tricky, changed: chg, aria: '新词的音格', main: true }));
+          stage.append(h('p', { class: 'kb-prompt', text: child() ? L('换了一格，变成什么了？', 'One box changed. What is it now?') : L('换了一格（绿框）' + (removed ? '，或少了一格' : '') + '。先自己读出来，再选它是什么。', 'One box changed (green frame)' + (removed ? ', or one box was removed' : '') + '. Read it yourself first, then choose what it is.') }),
+            h('div', { class: 'known' }, [h('span', { text: L('刚才是', 'Before:') }), boxRow(it.prev, { small: true, onTap: function (i, k) { speakUnit(k); } }), it.prev.pic ? h('span', { class: 'pic', text: it.prev.pic }) : h('span', { text: L('（假词）', '(made-up word)') }), h('span', { class: 'arrow', text: '↓' })]),
+            boxRow(w, { onTap: tapBox, tricky: tricky, changed: chg, aria: L('新词的音格', 'Sound boxes of the new word'), main: true }));
         } else {
-          stage.append(h('p', { class: 'kb-prompt', text: child() ? '点一点，读一读，是哪个？' : '一格一格点着读，再自己连起来。这是哪个？' }), boxRow(w, { onTap: tapBox, tricky: tricky, aria: '音格', main: true }));
+          stage.append(h('p', { class: 'kb-prompt', text: child() ? L('点一点，读一读，是哪个？', 'Tap and read. Which one is it?') : L('一格一格点着读，再自己连起来。这是哪个？', 'Click and read box by box, then blend them yourself. Which one is it?') }), boxRow(w, { onTap: tapBox, tricky: tricky, aria: L('音格', 'Sound boxes'), main: true }));
         }
         stage.append(h('p', { class: 'cap' }));
         if (child()) stage.append(h('div', { class: 'track' }, [h('span', { class: 'snail', text: '🐌' })]));
         stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: function () {
           if (!it.answered && !it.heardWhole) { it.heardWhole = true; B.hint(it.id, 3); }
           blendWord(w); B.emit('select', { item: it.id, blend: true, beforeAnswer: !it.answered });
-        } }, it.answered || it.heardWhole ? '▶ 合起来' : '▶ 合起来听（算提示）')]));
+        } }, it.answered || it.heardWhole ? L('▶ 合起来', '▶ Blend') : L('▶ 合起来听（算提示）', '▶ Hear it blended (counts as a hint)'))]));
         stage.append(optButtons(it));
         if (it.compare && !it.solved) stage.append(compareRows(w, it.compare));
         stage.append(hintTools(it));
       } else if (it.kind === 'spell') {
         if (!it.bank) buildBank(it);
-        stage.append(h('p', { class: 'kb-prompt', text: child() ? '听一听，缺的那一格是哪个？' : '听一听，用下面的字块把它摆出来：一格放一个音。' }),
+        stage.append(h('p', { class: 'kb-prompt', text: child() ? L('听一听，缺的那一格是哪个？', 'Listen. Which one goes in the missing box?') : L('听一听，用下面的字块把它摆出来：一格放一个音。', 'Listen, then build it with the tiles below: one sound per box.') }),
           h('div', { class: 'tools' }, [
-            h('button', { class: 'kb-btn primary', onclick: function () { speakWord(w); B.emit('select', { item: it.id, replay: true }); } }, '▶ 再听'),
-            h('button', { class: 'kb-btn', onclick: function () { speakWord(w, 0.5); B.emit('select', { item: it.id, replay: 'slow' }); } }, '▶ 慢一点')]),
+            h('button', { class: 'kb-btn primary', onclick: function () { speakWord(w); B.emit('select', { item: it.id, replay: true }); } }, L('▶ 再听', '▶ Listen again')),
+            h('button', { class: 'kb-btn', onclick: function () { speakWord(w, 0.5); B.emit('select', { item: it.id, replay: 'slow' }); } }, L('▶ 慢一点', '▶ Slower'))]),
           spellRow(it), h('p', { class: 'cap' }),
-          h('div', { class: 'bank', 'aria-label': '字块' }, it.bank.map(function (v, i) {
+          h('div', { class: 'bank', 'aria-label': L('字块', 'Tiles') }, it.bank.map(function (v, i) {
             var brk = isZh && i > 0 && unit(it.bank[i - 1]).kind !== unit(v).kind;
-            return [brk ? h('span', { class: 'sec' }) : null, h('button', { class: 'tile', disabled: it.solved, 'aria-label': '字块 ' + v, onclick: function () { place(v); } }, tileLabel(v))];
+            return [brk ? h('span', { class: 'sec' }) : null, h('button', { class: 'tile', disabled: it.solved, 'aria-label': L('字块 ', 'Tile ') + v, onclick: function () { place(v); } }, tileLabel(v))];
           }).reduce(function (a, b) { return a.concat(b); }, [])));
         if (!child()) stage.append(h('div', { class: 'tools' }, [
-          h('button', { class: 'kb-btn primary', disabled: it.solved || !it.placed.length, onclick: submitSpell }, '摆好了'),
-          h('button', { class: 'kb-btn', disabled: it.solved || !it.placed.length, onclick: function () { it.placed = []; it.diff = null; B.emit('revise', { item: it.id, cleared: true }); render(); } }, '清空'),
-          h('button', { class: 'kb-btn', disabled: it.solved || it.showCount, onclick: function () { it.showCount = true; B.hint(it.id, 1); render(); } }, '提示 1：有几格'),
-          h('button', { class: 'kb-btn', disabled: it.solved || it.showTricky, onclick: function () { it.showTricky = true; it.showCount = true; B.hint(it.id, 2); render(); } }, '提示 2：给出难点格'),
+          h('button', { class: 'kb-btn primary', disabled: it.solved || !it.placed.length, onclick: submitSpell }, L('摆好了', 'Check')),
+          h('button', { class: 'kb-btn', disabled: it.solved || !it.placed.length, onclick: function () { it.placed = []; it.diff = null; B.emit('revise', { item: it.id, cleared: true }); render(); } }, L('清空', 'Clear')),
+          h('button', { class: 'kb-btn', disabled: it.solved || it.showCount, onclick: function () { it.showCount = true; B.hint(it.id, 1); render(); } }, L('提示 1：有几格', 'Hint 1: how many boxes')),
+          h('button', { class: 'kb-btn', disabled: it.solved || it.showTricky, onclick: function () { it.showTricky = true; it.showCount = true; B.hint(it.id, 2); render(); } }, L('提示 2：给出难点格', 'Hint 2: show the tricky box')),
           h('button', { class: 'kb-btn', disabled: it.solved, onclick: function () {
             B.reveal(it.id); it.solved = true; it.placed = w.boxes.map(val); it.diff = null; st.record[it.id] = { text: w.text, cls: B.status(it.id) === 'wrong' ? 'bad' : 'ast' }; render(); blendWord(w);
-            feedback('答案：' + showText(w) + '。这一题记为“看过答案”。', 'warn'); } }, '看答案')]));
-        else stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', disabled: it.solved, onclick: function () { B.hint(it.id, 1); playBoxes(w); } }, '提示：一格一格放')]));
-        if (w.pseudo && !it.solved) stage.append(h('p', { class: 'kb-note', text: '这一题可能是假词：能读出来，但不是一个词。按规则拼就行。' }));
+            feedback(L('答案：', 'Answer: ') + showText(w) + L('。这一题记为“看过答案”。', '. This item is recorded as “answer shown”.'), 'warn'); } }, L('看答案', 'Show the answer'))]));
+        else stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', disabled: it.solved, onclick: function () { B.hint(it.id, 1); playBoxes(w); } }, L('提示：一格一格放', 'Hint: play box by box'))]));
+        if (w.pseudo && !it.solved) stage.append(h('p', { class: 'kb-note', text: L('这一题可能是假词：能读出来，但不是一个词。按规则拼就行。', 'This one may be a made-up word: it can be read, but it is not a word. Just spell it by the rules.') }));
       } else if (it.kind === 'rule') {
-        stage.append(h('p', { class: 'kb-prompt', text: '按“' + pack.rule + '”一格一格拼，能读对这个词吗？' }),
-          h('div', { class: 'known' }, [h('span', { class: 'pic', text: w.pic }), h('span', { text: w.gloss })]),
-          boxRow(w, { onTap: tapBox, tricky: tricky, aria: '音格', main: true }), h('p', { class: 'cap' }));
-        var yes = h('button', { class: 'opt' + (it.answered && !it.judged ? (w.rule ? ' wrongpick' : ' right') : ''), disabled: it.answered, onclick: function () { judge(false); } }, [h('span', { class: 'pic', text: '✅' }), h('span', { class: 'gl', text: '能，按规则拼就对' }), h('span', { class: 'num', text: '1' })]);
-        var no = h('button', { class: 'opt' + (it.answered && it.judged ? (w.rule ? ' right' : ' wrongpick') : ''), disabled: it.answered, onclick: function () { judge(true); } }, [h('span', { class: 'pic', text: '⚠️' }), h('span', { class: 'gl', text: '不能，要整体记' }), h('span', { class: 'num', text: '2' })]);
+        stage.append(h('p', { class: 'kb-prompt', text: L('按“' + pack.rule + '”一格一格拼，能读对这个词吗？', 'Blending box by box by the rule “' + T(pack, 'rule') + '”, would you read this word correctly?') }),
+          h('div', { class: 'known' }, [h('span', { class: 'pic', text: w.pic }), h('span', { text: gl(w) })]),
+          boxRow(w, { onTap: tapBox, tricky: tricky, aria: L('音格', 'Sound boxes'), main: true }), h('p', { class: 'cap' }));
+        var yes = h('button', { class: 'opt' + (it.answered && !it.judged ? (w.rule ? ' wrongpick' : ' right') : ''), disabled: it.answered, onclick: function () { judge(false); } }, [h('span', { class: 'pic', text: '✅' }), h('span', { class: 'gl', text: L('能，按规则拼就对', 'Yes, the rules give the right reading') }), h('span', { class: 'num', text: '1' })]);
+        var no = h('button', { class: 'opt' + (it.answered && it.judged ? (w.rule ? ' right' : ' wrongpick') : ''), disabled: it.answered, onclick: function () { judge(true); } }, [h('span', { class: 'pic', text: '⚠️' }), h('span', { class: 'gl', text: L('不能，要整体记', 'No, it has to be learned whole') }), h('span', { class: 'num', text: '2' })]);
         stage.append(h('div', { class: 'opts' }, [yes, no]));
-        if (it.answered && w.rule) stage.append(h('p', {}, [h('span', { class: 'flag', text: '规则外' }), ' ', w.text + (w.say && w.say !== w.text ? '（' + w.say + '）' : '')]));
-        if (it.answered) stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () { speakWord(w); } }, '▶ 再听真正的读音')]));
+        if (it.answered && w.rule) stage.append(h('p', {}, [h('span', { class: 'flag', text: L('规则外', 'Irregular') }), ' ', w.text + (w.say && w.say !== w.text ? L('（' + w.say + '）', ' (' + w.say + ')') : '')]));
+        if (it.answered) stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () { speakWord(w); } }, L('▶ 再听真正的读音', '▶ Hear the real pronunciation again'))]));
       }
       stage.append(h('div', { class: 'kb-feedback', hidden: true }));
-      stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn' + (it.solved ? ' primary' : ''), onclick: next }, it.solved ? '下一题 →' : '跳过')]));
+      stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn' + (it.solved ? ' primary' : ''), onclick: next }, it.solved ? L('下一题 →', 'Next →') : L('跳过', 'Skip'))]));
     }
     function renderSide() {
       side.innerHTML = '';
       var chips = st.queue.filter(function (q) { return st.record[q.id]; }).map(function (q) { var r = st.record[q.id]; return h('span', { class: 'chip ' + r.cls, text: r.text }); });
-      side.append(h('div', { class: 'kb-card' }, [h('b', { text: '这一轮的词卡' }),
-        chips.length ? h('div', { class: 'chips' }, chips) : h('p', { class: 'kb-note', text: '还没有作答。' }),
-        h('p', { class: 'kb-note', text: '绿 = 第一次就独立做对；黄 = 用过提示、听过整词或看过答案；红 = 第一次做错。第一次作答一经记录不会被覆盖。' })]));
-      var legend = isZh ? [['b', '声母'], ['a', '韵母'], ['3', '声调']] : pack.lang === 'ja' ? [['か', '一拍'], ['っ', '促音'], ['ー', '长音']] : [['t', '辅音'], ['a', '元音'], [pack.lang === 'fr' ? 't:0' : 'e:0', '不发音']];
+      side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('这一轮的词卡', 'Words this round') }),
+        chips.length ? h('div', { class: 'chips' }, chips) : h('p', { class: 'kb-note', text: L('还没有作答。', 'No answers yet.') }),
+        h('p', { class: 'kb-note', text: L('绿 = 第一次就独立做对；黄 = 用过提示、听过整词或看过答案；红 = 第一次做错。第一次作答一经记录不会被覆盖。', 'Green = correct independently on the first attempt; yellow = used a hint, heard the whole word or saw the answer; red = wrong on the first attempt. Once recorded, the first attempt is never overwritten.') })]));
+      var legend = isZh ? [['b', L('声母', 'initial (声母)')], ['a', L('韵母', 'final (韵母)')], ['3', L('声调', 'tone (声调)')]] : pack.lang === 'ja' ? [['か', L('一拍', 'one beat')], ['っ', L('促音', 'sokuon (pause)')], ['ー', L('长音', 'long vowel')]] : [['t', L('辅音', 'consonant')], ['a', L('元音', 'vowel')], [pack.lang === 'fr' ? 't:0' : 'e:0', L('不发音', 'silent')]];
       side.append(h('div', { class: 'kb-card' }, [h('div', { class: 'legend' }, legend.map(function (l) { return h('span', {}, [h('span', { class: 'bx k-' + unit(l[0]).kind, text: label(l[0]) }), ' ' + l[1]]); })),
-        pack.voiceNote ? h('p', { class: 'kb-note', text: pack.voiceNote }) : null]));
-      if (pack.reverse) side.append(h('div', { class: 'kb-card reverse' }, [h('b', { text: '不按规则的词' }), h('p', { class: 'kb-note', text: pack.reverse })]));
+        pack.voiceNote ? h('p', { class: 'kb-note', text: T(pack, 'voiceNote') }) : null]));
+      if (pack.reverse) side.append(h('div', { class: 'kb-card reverse' }, [h('b', { text: L('不按规则的词', 'Words that break the rules') }), h('p', { class: 'kb-note', text: T(pack, 'reverse') })]));
     }
     function render() { renderBar(); renderStage(); renderSide(); }
 

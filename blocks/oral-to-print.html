@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Oral to print</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .op-layout { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .op-layout { grid-template-columns: 1fr; } }
+  .op-stage { display: grid; gap: 14px; justify-items: center; text-align: center; }
+  .op-stage > * { max-width: 100%; }
+  .op-stage .kb-prompt { margin: 0; }
+  .picker { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .pk { font-size: 1.8rem; width: calc(var(--cell) * 1.1); height: calc(var(--cell) * 1.1); border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); display: inline-flex; align-items: center; justify-content: center; position: relative; }
+  .pk[aria-pressed="true"] { border: 2px solid var(--accent); background: var(--accent-soft); }
+  .pk .tick { position: absolute; right: 2px; bottom: 0; font-size: .7rem; color: var(--t2); }
+  .bigpic { font-size: 4.5rem; line-height: 1.1; }
+  [data-variant="child"] .bigpic { font-size: 6rem; }
+  .mine { border: 2px solid var(--line); border-radius: var(--radius); padding: 12px 16px; background: var(--panel); display: grid; gap: 8px; justify-items: center; }
+  .mine .lab { font-size: .8rem; color: var(--muted); }
+  .words { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; align-items: flex-end; }
+  .w { font-size: calc(var(--glyph) * 1.25); line-height: 1.2; border: 1px solid transparent; background: transparent; border-radius: 8px; padding: 2px 6px; }
+  .w.tap { border-color: var(--line); background: var(--panel); }
+  .w.learn { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 3px; text-underline-offset: 6px; }
+  .w.lit { background: var(--accent-soft); border-color: var(--accent); }
+  .w.done { border-color: var(--t2); }
+  .w.punct { padding: 2px 0; color: var(--muted); }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; width: 100%; max-width: 640px; }
+  .wc { font-size: calc(var(--glyph) * 1.2); min-height: calc(var(--cell) * 1.5); border: 2px solid var(--line); border-radius: var(--radius); background: var(--panel); padding: 8px; display: flex; align-items: center; justify-content: center; }
+  .wc.right { border-color: var(--t2); background: var(--accent-soft); }
+  .wc.wrongpick { border-color: var(--warn); background: var(--warn-soft); }
+  .wc.none { font-size: 1rem; border-style: dashed; border-left: 5px solid var(--warn); }
+  .wc:disabled { cursor: default; }
+  .cmp { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .cmp .box { border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 14px; display: grid; gap: 4px; justify-items: center; min-width: 140px; }
+  .cmp .g { font-size: calc(var(--glyph) * 1.4); }
+  .cmp mark { background: var(--accent-soft); color: inherit; border-radius: 4px; padding: 0 2px; }
+  .opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; width: 100%; max-width: 640px; }
+  .opt { border: 1px solid var(--line); background: var(--panel); border-radius: var(--radius); padding: 10px; min-height: 48px; }
+  .opt.right { border-color: var(--t2); background: var(--accent-soft); }
+  .opt.wrongpick { border-color: var(--bad); background: var(--bad-soft); }
+  .opt.rev { border-left: 4px solid var(--warn); }
+  .opt.big { font-size: calc(var(--glyph) * 1.1); }
+  .sentence { font-size: calc(var(--glyph) * 1.35); line-height: 1.5; padding: 12px 18px; border: 2px solid var(--line); border-radius: var(--radius); background: var(--panel); }
+  .listen { display: grid; gap: 8px; justify-items: center; border: 1px dashed var(--line); border-radius: var(--radius); padding: 10px 14px; }
+  .kb-feedback { max-width: 640px; }
+  details.adult { font-size: .85rem; color: var(--muted); }
+  input[type=text] { font-size: 1.1rem; padding: 6px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); width: min(100%, 420px); }
+  .emojis { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+  .emojis button { font-size: 1.5rem; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); padding: 2px 6px; }
+  .emojis button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+  .wall { display: grid; gap: 10px; }
+  .wall h2 { font-size: 1rem; margin: 0; }
+  .wall .grp { display: grid; gap: 4px; }
+  .wall .grp .from { font-size: .8rem; color: var(--muted); }
+  .tiles { display: flex; flex-wrap: wrap; gap: 6px; }
+  @media (max-width: 860px) { .tiles { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; } }
+  .tile { border: 1px solid var(--line); border-radius: 10px; padding: 4px 8px; display: grid; justify-items: center; min-width: 64px; background: var(--panel); flex: none; }
+  .tile .g { font-size: calc(var(--glyph) * .95); line-height: 1.2; }
+  .tile .p { font-size: .9rem; }
+  .tile .lv { font-size: .75rem; min-height: 1em; }
+  .tile .cb { font-size: .7rem; color: var(--muted); max-width: 120px; }
+  .tile.known { border-color: var(--t2); }
+  .done { font-size: 2.4rem; }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* Oral to print (prim:oral-to-print). Packs: data/oral-to-print.js (format in its header). For children and
+ * heritage speakers who can already say the words; no pinyin or phonetic spelling is shown.
+ * Modes:
+ *   say   — step 1: pick a picture, see "my words" written under it; tap words to hear them (browser speech, not the
+ *           child's own voice); point-read the words in order (not counted as reading); put the sentence on the word
+ *           wall. An adult can type the child's own sentence; units the pack knows get practice items.
+ *   find  — step 2: hear a cue ("下雨的下"); three cards WITHOUT pictures, shuffled, plus "none of these"; tap the card
+ *           with the unit you said. Then judge it in the new combination: same meaning / same unit, new meaning /
+ *           only looks alike (大/太, was/saw, sun/son: the reverse half). A wrong pick is shown side by side, not
+ *           marked red. Hints: "where did you say it?", replay the sentence, show its picture.
+ *   read  — step 3: a new sentence without picture; a real listener taps "understood / not understood" and ticks
+ *           "helped along the way"; recorded as self/partner report, never as a scored answer.
+ *   trap  — spoken ≠ written: hear a sentence and choose how it is written (在/再, 他/她/它, said, one/won, gonna).
+ * Word wall: per unit, the combinations it was recognised in on the first try without help (a leaf each); "known"
+ * needs two different combinations; its picture is removed after three. Kept in localStorage (this browser only).
+ * Evidence: find:<id>, judge:<id>, read:<id> (self-report), trap:<id>. */
+(function () {
+  'use strict';
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t;
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'oral-to-print-zh';
+  var entry = (window.KT_REGISTRY && KT_REGISTRY.packs && KT_REGISTRY.packs[setId]) || { file: 'data/oral-to-print.js', block: 'oral-to-print' };
+  var app = document.getElementById('app');
+  if (entry.block !== 'oral-to-print') { app.textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  var s = document.createElement('script');
+  s.src = entry.file;
+  s.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else app.textContent = L('数据包里没有 ' + setId, 'The data pack file does not contain ' + setId); };
+  s.onerror = function () { app.textContent = L('数据包加载失败：', 'Could not load the data pack: ') + entry.file; };
+  document.head.appendChild(s);
+
+  var EMOJI = ['🏠', '🐱', '🐶', '🍎', '🚗', '⚽', '🌧️', '🎂', '🧸', '📚'];
+
+  function start(pack) {
+    var title = T(pack, 'title'), zh = pack.lang === 'zh', unitName = T(pack.unitName, 'zh');
+    var B = KTBlock.init({ id: 'oral-to-print', primitive: 'prim:oral-to-print', title: title, set: pack.id });
+    document.title = title + ' · Oral to print';
+    var modes = [{ id: 'say', label: L('1 说出来', '1 Say it') }, { id: 'find', label: L('2 认出来', '2 Find it') }, { id: 'read', label: L('3 读给人听', '3 Read it to someone') }, { id: 'trap', label: L('说的和写的', 'Said vs written') }];
+    var pm = params.get('mode');
+    var KEY = 'kt-oral-to-print-' + pack.id;
+    var saved = B.store(KEY) || {};
+    var st = {
+      mode: modes.some(function (m) { return m.id === pm; }) ? pm : 'say',
+      said: saved.said || [], custom: saved.custom || [], wall: saved.wall || {},
+      card: null, point: 0, queue: [], idx: 0, cur: null, msg: null, newPic: EMOJI[0]
+    };
+    function persist() { B.store(KEY, { said: st.said, custom: st.custom, wall: st.wall }); }
+    var ui = KTBlock.chrome(B, { title: title, subtitle: T(pack, 'subtitle'), modes: modes, mode: st.mode,
+      onMode: function (m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m }); enterMode(); },
+      onVariant: function () { render(); } });
+    var bar = h('div', { class: 'kb-bar' });
+    var stage = h('div', { class: 'kb-card op-stage', 'aria-live': 'polite' });
+    var side = h('aside', { class: 'kb-card wall' });
+    app.append(ui.header, h('main', { class: 'kb-main' }, [bar, h('div', { class: 'op-layout' }, [stage, side])]), ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id });
+
+    function child() { return B.variant === 'child'; }
+    var warned = false;
+    function say(text) {
+      var r = B.speak(text, pack.speech);
+      if (r === false && !warned) { warned = true; st.msg = { t: L('这个浏览器不能播放语音：请家长读出来。', 'This browser cannot play speech: please read it aloud for the child.'), tone: 'warn' }; render(); }
+      return r;
+    }
+    function allCards() { return pack.cards.concat(st.custom); }
+    function cardById(id) { return allCards().filter(function (c) { return c.id === id; })[0]; }
+    function sentence(c) { return zh ? c.words.join('') : c.words.join(' '); }
+    function isPunct(w) { return /^[\s，。！？、,.!?]+$/.test(w); }
+    function wordHasUnit(w, u) { return zh ? w.indexOf(u) >= 0 : w.toLowerCase().replace(/[^a-z']/g, '') === u; }
+    function hasUnit(text, u) { return zh ? text.indexOf(u) >= 0 : new RegExp('\\b' + u + '\\b', 'i').test(text); }
+    function wallUnit(u) { return st.wall[u] || (st.wall[u] = { combos: [], enc: 0 }); }
+
+    /* ---------- say ---------- */
+    function renderSay() {
+      stage.append(h('p', { class: 'kb-prompt', text: L('选一张图，说说你看到了什么。下面是你会说的话写成的' + unitName + '。', 'Pick a picture and say what you see. Below, what you can say is written down.') }));
+      stage.append(h('div', { class: 'picker', role: 'group', 'aria-label': L('图片', 'Pictures') }, allCards().map(function (c) {
+        return h('button', { class: 'pk', 'aria-pressed': String(st.card === c.id), 'aria-label': sentence(c), onclick: function () { st.card = c.id; st.point = 0; st.msg = null; B.emit('select', { card: c.id }); render(); } },
+          [c.pic, st.said.indexOf(c.id) >= 0 ? h('span', { class: 'tick', text: '✓' }) : null]);
+      }).concat([h('button', { class: 'pk', 'aria-pressed': String(st.card === '+new'), 'aria-label': L('大人帮忙写一句', 'An adult writes a sentence'), onclick: function () { st.card = '+new'; st.msg = null; render(); } }, '✏️')])));
+      if (st.card === '+new') { renderNew(); return; }
+      var c = cardById(st.card);
+      if (!c) { stage.append(h('p', { class: 'kb-note', text: L('先点一张图。', 'Tap a picture first.') })); return; }
+      stage.append(h('div', { class: 'bigpic', role: 'img', 'aria-label': sentence(c), text: c.pic }));
+      var tapIdx = c.words.map(function (w, i) { return isPunct(w) ? -1 : i; }).filter(function (i) { return i >= 0; });
+      stage.append(h('div', { class: 'mine' }, [
+        h('span', { class: 'lab', text: L('我的话', 'My words') }),
+        h('div', { class: 'words' }, c.words.map(function (w, i) {
+          if (isPunct(w)) return h('span', { class: 'w punct', text: w });
+          var learn = c.learn.some(function (u) { return wordHasUnit(w, u); });
+          var pos = tapIdx.indexOf(i);
+          return h('button', { class: 'w tap' + (learn ? ' learn' : '') + (pos < st.point ? ' done' : ''), dataset: { i: i }, onclick: function () { tapWord(c, i, pos, w); } }, w);
+        }))
+      ]));
+      stage.append(h('div', { class: 'tools' }, [
+        h('button', { class: 'kb-btn', onclick: function () { playAlong(c); } }, L('🔊 一个一个听', '🔊 Word by word')),
+        h('button', { class: 'kb-btn', onclick: function () { say(sentence(c)); B.emit('select', { card: c.id, action: 'listen-sentence' }); } }, L('🔊 整句听', '🔊 Whole sentence'))
+      ]));
+      var doneAll = st.point >= tapIdx.length;
+      stage.append(h('p', { class: 'kb-note', text: doneAll ? L('点读完了。跟着点读只是把声音和字连起来，还不算会认。', 'Done pointing. Pointing along links sound to print; it does not count as reading yet.') : L('用手指点着读：从第一个开始，按顺序一个一个点。', 'Point and read: tap the words in order, starting with the first.') }));
+      stage.append(h('div', { class: 'tools' }, [st.said.indexOf(c.id) >= 0 ? h('span', { class: 'kb-note', text: L('✓ 已经在识字墙上了', '✓ Already on the word wall') }) :
+        h('button', { class: 'kb-btn primary', onclick: function () { addSaid(c); } }, L('这句话是我说的：放到识字墙上', 'I said this: put it on my word wall'))]));
+      var f = fb(); if (f) stage.append(f);
+    }
+    function tapWord(c, i, pos, w) {
+      say(w);
+      if (pos === st.point) st.point++;
+      B.emit('select', { card: c.id, word: w, inOrder: pos === st.point - 1 });
+      var total = c.words.filter(function (x) { return !isPunct(x); }).length;
+      if (st.point === total && pos === total - 1) B.emit('complete', { card: c.id, pointRead: true, counted: false });
+      render();
+    }
+    function playAlong(c) {
+      var idx = c.words.map(function (w, i) { return isPunct(w) ? -1 : i; }).filter(function (i) { return i >= 0; });
+      B.emit('select', { card: c.id, action: 'listen-words' });
+      var k = 0;
+      function step() {
+        stage.querySelectorAll('.w.lit').forEach(function (b) { b.classList.remove('lit'); });
+        if (k >= idx.length) return;
+        var i = idx[k++], btn = stage.querySelector('.w[data-i="' + i + '"]');
+        if (btn) btn.classList.add('lit');
+        var r = say(c.words[i]);
+        if (r && r.then) r.then(function () { setTimeout(step, 150); }); else setTimeout(step, 700);
+      }
+      step();
+    }
+    function addSaid(c) {
+      if (st.said.indexOf(c.id) < 0) st.said.push(c.id);
+      c.learn.forEach(function (u) { wallUnit(u); B.emit('connect', { card: c.id, unit: u, to: 'wall' }); });
+      persist();
+      st.msg = { t: L('放好了。去“认出来”找一找这些' + unitName + '。', 'Done. Go to "Find it" to look for these words.') };
+      render();
+    }
+    function renderNew() {
+      stage.append(h('p', { class: 'kb-prompt', text: L('给大人：请孩子说一句话，你把它照原样写下来（只写孩子真说的话）。', 'For the adult: ask the child to say a sentence and type it exactly as said (only what the child really said).') }));
+      var inp = h('input', { type: 'text', 'aria-label': L('孩子说的话', 'What the child said'), placeholder: zh ? '我的小狗叫豆豆。' : 'My dog is called Bean.' });
+      stage.append(inp);
+      stage.append(h('div', { class: 'emojis', role: 'group', 'aria-label': L('选一张图', 'Pick a picture') }, EMOJI.map(function (e) {
+        return h('button', { 'aria-pressed': String(st.newPic === e), onclick: function () { st.newPic = e; stage.querySelectorAll('.emojis button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.textContent === e)); }); } }, e);
+      })));
+      stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: function () {
+        var txt = inp.value.trim();
+        if (!txt) return;
+        var words = zh ? Array.from(txt.replace(/\s+/g, '')) : txt.split(/\s+/);
+        var known = Object.keys(pack.units).filter(function (u) { return hasUnit(txt, u); }).slice(0, 3);
+        var c = { id: 'my' + Date.now(), pic: st.newPic, words: words, learn: known, mine: true };
+        st.custom.push(c); st.card = c.id; st.point = 0; persist();
+        B.emit('select', { card: c.id, custom: true, units: known });
+        st.msg = known.length ? { t: L('里面有 ' + known.join('、') + '，可以在“认出来”里练。', 'It has ' + known.join(', ') + ', which you can practise in "Find it".') } : { t: L('这句话里的' + unitName + '数据包里还没有练习题，可以先点读，放到识字墙上。', 'This pack has no practice yet for the words in this sentence; you can still point-read it and put it on the wall.'), tone: 'warn' };
+        render();
+      } }, L('写好了', 'Done'))]));
+      stage.append(h('p', { class: 'kb-note', text: zh ? L('自己写的句子按字朗读，浏览器可能读错个别字。家里说方言、写不出普通话字的词，先不要写进来。', 'Typed sentences are read character by character and the browser may misread some. Leave out dialect words that have no standard written form.') : L('浏览器可能读错个别词。', 'The browser may misread some words.') }));
+      var f = fb(); if (f) stage.append(f);
+    }
+
+    /* ---------- find ---------- */
+    function enterMode() {
+      st.msg = null; st.idx = 0; st.cur = null;
+      if (st.mode === 'find') {
+        var onWall = pack.find.filter(function (f) { return st.said.indexOf(pack.units[f.u].card) >= 0 || st.custom.some(function (c) { return c.learn.indexOf(f.u) >= 0; }); });
+        st.findAll = !onWall.length;
+        var pool = KTBlock.shuffle(onWall.length ? onWall : pack.find);
+        st.queue = child() ? pool.slice(0, 8) : pool;
+      } else if (st.mode === 'read') st.queue = KTBlock.shuffle(pack.read);
+      else if (st.mode === 'trap') st.queue = KTBlock.shuffle(pack.trap);
+      else st.queue = [];
+      begin();
+    }
+    function begin() {
+      st.msg = null;
+      var it = st.queue[st.idx];
+      if (st.mode === 'say') { render(); return; }
+      if (!it) { st.cur = null; if (st.queue.length) B.emit('complete', { mode: st.mode, items: st.queue.length }); render(); return; }
+      if (st.mode === 'find') {
+        st.cur = { it: it, cards: KTBlock.shuffle(it.cards), picked: [], found: false, hint: 0, judged: [], judgedOk: false };
+        setTimeout(function () { say(it.cue); }, 250);
+      } else if (st.mode === 'read') st.cur = { it: it, heard: false, helped: false, who: 'parent', done: false };
+      else { st.cur = { it: it, opts: KTBlock.shuffle(it.opts), picked: [], solved: false }; setTimeout(function () { say(it.say); }, 250); }
+      B.emit('view', { item: it.id, mode: st.mode });
+      render();
+    }
+    function next() { st.idx++; begin(); }
+    function findCorrect(c) { return c === 'none' ? !st.cur.it.cards.some(function (x) { return x.has; }) : !!c.has; }
+    function renderFind() {
+      var c = st.cur, it = c.it, u = it.u, from = cardById(pack.units[u].card);
+      if (st.findAll) stage.append(h('p', { class: 'kb-note', text: L('识字墙上还没有句子，先练全部。先在“说出来”里说过这些话会更好。', 'The word wall is empty, so all items are shown. It works better after saying these sentences in "Say it".') }));
+      stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: function () { say(it.cue); B.emit('select', { item: 'find:' + it.id, action: 'listen-cue' }); } }, L('🔊 再听一遍', '🔊 Listen again'))]));
+      stage.append(h('details', { class: 'adult' }, [h('summary', { text: L('给大人看（没有声音时读给孩子听）', 'For the adult (read this aloud if there is no sound)') }), h('p', { text: '“' + it.cue + '”' })]));
+      if (!c.found) {
+        stage.append(h('p', { class: 'kb-prompt', text: L('哪一张里有你说过的这个' + unitName + '？', 'Which card has the ' + unitName + ' you just heard?') }));
+        stage.append(h('div', { class: 'cards' }, c.cards.map(function (x) {
+          var p = c.picked.indexOf(x) >= 0;
+          return h('button', { class: 'wc' + (p ? ' wrongpick' : ''), disabled: p, onclick: function () { findPick(x); } }, x.t);
+        }).concat([h('button', { class: 'wc none' + (c.picked.indexOf('none') >= 0 ? ' wrongpick' : ''), disabled: c.picked.indexOf('none') >= 0, onclick: function () { findPick('none'); } }, L('都没有', 'None of these'))])));
+        if (c.picked.length) {
+          var last = c.picked[c.picked.length - 1];
+          stage.append(h('div', { class: 'cmp' }, [
+            h('div', { class: 'box' }, [h('span', { class: 'kb-note', text: L('你选的', 'You chose') }), h('span', { class: 'g', text: last === 'none' ? L('都没有', 'None') : last.t })]),
+            h('div', { class: 'box' }, [h('span', { class: 'kb-note', text: L('你说过的', 'What you said') }), h('span', { class: 'bigpic', style: 'font-size:2.4rem', text: from.pic }), h('span', { class: 'g' }, markUnit(sentence(from), u))])
+          ]));
+        }
+        var hints = [];
+        if (c.hint >= 1) hints.push(h('p', { class: 'kb-note', text: L('这个' + unitName + '你在哪句话里说过？', 'Which of your sentences did you say this in?') }));
+        if (c.hint >= 3) hints.push(h('div', { class: 'bigpic', style: 'font-size:3rem', role: 'img', 'aria-label': sentence(from), text: from.pic }));
+        stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', disabled: c.hint >= 3, onclick: function () {
+          c.hint++; B.hint('find:' + it.id, c.hint);
+          if (c.hint === 2) say(sentence(from));
+          render();
+        } }, c.hint >= 3 ? L('没有更多提示', 'No more hints') : L('提示 ' + (c.hint + 1), 'Hint ' + (c.hint + 1)))].concat(hints)));
+      } else {
+        var about = it.about, none = !it.cards.some(function (x) { return x.has; });
+        stage.append(h('div', { class: 'sentence' }, none ? about : markUnit(about, u)));
+        stage.append(h('p', { class: 'kb-prompt', text: none
+          ? L('“' + about + '”里有一个' + unitName + '和你说的“' + u + '”长得像。它是……', '"' + about + '" has a ' + unitName + ' that looks like your "' + u + '". It is…')
+          : L('在“' + about + '”里，“' + u + '”和你说的“' + sentence(from) + '”里的一样吗？', 'In "' + about + '", is "' + u + '" the same as in "' + sentence(from) + '"?') }));
+        var J = [{ id: 'same', zh: '同一个' + unitName + '，意思一样', en: 'The same ' + unitName + ', same meaning' }, { id: 'shift', zh: '同一个' + unitName + '，意思变了', en: 'The same ' + unitName + ', a new meaning' }, { id: 'look', zh: '长得像，但不是同一个' + unitName, en: 'Only looks alike: a different ' + unitName }];
+        stage.append(h('div', { class: 'opts' }, J.map(function (j) {
+          var cls = 'opt' + (j.id === 'look' ? ' rev' : '');
+          if (c.judgedOk && j.id === it.ans) cls += ' right'; else if (c.judged.indexOf(j.id) >= 0) cls += ' wrongpick';
+          return h('button', { class: cls, disabled: c.judgedOk || c.judged.indexOf(j.id) >= 0, onclick: function () { judgePick(j.id); } }, L(j.zh, j.en));
+        })));
+        if (c.judgedOk) stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: next }, L('下一个 →', 'Next →'))]));
+      }
+      var f = fb(); if (f) stage.append(f);
+    }
+    function markUnit(text, u) {
+      var i = zh ? text.indexOf(u) : text.toLowerCase().search(new RegExp('\\b' + u + '\\b'));
+      if (i < 0) return text;
+      return h('span', {}, [text.slice(0, i), h('mark', { text: text.slice(i, i + u.length) }), text.slice(i + u.length)]);
+    }
+    function findPick(x) {
+      var c = st.cur, it = c.it, ok = findCorrect(x);
+      var rec = B.attempt('find:' + it.id, { correct: ok, response: { pick: x === 'none' ? 'none' : x.t, hints: c.hint } });
+      if (ok) {
+        c.found = true; st.msg = null;
+        var w = wallUnit(it.u); w.enc++;
+        if (x !== 'none' && rec.first.correct && !rec.first.assisted && w.combos.indexOf(x.t) < 0) { w.combos.push(x.t); B.emit('connect', { unit: it.u, combo: x.t, to: 'wall' }); }
+        persist();
+      } else {
+        c.picked.push(x);
+        st.msg = { t: L('比一比这两张，再找一次。', 'Compare these two, then look again.'), tone: 'warn' };
+      }
+      render();
+    }
+    function judgePick(j) {
+      var c = st.cur, it = c.it, ok = j === it.ans;
+      B.attempt('judge:' + it.id, { correct: ok, response: { judge: j } });
+      if (ok) { c.judgedOk = true; st.msg = { t: T(it.why, 'zh') }; }
+      else { c.judged.push(j); st.msg = { t: L('再看看：真的是同一个' + unitName + '吗？意思呢？', 'Look again: is it really the same ' + unitName + '? And the meaning?'), tone: 'warn' }; }
+      render();
+    }
+
+    /* ---------- read ---------- */
+    function renderRead() {
+      var c = st.cur, it = c.it, id = 'read:' + it.id;
+      stage.append(h('p', { class: 'kb-prompt', text: L('读给家人、同伴或老师听。没有图，也没有拼音。', 'Read this to someone at home, a friend or a teacher. No picture, no pinyin.') }));
+      stage.append(h('div', { class: 'sentence', text: it.s }));
+      if (!c.done) {
+        stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () { c.heard = true; B.hint(id, 'listen-first'); say(it.s); render(); } }, c.heard ? L('🔊 再听（已算提示）', '🔊 Listen again (counted as help)') : L('🔊 先听一遍（算提示）', '🔊 Listen first (counts as help)'))]));
+        stage.append(h('div', { class: 'listen' }, [
+          h('strong', { text: L('给听的人：', 'For the listener:') }),
+          h('div', { class: 'tools' }, [h('label', {}, [L('谁在听 ', 'Who is listening '), h('select', { onchange: function (e) { c.who = e.target.value; } }, [['parent', L('家长', 'Parent')], ['peer', L('同伴', 'Friend')], ['teacher', L('老师', 'Teacher')], ['self', L('自己（读完自己判断）', 'Myself (judge it afterwards)')]].map(function (o) { return h('option', { value: o[0], text: o[1], selected: c.who === o[0] }); }))])]),
+          h('label', {}, [h('input', { type: 'checkbox', checked: c.helped, onchange: function (e) { c.helped = e.target.checked; } }), L(' 中途帮过（提醒了某个' + unitName + '）', ' Helped along the way (prompted a word)')]),
+          h('div', { class: 'tools' }, [
+            h('button', { class: 'kb-btn primary', onclick: function () { readDone(true); } }, L('听懂了', 'Understood it')),
+            h('button', { class: 'kb-btn', onclick: function () { readDone(false); } }, L('没听懂', 'Did not understand'))
+          ]),
+          h('p', { class: 'kb-note', text: L('页面不听、不打分，只记下听的人的判断。', 'The page does not listen or score; it only records the listener\'s judgement.') })
+        ]));
+      } else stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: next }, L('下一句 →', 'Next →'))]));
+      var f = fb(); if (f) stage.append(f);
+    }
+    function readDone(ok) {
+      var c = st.cur, id = 'read:' + c.it.id;
+      if (c.helped) B.hint(id, 'listener-helped');
+      B.attempt(id, { correct: ok, selfReport: true, response: { listener: c.who, helped: c.helped, heardFirst: c.heard } });
+      c.done = true;
+      st.msg = { t: ok ? (c.helped || c.heard ? L('记下了：读出来了，有帮助。', 'Recorded: read with help.') : L('记下了：自己读出来，听的人听懂了。', 'Recorded: read independently and understood.')) : L('记下了。可以回到“认出来”再练一练这些' + unitName + '。', 'Recorded. Go back to "Find it" to practise these words.') };
+      render();
+    }
+
+    /* ---------- trap ---------- */
+    function renderTrap() {
+      var c = st.cur, it = c.it;
+      stage.append(h('p', { class: 'kb-prompt', text: L('听一听，再选：写出来是哪一个？', 'Listen, then choose: how is it written?') }));
+      stage.append(h('div', { class: 'sentence', text: it.s }));
+      stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () { say(it.say); B.emit('select', { item: 'trap:' + it.id, action: 'listen' }); } }, L('🔊 听', '🔊 Listen'))]));
+      stage.append(h('div', { class: 'opts' }, c.opts.map(function (o) {
+        var cls = 'opt big';
+        if (c.solved && o === it.ok) cls += ' right'; else if (c.picked.indexOf(o) >= 0) cls += ' wrongpick';
+        return h('button', { class: cls, disabled: c.solved || c.picked.indexOf(o) >= 0, onclick: function () { trapPick(o); } }, o);
+      })));
+      if (c.solved) stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: next }, L('下一句 →', 'Next →'))]));
+      var f = fb(); if (f) stage.append(f);
+    }
+    function trapPick(o) {
+      var c = st.cur, ok = o === c.it.ok;
+      B.attempt('trap:' + c.it.id, { correct: ok, response: { pick: o } });
+      if (ok) { c.solved = true; st.msg = { t: T(c.it.why, 'zh') }; }
+      else { c.picked.push(o); st.msg = { t: L('说起来差不多，写出来不一样。再试一次。', 'They sound alike but are written differently. Try again.'), tone: 'warn' }; }
+      render();
+    }
+
+    /* ---------- wall ---------- */
+    function renderWall() {
+      side.innerHTML = '';
+      side.append(h('h2', { text: (child() ? '🌳 ' : '') + L('我的识字墙', 'My word wall') }));
+      var cards = allCards().filter(function (c) { return st.said.indexOf(c.id) >= 0; });
+      if (!cards.length) side.append(h('p', { class: 'kb-note', text: L('在“说出来”里把一句话放到墙上，这里就会长出' + unitName + '。', 'Put a sentence on the wall in "Say it" and its words will grow here.') }));
+      cards.forEach(function (c) {
+        side.append(h('div', { class: 'grp' }, [h('span', { class: 'from', text: c.pic + ' ' + sentence(c) }), h('div', { class: 'tiles' }, c.learn.map(function (u) {
+          var w = wallUnit(u), n = w.combos.length;
+          return h('button', { class: 'tile' + (n >= 2 ? ' known' : ''), title: w.combos.join(' / '), 'aria-label': u + L('，新组合里认出 ' + n + ' 次', ', recognised in ' + n + ' new combinations'), onclick: function () { say((pack.units[u] || {}).say || u); } }, [
+            h('span', { class: 'g', text: u }),
+            n >= 3 ? null : h('span', { class: 'p', text: c.pic }),
+            h('span', { class: 'lv', text: new Array(n + 1).join('🍃') }),
+            h('span', { class: 'cb', text: n >= 2 ? L('认得', 'known') : w.combos.join(' · ') })
+          ]);
+        }))]));
+      });
+      side.append(h('p', { class: 'kb-note', text: L('一片叶子 = 在一个新组合里第一次就自己认出来。两个不同组合才算“认得”；三个以后图就撤掉。只存在这台设备的浏览器里。', 'One leaf = recognised on the first try, without help, in one new combination. Two different combinations count as "known"; after three the picture goes. Saved in this browser only.') }));
+      side.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () { if (confirm(L('清空识字墙？', 'Clear the word wall?'))) { st.said = []; st.custom = []; st.wall = {}; persist(); render(); } } }, L('清空', 'Clear'))]));
+    }
+
+    function fb() { return st.msg ? h('div', { class: 'kb-feedback ' + (st.msg.tone || '') }, st.msg.t) : null; }
+    function renderBar() {
+      bar.innerHTML = '';
+      if (st.mode !== 'say' && st.queue.length) bar.append(h('span', { class: 'kb-note', text: L('第 ' + Math.min(st.idx + 1, st.queue.length) + ' / ' + st.queue.length + ' 题', 'Item ' + Math.min(st.idx + 1, st.queue.length) + ' of ' + st.queue.length) }));
+    }
+    function render() {
+      stage.innerHTML = '';
+      renderBar();
+      if (st.mode === 'say') renderSay();
+      else if (!st.cur) stage.append(h('div', { class: 'done', text: '🎉' }), h('p', { class: 'kb-prompt', text: L('这一组做完了。', 'This set is done.') }), h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: enterMode }, L('再来一组', 'Another round'))]));
+      else if (st.mode === 'find') renderFind();
+      else if (st.mode === 'read') renderRead();
+      else renderTrap();
+      renderWall();
+    }
+    enterMode();
+  }
+})();
+</script>
+</body>
+</html>

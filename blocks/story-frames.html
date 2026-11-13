@@ -96,6 +96,8 @@
   .sf-scard[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
   .sf-scard span.t { flex: 1; text-align: left; }
   h3.sf-h { margin: 0 0 6px; font-size: 1rem; }
+  /* English mode labels are wider: keep the five tabs inside a phone screen */
+  @media (max-width: 480px) { html[lang="en"] .kb-modes button { padding: 6px 9px; } }
 </style>
 <script src="runtime/block.js"></script>
 <script src="registry.js"></script>
@@ -105,17 +107,17 @@
 <script>
 (function () {
   'use strict';
-  var h = KTBlock.h, shuffle = KTBlock.shuffle;
+  var h = KTBlock.h, shuffle = KTBlock.shuffle, tr = KTBlock.L, tx = KTBlock.t;
   var params = new URLSearchParams(location.search);
   var setId = params.get('set') || 'story-en';
   var entry = KT_REGISTRY.packs[setId] || {};
   var app = document.getElementById('app');
-  if (!entry.file) { app.textContent = '未知的数据包：' + setId; return; }
-  if (entry.block !== 'story-frames') { app.textContent = '数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在连环画里打开。'; return; }
+  if (!entry.file) { app.textContent = tr('未知的数据包：', 'Unknown data pack: ') + setId; return; }
+  if (entry.block !== 'story-frames') { app.textContent = tr('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在连环画里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened in story frames.'); return; }
   var s = document.createElement('script');
   s.src = entry.file;
   s.onload = function () { start(KT_DATA[setId]); };
-  s.onerror = function () { app.textContent = '数据包加载失败：' + entry.file; };
+  s.onerror = function () { app.textContent = tr('数据包加载失败：', 'Could not load the data pack: ') + entry.file; };
   document.head.appendChild(s);
 
   var ARROW = { seq: '→', same: '⇉', cause: '⇒', contrast: '↯', back: '↶', end: '⇥', trap: '✕' };
@@ -125,14 +127,17 @@
 
   function start(pack) {
     var scene = KT_SCENES[pack.scene];
-    var B = KTBlock.init({ id: 'story-frames', primitive: 'prim:sequence-retell', title: pack.title, set: pack.id });
-    document.title = pack.title + ' · Story Frames';
+    var title = tx(pack, 'title');
+    // a gloss only helps in a language other than the one being taught: an English story shows none in English mode
+    var showGloss = !(KTBlock.lang === 'en' && pack.lang === 'en');
+    var B = KTBlock.init({ id: 'story-frames', primitive: 'prim:sequence-retell', title: title, set: pack.id });
+    document.title = title + ' · Story Frames';
     var isCJK = pack.lang === 'zh' || pack.lang === 'ja';
-    var modes = [{ id: 'watch', label: '预测' }, { id: 'order', label: '排序' }, { id: 'link', label: '连接' }, { id: 'process', label: '过程' }, { id: 'retell', label: '复述' }];
+    var modes = [{ id: 'watch', label: tr('预测', 'Predict') }, { id: 'order', label: tr('排序', 'Order') }, { id: 'link', label: tr('连接', 'Connect') }, { id: 'process', label: tr('过程', 'Process') }, { id: 'retell', label: tr('复述', 'Retell') }];
     var st = { mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : 'watch', showReading: true };
     var W, O, L, R, T, timer = null;
     function child() { return B.variant === 'child'; }
-    var ui = KTBlock.chrome(B, { title: pack.title, subtitle: pack.subtitle, modes: modes, mode: st.mode,
+    var ui = KTBlock.chrome(B, { title: title, subtitle: tx(pack, 'subtitle'), modes: modes, mode: st.mode,
       onMode: function (m) { go(m); }, onVariant: function () { resetAll(); render(); } });
     var bar = h('div', { class: 'kb-bar' }), body = h('div', {});
     app.append(ui.header, h('main', { class: 'kb-main' }, [bar, body]), ui.drawer);
@@ -140,17 +145,17 @@
 
     function go(m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m }); render(); }
     function say(text) { return B.speak(text, pack.speech); }
-    function speakBtn(text, label) { return h('button', { class: 'speak-btn', type: 'button', onclick: function () { say(text); } }, label || '▶ 听'); }
+    function speakBtn(text, label) { return h('button', { class: 'speak-btn', type: 'button', onclick: function () { say(text); } }, label || tr('▶ 听', '▶ Listen')); }
     function frame(id, step) {
-      var d = h('div', { class: 'sf-frame', role: 'img', 'aria-label': scene.frames[id].alt });
+      var d = h('div', { class: 'sf-frame', role: 'img', 'aria-label': tx(scene.frames[id], 'alt') });
       d.innerHTML = scene.frames[id].svg;                // authored in the data pack, not learner input
       if (step) d.dataset.step = step;
       return d;
     }
     function sentence(o, gloss) {
-      return h('div', {}, [h('p', { class: 'sf-sent', lang: pack.lang }, [o.t, o.src === 'kc' ? h('span', { class: 'kb-note', title: '取自课程知识点的例句' }, ' ★') : null]),
+      return h('div', {}, [h('p', { class: 'sf-sent', lang: pack.lang }, [o.t, o.src === 'kc' ? h('span', { class: 'kb-note', title: tr('取自课程知识点的例句', 'Example sentence taken from a course knowledge point') }, ' ★') : null]),
         o.r && st.showReading ? h('p', { class: 'sf-read', text: o.r }) : null,
-        gloss && o.g ? h('p', { class: 'kb-note', style: 'margin:2px 0 0', text: o.g }) : null]);
+        gloss && showGloss && o.g ? h('p', { class: 'kb-note', style: 'margin:2px 0 0', text: o.g }) : null]);
     }
     function has(re, text) { return new RegExp(re, 'i').test(text); }
     function tokens(x) { x = x.toLowerCase().replace(/[.,!?;:—\-。，！？、；：“”"']/g, ' '); return isCJK ? x.replace(/\s/g, '').split('') : x.split(/\s+/).filter(Boolean); }
@@ -170,27 +175,27 @@
       var strip = h('div', { class: 'sf-strip' }, scene.told.map(function (id, i) {
         var b = W.bets[id];
         return h('div', { class: i === W.shown - 1 ? 'now' : '' }, [i < W.shown ? frame(id) : h('div', { class: 'sf-hidden', text: '?' }),
-          b ? h('span', { class: 'sf-badge' + (b.hit ? '' : ' miss'), title: b.hit ? '这里你押中了' : '这里你没押中：故事在这儿拐了弯', text: b.hit ? '押中' : '没押中' }) : null]);
+          b ? h('span', { class: 'sf-badge' + (b.hit ? '' : ' miss'), title: b.hit ? tr('这里你押中了', 'You guessed right here') : tr('这里你没押中：故事在这儿拐了弯', 'You guessed wrong here: the story took a turn at this point'), text: b.hit ? tr('押中', 'Hit') : tr('没押中', 'Miss') }) : null]);
       }));
       var cap = pack.frames[cur], isAnim = scene.anim.frame === cur;
       var big = frame(cur, isAnim ? 3 : null);
-      var left = h('div', {}, [big, isAnim ? h('div', { class: 'sf-row' }, [h('button', { class: 'kb-btn', type: 'button', onclick: function () { play(big); } }, '▶ 看它是怎么拔的'), h('button', { class: 'kb-btn', type: 'button', onclick: function () { go('process'); } }, '去说这个过程')]) : null]);
-      var right = h('div', { class: 'kb-card' }, [sentence(cap, true), h('div', { class: 'sf-row' }, [speakBtn(cap.t, '▶ 听这一幅')])]);
+      var left = h('div', {}, [big, isAnim ? h('div', { class: 'sf-row' }, [h('button', { class: 'kb-btn', type: 'button', onclick: function () { play(big); } }, tr('▶ 看它是怎么拔的', '▶ Watch how he pulls')), h('button', { class: 'kb-btn', type: 'button', onclick: function () { go('process'); } }, tr('去说这个过程', 'Go and describe the process'))]) : null]);
+      var right = h('div', { class: 'kb-card' }, [sentence(cap, true), h('div', { class: 'sf-row' }, [speakBtn(cap.t, tr('▶ 听这一幅', '▶ Listen to this picture'))])]);
       var last = W.bets[cur];
       if (last) right.append(h('div', { class: 'sf-two', style: 'margin-top:10px' }, [
-        h('div', {}, [h('h4', { text: '你押的' }), h('span', { lang: pack.lang, text: last.label })]),
-        h('div', {}, [h('h4', { text: '实际' }), h('span', { lang: pack.lang, text: last.actual })])]),
-        h('div', { class: 'kb-feedback' + (last.hit ? '' : ' warn'), role: 'status' }, (last.hit ? '押中了。' : '没押中，没关系：先押再看，才看得见故事在这里怎么走。') + last.why));
+        h('div', {}, [h('h4', { text: tr('你押的', 'Your guess') }), h('span', { lang: pack.lang, text: last.label })]),
+        h('div', {}, [h('h4', { text: tr('实际', 'What happened') }), h('span', { lang: pack.lang, text: last.actual })])]),
+        h('div', { class: 'kb-feedback' + (last.hit ? '' : ' warn'), role: 'status' }, (last.hit ? tr('押中了。', 'You guessed right. ') : tr('没押中，没关系：先押再看，才看得见故事在这里怎么走。', 'Not this time, and that is fine: guessing before you look is how you see where the story goes here. ')) + last.why));
       var j = next && junction(next);
       if (!next) {
-        right.append(h('div', { class: 'kb-feedback' }, '故事讲完了。押对方向，不等于每一句都听懂了——接着把画排一排。'),
-          h('div', { class: 'sf-row' }, [h('button', { class: 'kb-btn primary', type: 'button', onclick: function () { go('order'); } }, '去排序'),
-            h('button', { class: 'kb-btn', type: 'button', onclick: function () { W.shown = 1; W.pick = null; render(); } }, '从头再看'),
-            h('button', { class: 'speak-btn', type: 'button', onclick: function () { B.speakSequence(scene.told.map(function (id) { return { text: pack.frames[id].t, pause: 350 }; }), pack.speech); } }, '▶ 连着听一遍')]));
+        right.append(h('div', { class: 'kb-feedback' }, tr('故事讲完了。押对方向，不等于每一句都听懂了——接着把画排一排。', 'The story is finished. Guessing the direction right does not mean you understood every sentence. Next, put the pictures in order.')),
+          h('div', { class: 'sf-row' }, [h('button', { class: 'kb-btn primary', type: 'button', onclick: function () { go('order'); } }, tr('去排序', 'Go to ordering')),
+            h('button', { class: 'kb-btn', type: 'button', onclick: function () { W.shown = 1; W.pick = null; render(); } }, tr('从头再看', 'Watch again from the start')),
+            h('button', { class: 'speak-btn', type: 'button', onclick: function () { B.speakSequence(scene.told.map(function (id) { return { text: pack.frames[id].t, pause: 350 }; }), pack.speech); } }, tr('▶ 连着听一遍', '▶ Listen to the whole story'))]));
       } else if (j) {
-        var opts = j.type === 'dir' ? dirCards().map(function (d) { return { id: d, arrow: DIR_ARROW[d], t: pack.directions[d].w, zh: pack.directions[d].zh }; }) :
+        var opts = j.type === 'dir' ? dirCards().map(function (d) { return { id: d, arrow: DIR_ARROW[d], t: pack.directions[d].w, zh: tx(pack.directions[d], 'zh') }; }) :
           (W.pickOrder && W.pickFor === next ? W.pickOrder : (W.pickFor = next, W.pickOrder = shuffle(pack.picks[next]))).map(function (p, k) { return { id: p.t, arrow: '•', t: p.t, r: p.r, right: p.right }; });
-        right.append(h('p', { class: 'kb-prompt', style: 'margin-top:14px', text: j.type === 'dir' ? '先押：下一幅，故事会怎么走？押了才能看。' : '先押：下一幅是哪一句？' }),
+        right.append(h('p', { class: 'kb-prompt', style: 'margin-top:14px', text: j.type === 'dir' ? tr('先押：下一幅，故事会怎么走？押了才能看。', 'Guess first: where will the story go in the next picture? You can only look after you guess.') : tr('先押：下一幅是哪一句？', 'Guess first: which sentence goes with the next picture?') }),
           h('div', { class: 'sf-bets' }, opts.map(function (o) {
             return h('button', { type: 'button', 'aria-pressed': W.pick === o.id ? 'true' : 'false', onclick: function () { W.pick = o.id; B.emit('select', { item: 'bet:' + next, response: o.id }); render(); } },
               [h('span', { class: 'arrow', 'aria-hidden': 'true', text: o.arrow }), h('span', {}, [h('b', { lang: pack.lang, text: o.t }), o.zh ? h('small', { text: o.zh }) : null, o.r && st.showReading ? h('small', { text: o.r }) : null])]);
@@ -199,11 +204,11 @@
             var actual = j.type === 'dir' ? (child() ? j.child : j.actual) : pack.picks[next].find(function (p) { return p.right; }).t;
             var hit = W.pick === actual;
             B.attempt('bet:' + next, { correct: hit, response: W.pick });       // submitted before the frame is shown
-            W.bets[next] = { hit: hit, why: j.why, label: j.type === 'dir' ? pack.directions[W.pick].w : W.pick, actual: j.type === 'dir' ? pack.directions[actual].w : actual };
+            W.bets[next] = { hit: hit, why: tx(j, 'why'), label: j.type === 'dir' ? pack.directions[W.pick].w : W.pick, actual: j.type === 'dir' ? pack.directions[actual].w : actual };
             W.pick = null; W.shown += 1; B.emit('reveal', { item: 'frame:' + next, afterBet: true }); render();
-          } }, '押定，揭晓下一幅')]));
+          } }, tr('押定，揭晓下一幅', 'Lock in and show the next picture'))]));
       } else {
-        right.append(h('div', { class: 'sf-row' }, [h('button', { class: 'kb-btn primary', type: 'button', onclick: function () { W.shown += 1; B.emit('view', { item: 'frame:' + next }); render(); } }, '下一幅')]));
+        right.append(h('div', { class: 'sf-row' }, [h('button', { class: 'kb-btn primary', type: 'button', onclick: function () { W.shown += 1; B.emit('view', { item: 'frame:' + next }); render(); } }, tr('下一幅', 'Next picture'))]));
       }
       body.append(strip, h('div', { class: 'sf-watch' }, [left, right]));
     }
@@ -223,7 +228,7 @@
     function renderOrder() {
       var cards = h('div', { class: 'sf-cards' }, O.arr.map(function (id, i) {
         return h('button', { class: 'sf-card' + (O.solved ? ' right' : '') + (O.hint >= 2 && id === scene.flash && !O.solved ? ' hinted' : ''), type: 'button', 'aria-pressed': O.sel === i ? 'true' : 'false',
-          'aria-label': '第 ' + (i + 1) + ' 个位置：' + scene.frames[id].alt,
+          'aria-label': tr('第 ' + (i + 1) + ' 个位置：', 'Position ' + (i + 1) + ': ') + tx(scene.frames[id], 'alt'),
           onclick: function () {
             if (O.solved) return;
             if (O.sel === null) O.sel = i; else if (O.sel === i) O.sel = null; else { move(O.sel, i); O.sel = null; }
@@ -238,26 +243,27 @@
           } }, [frame(id), O.showText ? h('p', { lang: pack.lang, text: pack.frames[id].b }) : null]);
       }));
       var card = h('div', { class: 'kb-card', style: 'margin-bottom:12px' }, [
-        h('p', { class: 'kb-prompt', text: '把画按事情“发生”的先后排好，从左到右、从上到下。注意：不一定是故事讲的顺序。' }),
-        h('p', { class: 'kb-note', text: '点一幅，再点另一幅，两幅交换位置；选中后也可以用键盘 ← → 挪动。' }),
+        h('p', { class: 'kb-prompt', text: tr('把画按事情“发生”的先后排好，从左到右、从上到下。注意：不一定是故事讲的顺序。', 'Put the pictures in the order things happened, left to right, top to bottom. Note: this is not necessarily the order the story is told in.') }),
+        h('p', { class: 'kb-note', text: tr('点一幅，再点另一幅，两幅交换位置；选中后也可以用键盘 ← → 挪动。', 'Click one picture, then another, and the two swap places. With a picture selected you can also move it with the ← → keys.') }),
         h('div', { class: 'sf-row' }, [
           O.solved ? null : h('button', { class: 'kb-btn primary', type: 'button', onclick: function () {
             var ok = same(O.arr, scene.happened);
             B.attempt('order', { correct: ok, response: O.arr.slice() });
-            if (ok) { O.solved = true; O.sel = null; O.msg = '顺序对了。'; O.tone = ''; B.emit('compare', { item: 'told-vs-happened' }); }
+            if (ok) { O.solved = true; O.sel = null; O.msg = tr('顺序对了。', 'The order is right.'); O.tone = ''; B.emit('compare', { item: 'told-vs-happened' }); }
             else {
               O.tone = 'bad';
-              O.msg = same(O.arr, scene.told) ? '这是故事“讲”的顺序。问的是“发生”的顺序：有一幅讲在后面，其实发生得更早。' :
-                '还不对。现在有 ' + O.arr.filter(function (x, i) { return x === scene.happened[i]; }).length + ' 幅在对的位置。';
+              var nOk = O.arr.filter(function (x, i) { return x === scene.happened[i]; }).length;
+              O.msg = same(O.arr, scene.told) ? tr('这是故事“讲”的顺序。问的是“发生”的顺序：有一幅讲在后面，其实发生得更早。', 'This is the order the story is told in. The question is the order things happened: one picture is told later but actually happened earlier.') :
+                tr('还不对。现在有 ' + nOk + ' 幅在对的位置。', 'Not yet. ' + nOk + (nOk === 1 ? ' picture is' : ' pictures are') + ' in the right place now.');
             }
             render();
-          } }, '检查顺序'),
+          } }, tr('检查顺序', 'Check the order')),
           O.solved ? null : h('button', { class: 'kb-btn', type: 'button', onclick: function () {
-            O.hint = Math.min(2, O.hint + 1); O.assisted = true; B.hint('order', O.hint); O.msg = scene.orderHints[O.hint - 1]; O.tone = 'warn'; render();
-          } }, '提示'),
-          h('label', { class: 'kb-variant' }, [h('input', { type: 'checkbox', checked: O.showText, onchange: function (e) { O.showText = e.target.checked; B.emit('highlight', { item: 'order', showText: O.showText }); render(); } }), ' 显示句子（去掉了连接词）']),
-          O.solved ? h('button', { class: 'kb-btn primary', type: 'button', onclick: function () { go('link'); } }, '去放连接词') : null,
-          O.solved ? h('button', { class: 'kb-btn', type: 'button', onclick: function () { resetOrder(); render(); } }, '打乱再排') : null
+            O.hint = Math.min(2, O.hint + 1); O.assisted = true; B.hint('order', O.hint); O.msg = tx(scene, 'orderHints')[O.hint - 1]; O.tone = 'warn'; render();
+          } }, tr('提示', 'Hint')),
+          h('label', { class: 'kb-variant' }, [h('input', { type: 'checkbox', checked: O.showText, onchange: function (e) { O.showText = e.target.checked; B.emit('highlight', { item: 'order', showText: O.showText }); render(); } }), tr(' 显示句子（去掉了连接词）', ' Show sentences (connectives removed)')]),
+          O.solved ? h('button', { class: 'kb-btn primary', type: 'button', onclick: function () { go('link'); } }, tr('去放连接词', 'Go and add connectives')) : null,
+          O.solved ? h('button', { class: 'kb-btn', type: 'button', onclick: function () { resetOrder(); render(); } }, tr('打乱再排', 'Shuffle and sort again')) : null
         ]),
         h('div', { class: 'kb-feedback ' + O.tone, role: 'status', hidden: !O.msg }, O.msg || '')
       ]);
@@ -276,8 +282,8 @@
       });
       function row(list) { return h('div', { class: 'sf-strip' }, list.map(function (id) { return h('div', {}, [frame(id)]); })); }
       return h('div', { class: 'kb-card sf-time', style: 'margin-top:12px' }, [
-        h('h4', { text: '故事讲的顺序' }), row(scene.told), svg, row(scene.happened), h('h4', { text: '事情发生的顺序' }),
-        h('div', { class: 'kb-feedback warn' }, '虚线那一幅和别的线交叉了：它讲在后面，却发生在最前面（✕ 交叉）。讲的顺序不一定等于发生的顺序，复述时要把这一处标出来。' + pack.backNote)
+        h('h4', { text: tr('故事讲的顺序', 'Order the story is told in') }), row(scene.told), svg, row(scene.happened), h('h4', { text: tr('事情发生的顺序', 'Order things happened in') }),
+        h('div', { class: 'kb-feedback warn' }, tr('虚线那一幅和别的线交叉了：它讲在后面，却发生在最前面（✕ 交叉）。讲的顺序不一定等于发生的顺序，复述时要把这一处标出来。', 'The dashed line crosses the others: that picture is told later but happened first (✕ crossing). The order of telling is not always the order of events; mark this spot when you retell. ') + tx(pack, 'backNote'))
       ]);
     }
 
@@ -285,20 +291,20 @@
     function resetLink() { L = { pick: {}, open: 0, msg: null, tone: '' }; }
     function renderLink() {
       var conns = child() ? pack.connectives.filter(function (c) { return ['seq', 'contrast', 'back', 'end'].indexOf(c.cat) >= 0; }) : pack.connectives;
-      var chain = h('div', { class: 'sf-chain' });
+      var chain = h('div', { class: 'sf-chain' }), cats = tx(pack, 'cats');
       scene.told.forEach(function (id, i) {
         chain.append(frame(id));
         if (i === scene.told.length - 1) return;
         var p = L.pick[i], c = p && pack.connectives.find(function (x) { return x.id === p.id; });
-        chain.append(h('button', { class: 'sf-slot' + (p ? (p.ok ? ' right' : ' wrong') : ''), type: 'button', 'aria-pressed': L.open === i ? 'true' : 'false', 'aria-label': '第 ' + (i + 1) + ' 个连接处',
+        chain.append(h('button', { class: 'sf-slot' + (p ? (p.ok ? ' right' : ' wrong') : ''), type: 'button', 'aria-pressed': L.open === i ? 'true' : 'false', 'aria-label': tr('第 ' + (i + 1) + ' 个连接处', 'Link ' + (i + 1)),
           onclick: function () { L.open = i; L.msg = null; render(); } },
-          [h('span', { class: 'arrow', 'aria-hidden': 'true', text: c ? ARROW[c.cat] : '？' }), c ? h('span', { lang: pack.lang, text: c.w }) : '选连接', c ? h('span', { class: 'kb-note', style: 'display:block', text: pack.cats[c.cat] }) : null]));
+          [h('span', { class: 'arrow', 'aria-hidden': 'true', text: c ? ARROW[c.cat] : tr('？', '?') }), c ? h('span', { lang: pack.lang, text: c.w }) : tr('选连接', 'Choose a link'), c ? h('span', { class: 'kb-note', style: 'display:block', text: cats[c.cat] }) : null]));
       });
       var done = scene.slots.every(function (_, i) { return L.pick[i] && L.pick[i].ok; });
       var used = Object.keys(L.pick).map(function (i) { return L.pick[i].id; });
       var mono = done && used.every(function (x) { return x === used[0]; });
       var panel = h('div', { class: 'kb-card', style: 'margin-top:12px' }, [
-        h('p', { class: 'kb-prompt', text: done ? '五个连接处都放好了。' : '第 ' + (L.open + 1) + ' 个连接处：前一幅和后一幅之间，用哪个连接？' }),
+        h('p', { class: 'kb-prompt', text: done ? tr('五个连接处都放好了。', 'All five links are in place.') : tr('第 ' + (L.open + 1) + ' 个连接处：前一幅和后一幅之间，用哪个连接？', 'Link ' + (L.open + 1) + ': which connective goes between the picture before and the picture after?') }),
         done ? null : h('div', { class: 'sf-chips' }, conns.map(function (c) {
           return h('button', { type: 'button', lang: pack.lang, onclick: function () {
             var i = L.open, slot = scene.slots[i], ok = slot.ok.indexOf(c.cat) >= 0;
@@ -306,17 +312,18 @@
             B.attempt('link:' + i, { correct: ok, response: c.id });
             L.pick[i] = { id: c.id, ok: ok };
             L.tone = ok ? '' : 'bad';
-            L.msg = ok ? '可以。' + slot.why : (slot.ok.indexOf('back') >= 0 ? slot.why + pack.backNote : (c.no || '这里不是“' + pack.cats[c.cat] + '”。') + slot.why);
+            var why = tx(slot, 'why'), sp = tr('', ' ');
+            L.msg = ok ? tr('可以。', 'That works. ') + why : (slot.ok.indexOf('back') >= 0 ? why + sp + tx(pack, 'backNote') : (tx(c, 'no') || tr('这里不是“' + pack.cats[c.cat] + '”。', 'This is not "' + cats[c.cat] + '" here.')) + sp + why);
             if (ok) { var nx = scene.slots.findIndex(function (_, k) { return !(L.pick[k] && L.pick[k].ok); }); if (nx >= 0) L.open = nx; }
             render();
-          } }, [c.w, h('small', { class: 'kb-note', text: ' ' + ARROW[c.cat] + ' ' + pack.cats[c.cat] })]);
+          } }, [c.w, h('small', { class: 'kb-note', text: ' ' + ARROW[c.cat] + ' ' + cats[c.cat] })]);
         })),
         h('div', { class: 'kb-feedback ' + L.tone, role: 'status', hidden: !L.msg }, L.msg || ''),
-        mono ? h('div', { class: 'kb-feedback warn' }, pack.checks.mono) : null,
-        done ? h('div', { class: 'sf-row' }, [h('button', { class: 'kb-btn primary', type: 'button', onclick: function () { go('process'); } }, '去看动画说过程'), h('button', { class: 'kb-btn', type: 'button', onclick: function () { resetLink(); render(); } }, '重来')]) : null,
-        h('p', { class: 'kb-note', text: '箭头的样子跟着关系变：→ 先后，⇉ 同时，⇒ 因果，↯ 转折，↶ 回头补说更早的事，⇥ 收尾。每个连接处的第一次选择单独保留。' })
+        mono ? h('div', { class: 'kb-feedback warn' }, tx(pack.checks, 'mono')) : null,
+        done ? h('div', { class: 'sf-row' }, [h('button', { class: 'kb-btn primary', type: 'button', onclick: function () { go('process'); } }, tr('去看动画说过程', 'Go to the animation and say the process')), h('button', { class: 'kb-btn', type: 'button', onclick: function () { resetLink(); render(); } }, tr('重来', 'Start over'))]) : null,
+        h('p', { class: 'kb-note', text: tr('箭头的样子跟着关系变：→ 先后，⇉ 同时，⇒ 因果，↯ 转折，↶ 回头补说更早的事，⇥ 收尾。每个连接处的第一次选择单独保留。', 'The arrow changes with the relation: → sequence, ⇉ at the same time, ⇒ cause and effect, ↯ contrast, ↶ going back to something earlier, ⇥ ending. Your first choice at each link is kept separately.') })
       ]);
-      body.append(h('div', { class: 'kb-card' }, [h('p', { class: 'kb-note', style: 'margin:0 0 8px', text: '这是故事讲的顺序。点两幅画之间的格子，放一个连接。' }), chain]), panel);
+      body.append(h('div', { class: 'kb-card' }, [h('p', { class: 'kb-note', style: 'margin:0 0 8px', text: tr('这是故事讲的顺序。点两幅画之间的格子，放一个连接。', 'This is the order the story is told in. Click the box between two pictures and put a connective there.') }), chain]), panel);
     }
 
     /* ================= 过程：看动画，说一步一步 ================= */
@@ -324,47 +331,47 @@
     function renderProcess() {
       var big = frame(scene.anim.frame, R.step);
       function setStep(k) { clearInterval(timer); R.step = k; R.seen[k] = true; big.dataset.step = k; B.emit('view', { item: 'anim-step', step: k }); syncDots(); }
-      var dots = [1, 2, 3].map(function (k) { return h('button', { class: 'dot', type: 'button', 'aria-label': '第 ' + k + ' 步', onclick: function () { setStep(k); renderLines(); } }, String(k)); });
+      var dots = [1, 2, 3].map(function (k) { return h('button', { class: 'dot', type: 'button', 'aria-label': tr('第 ' + k + ' 步', 'Step ' + k), onclick: function () { setStep(k); renderLines(); } }, String(k)); });
       function syncDots() { dots.forEach(function (d, i) { d.setAttribute('aria-pressed', R.step === i + 1 ? 'true' : 'false'); }); }
       R.seen[R.step] = true; syncDots();
       var stepper = h('div', { class: 'sf-stepper' }, dots.concat([
         h('button', { class: 'kb-btn', type: 'button', onclick: function () {
           var k = 1; setStep(1); renderLines();
           clearInterval(timer); timer = setInterval(function () { k += 1; if (k > 3) { clearInterval(timer); return; } setStep(k); renderLines(); }, 1200);
-        } }, '▶ 连着放'),
-        h('span', { class: 'kb-note', text: '一步一步看，没有字。' })
+        } }, tr('▶ 连着放', '▶ Play through')),
+        h('span', { class: 'kb-note', text: tr('一步一步看，没有字。', 'Watch step by step, without words.') })
       ]));
       var allSeen = function () { return R.seen[1] && R.seen[2] && R.seen[3]; };
       var linesBox = h('div', {});
       function renderLines() {
         linesBox.innerHTML = '';
         var steps = pack.process.steps;
-        linesBox.append(h('p', { class: 'kb-prompt', text: '这三句话说的是哪一步？按动画的先后排好。' }),
+        linesBox.append(h('p', { class: 'kb-prompt', text: tr('这三句话说的是哪一步？按动画的先后排好。', 'Which step does each of these three sentences describe? Put them in the order of the animation.') }),
           h('div', { class: 'sf-lines' }, R.arr.map(function (k, i) {
             return h('div', { class: 'sf-line' + (R.solved ? ' right' : '') }, [
-              h('span', {}, [h('span', { lang: pack.lang, text: steps[k].t }), steps[k].r && st.showReading ? h('small', { class: 'kb-note', style: 'display:block', text: steps[k].r }) : null, R.solved ? h('small', { class: 'kb-note', style: 'display:block', text: steps[k].g }) : null]),
+              h('span', {}, [h('span', { lang: pack.lang, text: steps[k].t }), steps[k].r && st.showReading ? h('small', { class: 'kb-note', style: 'display:block', text: steps[k].r }) : null, R.solved && showGloss ? h('small', { class: 'kb-note', style: 'display:block', text: steps[k].g }) : null]),
               speakBtn(steps[k].t, '▶'),
-              R.solved ? null : h('button', { type: 'button', 'aria-label': '上移', disabled: i === 0, onclick: function () { var t = R.arr[i - 1]; R.arr[i - 1] = R.arr[i]; R.arr[i] = t; B.emit('reorder', { item: 'process-order', order: R.arr.slice() }); renderLines(); } }, '↑'),
-              R.solved ? null : h('button', { type: 'button', 'aria-label': '下移', disabled: i === 2, onclick: function () { var t = R.arr[i + 1]; R.arr[i + 1] = R.arr[i]; R.arr[i] = t; B.emit('reorder', { item: 'process-order', order: R.arr.slice() }); renderLines(); } }, '↓')
+              R.solved ? null : h('button', { type: 'button', 'aria-label': tr('上移', 'Move up'), disabled: i === 0, onclick: function () { var t = R.arr[i - 1]; R.arr[i - 1] = R.arr[i]; R.arr[i] = t; B.emit('reorder', { item: 'process-order', order: R.arr.slice() }); renderLines(); } }, '↑'),
+              R.solved ? null : h('button', { type: 'button', 'aria-label': tr('下移', 'Move down'), disabled: i === 2, onclick: function () { var t = R.arr[i + 1]; R.arr[i + 1] = R.arr[i]; R.arr[i] = t; B.emit('reorder', { item: 'process-order', order: R.arr.slice() }); renderLines(); } }, '↓')
             ]);
           })));
         if (!R.solved) linesBox.append(h('div', { class: 'sf-row' }, [h('button', { class: 'kb-btn primary', type: 'button', disabled: !allSeen(), onclick: function () {
           var ok = same(R.arr, [0, 1, 2]);
           B.attempt('process-order', { correct: ok, response: R.arr.slice() });
-          if (ok) { R.solved = true; R.msg = '对上了。'; R.tone = ''; } else { R.msg = '和动画的先后还不一样。回到第 1 步，再一步一步看。'; R.tone = 'bad'; }
+          if (ok) { R.solved = true; R.msg = tr('对上了。', 'They match.'); R.tone = ''; } else { R.msg = tr('和动画的先后还不一样。回到第 1 步，再一步一步看。', 'Not the same order as the animation yet. Go back to step 1 and watch step by step again.'); R.tone = 'bad'; }
           renderLines();
-        } }, '检查'), allSeen() ? null : h('span', { class: 'kb-note', text: '三步都看过才能检查。' })]));
+        } }, tr('检查', 'Check')), allSeen() ? null : h('span', { class: 'kb-note', text: tr('三步都看过才能检查。', 'You can check after watching all three steps.') })]));
         linesBox.append(h('div', { class: 'kb-feedback ' + R.tone, role: 'status', hidden: !R.msg }, R.msg || ''));
         if (R.solved) {
-          linesBox.append(h('p', { class: 'kb-prompt', style: 'margin-top:14px', text: '现在不看句子，对着动画把这个过程大声说一遍，用上：' + pack.process.words }),
-            h('p', { class: 'kb-note', text: '页面听不到你。说完再看范例，自己或搭档来判断；自评单独记，不算答对。' }));
-          if (!R.model) linesBox.append(h('div', { class: 'sf-row' }, [h('button', { class: 'kb-btn primary', type: 'button', onclick: function () { R.model = true; B.emit('compare', { item: 'process-model' }); renderLines(); } }, '我说完了，看范例')]));
+          linesBox.append(h('p', { class: 'kb-prompt', style: 'margin-top:14px', text: tr('现在不看句子，对着动画把这个过程大声说一遍，用上：', 'Now, without looking at the sentences, say the process aloud along with the animation, using: ') + pack.process.words }),
+            h('p', { class: 'kb-note', text: tr('页面听不到你。说完再看范例，自己或搭档来判断；自评单独记，不算答对。', 'The page cannot hear you. After speaking, look at the model and judge for yourself or with a partner. The self-rating is recorded separately and does not count as a correct answer.') }));
+          if (!R.model) linesBox.append(h('div', { class: 'sf-row' }, [h('button', { class: 'kb-btn primary', type: 'button', onclick: function () { R.model = true; B.emit('compare', { item: 'process-model' }); renderLines(); } }, tr('我说完了，看范例', 'I have said it, show the model'))]));
           else {
             linesBox.append(h('div', { class: 'kb-card', style: 'margin-top:8px;border-left:4px solid var(--accent)' }, [sentence({ t: pack.process.model, r: pack.process.modelR, g: pack.process.modelG }, true), speakBtn(pack.process.model)]));
-            if (!R.rated) linesBox.append(h('div', { class: 'sf-row' }, [['三步都说到了，也用了连接词', true], ['少了一步，或没用连接词', false]].map(function (o) {
-              return h('button', { class: 'kb-btn', type: 'button', onclick: function () { R.rated = true; B.attempt('process-say', { selfReport: true, correct: o[1], response: o[0] }); renderLines(); } }, o[0]);
+            if (!R.rated) linesBox.append(h('div', { class: 'sf-row' }, [['三步都说到了，也用了连接词', true, 'I said all three steps and used connectives'], ['少了一步，或没用连接词', false, 'I missed a step, or used no connectives']].map(function (o) {
+              return h('button', { class: 'kb-btn', type: 'button', onclick: function () { R.rated = true; B.attempt('process-say', { selfReport: true, correct: o[1], response: o[0] }); renderLines(); } }, tr(o[0], o[2]));
             })));
-            else linesBox.append(h('div', { class: 'sf-row' }, [h('button', { class: 'kb-btn primary', type: 'button', onclick: function () { go('retell'); } }, '去复述整个故事')]));
+            else linesBox.append(h('div', { class: 'sf-row' }, [h('button', { class: 'kb-btn primary', type: 'button', onclick: function () { go('retell'); } }, tr('去复述整个故事', 'Go and retell the whole story'))]));
           }
         }
       }
@@ -379,7 +386,7 @@
       var devices = pack.checks.devices.filter(function (d) { return has(d.re, all); }).map(function (d) { return d.id; });
       var needDev = child() ? 2 : 3;
       var coveredF = scene.told.filter(function (f) { return items.some(function (x) { return x.frame === f; }); });
-      var traps = []; items.forEach(function (x) { pack.checks.traps.forEach(function (t) { if (has(t.re, x.text) && traps.indexOf(t.msg) < 0) traps.push(t.msg); }); });
+      var traps = []; items.forEach(function (x) { pack.checks.traps.forEach(function (t) { var m = tx(t, 'msg'); if (has(t.re, x.text) && traps.indexOf(m) < 0) traps.push(m); }); });
       var copied = items.filter(function (x) { return x.frame && overlap(x.text, pack.frames[x.frame].t) >= .85; }).length;
       // flashback: told after something that happened later → must carry a "this was earlier" marker
       var cross = false, flashTold = false;
@@ -396,32 +403,32 @@
     }
     function resultCard(res, level) {
       return h('div', { class: 'kb-card' }, [
-        h('h3', { class: 'sf-h', text: res.pass ? '这一遍过了' : '还差几处' }),
+        h('h3', { class: 'sf-h', text: res.pass ? tr('这一遍过了', 'This attempt passed') : tr('还差几处', 'A few things to fix') }),
         h('ul', { class: 'sf-list' }, [
-          h('li', { class: res.covered.length === scene.told.length ? 'done' : 'no', text: '六幅图都说到了（现在 ' + res.covered.length + ' 幅' + (level === 2 ? '；灰色的是没连到的' : '') + '）' }),
-          h('li', { class: res.devices.length >= res.needDev && !res.mono ? 'done' : 'no', text: '至少 ' + res.needDev + ' 种不同的连接手段（找到：' + (res.devices.join('、') || '无') + '）' + (res.mono || res.devices.length < 2 ? '。' + pack.checks.mono : '') }),
-          h('li', { class: res.cross ? 'no' : res.flashTold ? 'done' : '', text: res.cross ? '顺序交叉：夜里那一幅讲在后面，却没有标出它更早。' + pack.backNote : '夜里那一幅：标出了它发生得更早，或者按发生顺序讲在了前面' }),
-          h('li', { class: res.traps.length ? 'no' : 'done', text: res.traps.length ? res.traps.join(' ') : '没有发现已知的时间表达错误（只查了几种固定的错法）' }),
-          h('li', { class: res.copied > 0 ? (res.copied > 3 ? 'no' : '') : 'done', text: res.copied ? res.copied + ' 句和原文几乎一样：试着用自己的话说' : '是你自己的话，不是照抄原文' })
+          h('li', { class: res.covered.length === scene.told.length ? 'done' : 'no', text: tr('六幅图都说到了（现在 ' + res.covered.length + ' 幅' + (level === 2 ? '；灰色的是没连到的' : '') + '）', 'All six pictures mentioned (now ' + res.covered.length + (level === 2 ? '; the grey ones have no sentence linked' : '') + ')') }),
+          h('li', { class: res.devices.length >= res.needDev && !res.mono ? 'done' : 'no', text: tr('至少 ' + res.needDev + ' 种不同的连接手段（找到：' + (res.devices.join('、') || '无') + '）', 'At least ' + res.needDev + ' different linking devices (found: ' + (res.devices.join(', ') || 'none') + ')') + (res.mono || res.devices.length < 2 ? tr('。', '. ') + tx(pack.checks, 'mono') : '') }),
+          h('li', { class: res.cross ? 'no' : res.flashTold ? 'done' : '', text: res.cross ? tr('顺序交叉：夜里那一幅讲在后面，却没有标出它更早。', 'The orders cross: the night picture is told later, but nothing marks it as earlier. ') + tx(pack, 'backNote') : tr('夜里那一幅：标出了它发生得更早，或者按发生顺序讲在了前面', 'The night picture: you marked it as earlier, or told it first, in the order things happened') }),
+          h('li', { class: res.traps.length ? 'no' : 'done', text: res.traps.length ? res.traps.join(' ') : tr('没有发现已知的时间表达错误（只查了几种固定的错法）', 'No known time-expression errors found (only a few fixed error patterns are checked)') }),
+          h('li', { class: res.copied > 0 ? (res.copied > 3 ? 'no' : '') : 'done', text: res.copied ? tr(res.copied + ' 句和原文几乎一样：试着用自己的话说', res.copied + (res.copied === 1 ? ' sentence is' : ' sentences are') + ' almost the same as the original: try saying it in your own words') : tr('是你自己的话，不是照抄原文', 'These are your own words, not copied from the original') })
         ]),
-        h('p', { class: 'kb-note', text: '页面只按一份固定的连接词表和几条规则核对，看不懂句子的意思；排对顺序、过了这几条，不等于故事讲得好。' })
+        h('p', { class: 'kb-note', text: tr('页面只按一份固定的连接词表和几条规则核对，看不懂句子的意思；排对顺序、过了这几条，不等于故事讲得好。', 'The page only checks against a fixed list of connectives and a few rules; it does not understand what the sentences mean. Getting the order right and passing these checks does not mean the story is well told.') })
       ]);
     }
     function renderRetell() {
       var head = h('div', { class: 'kb-card' }, [
         h('div', { class: 'sf-row', style: 'margin-top:0' }, [
-          h('div', { class: 'sf-pill', role: 'group', 'aria-label': '支持的多少' }, [[1, '有提示词'], [2, '只有图']].map(function (o) {
-            return h('button', { type: 'button', 'aria-pressed': T.level === o[0] ? 'true' : 'false', onclick: function () { var keep = T.l1pass; resetRetell(); T.level = o[0]; T.l1pass = keep; B.emit('view', { item: 'retell', support: o[1] }); render(); } }, o[1]);
+          h('div', { class: 'sf-pill', role: 'group', 'aria-label': tr('支持的多少', 'Amount of support') }, [[1, '有提示词', 'With cues'], [2, '只有图', 'Pictures only']].map(function (o) {
+            return h('button', { type: 'button', 'aria-pressed': T.level === o[0] ? 'true' : 'false', onclick: function () { var keep = T.l1pass; resetRetell(); T.level = o[0]; T.l1pass = keep; B.emit('view', { item: 'retell', support: o[1] }); render(); } }, tr(o[1], o[2]));
           })),
-          h('span', { class: 'kb-note', text: T.level === 1 ? '原文收起来了。每幅图上留一个提示词，一幅说一句。' : '提示词也撤掉了：只看图，把整个故事讲一遍。' })
+          h('span', { class: 'kb-note', text: T.level === 1 ? tr('原文收起来了。每幅图上留一个提示词，一幅说一句。', 'The original text is put away. Each picture keeps one cue; say one sentence per picture.') : tr('提示词也撤掉了：只看图，把整个故事讲一遍。', 'The cues are gone too: looking only at the pictures, tell the whole story.') })
         ]),
-        T.l1pass && T.level === 1 ? h('div', { class: 'kb-feedback', style: 'margin-top:8px' }, '有提示词的这一遍过了。支持可以撤掉了：换到“只有图”再讲一遍。') : null
+        T.l1pass && T.level === 1 ? h('div', { class: 'kb-feedback', style: 'margin-top:8px' }, tr('有提示词的这一遍过了。支持可以撤掉了：换到“只有图”再讲一遍。', 'The attempt with cues passed. The support can come off now: switch to "Pictures only" and tell it again.')) : null
       ]);
       body.append(head);
       if (T.spoken) return renderSpoken();
       if (T.level === 1) {
         var rows = h('div', { class: 'sf-retell' }, scene.told.map(function (id) {
-          var input = h('input', { type: 'text', lang: pack.lang, 'aria-label': '这一幅的句子', oninput: function (e) { T.inputs[id] = e.target.value; } });
+          var input = h('input', { type: 'text', lang: pack.lang, 'aria-label': tr('这一幅的句子', 'Sentence for this picture'), oninput: function (e) { T.inputs[id] = e.target.value; } });
           input.value = T.inputs[id] || '';
           return h('div', { class: 'sf-rrow' }, [frame(id), h('div', {}, [h('span', { class: 'sf-cue', lang: pack.lang, text: pack.frames[id].cue }), input])]);
         }));
@@ -435,11 +442,11 @@
         })]));
       } else {
         if (!T.sents) {
-          var ta = h('textarea', { class: 'sf-text', lang: pack.lang, placeholder: '一行写一句。', 'aria-label': '你的复述', oninput: function (e) { T.text = e.target.value; } });
+          var ta = h('textarea', { class: 'sf-text', lang: pack.lang, placeholder: tr('一行写一句。', 'One sentence per line.'), 'aria-label': tr('你的复述', 'Your retelling'), oninput: function (e) { T.text = e.target.value; } });
           ta.value = T.text;
           body.append(h('div', { class: 'kb-card', style: 'margin-top:12px' }, [h('div', { class: 'sf-thumbs' }, scene.told.map(function (id) { return h('div', {}, [frame(id)]); })),
             h('div', { style: 'margin-top:10px' }, [ta]),
-            T.list ? h('div', { class: 'kb-feedback warn' }, pack.checks.list.join('　｜　')) : null,
+            T.list ? h('div', { class: 'kb-feedback warn' }, pack.checks.list.join(tr('　｜　', ' | '))) : null,
             retellButtons(function () {
               var sents = T.text.replace(/([.!?。！？])\s*/g, '$1\n').split(/\n+/).map(function (x) { return x.trim(); }).filter(function (x) { return tokens(x).length > 1; });
               if (!sents.length) return;
@@ -452,19 +459,19 @@
           var linkedAll = items.every(function (x) { return x.frame; });
           var cov = items.map(function (x) { return x.frame; });
           body.append(h('div', { class: 'kb-card', style: 'margin-top:12px' }, [
-            h('p', { class: 'kb-prompt', text: '把每一句放回它说的那幅图：选一句，再点图。' }),
+            h('p', { class: 'kb-prompt', text: tr('把每一句放回它说的那幅图：选一句，再点图。', 'Put each sentence back on the picture it describes: select a sentence, then click a picture.') }),
             h('div', { class: 'sf-thumbs' }, scene.told.map(function (id) {
               var idx = items.map(function (x, i) { return x.frame === id ? i + 1 : 0; }).filter(Boolean);
-              return h('button', { type: 'button', class: T.res && cov.indexOf(id) < 0 ? 'uncovered' : '', 'aria-label': scene.frames[id].alt, onclick: function () {
+              return h('button', { type: 'button', class: T.res && cov.indexOf(id) < 0 ? 'uncovered' : '', 'aria-label': tx(scene.frames[id], 'alt'), onclick: function () {
                 if (T.sel === null || T.res) return;
                 var first = T.links[T.sel] === undefined;
                 T.links[T.sel] = id; B.emit(first ? 'connect' : 'revise', { item: 'retell-sentence:' + T.sel, frame: id });
                 var nx = T.sents.findIndex(function (_, k) { return !T.links[k]; }); T.sel = nx >= 0 ? nx : T.sel; render();
-              } }, [frame(id), idx.length ? h('span', { class: 'tag', text: '句 ' + idx.join('、') }) : null]);
+              } }, [frame(id), idx.length ? h('span', { class: 'tag', text: tr('句 ' + idx.join('、'), 'S ' + idx.join(', ')) }) : null]);
             })),
             h('div', {}, T.sents.map(function (t, i) {
               return h('button', { class: 'sf-scard', type: 'button', style: 'width:100%', 'aria-pressed': T.sel === i ? 'true' : 'false', onclick: function () { T.sel = i; render(); } },
-                [h('span', { class: 'kb-note', text: '句 ' + (i + 1) }), h('span', { class: 't', lang: pack.lang, text: t }), h('span', { class: 'kb-note', text: T.links[i] ? '已连' : '未连' })]);
+                [h('span', { class: 'kb-note', text: tr('句 ' + (i + 1), 'Sentence ' + (i + 1)) }), h('span', { class: 't', lang: pack.lang, text: t }), h('span', { class: 'kb-note', text: T.links[i] ? tr('已连', 'linked') : tr('未连', 'not linked') })]);
             })),
             T.res ? null : h('div', { class: 'sf-row' }, [h('button', { class: 'kb-btn primary', type: 'button', disabled: !linkedAll, onclick: function () {
               T.res = checkRetell(items);
@@ -472,51 +479,51 @@
               if (T.peek) B.reveal('retell:free');
               B.attempt('retell:free', { correct: T.res.pass, response: T.sents });
               render();
-            } }, '核对'), linkedAll ? null : h('span', { class: 'kb-note', text: '每一句都连到图上才能核对。' })])
+            } }, tr('核对', 'Check')), linkedAll ? null : h('span', { class: 'kb-note', text: tr('每一句都连到图上才能核对。', 'Every sentence must be linked to a picture before you can check.') })])
           ]));
         }
       }
       if (T.res) {
         body.append(h('div', { style: 'margin-top:12px' }, [resultCard(T.res, T.level)]),
           h('div', { class: 'sf-row' }, [
-            T.compare ? null : h('button', { class: 'kb-btn primary', type: 'button', onclick: function () { T.compare = true; B.emit('compare', { item: 'retell-vs-original' }); render(); } }, '和原文对照'),
-            h('button', { class: 'kb-btn', type: 'button', onclick: function () { var lv = T.level, keep = T.l1pass, inputs = T.inputs, text = T.text; resetRetell(); T.level = lv; T.l1pass = keep; T.inputs = inputs; T.text = text; render(); } }, '改一改，再来一遍'),
-            T.level === 1 ? h('button', { class: 'kb-btn', type: 'button', onclick: function () { var keep = T.l1pass; resetRetell(); T.level = 2; T.l1pass = keep; render(); } }, '撤掉提示词，只看图讲') : null
+            T.compare ? null : h('button', { class: 'kb-btn primary', type: 'button', onclick: function () { T.compare = true; B.emit('compare', { item: 'retell-vs-original' }); render(); } }, tr('和原文对照', 'Compare with the original')),
+            h('button', { class: 'kb-btn', type: 'button', onclick: function () { var lv = T.level, keep = T.l1pass, inputs = T.inputs, text = T.text; resetRetell(); T.level = lv; T.l1pass = keep; T.inputs = inputs; T.text = text; render(); } }, tr('改一改，再来一遍', 'Revise and try again')),
+            T.level === 1 ? h('button', { class: 'kb-btn', type: 'button', onclick: function () { var keep = T.l1pass; resetRetell(); T.level = 2; T.l1pass = keep; render(); } }, tr('撤掉提示词，只看图讲', 'Remove the cues and tell it from the pictures only')) : null
           ]));
         if (T.compare) body.append(original());
       }
     }
     function original() {
-      return h('div', { class: 'kb-card', style: 'margin-top:12px' }, [h('h3', { class: 'sf-h', text: '原文（只是一种讲法）' })].concat(scene.told.map(function (id) { return sentence(pack.frames[id], false); }),
-        [h('div', { class: 'sf-row' }, [h('button', { class: 'speak-btn', type: 'button', onclick: function () { B.speakSequence(scene.told.map(function (id) { return { text: pack.frames[id].t, pause: 350 }; }), pack.speech); } }, '▶ 听原文')])]));
+      return h('div', { class: 'kb-card', style: 'margin-top:12px' }, [h('h3', { class: 'sf-h', text: tr('原文（只是一种讲法）', 'Original text (just one way to tell it)') })].concat(scene.told.map(function (id) { return sentence(pack.frames[id], false); }),
+        [h('div', { class: 'sf-row' }, [h('button', { class: 'speak-btn', type: 'button', onclick: function () { B.speakSequence(scene.told.map(function (id) { return { text: pack.frames[id].t, pause: 350 }; }), pack.speech); } }, tr('▶ 听原文', '▶ Listen to the original'))])]));
     }
     function retellButtons(onSubmit, free) {
       return h('div', {}, [h('div', { class: 'sf-row' }, [
-        h('button', { class: 'kb-btn primary', type: 'button', onclick: onSubmit }, free ? '提交复述' : '核对'),
-        h('button', { class: 'kb-btn', type: 'button', onclick: function () { T.spoken = { checked: {} }; B.emit('submit', { item: 'retell-spoken', support: T.level === 1 ? 'cued' : 'pictures-only', heardByPage: false }); render(); } }, '我口头复述（给自己或搭档听）'),
-        free ? h('button', { class: 'kb-btn', type: 'button', onclick: function () { T.list = true; T.assisted = true; B.hint('retell:free', 3); render(); } }, '看连接词清单（算提示）') : null,
-        h('button', { class: 'kb-btn', type: 'button', onclick: function () { T.peek = !T.peek; if (T.peek) { T.assisted = true; B.reveal(T.level === 1 ? 'retell:cued' : 'retell:free'); } render(); } }, T.peek ? '收起原文' : '再看一遍原文（记为辅助完成）')
+        h('button', { class: 'kb-btn primary', type: 'button', onclick: onSubmit }, free ? tr('提交复述', 'Submit retelling') : tr('核对', 'Check')),
+        h('button', { class: 'kb-btn', type: 'button', onclick: function () { T.spoken = { checked: {} }; B.emit('submit', { item: 'retell-spoken', support: T.level === 1 ? 'cued' : 'pictures-only', heardByPage: false }); render(); } }, tr('我口头复述（给自己或搭档听）', 'I will retell aloud (to myself or a partner)')),
+        free ? h('button', { class: 'kb-btn', type: 'button', onclick: function () { T.list = true; T.assisted = true; B.hint('retell:free', 3); render(); } }, tr('看连接词清单（算提示）', 'Show the connective list (counts as a hint)')) : null,
+        h('button', { class: 'kb-btn', type: 'button', onclick: function () { T.peek = !T.peek; if (T.peek) { T.assisted = true; B.reveal(T.level === 1 ? 'retell:cued' : 'retell:free'); } render(); } }, T.peek ? tr('收起原文', 'Hide the original') : tr('再看一遍原文（记为辅助完成）', 'Look at the original again (recorded as assisted)'))
       ]), T.peek ? original() : null]);
     }
     function renderSpoken() {
       var sp = T.spoken;
       body.append(h('div', { class: 'kb-card', style: 'margin-top:12px' }, [
         h('div', { class: 'sf-thumbs' }, scene.told.map(function (id) { return h('div', {}, [frame(id)]); })),
-        h('p', { class: 'kb-prompt', style: 'margin-top:12px', text: '看着图，把故事大声讲一遍。讲完后，自己或搭档对照下面几条。' }),
-        h('p', { class: 'kb-note', text: '页面没有听，也不会给录音打分。这几条是自评，单独记录，不算答对。' }),
-        h('div', {}, pack.selfCheck.map(function (t, i) {
+        h('p', { class: 'kb-prompt', style: 'margin-top:12px', text: tr('看着图，把故事大声讲一遍。讲完后，自己或搭档对照下面几条。', 'Looking at the pictures, tell the story aloud. Afterwards, check the points below yourself or with a partner.') }),
+        h('p', { class: 'kb-note', text: tr('页面没有听，也不会给录音打分。这几条是自评，单独记录，不算答对。', 'The page did not listen and will not score a recording. These points are a self-rating, recorded separately, and do not count as a correct answer.') }),
+        h('div', {}, tx(pack, 'selfCheck').map(function (t, i) {
           return h('label', { style: 'display:block;margin:6px 0' }, [h('input', { type: 'checkbox', checked: !!sp.checked[i], disabled: sp.done, onchange: function (e) { sp.checked[i] = e.target.checked; } }), ' ' + t]);
         })),
-        sp.done ? h('div', { class: 'kb-feedback' }, '记下了（自评）。' + pack.partner) : null,
+        sp.done ? h('div', { class: 'kb-feedback' }, tr('记下了（自评）。', 'Recorded (self-rating). ') + tx(pack, 'partner')) : null,
         h('div', { class: 'sf-row' }, [
           sp.done ? null : h('button', { class: 'kb-btn primary', type: 'button', onclick: function () {
             var yes = pack.selfCheck.filter(function (_, i) { return sp.checked[i]; });
             if (T.peek) B.reveal('retell-spoken:' + T.level);
             B.attempt('retell-spoken:' + T.level, { selfReport: true, correct: yes.length === pack.selfCheck.length, response: yes });
             sp.done = true; render();
-          } }, '记下自评'),
-          h('button', { class: 'kb-btn', type: 'button', onclick: function () { T.spoken = null; render(); } }, '改成打字'),
-          sp.done ? h('button', { class: 'kb-btn', type: 'button', onclick: function () { T.compare = !T.compare; if (T.compare) B.emit('compare', { item: 'retell-vs-original', spoken: true }); render(); } }, '和原文对照') : null
+          } }, tr('记下自评', 'Record self-rating')),
+          h('button', { class: 'kb-btn', type: 'button', onclick: function () { T.spoken = null; render(); } }, tr('改成打字', 'Switch to typing')),
+          sp.done ? h('button', { class: 'kb-btn', type: 'button', onclick: function () { T.compare = !T.compare; if (T.compare) B.emit('compare', { item: 'retell-vs-original', spoken: true }); render(); } }, tr('和原文对照', 'Compare with the original')) : null
         ])
       ]));
       if (T.compare) body.append(original());
@@ -526,8 +533,8 @@
     function render() {
       clearInterval(timer);
       bar.innerHTML = ''; body.innerHTML = '';
-      if (pack.readingLabel) bar.append(h('label', { class: 'kb-variant' }, [h('input', { type: 'checkbox', checked: st.showReading, onchange: function (e) { st.showReading = e.target.checked; B.emit('highlight', { showReading: st.showReading }); render(); } }), ' 显示' + pack.readingLabel]));
-      bar.append(h('span', { class: 'kb-note', text: '声音来自浏览器的语音合成，只放音，不录音、不打分。' }));
+      if (pack.readingLabel) bar.append(h('label', { class: 'kb-variant' }, [h('input', { type: 'checkbox', checked: st.showReading, onchange: function (e) { st.showReading = e.target.checked; B.emit('highlight', { showReading: st.showReading }); render(); } }), tr(' 显示' + pack.readingLabel, ' Show ' + tx(pack, 'readingLabel'))]));
+      bar.append(h('span', { class: 'kb-note', text: tr('声音来自浏览器的语音合成，只放音，不录音、不打分。', 'Sound comes from the browser\'s speech synthesis. It only plays; it does not record or score.') }));
       if (st.mode === 'watch') renderWatch();
       else if (st.mode === 'order') renderOrder();
       else if (st.mode === 'link') renderLink();

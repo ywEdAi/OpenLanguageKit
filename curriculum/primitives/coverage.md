@@ -6,25 +6,25 @@
 
 | 原语 | 领域 | 状态 | 实现 | en | ja | zh |
 | --- | --- | --- | --- | ---: | ---: | ---: |
-| 最小对立辨音 `prim:sound-contrast` | 感知与发音 | 仅契约 | — | 5 / 5 | 12 / 4 | 2 / 3 |
+| 最小对立辨音 `prim:sound-contrast` | 感知与发音 | 部分实现 | `en-sound-contrast`, `ja-sound-contrast`, `zh-sound-contrast` | 5 / 5 | 12 / 4 | 2 / 3 |
 | 声调与音高轮廓 `prim:contour-match` | 感知与发音 | 有实现 | `zh-tones`, `ja-pitch` | 3 / 4 | 4 / 0 | 2 / 1 |
 | 节奏与停顿跟读 `prim:rhythm-shadow` | 感知与发音 | 有英语实现 | c56 | 3 / 4 | 2 / 8 | 0 / 1 |
 | 录下来自己转写 `prim:record-self-transcribe` | 感知与发音 | 有英语实现 | c55 | 1 / 5 | 0 / 1 | 1 / 2 |
 | 音形对应拼读 `prim:sound-spelling-blend` | 文字与解码 | 有实现 | `ja-hiragana-grid`, `ja-katakana-grid`, `ja-blend`, `zh-pinyin-grid`, `zh-blend`, `en-alphabet`, `en-phonics`, `en-blend`, `fr-alphabet`, `fr-blend` | 6 / 0 | 5 / 3 | 1 / 1 |
 | 字形构件与书写 `prim:character-anatomy` | 文字与解码 | 部分实现 | `zh-hanzi-parts`, `ja-kanji-parts` | 1 / 0 | 2 / 5 | 7 / 3 |
-| 注音逐步撤除 `prim:reading-aid-fade` | 文字与解码 | 仅契约 | — | 0 / 3 | 0 / 7 | 1 / 3 |
+| 注音逐步撤除 `prim:reading-aid-fade` | 文字与解码 | 部分实现 | `ja-reading-aid-fade`, `zh-reading-aid-fade`, `en-reading-aid-fade`, `en-reading-aid-fade-ipa` | 0 / 3 | 0 / 7 | 1 / 3 |
 | 拆词与语素族 `prim:word-shape-split` | 文字与解码 | 有英语实现 | c28 | 3 / 2 | 0 / 2 | 1 / 5 |
 | 先回想，再对照 `prim:recall-before-reveal` | 词汇与语块 | 部分实现 | c12 | 6 / 9 | 5 / 4 | 9 / 1 |
 | 语块采集与搭配 `prim:chunk-harvest` | 词汇与语块 | 有英语实现 | c02, c05 | 5 / 9 | 1 / 4 | 5 / 6 |
 | 用法边界裁判 `prim:usage-boundary` | 词汇与语块 | 有英语实现 | c04 | 18 / 26 | 13 / 20 | 4 / 33 |
 | 场景词群走一遍 `prim:scene-walkthrough` | 词汇与语块 | 有英语实现 | c06 | 15 / 11 | 6 / 5 | 4 / 3 |
-| 计量方式：量词与可数性 `prim:classifier-match` | 词汇与语块 | 仅契约 | — | 6 / 2 | 1 / 1 | 2 / 1 |
+| 计量方式：量词与可数性 `prim:classifier-match` | 词汇与语块 | 部分实现 | `en-classifier-match`, `ja-classifier-match`, `zh-classifier-match` | 6 / 2 | 1 / 1 | 2 / 1 |
 | 语境猜词与查跳 `prim:context-guess` | 词汇与语块 | 有英语实现 | c26, c27 | 2 / 0 | 1 / 1 | 2 / 4 |
 | 意义靠形式 `prim:form-for-meaning` | 语法形式 | 有英语实现 | c13 | 9 / 30 | 21 / 23 | 19 / 8 |
-| 变形规则用于新词 `prim:paradigm-apply` | 语法形式 | 仅契约 | — | 24 / 14 | 60 / 28 | 3 / 2 |
+| 变形规则用于新词 `prim:paradigm-apply` | 语法形式 | 部分实现 | `ja-paradigm-apply-masu`, `ja-paradigm-apply-te`, `ja-paradigm-apply-ta`, `ja-paradigm-apply-nai`, `ja-paradigm-apply-adj`, `en-paradigm-apply-plural`, `en-paradigm-apply-third`, `en-paradigm-apply-past`, `en-paradigm-apply-ing`, `en-paradigm-apply-comp`, `en-paradigm-apply-wug`, `zh-paradigm-apply-vredup`, `zh-paradigm-apply-aredup`, `zh-paradigm-apply-anota` | 24 / 14 | 60 / 28 | 3 / 2 |
 | 对立形式按意图选择 `prim:choose-by-intent` | 语法形式 | 有英语实现 | c14, c15, c20 | 51 / 29 | 61 / 47 | 28 / 22 |
-| 语序槽位 `prim:slot-order` | 语法形式 | 仅契约 | — | 7 / 3 | 10 / 2 | 16 / 6 |
-| 格与语义角色标记 `prim:role-marking` | 语法形式 | 仅契约 | — | 2 / 1 | 19 / 14 | 7 / 3 |
+| 语序槽位 `prim:slot-order` | 语法形式 | 部分实现 | `en-slot-order`, `ja-slot-order`, `zh-slot-order` | 7 / 3 | 10 / 2 | 16 / 6 |
+| 格与语义角色标记 `prim:role-marking` | 语法形式 | 部分实现 | `en-role-marking`, `ja-role-marking`, `zh-role-marking` | 2 / 1 | 19 / 14 | 7 / 3 |
 | 时间轴上的时与体 `prim:aspect-timeline` | 语法形式 | 部分实现 | c35 | 12 / 17 | 12 / 21 | 7 / 8 |
 | 修饰挂在哪儿 `prim:attach-position` | 语法形式 | 有英语实现 | c18, c21 | 9 / 3 | 6 / 2 | 2 / 1 |
 | 句子组合与拆分 `prim:combine-unpack` | 句子与篇章 | 有英语实现 | c16, c19, c44, c59 | 13 / 9 | 5 / 8 | 8 / 6 |
@@ -35,103 +35,46 @@
 | 来源、立场与确定度 `prim:source-stance` | 句子与篇章 | 有英语实现 | c31, c34, c53 | 9 / 4 | 4 / 7 | 3 / 9 |
 | 听到的与原文对齐 `prim:transcript-diff` | 听取信息 | 有英语实现 | c47, c50 | 4 / 3 | 1 / 5 | 4 / 1 |
 | 听取数字与关键信息 `prim:listen-for-data` | 听取信息 | 有英语实现 | c51, c48 | 5 / 11 | 2 / 8 | 3 / 6 |
-| 听指令做动作 `prim:listen-and-do` | 听取信息 | 仅契约 | — | 3 / 10 | 0 / 4 | 2 / 6 |
-| 交际回合与分支 `prim:exchange-script` | 交际与得体 | 仅契约 | — | 34 / 19 | 36 / 24 | 16 / 11 |
+| 听指令做动作 `prim:listen-and-do` | 听取信息 | 部分实现 | `en-listen-and-do`, `ja-listen-and-do`, `zh-listen-and-do` | 3 / 10 | 0 / 4 | 2 / 6 |
+| 交际回合与分支 `prim:exchange-script` | 交际与得体 | 部分实现 | `en-exchange-script`, `ja-exchange-script`, `zh-exchange-script` | 34 / 19 | 36 / 24 | 16 / 11 |
 | 语域与礼貌校准 `prim:register-calibrate` | 交际与得体 | 部分实现 | c17, c42 | 16 / 31 | 17 / 30 | 5 / 17 |
 | 信息差提问 `prim:info-gap` | 交际与得体 | 有英语实现 | c58 | 3 / 16 | 0 / 6 | 1 / 4 |
-| 文化情境判读 `prim:culture-incident` | 交际与得体 | 仅契约 | — | 2 / 4 | 3 / 14 | 2 / 4 |
+| 文化情境判读 `prim:culture-incident` | 交际与得体 | 部分实现 | `en-culture-incident`, `ja-culture-incident`, `zh-culture-incident` | 2 / 4 | 3 / 14 | 2 / 4 |
 | 先写再对照 `prim:attempt-then-compare` | 产出与修改 | 有英语实现 | c37 | 2 / 14 | 4 / 6 | 0 / 6 |
 | 一次改一类 `prim:one-fix-revision` | 产出与修改 | 有英语实现 | c36, c40 | 2 / 6 | 0 / 5 | 1 / 5 |
 | 看图描述与核对 `prim:picture-describe` | 产出与修改 | 部分实现 | `en-picture-talk`, `zh-picture-talk` | 5 / 9 | 2 / 2 | 3 / 2 |
 | 排序与复述 `prim:sequence-retell` | 产出与修改 | 部分实现 | `en-story-frames`, `zh-story-frames` | 3 / 3 | 4 / 1 | 4 / 1 |
 | 扩展成段 `prim:grow-text` | 产出与修改 | 有英语实现 | c38, c46, c39, c45 | 6 / 6 | 1 / 5 | 1 / 3 |
 | 换个情境再用 `prim:carry-across` | 迁移 | 有英语实现 | c57 | 2 / 1 | 6 / 2 | 0 / 4 |
-| 真实单据扫读 `prim:real-document-scan` | 迁移 | 仅契约 | — | 5 / 5 | 4 / 12 | 2 / 3 |
+| 真实单据扫读 `prim:real-document-scan` | 迁移 | 部分实现 | `en-real-document-scan`, `ja-real-document-scan`, `zh-real-document-scan` | 5 / 5 | 4 / 12 | 2 / 3 |
 | 梯度定位 `prim:scale-place` | 语法形式 | 部分实现 | c34, c17 | 15 / 3 | 6 / 5 | 3 / 0 |
-| 视点与方向 `prim:viewpoint-direction` | 语法形式 | 仅契约 | — | 2 / 1 | 6 / 7 | 3 / 0 |
-| 后句限制核对 `prim:clause-constraint` | 语法形式 | 仅契约 | — | 3 / 1 | 18 / 2 | 5 / 0 |
-| 口语词连到文字 `prim:oral-to-print` | 文字与解码 | 仅契约 | — | 0 / 2 | 0 / 0 | 1 / 0 |
-| 音素意识游戏 `prim:oral-sound-play` | 感知与发音 | 仅契约 | — | 1 / 0 | 0 / 1 | 0 / 1 |
-| 读音选择 `prim:reading-select` | 文字与解码 | 仅契约 | — | 0 / 0 | 6 / 1 | 0 / 2 |
-| 同形异义核对 `prim:false-friend-check` | 词汇与语块 | 仅契约 | — | 1 / 0 | 2 / 9 | 0 / 0 |
-| 翻译与中介对齐 `prim:cross-language-align` | 迁移 | 仅契约 | — | 1 / 0 | 1 / 0 | 2 / 0 |
-| 数位体系转换 `prim:number-system-map` | 词汇与语块 | 仅契约 | — | 1 / 1 | 0 / 0 | 1 / 0 |
-| 变体对照 `prim:variety-map` | 交际与得体 | 仅契约 | — | 1 / 1 | 2 / 1 | 1 / 0 |
-| 字面与言外之意 `prim:figurative-decode` | 句子与篇章 | 仅契约 | — | 2 / 2 | 2 / 1 | 4 / 0 |
-| 词典义项选择 `prim:entry-sense-pick` | 词汇与语块 | 仅契约 | — | 1 / 0 | 0 / 0 | 0 / 1 |
-| 输入法转换 `prim:ime-convert` | 文字与解码 | 仅契约 | — | 0 / 0 | 1 / 0 | 0 / 1 |
-| 会话修复与接应 `prim:repair-and-backchannel` | 交际与得体 | 仅契约 | — | 4 / 0 | 2 / 0 | 2 / 0 |
-| 按真实格式填写 `prim:template-write` | 产出与修改 | 仅契约 | — | 2 / 0 | 2 / 0 | 2 / 0 |
+| 视点与方向 `prim:viewpoint-direction` | 语法形式 | 部分实现 | `en-viewpoint-direction`, `ja-viewpoint-direction`, `zh-viewpoint-direction` | 2 / 1 | 6 / 7 | 3 / 0 |
+| 后句限制核对 `prim:clause-constraint` | 语法形式 | 部分实现 | `en-clause-constraint`, `ja-clause-constraint`, `zh-clause-constraint` | 3 / 1 | 18 / 2 | 5 / 0 |
+| 口语词连到文字 `prim:oral-to-print` | 文字与解码 | 部分实现 | `zh-oral-to-print`, `en-oral-to-print` | 0 / 2 | 0 / 0 | 1 / 0 |
+| 音素意识游戏 `prim:oral-sound-play` | 感知与发音 | 部分实现 | `en-oral-sound-play`, `ja-oral-sound-play`, `zh-oral-sound-play` | 1 / 0 | 0 / 1 | 0 / 1 |
+| 读音选择 `prim:reading-select` | 文字与解码 | 部分实现 | `ja-reading-select`, `zh-reading-select` | 0 / 0 | 6 / 1 | 0 / 2 |
+| 同形异义核对 `prim:false-friend-check` | 词汇与语块 | 部分实现 | `ja-false-friend-check`, `en-false-friend-check` | 1 / 0 | 2 / 9 | 0 / 0 |
+| 翻译与中介对齐 `prim:cross-language-align` | 迁移 | 部分实现 | `en-cross-language-align`, `zh-cross-language-align`, `ja-cross-language-align` | 1 / 0 | 1 / 0 | 2 / 0 |
+| 数位体系转换 `prim:number-system-map` | 词汇与语块 | 部分实现 | `en-number-system-map`, `zh-number-system-map` | 1 / 1 | 0 / 0 | 1 / 0 |
+| 变体对照 `prim:variety-map` | 交际与得体 | 部分实现 | `en-variety-map`, `ja-variety-map`, `zh-variety-map` | 1 / 1 | 2 / 1 | 1 / 0 |
+| 字面与言外之意 `prim:figurative-decode` | 句子与篇章 | 部分实现 | `en-figurative-decode`, `zh-figurative-decode`, `ja-figurative-decode` | 2 / 2 | 2 / 1 | 4 / 0 |
+| 词典义项选择 `prim:entry-sense-pick` | 词汇与语块 | 部分实现 | `en-entry-sense-pick`, `zh-entry-sense-pick` | 1 / 0 | 0 / 0 | 0 / 1 |
+| 输入法转换 `prim:ime-convert` | 文字与解码 | 部分实现 | `ja-ime-convert`, `zh-ime-convert` | 0 / 0 | 1 / 0 | 0 / 1 |
+| 会话修复与接应 `prim:repair-and-backchannel` | 交际与得体 | 部分实现 | `en-repair-and-backchannel`, `ja-repair-and-backchannel`, `zh-repair-and-backchannel` | 4 / 0 | 2 / 0 | 2 / 0 |
+| 按真实格式填写 `prim:template-write` | 产出与修改 | 部分实现 | `en-template-write`, `ja-template-write`, `zh-template-write` | 2 / 0 | 2 / 0 | 2 / 0 |
 
 ## 缺口：主要原语还没有任何实现的知识点
 
 这些知识点的核心困难落在只有契约的原语上，是新建实现的优先清单。
 
-### en：107 / 353 个知识点
+### en：0 / 353 个知识点
 
-- **交际回合与分支**（34）：问候、介绍与告别、用简单词语和手势建立联系、求助、询价、金额与付款、问路与给出路线、完成购票、住宿、点餐等服务交际、购物、在熟悉话题上进行简单问答、描述人物外貌与性格……
-- **变形规则用于新词**（24）：be 的现在式、否定与缩略、名词复数及常见不规则复数、词尾变化的拼写规则（-ing / -ed / -ies）、序数词与日期、have / have got 表示拥有、do / does 的疑问与否定、like / love / hate + -ing、can / can't 表达能力……
-- **语序槽位**（7）：基本语序与句子成分、be 疑问句与简短回答、疑问词提问（what / who / where / how）、时间、地点、频率状语及语序、间接疑问句（Can you tell me where…?）、间接引语：疑问句、否定副词前置倒装
-- **计量方式：量词与可数性**（6）：可数与不可数名词、some / any / a lot of、much / many 与数量提问、all / none / enough / (a) few / (a) little、fewer 与 less 的比较、most / both / all the / either / neither
-- **最小对立辨音**（5）：26 个字母的名称与大小写、英语元音与辅音的关键对立、-s / -es 词尾的三种读音、听辨易混数字（13 / 30）、-ed 词尾的三种读音
-- **真实单据扫读**（5）：读懂标识与告示、读菜单、时刻表、广告等信息材料、读懂指示、说明与条件、略读与扫读、读懂官方文件、指南与合同等
-- **会话修复与接应**（4）：请对方重复、说慢一点、用固定说法请求澄清、打断、换题与恢复话题、口语中的组织标记（well / anyway / so）
-- **听指令做动作**（3）：听懂当面给出的路线与指令、听指令做动作、身体部位
-- **后句限制核对**（3）：第一条件句：开放的未来条件、时间从句：when / until / as soon as + 现在时表将来、条件连词：unless / provided / as long as / in case / otherwise
-- **格与语义角色标记**（2）：方位介词与空间关系、移动路径介词短语
-- **文化情境判读**（2）：闲谈：话题选择与分寸、写简历与求职信
-- **视点与方向**（2）：基本被动语态、have / get something done
-- **字面与言外之意**（2）：读文学作品、习惯表达的适切使用
-- **按真实格式填写**（2）：填写表格中的个人信息、写明信片、便条与短消息
-- **音素意识游戏**（1）：音素意识：押韵、音节与音素拼合
-- **同形异义核对**（1）：消除跨语言假朋友
-- **翻译与中介对齐**（1）：向他人转达所读所听的要点
-- **数位体系转换**（1）：大数、小数、百分比与度量
-- **变体对照**（1）：英美用法差异与口音多样性
-- **词典义项选择**（1）：查词典与记录生词
 
-### ja：187 / 386 个知识点
+### ja：0 / 386 个知识点
 
-- **变形规则用于新词**（60）：数字的位值组合（一到万）、数字读音的变化：4、7、9 与音便、～分・半 与 ふん／ぷん 音变、动词过去：Vました／Vませんでした、イ形容词与ナ形容词两类、イ形容词谓语与否定、イ形容词过去：Aかったです、ナ形容词谓语与过去……
-- **交际回合与分支**（36）：问候、告别与日常寒暄、课堂用语与"日语怎么说"、自我介绍与初次见面、询问和说明营业时间与日程、动词疑问句：Vますか、在餐厅、快餐店点餐、询问人和物在哪里、接受与委婉拒绝邀约……
-- **格与语义角色标记**（19）：起点与终点：から・まで、助词的作用与分类总览、宾语「を」、方向「へ」、「に」：到达点、对象、「で」：动作场所、「と」：一起做的人、格助词体系复盘：が・を・に・で・へ・と・から・まで・より……
-- **后句限制核对**（18）：规律条件「と」：まっすぐ行くと、「て」表原因：道に迷って遅れます、四种条件形的对比与选择、～うちは：在……的期间内、～たとたん（に）：刚一……就、～とはいえ、～からといって（～わけではない）、～ものだから：辩解式理由……
-- **最小对立辨音**（12）：五个元音的发音、清浊对立 k / g、清浊对立 t / d、清浊对立 p / b、拗音与拍、促音（っ）的一拍、长音与长音的写法、元音清化的听辨（です、～ます）……
-- **语序槽位**（10）：名词谓语：Nです／Nではありません、どれ／どこ／どのN／だれ／なん、动词ます形：Vます／Vません、点单与购买：Nをください／お願いします、处所存在：NにNがあります／NはNにあります、比较：AよりBのほうが／いちばん、引用与转述：～と言う／～と聞く、より 作为比较基准与书面的"从"……
-- **视点与方向**（6）：借东西与请人帮忙、授受动词体系与视点、あげる：给出去、くれる：给我（我方）、移动与变化的方向：Vていく／Vてくる、使役受身：被迫的视点
-- **读音选择**（6）：昨天、今天、明天等相对时间词、汉字的音读、训读与部首、入门汉字（约 100 个：数字、日期、人、方位等）、连浊、中高级汉字（累计约 1000 个）、常用汉字（2136 字）的认读
-- **真实单据扫读**（4）：读懂假名和基本汉字写的日常短文、读懂日常话题的短文与通知、规章式指示：～こと、竖排与原稿纸格式
-- **文化情境判读**（3）：问候的身体语言与场合、年中行事与节日习俗、场合礼仪：服装、拜访、送礼、禁忌
-- **同形异义核对**（2）：住房与搬家、读懂日常与社会话题的文章、抓住概要
-- **变体对照**（2）：中级汉字（累计约 650 个）、方言的认识与听懂：关西方言等
-- **字面与言外之意**（2）：理解含蓄、省略与言外之意、阅读小说、随笔等文学作品
-- **会话修复与接应**（2）：听不懂时请对方重复、说慢一点、附和与填充词：はい・ええ・そうですか・えーと
-- **按真实格式填写**（2）：填表、写便条、写短邮件和聊天消息
-- **计量方式：量词与可数性**（1）：助数词：つ・人・枚・本・個等
-- **翻译与中介对齐**（1）：中介：把日语资料的要点用中文或日语传达给他人
-- **输入法转换**（1）：日语输入法：罗马字输入与变换
 
-### zh：74 / 211 个知识点
+### zh：0 / 211 个知识点
 
-- **语序槽位**（16）：疑问代词提问：什么、谁、哪、哪儿、怎么、为什么、怎么样、时间词与地点词的位置：在动词前、从大到小、动词谓语句与宾语、常用副词：也、都、很、太、常常、交通方式："坐/骑/开"＋交通工具＋去、连动句：去商店买东西、"比"字句与否定"没有……那么"、等比："跟……一样"……
-- **交际回合与分支**（16）：问候与告别、道谢、道歉与回应、课堂用语与"……用中文怎么说"、自我介绍与询问对方、点餐与购物的基本说法、邀请、建议与接受、拒绝、购物：比较、讲价、付款、说明症状、看病买药……
-- **格与语义角色标记**（7）："在"表位置：动词与介词、方位词：上、下、里、外、前、后、旁边、介词：从、到、离、往、向、介词：对、给、跟、为、和、动词后的"在、到、给"：住在、送到、交给、把字句表位移：把……放在／送到／翻译成、兼语句与使役：让、叫、使、请
-- **后句限制核对**（5）：条件：只要……就……／只有……才……、紧接：一……就……、让步：即使……也……／哪怕、无条件：不管／无论……都……、推论：既然……就……
-- **字面与言外之意**（4）：常用成语与四字格、修辞：比喻、排比、对偶、夸张、成语、俗语、歇后语与典故、理解言外之意、委婉与含蓄
-- **变形规则用于新词**（3）：正反问句：去不去、是不是、重叠：看看、试一试、高高兴兴、动词重叠：看看、试试、尝一尝
-- **视点与方向**（3）：简单趋向补语：来、去、复合趋向补语：上来、下去、出来、回去、"被"字句
-- **最小对立辨音**（2）：声母与韵母、儿化与轻声词
-- **计量方式：量词与可数性**（2）：基本量词：个、本、张、杯、口、量词扩展：件、条、双、套、场、遍、次
-- **听指令做动作**（2）：听懂慢速、简短的日常对话与指令、问路与指路
-- **文化情境判读**（2）：节日、习俗与禁忌、面子、客套与谦虚的回应
-- **真实单据扫读**（2）：读懂拼音与常用汉字写的短句、告示与菜单、读懂日常话题的短文和便条
-- **翻译与中介对齐**（2）：中外互译：日常与一般社会题材、专业题材的笔译与口译
-- **会话修复与接应**（2）：请对方重复、说慢一点、讨论中的互动：插话、追问、总结
-- **按真实格式填写**（2）：抄写和书写常用汉字、填写简单表格、写便条、短信和简单的社交消息
-- **注音逐步撤除**（1）：二级汉字（累计约 600 个）
-- **口语词连到文字**（1）：一级汉字（约 300 个）的认读与书写
-- **数位体系转换**（1）：大数、约数、分数与百分数：万、亿、左右、多、百分之
-- **变体对照**（1）：普通话与方言、繁简字与港台用语
 
 ## 绑定时发现的、现有原语都不太合适的知识点
 

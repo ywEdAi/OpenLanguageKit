@@ -1,0 +1,680 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Listen and Do</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .ld-layout { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .ld-layout { grid-template-columns: minmax(0, 1fr); } }
+  .ld-layout > * { min-width: 0; }
+  .ld-side { display: grid; gap: 12px; }
+  .ld-stage { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .ld-stage .kb-prompt { margin: 0; text-align: center; }
+  .ld-scene { border: 2px solid var(--ink); border-radius: 12px; overflow: hidden; background: #f6f1e7; line-height: 0; }
+  .ld-scene svg { display: block; width: 100%; height: auto; touch-action: manipulation; }
+  .ld-scene [data-obj], .ld-scene [data-spot], .ld-scene [data-bld] { cursor: pointer; }
+  .ld-scene.readonly [data-obj], .ld-scene.readonly [data-spot], .ld-scene.readonly [data-bld] { cursor: default; }
+  .ld-scene .spot { fill: transparent; stroke: none; }
+  .ld-scene.moving .spot { fill: rgba(61, 79, 224, .07); stroke: #3d4fe0; stroke-width: 1.5; stroke-dasharray: 5 4; }
+  .ld-scene .sel > :first-child { stroke: #3d4fe0; stroke-width: 3; }
+  .ld-scene .selring { fill: none; stroke: #3d4fe0; stroke-width: 2.5; stroke-dasharray: 4 3; }
+  .ld-scene .flash { animation: ld-blink .45s ease-in-out 3; }
+  .ld-scene .spot.flash { fill: rgba(232, 163, 61, .35); stroke: #c47a12; stroke-width: 2.5; stroke-dasharray: none; }
+  @keyframes ld-blink { 0%, 100% { opacity: 1; } 50% { opacity: .15; } }
+  .ld-scene .ghost { fill: none; stroke: #2e8b57; stroke-width: 2.5; stroke-dasharray: 5 3; }
+  .ld-scene .bld rect.wall { fill: #d9d3c7; stroke: #8b8478; stroke-width: 1.5; }
+  .ld-scene .bld.picked rect.wall { fill: #c9cdfb; stroke: #3d4fe0; stroke-width: 3; }
+  .ld-scene .bld.answer rect.wall { stroke: #2e8b57; stroke-width: 3.5; }
+  .ld-scene .cross.flash { fill: #f2c46d; }
+  .ld-scene [data-obj]:focus, .ld-scene [data-spot]:focus, .ld-scene [data-bld]:focus { outline: none; }
+  .ld-scene [data-obj]:focus-visible > :first-child, .ld-scene [data-bld]:focus-visible rect.wall { stroke: #c47a12; stroke-width: 3; }
+  .ld-scene .spot:focus-visible { fill: rgba(232, 163, 61, .25); stroke: #c47a12; stroke-width: 2; }
+  .ld-tools { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; }
+  .ld-pal { display: inline-flex; gap: 6px; padding: 4px 8px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); flex-wrap: wrap; justify-content: center; }
+  .ld-pal button { min-width: 38px; height: 38px; border-radius: 999px; border: 2px solid var(--line); background: var(--panel); }
+  .ld-pal button[aria-pressed="true"] { border-color: var(--ink); box-shadow: 0 0 0 3px var(--focus); }
+  .ld-pal button.sw { width: 38px; padding: 0; }
+  .ld-pal button.flash { animation: ld-blink .45s ease-in-out 3; }
+  [data-variant="child"] .ld-pal button { min-width: 48px; height: 48px; }
+  [data-variant="child"] .ld-pal button.sw { width: 48px; }
+  .ld-play { font-size: 1.1rem; padding: 9px 22px; }
+  .ld-caption { text-align: center; font-size: 1.15rem; margin: 0; padding: 6px 10px; border-radius: 10px; background: var(--warn-soft); }
+  .ld-cats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+  .ld-cat { border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 8px 10px; text-align: left; display: flex; gap: 8px; align-items: flex-start; }
+  .ld-cat .n { font-size: .75rem; color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; }
+  .ld-cat.right { background: var(--accent-soft); border-color: var(--accent); }
+  .ld-cat.also { border-color: var(--accent); border-style: dashed; }
+  .ld-cat.wrongpick { background: var(--bad-soft); border-color: var(--bad); }
+  .ld-cat:disabled { cursor: default; }
+  .ld-comp { display: grid; gap: 8px; }
+  .ld-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .ld-row > span { font-size: .8rem; color: var(--muted); min-width: 4.5em; }
+  .ld-row button { border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 4px 12px; }
+  .ld-row button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .ld-sent { font-size: 1.2rem; text-align: center; padding: 8px 12px; border: 1px dashed var(--line); border-radius: 10px; min-height: 2.4em; }
+  .ld-list { margin: 4px 0 0; padding-left: 20px; font-size: .85rem; }
+  .ld-list li { margin: 3px 0; }
+  .reverse { border-left: 4px solid var(--warn); }
+  .flag { display: inline-block; font-size: .78rem; padding: 1px 8px; border-radius: 999px; background: var(--warn-soft); color: var(--warn); }
+  .done { font-size: 2.4rem; text-align: center; }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function () {
+  'use strict';
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t;
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'listen-and-do-en';
+  var reg = (window.KT_REGISTRY && KT_REGISTRY.packs) || {};
+  var entry = reg[setId] || {};
+  if (entry.block && entry.block !== 'listen-and-do') { document.getElementById('app').textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  var file = entry.file || 'data/listen-and-do.js';   // fallback while the registry does not list the pack yet
+  var s = document.createElement('script');
+  s.src = file;
+  s.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else document.getElementById('app').textContent = L('未知的数据包：', 'Unknown data pack: ') + setId; };
+  s.onerror = function () { document.getElementById('app').textContent = L('数据包加载失败：', 'Could not load the data pack: ') + file; };
+  document.head.appendChild(s);
+
+  /* ---------- the room (language-neutral) ---------- */
+  var OBJ = {
+    ballBig: { noun: 'ball', size: 'big', colourable: true, zh: '大球', en: 'big ball' },
+    ballSmall: { noun: 'ball', size: 'small', colourable: true, zh: '小球', en: 'small ball' },
+    cupRed: { noun: 'cup', color: 'red', zh: '红杯子', en: 'red cup' },
+    cupBlue: { noun: 'cup', color: 'blue', zh: '蓝杯子', en: 'blue cup' },
+    book: { noun: 'book', zh: '书', en: 'book' },
+    pencil: { noun: 'pencil', zh: '铅笔', en: 'pencil' }
+  };
+  var OBJ_IDS = Object.keys(OBJ);
+  var COLORS = { red: '#e0453a', blue: '#3b6fd8', yellow: '#f2c230', green: '#3aa35b' };
+  var COLOR_NAME = { red: ['红', 'red'], blue: ['蓝', 'blue'], yellow: ['黄', 'yellow'], green: ['绿', 'green'] };
+  var SPOT = {
+    'box-in': { x: 50, y: 207, r: [16, 146, 70, 72], zh: '箱子里', en: 'in the box' },
+    'box-next': { x: 106, y: 216, r: [88, 160, 36, 60], zh: '箱子旁边', en: 'next to the box' },
+    'table-on': { x: 190, y: 112, r: [132, 66, 116, 48], zh: '桌子上', en: 'on the table' },
+    'table-under': { x: 190, y: 216, r: [142, 150, 96, 70], zh: '桌子下面', en: 'under the table' },
+    'chair-on': { x: 290, y: 152, r: [264, 110, 54, 44], zh: '椅子上', en: 'on the chair' },
+    'chair-under': { x: 290, y: 216, r: [264, 168, 54, 52], zh: '椅子下面', en: 'under the chair' },
+    'boy-right': { x: 350, y: 216, r: [330, 150, 38, 70], zh: '男孩右手旁边（你的左边）', en: "by the boy's right hand (your left)" },
+    'boy-left': { x: 436, y: 216, r: [418, 150, 38, 70], zh: '男孩左手旁边（你的右边）', en: "by the boy's left hand (your right)" }
+  };
+  var PLACE_IDS = Object.keys(SPOT);
+  var RUG = [];
+  for (var ri = 0; ri < 6; ri++) { var rid = 'rug' + ri; RUG.push(rid); SPOT[rid] = { x: 52 + ri * 72, y: 256, r: [22 + ri * 72, 228, 60, 34], zh: '地毯', en: 'the rug', rug: true }; }
+  var FACTS = { 'door-open': false, 'window-open': true };
+
+  function objSvg(id, x, y, st, ghost) {
+    var o = OBJ[id], fill, c = ghost ? ' class="ghost"' : '';
+    if (o.noun === 'ball') {
+      var r = o.size === 'big' ? 17 : 9;
+      fill = ghost ? 'none' : (st && st.color ? COLORS[st.color] : '#fdfcf8');
+      return '<circle cx="' + x + '" cy="' + (y - r) + '" r="' + r + '" fill="' + fill + '" stroke="' + (ghost ? '#2e8b57' : '#4a4a55') + '" stroke-width="' + (ghost ? 2.5 : 1.6) + '"' + c + '/>' +
+        (ghost ? '' : '<path d="M' + (x - r * 0.7) + ' ' + (y - r * 1.3) + ' q' + (r * 0.7) + ' ' + (r * 0.5) + ' ' + (r * 1.4) + ' 0" fill="none" stroke="#4a4a55" stroke-width="1" opacity=".5"/>');
+    }
+    if (o.noun === 'cup') {
+      fill = ghost ? 'none' : COLORS[o.color];
+      return '<path d="M' + (x - 10) + ' ' + (y - 22) + ' h20 l-3 22 h-14 z" fill="' + fill + '" stroke="' + (ghost ? '#2e8b57' : '#33333d') + '" stroke-width="' + (ghost ? 2.5 : 1.4) + '"' + c + '/>' +
+        (ghost ? '' : '<path d="M' + (x + 9) + ' ' + (y - 18) + ' q8 2 3 10" fill="none" stroke="#33333d" stroke-width="2.4"/>');
+    }
+    if (o.noun === 'book') {
+      return '<rect x="' + (x - 17) + '" y="' + (y - 11) + '" width="34" height="11" rx="2" fill="' + (ghost ? 'none' : '#8a5a3c') + '" stroke="' + (ghost ? '#2e8b57' : '#4b2f1f') + '" stroke-width="' + (ghost ? 2.5 : 1.4) + '"' + c + '/>' +
+        (ghost ? '' : '<rect x="' + (x - 15) + '" y="' + (y - 4) + '" width="30" height="3" fill="#f3ead8"/>');
+    }
+    return '<path d="M' + (x - 19) + ' ' + (y - 7) + ' h30 l8 3.5 l-8 3.5 h-30 z" fill="' + (ghost ? 'none' : '#e8a33d') + '" stroke="' + (ghost ? '#2e8b57' : '#6b4a1a') + '" stroke-width="' + (ghost ? 2.5 : 1.2) + '"' + c + '/>' +
+      (ghost ? '' : '<rect x="' + (x - 23) + '" y="' + (y - 7) + '" width="5" height="7" fill="#f19aa6" stroke="#6b4a1a" stroke-width="1"/><path d="M' + (x + 17) + ' ' + (y - 4.5) + ' l3 1 l-3 1 z" fill="#333"/>');
+  }
+  /** Positions of all objects: several things on one spot sit side by side. */
+  function layout(state) {
+    var by = {}, pos = {};
+    OBJ_IDS.forEach(function (id) { var sp = state[id].spot; (by[sp] = by[sp] || []).push(id); });
+    Object.keys(by).forEach(function (sp) {
+      var list = by[sp], n = list.length, w = SPOT[sp].rug ? 0 : (sp === 'box-in' ? 18 : 26);
+      list.forEach(function (id, k) { pos[id] = { x: SPOT[sp].x + (k - (n - 1) / 2) * w, y: SPOT[sp].y }; });
+    });
+    return pos;
+  }
+  function roomSvg(state, opt) {
+    opt = opt || {};
+    var pos = layout(state), out = [];
+    out.push('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 266" role="group" aria-label="' + L('房间', 'Room') + '">');
+    out.push('<rect width="460" height="200" fill="#f4eee2"/><rect y="200" width="460" height="66" fill="#e3d7c2"/><line x1="0" y1="200" x2="460" y2="200" stroke="#bfae92" stroke-width="2"/>');
+    // window (open: one pane swung inwards)
+    out.push('<g data-fix="window"><rect x="22" y="22" width="78" height="62" fill="#cfe6f5" stroke="#6b5b45" stroke-width="3"/><line x1="61" y1="22" x2="61" y2="84" stroke="#6b5b45" stroke-width="2"/>' +
+      '<path d="M61 22 L86 30 L86 92 L61 84 Z" fill="#e6f2fa" stroke="#6b5b45" stroke-width="2.5"/><path d="M30 46 q8 -10 20 -4" fill="none" stroke="#fff" stroke-width="2"/></g>');
+    // door (closed)
+    out.push('<g data-fix="door"><rect x="322" y="40" width="54" height="160" fill="#b98b5e" stroke="#6b4a2a" stroke-width="3"/><rect x="330" y="52" width="38" height="58" fill="none" stroke="#8a6440" stroke-width="2"/><rect x="330" y="122" width="38" height="66" fill="none" stroke="#8a6440" stroke-width="2"/><circle cx="366" cy="124" r="3.5" fill="#f2c230" stroke="#6b4a2a"/></g>');
+    // rug
+    out.push('<rect x="14" y="226" width="432" height="36" rx="8" fill="#c7d8c0" stroke="#93ab8a" stroke-width="2"/><path d="M24 244 h412" stroke="#e5eee0" stroke-width="2" stroke-dasharray="6 6"/>');
+    // box back
+    out.push('<rect x="16" y="168" width="68" height="20" fill="#a77b4c" stroke="#6b4a2a" stroke-width="2"/>');
+    function objs(filter) {
+      OBJ_IDS.filter(filter).forEach(function (id) {
+        var p = pos[id], sel = opt.sel === id;
+        out.push('<g data-obj="' + id + '" tabindex="' + (opt.readonly ? '-1' : '0') + '" role="button" aria-label="' + L(OBJ[id].zh, OBJ[id].en) + (state[id].color && OBJ[id].colourable ? L('（' + COLOR_NAME[state[id].color][0] + '色）', ' (' + COLOR_NAME[state[id].color][1] + ')') : '') + '"' + (sel ? ' class="sel"' : '') + '>' + objSvg(id, p.x, p.y, state[id]) +
+          (sel ? '<circle class="selring" cx="' + p.x + '" cy="' + (p.y - 12) + '" r="26"/>' : '') + '</g>');
+      });
+    }
+    objs(function (id) { return state[id].spot === 'box-in'; });
+    // box front
+    out.push('<rect x="16" y="186" width="68" height="32" fill="#c4945f" stroke="#6b4a2a" stroke-width="2"/><path d="M16 186 l-6 -10 h68 l6 10" fill="#d6aa73" stroke="#6b4a2a" stroke-width="1.5"/>');
+    // table
+    out.push('<rect x="132" y="112" width="116" height="9" rx="2" fill="#9a6b43" stroke="#5e3f24" stroke-width="2"/><rect x="140" y="121" width="8" height="97" fill="#8a5d39" stroke="#5e3f24" stroke-width="1.5"/><rect x="232" y="121" width="8" height="97" fill="#8a5d39" stroke="#5e3f24" stroke-width="1.5"/>');
+    // chair (back on the right)
+    out.push('<rect x="306" y="92" width="8" height="126" fill="#5f88a8" stroke="#3a5a74" stroke-width="1.5"/><rect x="264" y="152" width="50" height="8" rx="2" fill="#7aa3c2" stroke="#3a5a74" stroke-width="2"/><rect x="268" y="160" width="6" height="58" fill="#5f88a8" stroke="#3a5a74" stroke-width="1.2"/><rect x="306" y="160" width="6" height="58" fill="#5f88a8"/>');
+    // boy, facing you, arms out: his right hand is on your left
+    out.push('<g data-fix="boy"><rect x="384" y="168" width="9" height="50" rx="3" fill="#3f4d7a"/><rect x="398" y="168" width="9" height="50" rx="3" fill="#3f4d7a"/>' +
+      '<rect x="380" y="118" width="31" height="54" rx="9" fill="#e8734f" stroke="#a84c31" stroke-width="1.5"/>' +
+      '<path d="M382 128 L356 150" stroke="#e8734f" stroke-width="8" stroke-linecap="round"/><path d="M409 128 L435 150" stroke="#e8734f" stroke-width="8" stroke-linecap="round"/>' +
+      '<circle cx="354" cy="152" r="5.5" fill="#f2c7a5" stroke="#b8865f"/><circle cx="437" cy="152" r="5.5" fill="#f2c7a5" stroke="#b8865f"/>' +
+      '<circle cx="395.5" cy="100" r="17" fill="#f2c7a5" stroke="#b8865f" stroke-width="1.5"/><path d="M379 96 q2 -18 17 -18 q15 0 17 18 q-8 -8 -17 -8 q-9 0 -17 8z" fill="#3b2a20"/>' +
+      '<circle cx="389.5" cy="101" r="2" fill="#222"/><circle cx="401.5" cy="101" r="2" fill="#222"/><path d="M390 108 q5.5 4 11 0" fill="none" stroke="#a04a3a" stroke-width="1.6" stroke-linecap="round"/></g>');
+    objs(function (id) { return state[id].spot !== 'box-in'; });
+    (opt.ghosts || []).forEach(function (g) { out.push(g); });
+    if (!opt.readonly) PLACE_IDS.forEach(function (sp) { var r = SPOT[sp].r; out.push('<rect class="spot" data-spot="' + sp + '" tabindex="' + (opt.moving ? '0' : '-1') + '" role="button" aria-label="' + L('放到', 'Put it ') + L(SPOT[sp].zh, SPOT[sp].en) + '" x="' + r[0] + '" y="' + r[1] + '" width="' + r[2] + '" height="' + r[3] + '" rx="8"/>'); });
+    else PLACE_IDS.forEach(function (sp) { var r = SPOT[sp].r; out.push('<rect class="spot" data-spot="' + sp + '" x="' + r[0] + '" y="' + r[1] + '" width="' + r[2] + '" height="' + r[3] + '" rx="8"/>'); });
+    out.push('</svg>');
+    return out.join('');
+  }
+
+  /* ---------- the street map (language-neutral) ---------- */
+  var BLD = {
+    M0L: { x: 112, y: 244, cross: 0, turn: 'straight', side: 'L' }, M0R: { x: 208, y: 244, cross: 0, turn: 'straight', side: 'R' },
+    M1L: { x: 112, y: 146, cross: 1, turn: 'straight', side: 'L' }, M1R: { x: 208, y: 146, cross: 1, turn: 'straight', side: 'R' },
+    M2L: { x: 112, y: 44, cross: 2, turn: 'straight', side: 'L' }, M2R: { x: 208, y: 44, cross: 2, turn: 'straight', side: 'R' },
+    W1N: { x: 26, y: 166, cross: 1, turn: 'left', side: 'R' }, W1S: { x: 26, y: 232, cross: 1, turn: 'left', side: 'L' },
+    E1N: { x: 294, y: 166, cross: 1, turn: 'right', side: 'L' }, E1S: { x: 294, y: 232, cross: 1, turn: 'right', side: 'R' },
+    W2N: { x: 26, y: 64, cross: 2, turn: 'left', side: 'R' }, W2S: { x: 26, y: 130, cross: 2, turn: 'left', side: 'L' },
+    E2N: { x: 294, y: 64, cross: 2, turn: 'right', side: 'L' }, E2S: { x: 294, y: 130, cross: 2, turn: 'right', side: 'R' }
+  };
+  var CROSS_Y = { 1: 212, 2: 112 };
+  function routePath(id) {
+    var b = BLD[id], cx = b.x + 20, cy = b.y + 15, p = [[180, 290]];
+    if (b.turn === 'straight') { p.push([180, cy]); p.push([b.side === 'L' ? b.x + 40 : b.x, cy]); }
+    else { var y = CROSS_Y[b.cross]; p.push([180, y]); p.push([cx, y]); p.push([cx, cy < y ? b.y + 30 : b.y]); }
+    return p.map(function (q, i) { return (i ? 'L' : 'M') + q[0] + ' ' + q[1]; }).join(' ');
+  }
+  function mapSvg(opt) {
+    opt = opt || {};
+    var out = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 300" role="group" aria-label="' + L('街区地图', 'Street map') + '">'];
+    out.push('<rect width="360" height="300" fill="#e7efdc"/>');
+    out.push('<rect x="165" y="0" width="30" height="300" fill="#cfd3da"/>');
+    out.push('<rect class="cross" data-cross="c1" x="0" y="200" width="360" height="25" fill="#cfd3da"/><rect class="cross" data-cross="c2" x="0" y="100" width="360" height="25" fill="#cfd3da"/>');
+    out.push('<path d="M180 0 V300 M0 212.5 H360 M0 112.5 H360" stroke="#f7f7f2" stroke-width="1.5" stroke-dasharray="7 7"/>');
+    Object.keys(BLD).forEach(function (id) {
+      var b = BLD[id], cls = 'bld' + (opt.picked === id ? ' picked' : '') + (opt.answer === id ? ' answer' : '');
+      out.push('<g class="' + cls + '" data-bld="' + id + '" tabindex="' + (opt.readonly ? '-1' : '0') + '" role="button" aria-label="' + L('房子 ', 'Building ') + id + '">' +
+        '<rect class="wall" x="' + b.x + '" y="' + b.y + '" width="40" height="30" rx="3"/>' +
+        '<rect x="' + (b.x + 6) + '" y="' + (b.y + 7) + '" width="8" height="7" fill="#f6f1e2"/><rect x="' + (b.x + 26) + '" y="' + (b.y + 7) + '" width="8" height="7" fill="#f6f1e2"/><rect x="' + (b.x + 16) + '" y="' + (b.y + 16) + '" width="8" height="14" fill="#8b7a62"/>' +
+        (opt.answer === id ? '<text x="' + (b.x + 20) + '" y="' + (b.y - 3) + '" text-anchor="middle" font-size="14">⭐</text>' : '') + '</g>');
+    });
+    if (opt.answer) out.push('<path d="' + routePath(opt.answer) + '" fill="none" stroke="#2e8b57" stroke-width="4" stroke-dasharray="8 5" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>');
+    out.push('<path d="M180 270 l-11 18 h22 z" fill="#3d4fe0"/><circle cx="180" cy="291" r="6" fill="#3d4fe0"/>');
+    out.push('<text x="196" y="292" font-size="11" fill="#33363f">' + L('你在这里，面朝上', 'You are here, facing up') + '</text>');
+    out.push('</svg>');
+    return out.join('');
+  }
+
+  function start(pack) {
+    var title = T(pack, 'title');
+    var B = KTBlock.init({ id: 'listen-and-do', primitive: 'prim:listen-and-do', title: title, set: pack.id });
+    document.title = title + ' · Listen and Do';
+    var modes = [{ id: 'do', label: L('听一个做一个', 'Hear it, do it') }, { id: 'check', label: L('对照差在哪', 'What was different?') }, { id: 'compose', label: L('反过来发指令', 'Give the instruction') }];
+    var C = pack.compose;
+    function sayText(it) { return it.seg.map(function (x) { return x[0]; }).join(pack.join); }
+    var st = {
+      mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : 'do',
+      scene: params.get('focus') === 'map' ? 'map' : 'room',
+      state: null, queue: [], idx: 0, item: null, round: 0, results: { room: [], map: [] }, cIdx: 0, comp: null, streak: 0
+    };
+    function child() { return B.variant === 'child'; }
+    var ui = KTBlock.chrome(B, { title: title, subtitle: T(pack, 'subtitle'), modes: modes, mode: st.mode,
+      onMode: function (m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m }); enterMode(); },
+      onVariant: function () { if (child()) st.scene = 'room'; enterMode(true); } });
+    var bar = h('div', { class: 'kb-bar' });
+    var stage = h('div', { class: 'kb-card ld-stage' });
+    var side = h('aside', { class: 'ld-side' });
+    document.getElementById('app').append(ui.header, h('main', { class: 'kb-main' }, [bar, h('div', { class: 'ld-layout' }, [stage, side])]), ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id });
+
+    /* ---- speech ---- */
+    var warned = false, timers = [];
+    function clearSeq() { timers.forEach(clearTimeout); timers = []; try { window.speechSynthesis.cancel(); } catch (e) { /* none */ } }
+    function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+    function note(t) { var c = stage.querySelector('.cap'); if (c) c.textContent = t || ''; }
+    function speak(text, rate) {
+      var r = B.speak(text, pack.speech, rate ? { rate: rate } : {});
+      if (!r && !warned) { warned = true; note(L('这个浏览器不能播放语音：请换一个浏览器，或由老师读指令。', 'This browser cannot play speech: use another browser, or have a teacher read the instructions.')); }
+      return r;
+    }
+    function flash(target) {
+      if (!target) return;
+      var sel = target.indexOf('c:') === 0 ? '[data-c="' + target.slice(2) + '"]' : '[data-obj="' + target + '"],[data-spot="' + target + '"],[data-fix="' + target + '"],[data-cross="' + target + '"]';
+      document.querySelectorAll(sel).forEach(function (el) { el.classList.remove('flash'); void el.getBoundingClientRect(); el.classList.add('flash'); });
+    }
+    /** Play the instruction phrase by phrase, blinking what each phrase names (step 2). */
+    function playSegments(it) {
+      clearSeq();
+      var chain = Promise.resolve();
+      it.seg.forEach(function (sg) {
+        chain = chain.then(function () {
+          if (st.item !== it && st.comp !== it) return;
+          flash(sg[1]);
+          var r = speak(sg[0]);
+          return Promise.race([Promise.resolve(r), new Promise(function (res) { setTimeout(res, 600 + sg[0].length * 160); })]).then(function () { return new Promise(function (res) { setTimeout(res, 350); }); });
+        });
+      });
+      return chain;
+    }
+
+    /* ---- room state ---- */
+    function freshState() {
+      var slots = KTBlock.shuffle(RUG), s2 = {};
+      OBJ_IDS.forEach(function (id, i) { s2[id] = { spot: slots[i], color: null }; });
+      return s2;
+    }
+    function clone(x) { return JSON.parse(JSON.stringify(x)); }
+
+    /* ---- rounds ---- */
+    function enterMode(reset) {
+      clearSeq();
+      if (st.mode === 'do') newRound();
+      else if (st.mode === 'check') { st.cIdx = 0; beginCheck(); }
+      else { st.compState = clone(st.state || freshState()); st.cn = 0; newCompose(); }
+    }
+    function pickItems() {
+      var pool = pack.items.filter(function (x) { return x.scene === st.scene; });
+      if (child()) return KTBlock.shuffle(pool.filter(function (x) { return x.child; })).slice(0, 5);
+      var n = st.scene === 'map' ? 6 : 8;
+      var rev = pool.filter(function (x) { return x.rev; });
+      var kinds = {};
+      var revPick = KTBlock.shuffle(rev).filter(function (x) { var k = x.forbid ? 'neg' : x.cond ? 'cond' : 'other'; if (kinds[k]) return false; kinds[k] = 1; return true; });
+      var rest = KTBlock.shuffle(pool.filter(function (x) { return revPick.indexOf(x) < 0; })).slice(0, n - revPick.length);
+      return KTBlock.shuffle(revPick.concat(rest));
+    }
+    function newRound() {
+      st.round++;
+      st.state = freshState();
+      st.queue = pickItems(); st.idx = 0;
+      st.results[st.scene] = [];
+      beginDo();
+    }
+    function beginDo() {
+      clearSeq();
+      var it = st.queue[st.idx];
+      st.item = it ? { src: it, id: 'do:' + it.id + ':' + st.round, before: st.scene === 'room' ? clone(st.state) : null, log: [], replays: 0, slow: false, captions: false, sel: null, tool: 'move', picked: null, seg: it.seg } : null;
+      if (it) { B.emit('view', { item: st.item.id, scene: st.scene }); later(function () { if (st.item && st.item.src === it) speak(sayText(it)); }, 450); }
+      else B.emit('complete', { mode: 'do', scene: st.scene, items: st.queue.length });
+      render();
+    }
+    function replay(slow) {
+      var it = st.item; if (!it) return;
+      if (!slow) {
+        if (child() && it.replays >= 2) return;
+        it.replays++;
+        B.emit('select', { item: it.id, replay: it.replays });
+        speak(sayText(it.src));
+      } else {
+        if (!it.slow) { it.slow = true; B.hint(it.id, 2); }
+        speak(sayText(it.src), 0.6);
+      }
+      renderStage();
+    }
+    function toggleCaptions() {
+      var it = st.item; if (!it) return;
+      it.captions = !it.captions;
+      if (it.captions && !it.capUsed) { it.capUsed = true; B.hint(it.id, 4); }
+      renderStage();
+    }
+
+    /* ---- acting on the room ---- */
+    function clickObj(id) {
+      var it = st.item; if (!it || st.mode !== 'do') return;
+      if (it.tool !== 'move') {
+        if (!OBJ[id].colourable) { note(L('这个东西不能涂色。', 'This one cannot be coloured.')); return; }
+        st.state[id].color = it.tool;
+        it.log.push({ t: 'colour', obj: id, color: it.tool });
+        B.emit('highlight', { item: it.id, obj: id, color: it.tool });
+        renderStage(); return;
+      }
+      it.sel = it.sel === id ? null : id;
+      if (it.sel) B.emit('select', { item: it.id, obj: id });
+      renderStage();
+      if (it.sel) { var sp = stage.querySelector('[data-spot]'); if (sp && document.activeElement && document.activeElement.closest && document.activeElement.closest('.ld-scene')) sp.focus(); }
+    }
+    function clickSpot(sp) {
+      var it = st.item; if (!it || !it.sel || st.mode !== 'do') return;
+      var id = it.sel, from = st.state[id].spot;
+      st.state[id].spot = sp;
+      it.log.push({ t: 'move', obj: id, from: from, to: sp });
+      B.emit('drop', { item: it.id, obj: id, from: from, to: sp });
+      it.sel = null;
+      renderStage();
+    }
+    function clickBld(id) {
+      var it = st.item; if (!it || st.mode !== 'do') return;
+      it.picked = it.picked === id ? null : id;
+      if (it.picked) B.emit('select', { item: it.id, building: id });
+      renderStage();
+    }
+
+    /* ---- judging (hidden until step 2) ---- */
+    function judgeRoom(it) {
+      var src = it.src, before = it.before, after = st.state;
+      var condMet = src.cond ? FACTS[src.cond.fact] : true;
+      var exp = condMet ? src.steps : [];
+      var expObjs = exp.map(function (x) { return x.obj; });
+      var changed = OBJ_IDS.filter(function (id) { return before[id].spot !== after[id].spot || before[id].color !== after[id].color; });
+      var used = {}, cats = {};
+      exp.forEach(function (stp) {
+        var o = stp.obj;
+        var ok = stp.t === 'move' ? after[o].spot === stp.spot : after[o].color === stp.color;
+        if (ok) { used[o] = 1; return; }
+        if (changed.indexOf(o) >= 0) { used[o] = 1; cats[stp.t === 'move' ? (after[o].spot !== before[o].spot ? 'place' : 'extraMissing') : 'attr'] = 1; return; }
+        var sub = changed.filter(function (x) { return !used[x] && expObjs.indexOf(x) < 0; })[0];
+        if (sub) {
+          used[sub] = 1;
+          cats[OBJ[sub].noun === OBJ[o].noun ? 'attr' : 'object'] = 1;
+          if (stp.t === 'move' && after[sub].spot !== stp.spot) cats.place = 1;
+          if (stp.t === 'colour' && after[sub].color !== stp.color) cats.attr = 1;
+        } else cats.extraMissing = 1;
+      });
+      changed.forEach(function (x) { if (!used[x]) cats.extraMissing = 1; });
+      if (!Object.keys(cats).length && src.order && exp.length > 1) {
+        var idx = exp.map(function (stp) {
+          for (var i = it.log.length - 1; i >= 0; i--) { var a = it.log[i]; if (a.obj === stp.obj && (stp.t === 'move' ? a.t === 'move' && a.to === stp.spot : a.t === 'colour' && a.color === stp.color)) return i; }
+          return -1;
+        });
+        if (idx[0] >= 0 && idx[1] >= 0 && idx[1] < idx[0]) cats.order = 1;
+      }
+      var truth = Object.keys(cats);
+      return { correct: !truth.length, truth: truth.length ? truth : ['none'], expected: exp, condMet: condMet };
+    }
+    function judgeMap(it) {
+      var a = BLD[it.src.answer], p = it.picked ? BLD[it.picked] : null, cats = [];
+      if (!p) return { correct: false, truth: ['nopick'] };
+      if (it.picked === it.src.answer) return { correct: true, truth: ['none'] };
+      if (p.cross !== a.cross) cats.push('count');
+      if (p.turn !== a.turn) cats.push('turn');
+      if (p.side !== a.side) cats.push('side');
+      return { correct: false, truth: cats.length ? cats : ['side'] };
+    }
+    function done() {
+      var it = st.item; if (!it) return;
+      if (st.scene === 'map' && !it.picked) { note(L('先点一座房子。', 'Click a building first.')); return; }
+      var j = st.scene === 'room' ? judgeRoom(it) : judgeMap(it);
+      B.attempt(it.id, { correct: j.correct, response: { scene: st.scene, actions: it.log.slice(), picked: it.picked, replays: it.replays, slow: it.slow, captions: it.capUsed || false, categories: j.truth } });
+      st.results[st.scene].push({ id: it.id, src: it.src, after: st.scene === 'room' ? clone(st.state) : null, picked: it.picked, judge: j, replays: it.replays, assisted: it.slow || it.capUsed });
+      st.idx++; beginDo();
+    }
+
+    /* ---- step 2: what was different ---- */
+    var CATS = {
+      room: [['object', L('拿错了东西', 'Wrong thing')], ['attr', L('大小或颜色不对', 'Wrong size or colour')], ['place', L('位置不对', 'Wrong place')], ['order', L('先后顺序不对', 'Wrong order')], ['extraMissing', L('多做了或漏做了', 'Did too much or missed something')], ['none', L('没差', 'No difference')]],
+      map: [['count', L('路口数不对', 'Wrong corner')], ['turn', L('拐错方向', 'Turned the wrong way')], ['side', L('左右两边看反了', 'Left and right swapped')], ['none', L('没差', 'No difference')]]
+    };
+    function beginCheck() {
+      clearSeq();
+      var list = st.results[st.scene];
+      var r = list[st.cIdx];
+      st.item = r ? { check: r, id: 'check:' + r.id, answered: false, pick: null, seg: r.src.seg, src: r.src } : null;
+      if (r) { B.emit('view', { item: st.item.id, mode: 'check' }); later(function () { if (st.item && st.item.check === r) { playSegments(st.item); B.emit('compare', { item: st.item.id, segments: r.src.seg.length }); } }, 500); }
+      render();
+    }
+    function pickCat(k) {
+      var it = st.item; if (!it || !it.check || it.answered) return;
+      var truth = it.check.judge.truth, ok = truth.indexOf(k) >= 0;
+      it.answered = true; it.pick = k;
+      B.attempt(it.id, { correct: ok, response: { pick: k, truth: truth } });
+      render();
+      var src = it.check.src, names = {};
+      CATS[st.scene].forEach(function (c) { names[c[0]] = c[1]; });
+      var msg = (ok ? L('对。', 'Right. ') : L('不对。', 'Not quite. ')) + L('这一条：', 'This one: ') + truth.map(function (t) { return names[t] || t; }).join(L('、', ', ')) + L('。', '.');
+      if (src.note) msg += ' ' + T(src, 'note');
+      if (st.scene === 'room' && it.check.judge.expected.length && !it.check.judge.correct) msg += L(' 绿色虚线是应该的样子。', ' The green dashed outline shows where it should be.');
+      if (st.scene === 'map' && !it.check.judge.correct) msg += L(' 绿色虚线是正确的路线。', ' The green dashed line is the right route.');
+      feedback(msg, ok ? '' : 'bad');
+    }
+
+    /* ---- step 3: give the instruction ---- */
+    function newCompose() {
+      clearSeq();
+      var s2 = st.compState, tgt, kind = Math.random() < 0.3 ? 'colour' : 'move';
+      if (kind === 'colour') {
+        var ball = Math.random() < 0.5 ? 'ballBig' : 'ballSmall';
+        var cols = Object.keys(COLORS).filter(function (c) { return c !== s2[ball].color; });
+        tgt = { t: 'colour', obj: ball, color: cols[Math.floor(Math.random() * cols.length)] };
+      } else {
+        var pool = ['ballBig', 'ballSmall', 'cupRed', 'cupBlue', 'ballBig', 'ballSmall', 'cupRed', 'cupBlue', 'book', 'pencil'];
+        var o = pool[Math.floor(Math.random() * pool.length)];
+        var spots = PLACE_IDS.filter(function (sp) { return sp !== s2[o].spot && (child() ? sp.indexOf('boy') < 0 : true); });
+        tgt = { t: 'move', obj: o, spot: spots[Math.floor(Math.random() * spots.length)] };
+      }
+      st.cn++;
+      st.comp = { id: 'compose:' + st.round + '.' + st.cn, target: tgt, verb: null, size: null, color: null, noun: null, place: null, to: null, result: null, saved: null };
+      st.item = null;
+      B.emit('view', { item: st.comp.id, mode: 'compose', target: tgt });
+      render();
+    }
+    function npText(c) {
+      var parts = { size: c.size ? C.sizes[c.size] : '', color: c.color ? C.colorAdj[c.color] : '', noun: c.noun ? C.nouns[c.noun] : '…' };
+      return C.np.map(function (k) { return parts[k]; }).filter(Boolean).join(C.npJoin);
+    }
+    function sentence(c) {
+      if (!c.verb) return '';
+      if (c.verb === 'put') return C.put.replace('{np}', npText(c)).replace('{place}', c.place ? C.places[c.place] : '…');
+      return C.colour.replace('{np}', npText(c)).replace('{colour}', c.to ? C.colorTo[c.to] : '…');
+    }
+    function matches(id, c, s2) {
+      var o = OBJ[id];
+      if (o.noun !== c.noun) return false;
+      if (c.size && o.size !== c.size) return false;
+      if (c.color) { var cur = o.colourable ? s2[id].color : o.color; if (cur !== c.color) return false; }
+      return true;
+    }
+    function execute() {
+      var c = st.comp; if (!c || !c.verb || !c.noun || (c.verb === 'put' ? !c.place : !c.to)) return;
+      var s2 = st.compState, cands = OBJ_IDS.filter(function (id) { return matches(id, c, s2); });
+      var text = sentence(c), tgt = c.target, res = { sentence: text, candidates: cands.length };
+      c.saved = clone(s2);
+      if (!cands.length) { res.outcome = 'nothing'; }
+      else {
+        var chosen = cands[Math.floor(Math.random() * cands.length)];
+        res.executedOn = chosen;
+        if (c.verb === 'put') s2[chosen].spot = c.place;
+        else if (OBJ[chosen].colourable) s2[chosen].color = c.to; else res.outcome = 'cannot';
+        var reached = tgt.t === 'move' ? s2[tgt.obj].spot === tgt.spot : s2[tgt.obj].color === tgt.color;
+        var others = OBJ_IDS.filter(function (id) { return id !== tgt.obj && (s2[id].spot !== c.saved[id].spot || s2[id].color !== c.saved[id].color); }).length;
+        res.outcome = res.outcome || (cands.length > 1 ? 'ambiguous' : reached && !others ? 'ok' : 'wrong');
+      }
+      var ok = res.outcome === 'ok';
+      B.attempt(c.id, { correct: ok, response: res });
+      B.emit('submit', { item: c.id, literal: true, outcome: res.outcome });
+      c.result = res;
+      render();
+      var msg = res.outcome === 'ok' ? L('页面照字面做了，正好得到目标：这条指令没有歧义。', 'The page did exactly what it says and reached the target: the instruction is unambiguous.')
+        : res.outcome === 'ambiguous' ? L('这句话能指不止一个东西（' + cands.length + ' 个都符合），页面只好随便挑了一个。补上大小或颜色。', 'This could mean more than one thing (' + cands.length + ' match), so the page picked one at random. Add the size or the colour.')
+        : res.outcome === 'nothing' ? L('画面里没有符合这句话的东西。', 'Nothing in the picture matches this description.')
+        : res.outcome === 'cannot' ? L('这个东西不能涂色。', 'That thing cannot be coloured.')
+        : L('页面照字面做了，但结果不是目标。对照虚线再看看。', 'The page did what it says, but the result is not the target. Compare with the dashed outline.');
+      feedback(msg, ok ? '' : 'bad');
+    }
+    function undoCompose() { var c = st.comp; if (!c || !c.saved) return; st.compState = c.saved; c.saved = null; c.result = null; B.emit('revise', { item: c.id }); render(); }
+
+    /* ---- render ---- */
+    function feedback(t, tone) { var f = stage.querySelector('.kb-feedback'); if (f) { f.textContent = t; f.className = 'kb-feedback ' + (tone || ''); f.hidden = !t; } }
+    function renderBar() {
+      bar.innerHTML = '';
+      if (st.mode !== 'compose' && !child()) bar.append(h('label', { class: 'kb-variant' }, [L('场景 ', 'Scene '), h('select', { onchange: function (e) { st.scene = e.target.value; B.emit('highlight', { scene: st.scene }); enterMode(); } },
+        [h('option', { value: 'room', text: L('房间', 'Room'), selected: st.scene === 'room' }), h('option', { value: 'map', text: L('问路地图', 'Street map'), selected: st.scene === 'map' })])]));
+      if (st.mode === 'do' && st.item) bar.append(h('span', { class: 'kb-note', text: L('第 ' + (st.idx + 1) + ' / ' + st.queue.length + ' 条', 'Instruction ' + (st.idx + 1) + ' / ' + st.queue.length) }));
+      if (st.mode === 'check' && st.item) bar.append(h('span', { class: 'kb-note', text: L('第 ' + (st.cIdx + 1) + ' / ' + st.results[st.scene].length + ' 条', 'Instruction ' + (st.cIdx + 1) + ' / ' + st.results[st.scene].length) }));
+      if (st.mode === 'do') bar.append(h('button', { class: 'kb-btn', onclick: newRound }, L('换一轮（场景复原）', 'New round (scene reset)')));
+      if (st.mode === 'compose') bar.append(h('button', { class: 'kb-btn', onclick: function () { st.compState = freshState(); newCompose(); } }, L('场景复原', 'Reset the scene')));
+    }
+    function sceneBox(html, cls) {
+      var box = h('div', { class: 'ld-scene ' + (cls || '') });
+      box.innerHTML = html;
+      return box;
+    }
+    function palette(it) {
+      var btns = [h('button', { 'aria-pressed': it.tool === 'move' ? 'true' : 'false', title: L('移动：先点东西，再点地方', 'Move: click a thing, then a place'), onclick: function () { it.tool = 'move'; renderStage(); } }, L('✋ 移动', '✋ Move'))];
+      Object.keys(COLORS).forEach(function (c) {
+        btns.push(h('button', { class: 'sw', 'data-c': c, style: 'background:' + COLORS[c], 'aria-pressed': it.tool === c ? 'true' : 'false', 'aria-label': L('涂成' + COLOR_NAME[c][0] + '色', 'Paint ' + COLOR_NAME[c][1]), onclick: function () { it.tool = c; it.sel = null; B.emit('select', { item: it.id, tool: c }); renderStage(); } }));
+      });
+      return h('div', { class: 'ld-pal', role: 'toolbar', 'aria-label': L('工具', 'Tools') }, btns);
+    }
+    function wireScene(box) {
+      function act(t) {
+        var o = t.closest('[data-obj]'), sp = t.closest('[data-spot]'), b = t.closest('[data-bld]');
+        if (sp && st.item && st.item.sel) clickSpot(sp.getAttribute('data-spot'));
+        else if (o) clickObj(o.getAttribute('data-obj'));
+        else if (b) clickBld(b.getAttribute('data-bld'));
+      }
+      box.addEventListener('click', function (e) { act(e.target); });
+      box.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); act(e.target); } });
+    }
+    function renderStage() {
+      stage.innerHTML = '';
+      if (st.mode === 'do') renderDo();
+      else if (st.mode === 'check') renderCheck();
+      else renderCompose();
+    }
+    function renderDo() {
+      var it = st.item;
+      if (!it) {
+        stage.append(h('div', { class: 'done', text: '✔' }), h('p', { class: 'kb-prompt', text: L('这一轮做完了。现在到“对照差在哪”，一条一条回放，自己找出差在哪里。', 'Round finished. Now go to “What was different?” and replay each instruction to find what differed.') }),
+          h('div', { class: 'ld-tools' }, [h('button', { class: 'kb-btn primary', onclick: function () { st.mode = 'check'; ui.setMode('check'); enterMode(); } }, L('去对照 →', 'Compare now →')), h('button', { class: 'kb-btn', onclick: newRound }, L('再来一轮', 'Another round'))]));
+        return;
+      }
+      var max = child() ? 2 : Infinity;
+      stage.append(h('p', { class: 'kb-prompt', text: st.scene === 'room' ? (child() ? L('听一听，做一做。', 'Listen and do it.') : L('听指令，在画面上做。做完点“做好了”。这一步不显示对错。', 'Listen and do it in the picture, then click “Done”. Nothing is marked yet.')) : L('听路线，点出要去的那座房子。这一步不显示对错。', 'Listen to the directions and click the building you are going to. Nothing is marked yet.') }),
+        h('div', { class: 'ld-tools' }, [
+          h('button', { class: 'kb-btn primary ld-play', disabled: it.replays >= max, onclick: function () { replay(false); } }, L('▶ 再听（空格）', '▶ Listen again (Space)') + (it.replays ? ' · ' + it.replays : '')),
+          child() ? null : h('button', { class: 'kb-btn', onclick: function () { replay(true); } }, L('慢速（算辅助）', 'Slow (counts as help)')),
+          child() ? null : h('button', { class: 'kb-btn', 'aria-pressed': it.captions ? 'true' : 'false', onclick: toggleCaptions }, it.captions ? L('关字幕', 'Hide captions') : L('字幕（算辅助）', 'Captions (counts as help)'))]));
+      if (it.captions) stage.append(h('p', { class: 'ld-caption', text: sayText(it.src) }));
+      var box;
+      if (st.scene === 'room') {
+        box = sceneBox(roomSvg(st.state, { sel: it.sel, moving: !!it.sel }), it.sel ? 'moving' : '');
+        stage.append(box, h('div', { class: 'ld-tools' }, [palette(it)]),
+          h('p', { class: 'kb-note', style: 'text-align:center;margin:0', text: it.tool === 'move' ? (it.sel ? L('现在点要放的地方（虚线框）。', 'Now click where it goes (dashed frames).') : L('移动：先点一个东西，再点要放的地方。涂色：先选颜色，再点球。', 'Move: click a thing, then where it goes. Colour: pick a colour, then click a ball.')) : L('点一个球，把它涂成这个颜色。', 'Click a ball to paint it this colour.') }));
+      } else {
+        box = sceneBox(mapSvg({ picked: it.picked }));
+        stage.append(box);
+      }
+      wireScene(box);
+      stage.append(h('p', { class: 'cap kb-note', style: 'text-align:center;margin:0' }),
+        h('div', { class: 'ld-tools' }, [h('button', { class: 'kb-btn primary', onclick: done }, L('做好了，下一条 →', 'Done, next →'))]),
+        h('p', { class: 'kb-note', style: 'text-align:center;margin:0', text: L('听到的指令里如果有不用做的部分，就不做；什么都不用做时，直接点“做好了”。', 'If part of an instruction should not be done, do not do it; if nothing needs doing, just click “Done”.') }));
+    }
+    function renderCheck() {
+      var it = st.item;
+      if (!it) {
+        var any = st.results[st.scene].length;
+        stage.append(h('p', { class: 'kb-prompt', text: any ? L('这一轮都对照完了。', 'Everything in this round has been compared.') : L('还没有可以对照的指令。先在“听一个做一个”里做一轮。', 'Nothing to compare yet. Do a round in “Hear it, do it” first.') }),
+          h('div', { class: 'ld-tools' }, [h('button', { class: 'kb-btn primary', onclick: function () { st.mode = 'do'; ui.setMode('do'); enterMode(); } }, L('去做一轮 →', 'Do a round →'))]));
+        return;
+      }
+      var r = it.check, box;
+      stage.append(h('p', { class: 'kb-prompt', text: L('这是你做完这一条之后的画面。听分段回放，看闪的地方，判断差在哪一类。', 'This is the picture after you did this instruction. Listen to the replay phrase by phrase, watch what blinks, and decide what kind of difference there was.') }),
+        h('div', { class: 'ld-tools' }, [h('button', { class: 'kb-btn primary ld-play', onclick: function () { playSegments(it); B.emit('compare', { item: it.id, replay: true }); } }, L('▶ 分段回放', '▶ Replay phrase by phrase'))]));
+      if (st.scene === 'room') {
+        var ghosts = [];
+        if (it.answered) r.judge.expected.forEach(function (stp) {
+          var sp = stp.t === 'move' ? SPOT[stp.spot] : null;
+          var pos = layout(r.after)[stp.obj];
+          if (stp.t === 'move' && r.after[stp.obj].spot !== stp.spot) ghosts.push(objSvg(stp.obj, sp.x, sp.y, null, true));
+          if (stp.t === 'colour' && r.after[stp.obj].color !== stp.color) ghosts.push('<circle cx="' + pos.x + '" cy="' + (pos.y - (OBJ[stp.obj].size === 'big' ? 17 : 9)) + '" r="' + (OBJ[stp.obj].size === 'big' ? 23 : 15) + '" fill="none" stroke="' + COLORS[stp.color] + '" stroke-width="4" stroke-dasharray="5 3"/>');
+        });
+        box = sceneBox(roomSvg(r.after, { readonly: true, ghosts: ghosts }), 'readonly');
+      } else box = sceneBox(mapSvg({ picked: r.picked, answer: it.answered ? r.src.answer : null, readonly: true }), 'readonly');
+      stage.append(box);
+      if (st.scene === 'room') stage.append(h('div', { class: 'ld-tools', 'aria-hidden': 'true' }, [h('div', { class: 'ld-pal' }, Object.keys(COLORS).map(function (c) { return h('button', { class: 'sw', 'data-c': c, tabindex: '-1', disabled: true, style: 'background:' + COLORS[c] }); }))]));
+      if (it.answered) stage.append(h('p', { class: 'ld-caption', text: sayText(r.src) }));
+      stage.append(h('div', { class: 'ld-cats' }, CATS[st.scene].map(function (c, i) {
+        var cls = 'ld-cat';
+        if (it.answered) { if (c[0] === it.pick) cls += r.judge.truth.indexOf(c[0]) >= 0 ? ' right' : ' wrongpick'; else if (r.judge.truth.indexOf(c[0]) >= 0) cls += ' also'; }
+        return h('button', { class: cls, disabled: it.answered, onclick: function () { pickCat(c[0]); } }, [h('span', { class: 'n', text: String(i + 1) }), h('span', { text: c[1] })]);
+      })));
+      stage.append(h('div', { class: 'kb-feedback', hidden: true }),
+        h('div', { class: 'ld-tools' }, [h('button', { class: 'kb-btn' + (it.answered ? ' primary' : ''), onclick: function () { st.cIdx++; beginCheck(); } }, it.answered ? L('下一条 →', 'Next →') : L('跳过', 'Skip'))]));
+    }
+    function renderCompose() {
+      var c = st.comp, s2 = st.compState, tgt = c.target, ghosts = [];
+      var pos = layout(s2)[tgt.obj];
+      if (tgt.t === 'move') {
+        var sp = SPOT[tgt.spot];
+        ghosts.push(objSvg(tgt.obj, sp.x, sp.y, null, true));
+        ghosts.push('<path d="M' + pos.x + ' ' + (pos.y - 30) + ' Q' + ((pos.x + sp.x) / 2) + ' ' + (Math.min(pos.y, sp.y) - 70) + ' ' + sp.x + ' ' + (sp.y - 30) + '" fill="none" stroke="#2e8b57" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#ld-arr)"/>');
+        ghosts.unshift('<defs><marker id="ld-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#2e8b57"/></marker></defs>');
+      } else ghosts.push('<circle cx="' + pos.x + '" cy="' + (pos.y - (OBJ[tgt.obj].size === 'big' ? 17 : 9)) + '" r="' + (OBJ[tgt.obj].size === 'big' ? 24 : 16) + '" fill="none" stroke="' + COLORS[tgt.color] + '" stroke-width="5" stroke-dasharray="6 3"/>');
+      stage.append(h('p', { class: 'kb-prompt', text: tgt.t === 'move' ? L('目标：把标出的东西移到绿色虚线的位置。拼一条指令，页面会照字面去做。', 'Target: move the marked thing to the green dashed outline. Build an instruction; the page will carry it out literally.') : L('目标：把圈出的球涂成圈的颜色。拼一条指令，页面会照字面去做。', 'Target: paint the circled ball the colour of the circle. Build an instruction; the page will carry it out literally.') }));
+      var box = sceneBox(roomSvg(s2, { readonly: true, ghosts: c.result ? [] : ghosts }), 'readonly');
+      stage.append(box, h('p', { class: 'sr-only', 'data-target': JSON.stringify(tgt), text: L('目标：', 'Target: ') + L(OBJ[tgt.obj].zh, OBJ[tgt.obj].en) + (tgt.t === 'move' ? L(' → ' + SPOT[tgt.spot].zh, ' → ' + SPOT[tgt.spot].en) : L(' → 涂成' + COLOR_NAME[tgt.color][0] + '色', ' → paint it ' + COLOR_NAME[tgt.color][1])) }));
+      function row(label, key, opts) {
+        return h('div', { class: 'ld-row' }, [h('span', { text: label })].concat(opts.map(function (o) {
+          return h('button', { 'aria-pressed': c[key] === o[0] ? 'true' : 'false', disabled: !!c.result, onclick: function () { c[key] = c[key] === o[0] && key !== 'verb' ? null : o[0]; B.emit('select', { item: c.id, card: key, value: c[key] }); renderStage(); } }, o[1]);
+        })));
+      }
+      var ks = function (m) { return Object.keys(m).map(function (k) { return [k, m[k]]; }); };
+      var comp = [row(L('动作', 'Action'), 'verb', [['put', L('📦 移动', '📦 Move')], ['colour', L('🎨 涂色', '🎨 Colour')]])];
+      if (c.verb) {
+        comp.push(row(L('大小', 'Size'), 'size', ks(C.sizes)), row(L('颜色', 'Colour'), 'color', ks(C.colorAdj)), row(L('东西', 'Thing'), 'noun', ks(C.nouns)));
+        comp.push(c.verb === 'put' ? row(L('放到', 'Place'), 'place', ks(C.places).filter(function (p) { return !child() || p[0].indexOf('boy') < 0; })) : row(L('涂成', 'Paint'), 'to', ks(C.colorTo)));
+      }
+      stage.append(h('div', { class: 'ld-comp' }, comp), h('div', { class: 'ld-sent', 'aria-live': 'polite', text: sentence(c) || L('（先选动作）', '(choose an action first)') }),
+        h('div', { class: 'ld-tools' }, [
+          h('button', { class: 'kb-btn', disabled: !sentence(c), onclick: function () { speak(sentence(c)); } }, L('▶ 读出来', '▶ Read it aloud')),
+          h('button', { class: 'kb-btn primary', disabled: !!c.result || !(c.verb && c.noun && (c.verb === 'put' ? c.place : c.to)), onclick: execute }, L('照字面执行', 'Do exactly this')),
+          c.result && c.result.outcome !== 'ok' ? h('button', { class: 'kb-btn', onclick: undoCompose }, L('撤回，改一改再试', 'Undo, edit and retry')) : null]),
+        h('div', { class: 'kb-feedback', hidden: true }),
+        h('p', { class: 'kb-note', style: 'text-align:center;margin:0', text: L('页面只按词卡的字面意思执行，不理解别的说法；不听也不评价口头指令。也可以把拼好的句子念给页面外的搭档，让搭档在纸上照做。', 'The page only follows the word cards literally and understands nothing else; it does not listen to or judge spoken instructions. You can also read the sentence to a partner away from the screen and let them act it out on paper.') }),
+        h('div', { class: 'ld-tools' }, [h('button', { class: 'kb-btn' + (c.result && c.result.outcome === 'ok' ? ' primary' : ''), onclick: newCompose }, c.result ? L('下一题 →', 'Next →') : L('换一个目标', 'Another target'))]));
+    }
+    function renderSide() {
+      side.innerHTML = '';
+      var res = st.results[st.scene];
+      var rep = res.map(function (r) { return r.replays; });
+      side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('这一轮', 'This round') }),
+        h('p', { class: 'kb-note', text: res.length ? L('做了 ' + res.length + ' 条；重放次数：', res.length + ' done; replays: ') + rep.join(' · ') + L('。用过慢速或字幕的 ' + res.filter(function (r) { return r.assisted; }).length + ' 条记为辅助完成。', '. ' + res.filter(function (r) { return r.assisted; }).length + ' used slow speech or captions and count as assisted.') : L('还没有做完的指令。', 'No instructions done yet.') }),
+        h('p', { class: 'kb-note', text: L('第一步不显示对错；对错和差在哪一类，到第二步自己对照。一条指令要东西、大小颜色、位置、顺序都对才算做对。', 'Step 1 shows no marks; you find out in step 2. An instruction counts as done only when the thing, its size or colour, the place and the order are all right.') })]));
+      if (st.mode !== 'compose') {
+        var rev = pack.items.filter(function (x) { return x.scene === st.scene && x.rev; });
+        side.append(h('div', { class: 'kb-card reverse' }, [h('b', { text: L('不是听到什么就动什么', 'Not everything you hear is something to do') }),
+          h('ul', { class: 'ld-list' }, st.scene === 'room' ? [
+            h('li', { text: L('有“别／不要”的部分：那个东西不能动。', 'A “don\'t” part: leave that thing alone.') }),
+            h('li', { text: L('“如果……”的条件不成立：什么都不做（门是关着的，窗户是开着的）。', 'An “if” that is not true: do nothing (the door is closed, the window is open).') }),
+            h('li', { text: L('“男孩的左手”：他面朝你，他的左手在你的右边。', '“The boy\'s left hand”: he faces you, so his left is your right.') })] : [
+            h('li', { text: L('“第一个路口不拐”：走过去，不是在那里拐。', '“Don\'t turn at the first corner”: walk past it, do not turn there.') }),
+            h('li', { text: L('拐弯以后，左右跟着你转：往左拐以后，你的右边是地图上方那一排。', 'After a turn, left and right turn with you: after turning left, your right is the upper row on the map.') })]),
+          h('p', { class: 'kb-note', text: child() ? L('儿童版只用简单指令，不出这类题。', 'The child version uses simple instructions only, without these.') : L('本组有 ' + rev.length + ' 条这样的指令，每轮至少出现 ' + Math.min(2, rev.length) + ' 条。', 'This set has ' + rev.length + ' such instructions; each round includes at least ' + Math.min(2, rev.length) + '.') })]));
+      }
+      side.append(h('div', { class: 'kb-card' }, [h('p', { class: 'kb-note', text: T(pack, 'voiceNote') }),
+        h('p', { class: 'kb-note', text: L('所有拖放都可以点选完成，也可以用键盘（Tab 选中，回车确认）。听障学习者不适合用这个练习，可以改用书面指令的阅读任务。', 'Everything works by clicking instead of dragging, and by keyboard (Tab to move, Enter to choose). This activity does not suit learners with a hearing impairment; use a reading task with written instructions instead.') })]));
+    }
+    function render() { renderBar(); renderStage(); renderSide(); }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT' || e.metaKey || e.ctrlKey || e.altKey) return;
+      var inScene = e.target.closest && e.target.closest('.ld-scene');
+      if (e.key === ' ' && !inScene && e.target.tagName !== 'BUTTON') {
+        e.preventDefault();
+        if (st.mode === 'do' && st.item) replay(false);
+        else if (st.mode === 'check' && st.item) playSegments(st.item);
+        return;
+      }
+      var n = parseInt(e.key, 10);
+      if (st.mode === 'check' && st.item && !st.item.answered && n >= 1 && n <= CATS[st.scene].length) pickCat(CATS[st.scene][n - 1][0]);
+    });
+
+    enterMode();
+  }
+})();
+</script>
+</body>
+</html>

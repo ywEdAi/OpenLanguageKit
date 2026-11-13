@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Number-system map</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .nm-layout { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .nm-layout { grid-template-columns: 1fr; } }
+  .nm-stage { display: grid; gap: 12px; min-width: 0; }
+  .nm-side { display: grid; gap: 12px; }
+  .ctx { font-size: 1.15rem; margin: 0; }
+  .ctx .say { font-weight: 700; color: var(--accent); }
+  .steph { font-size: .82rem; color: var(--muted); margin: 0 0 6px; font-weight: 600; }
+  /* number line */
+  .line { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 3px; position: relative; padding-top: 4px; }
+  .band { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 8px 2px 6px; font-size: .74rem; text-align: center; font-variant-numeric: tabular-nums; position: relative; min-height: 44px; overflow-wrap: anywhere; }
+  .band[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .band.truth { outline: 3px solid var(--t2); outline-offset: 1px; }
+  .band .tag { display: block; font-size: .68rem; font-weight: 700; }
+  @media (max-width: 560px) { .line { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .gapline { font-size: .9rem; margin: 8px 0 0; }
+  .gapline.far { color: var(--bad); font-weight: 600; }
+  /* grouping bar */
+  .digits { display: flex; flex-wrap: wrap; align-items: stretch; gap: 0; font-family: ui-monospace, Menlo, monospace; font-size: 1.6rem; margin: 6px 0; }
+  .dg { padding: 4px 3px; min-width: 1.05em; text-align: center; }
+  .gap { border: 0; background: transparent; width: 16px; padding: 0; position: relative; color: var(--muted); font: inherit; font-size: 1rem; }
+  .gap::after { content: ""; position: absolute; left: 7px; top: 15%; bottom: 15%; width: 2px; background: var(--line); }
+  .gap.on::after { width: 4px; left: 6px; background: var(--accent); }
+  .gap.on.wan::after { width: 6px; left: 5px; background: var(--t3); }
+  .gap:focus-visible { outline: 3px solid var(--focus); }
+  .gap .mk { position: absolute; bottom: -2px; left: 0; right: 0; font-size: .8rem; font-weight: 700; color: var(--accent); }
+  .ref { display: flex; flex-wrap: wrap; gap: 6px; font-family: ui-monospace, Menlo, monospace; font-size: 1.15rem; color: var(--muted); }
+  .grp { display: inline-grid; justify-items: center; border-bottom: 3px solid var(--line); padding: 0 4px; }
+  .grp.k3 { border-bottom-style: solid; }
+  .grp.k4 { border-bottom: 6px double var(--t3); }
+  .grp small { font-family: var(--font); font-size: .72rem; }
+  .opts { display: flex; flex-wrap: wrap; gap: 6px; }
+  .opts .kb-btn[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .readin { width: 100%; font-size: 1.15rem; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); }
+  .echo { font-family: ui-monospace, Menlo, monospace; }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; }
+  .chip { font-size: .78rem; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); }
+  .chip.ind { background: var(--accent-soft); border-color: var(--accent); }
+  .chip.ast { background: var(--warn-soft); border-color: var(--warn); }
+  .chip.bad { background: var(--bad-soft); border-color: var(--bad); }
+  .estlog { margin: 0; padding-left: 18px; font-size: .84rem; }
+  .estlog .far { color: var(--bad); }
+  .mc { display: grid; gap: 6px; }
+  .mc .kb-btn { text-align: left; border-radius: 10px; font-size: 1.05rem; }
+  .mc .kb-btn.right { border-color: var(--t2); border-width: 2px; opacity: 1; font-weight: 700; }
+  .mc .kb-btn.wrongpick { border-color: var(--bad); border-width: 2px; }
+  .show { font-size: 1.5rem; font-weight: 700; margin: 4px 0 10px; }
+  .done { font-size: 2.4rem; text-align: center; }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* Number-system map (prim:number-system-map). Packs: data/number-system-map.js (format in its header).
+ * Modes: card (step 1: from the source-language reading only, pick the order of magnitude on a number line — locked
+ * before anything else is shown; step 2: place the target language's group separators on the digits (three-digit
+ * commas for English, four-digit 万 lines for Chinese) and name the highest level; step 3: write the full quantity in
+ * the target language — the page parses it back into a number and shows "you wrote X, the number is Y"),
+ * rule (the reverse half: years, phone numbers, 成, fractions, plurals, 零, numbers under 10,000 — where the
+ * conversion rule does not apply), own (convert a number of your own; no example is shown).
+ * Readings are checked deterministically: value, approximation word, unit, and number-word form (no -s after a
+ * specific number, no "fifteen ten thousand", no 一百千, 多 in the right place, not digits only). Nothing spoken is
+ * heard or scored. */
+(function () {
+  'use strict';
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t;
+
+  /* ---------- parsers (also exposed as window.NSMParse for checking) ---------- */
+  var SMALL = { zero: 0, oh: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19 };
+  var TENS = { twenty: 20, thirty: 30, forty: 40, fifty: 50, sixty: 60, seventy: 70, eighty: 80, ninety: 90 };
+  var SCALE = { thousand: 1e3, million: 1e6, billion: 1e9 };
+  var APPROX_EN = { over: ['more than', 'just over', 'over'], about: ['approximately', 'roughly', 'around', 'about', 'some'] };
+  function err(code) { return { err: code }; }
+  /** English quantity phrase → {value, approx, rest, err}. */
+  function parseEn(text) {
+    var x = String(text || '').normalize('NFKC').toLowerCase().replace(/[‘’]/g, "'").replace(/(\d),(?=\d{3}\b)/g, '$1').replace(/[-–]/g, ' ').replace(/[.!]+$/, '').replace(/\band a half\b/g, 'point five').trim();
+    var approx = null;
+    ['over', 'about'].forEach(function (k) { APPROX_EN[k].forEach(function (p) { if (!approx && (x + ' ').indexOf(p + ' ') === 0) { approx = k; x = x.slice(p.length).trim(); } }); });
+    if (/^(nearly|almost|under|less than|just under)\b/.test(x)) return err('approx-other');
+    var toks = x.split(/\s+/).filter(Boolean), i = 0, total = 0, cur = null, last = null, scales = [], words = 0, decimal = null;
+    for (; i < toks.length; i++) {
+      var t = toks[i], nx = toks[i + 1];
+      if (t === 'and') { if (last === 'hundred' || last === 'scale') continue; break; }
+      if ((t === 'a' || t === 'one') && (nx === 'hundred' || SCALE[nx]) && cur === null) { cur = 1; last = 'unit'; words++; continue; }
+      if (/^\d+(\.\d+)?$/.test(t)) { if (cur !== null) return err('order'); cur = parseFloat(t); last = 'digit'; continue; }
+      if (t in SMALL || t in TENS) {
+        var v = t in SMALL ? SMALL[t] : TENS[t]; words++;
+        if (decimal !== null) { if (!(t in SMALL) || v > 9) return err('decimal'); decimal += String(v); continue; }
+        if (last === 'tens' && v < 10 && v > 0) { cur += v; last = 'unit'; continue; }
+        if (last === 'unit' || last === 'teen' || last === 'tens' || last === 'digit') return err('adjacent');
+        cur = (cur || 0) + v; last = v >= 20 ? 'tens' : v >= 10 ? 'teen' : 'unit'; continue;
+      }
+      if (t === 'point') { if (cur === null || decimal !== null) return err('order'); decimal = ''; last = 'point'; continue; }
+      if (t === 'hundred') { words++; if (cur === null || cur >= 100 || decimal !== null) return err('order'); cur *= 100; last = 'hundred'; continue; }
+      if (t === 'hundreds' || t === 'thousands' || t === 'millions' || t === 'billions') return err(cur === null ? 'plural-nonum' : 'plural');
+      if (SCALE[t]) {
+        words++;
+        if (cur === null) return err('order');
+        if (decimal !== null) { cur = parseFloat(String(cur) + '.' + (decimal || '0')); decimal = null; }
+        if (scales.length && SCALE[t] >= scales[scales.length - 1]) return err('adjacent');
+        scales.push(SCALE[t]); total += cur * SCALE[t]; cur = null; last = 'scale'; continue;
+      }
+      break;
+    }
+    if (decimal !== null) { if (!decimal) return err('decimal'); cur = parseFloat(String(cur) + '.' + decimal); }
+    if (cur !== null) total += cur;
+    if (i === 0 && cur === null && !scales.length) return err('nonumber');
+    if (!words) return err('digits');
+    var rest = toks.slice(i).join(' ');
+    if (/^of\b/.test(rest)) return err('of');
+    return { value: Math.round(total * 1000) / 1000, approx: approx, rest: rest };
+  }
+  var ZD = { '零': 0, '〇': 0, '一': 1, '二': 2, '两': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9 };
+  var ZU = { '十': 10, '百': 100, '千': 1000 };
+  /** Chinese number expression (no unit) → {value, err, liang2}. */
+  function parseZhNum(s) {
+    var m = /^(\d+(?:\.\d+)?)(万|亿)?$/.exec(s);
+    if (m) return m[2] ? { value: Math.round(parseFloat(m[1]) * (m[2] === '亿' ? 1e8 : 1e4)) } : err('digits');
+    m = /^(.+?)点([零〇一二三四五六七八九]+)(万|亿)?$/.exec(s);
+    if (m) {
+      var ip = parseZhNum(m[1]); if (ip.err) return ip;
+      if (/(十|百|千)/.test(m[2])) return err('decimal');
+      var frac = parseFloat('0.' + m[2].split('').map(function (c) { return ZD[c]; }).join(''));
+      return { value: Math.round((ip.value + frac) * (m[3] === '亿' ? 1e8 : m[3] === '万' ? 1e4 : 1) * 1000) / 1000 };
+    }
+    if (/(十|百|千)点/.test(s)) return err('decimal');
+    var total = 0, section = 0, num = null, zero = false, lastSmall = null, lastBig = Infinity, prevUnit = false, any = false;
+    for (var i = 0; i < s.length; i++) {
+      var c = s[i];
+      if (c in ZD) {
+        if (ZD[c] === 0) { zero = true; num = null; prevUnit = false; continue; }
+        if (num !== null) return err('adjacent');
+        num = ZD[c]; prevUnit = false; any = true; continue;
+      }
+      if (c in ZU) {
+        var u = ZU[c];
+        if (lastSmall !== null && u >= lastSmall) return err('baiqian');
+        if (num === null) { if (c === '十' && section === 0 && !zero) num = 1; else return err('order'); }
+        section += num * u; num = null; lastSmall = u; zero = false; prevUnit = true; any = true; continue;
+      }
+      if (c === '万' || c === '亿') {
+        var big = c === '万' ? 1e4 : 1e8, val = section + (num || 0);
+        if (!val) return err('order');
+        if (big >= lastBig) return err('baiqian');
+        total += val * big; section = 0; num = null; lastSmall = null; lastBig = big; zero = false; prevUnit = true; continue;
+      }
+      return err('nonumber');
+    }
+    if (!any) return err('nonumber');
+    if (num !== null) {
+      if (prevUnit === false && !zero && i > 1) {
+        var prev = s[s.length - 2];
+        if (prev in ZU) num *= ZU[prev] / 10; else if (prev === '万') num *= 1000; else if (prev === '亿') num *= 1e7;
+      }
+      section += num;
+    }
+    return { value: total + section, liang2: /^二[百千万亿]/.test(s) };
+  }
+  /** Chinese quantity phrase → {value, approx, unitOk, err}. units = accepted unit strings. */
+  function parseZh(text, units) {
+    var x = String(text || '').normalize('NFKC').replace(/[\s,，。.!！]+$/g, '').replace(/\s+/g, '');
+    var approx = null, mm;
+    if ((mm = /^(大约|大概|约|差不多)/.exec(x))) { approx = 'about'; x = x.slice(mm[1].length); }
+    else if ((mm = /^(超过|多于)/.exec(x))) { approx = 'over'; x = x.slice(mm[1].length); }
+    mm = /^[\d.零〇一二两三四五六七八九十百千万亿点]+/.exec(x);
+    if (!mm) return err('nonumber');
+    var numStr = mm[0], rest = x.slice(numStr.length);
+    var p = parseZhNum(numStr); if (p.err) return p;
+    if (/^多[万亿]/.test(rest) && !/[十百千]$/.test(numStr)) return err('duo');
+    if (/^多[万亿]/.test(rest) && !/[万亿]/.test(numStr)) { if (approx) return err('approx-double'); approx = 'over'; p = { value: p.value * (rest[1] === '万' ? 1e4 : 1e8), liang2: p.liang2 }; rest = rest.slice(2); }
+    else if (rest[0] === '多') { if (approx) return err('approx-double'); approx = 'over'; rest = rest.slice(1); }
+    if (/^左右/.test(rest)) { if (approx) return err('approx-double'); approx = 'about'; rest = rest.slice(2); }
+    rest = rest.replace(/^的/, '');
+    var unit = (units || []).filter(function (u) { return rest.indexOf(u) === 0; }).sort(function (a, b) { return b.length - a.length; })[0];
+    if (unit) rest = rest.slice(unit.length);
+    if (/^多/.test(rest) || /^[个名本位张]多/.test(rest)) return err('duo');
+    if (/^左右/.test(rest)) { if (approx) return err('approx-double'); approx = 'about'; rest = rest.slice(2); }
+    return { value: p.value, approx: approx, unitOk: !units || !units.length || !!unit, rest: rest, liang2: p.liang2 };
+  }
+  window.NSMParse = { en: parseEn, zh: parseZh, zhNum: parseZhNum };
+
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'number-system-map-en';
+  var entry = (window.KT_REGISTRY && KT_REGISTRY.packs && KT_REGISTRY.packs[setId]) || { file: 'data/number-system-map.js', block: 'number-system-map' };
+  var app = document.getElementById('app');
+  if (entry.block !== 'number-system-map') { app.textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  var sc = document.createElement('script');
+  sc.src = entry.file;
+  sc.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else app.textContent = L('数据包里没有 ' + setId, 'The data pack file does not contain ' + setId); };
+  sc.onerror = function () { app.textContent = L('数据包加载失败：', 'Could not load the data pack: ') + entry.file; };
+  document.head.appendChild(sc);
+
+  function start(pack) {
+    var title = T(pack, 'title');
+    var B = KTBlock.init({ id: 'number-system-map', primitive: 'prim:number-system-map', title: title, set: pack.id });
+    document.title = title + ' · Number-system map';
+    var EN_T = pack.lang === 'en';                       // target language
+    var tlang = EN_T ? 'en' : 'zh-CN', slang = pack.src === 'zh' ? 'zh-CN' : 'en';
+    var K = EN_T ? 3 : 4;                                // target grouping size
+    var LEVELS = EN_T
+      ? [{ v: 'none', zh: '不到一千', en: 'under a thousand' }, { v: 'thousand', zh: 'thousand', en: 'thousand' }, { v: 'million', zh: 'million', en: 'million' }, { v: 'billion', zh: 'billion', en: 'billion' }]
+      : [{ v: 'none', zh: '不到一万', en: 'under 万 (10,000)' }, { v: 'wan', zh: '万', en: '万 (10,000)' }, { v: 'yi', zh: '亿', en: '亿 (100,000,000)' }];
+    function levelOf(n) { return EN_T ? (n < 1e3 ? 'none' : n < 1e6 ? 'thousand' : n < 1e9 ? 'million' : 'billion') : (n < 1e4 ? 'none' : n < 1e8 ? 'wan' : 'yi'); }
+    function bands() { return B.variant === 'child' ? [1, 2, 3, 4] : [2, 3, 4, 5, 6, 7, 8, 9, 10]; }
+    function truthBand(n) { var bb = bands(); return Math.min(Math.max(Math.floor(Math.log10(n)), bb[0]), bb[bb.length - 1]); }
+    function comma(n) { return Number(n).toLocaleString('en-US'); }
+    function wanGroup(n) { var s = String(Math.round(n)), out = []; while (s.length > 4) { out.unshift(s.slice(-4)); s = s.slice(0, -4); } out.unshift(s); return out.join('|'); }
+    var cards;
+    function pickCards() {
+      cards = (B.variant === 'child' && pack.childCards ? pack.childCards : pack.cards).slice();
+      if (B.kc && cards.some(function (c) { return c.kc === B.kc; })) cards = cards.filter(function (c) { return c.kc === B.kc; });
+      st.ci = 0;
+    }
+    var modes = [{ id: 'card', label: L('估·算·读', 'Estimate · convert · say') }, { id: 'rule', label: L('规则之外', 'Where the rule stops') }, { id: 'own', label: L('自己的数', 'Your own number') }];
+    var st = { mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : 'card', ci: 0, streak: 0, est: [], ri: 0, ownN: 0 };
+    var ui = KTBlock.chrome(B, { title: title, subtitle: T(pack, 'subtitle'), modes: modes, mode: st.mode,
+      onMode: function (m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m }); enter(); },
+      onVariant: function () { pickCards(); enter(); } });
+    var bar = h('div', { class: 'kb-bar' });
+    var stage = h('div', { class: 'nm-stage' });
+    var side = h('aside', { class: 'nm-side' });
+    app.append(ui.header, h('main', { class: 'kb-main' }, [bar, h('div', { class: 'nm-layout' }, [stage, side])]), ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id });
+
+    pickCards();
+    function enter() {
+      if (st.mode === 'card') { loadCard(); return; }
+      if (st.mode === 'rule') { st.rq = KTBlock.shuffle(pack.rule); st.ri = 0; loadRule(); return; }
+      st.own = { n: '', what: '', text: '', res: null }; render();
+    }
+    function cur() { return cards[st.ci % cards.length]; }
+    function faded() { return st.streak >= 5; }
+    function loadCard() {
+      var c = cur();
+      st.c = { phase: 'est', est: null, t0: Date.now(), gaps: {}, level: null, grpRes: null, text: '', readRes: null, hints: {}, skipGrp: faded() };
+      B.emit('view', { item: c.id });
+      render();
+    }
+
+    /* ---- step 1 ---- */
+    function estimate(b) {
+      var c = cur(), C = st.c; if (C.est !== null) return;
+      C.est = b; var truth = truthBand(c.n), gap = b - truth, ms = Date.now() - C.t0;
+      C.gap = gap;
+      B.attempt('est:' + c.id, { correct: gap === 0, response: { band: b, truth: truth, gap: gap, ms: ms, slow: ms > 20000 } });
+      st.est.push({ id: c.id, gap: gap });
+      C.phase = C.skipGrp ? 'read' : 'grp';
+      B.emit('select', { item: 'est:' + c.id, band: b });
+      render();
+    }
+    /* ---- step 2 ---- */
+    function toggleGap(i) {
+      var c = cur(), C = st.c; if (C.grpRes && C.grpRes.ok) return;
+      C.gaps[i] = !C.gaps[i];
+      B.emit(C.gaps[i] ? 'drop' : 'drag', { item: 'grp:' + c.id, gapAfterDigit: i, on: !!C.gaps[i] });
+      render();
+      setTimeout(function () { var g = stage.querySelector('[data-gap="' + i + '"]'); if (g) g.focus(); }, 0);
+    }
+    function checkGrp() {
+      var c = cur(), C = st.c, s = String(c.n), want = [];
+      for (var i = 0; i < s.length - 1; i++) if ((s.length - 1 - i) % K === 0) want.push(i);
+      var have = Object.keys(C.gaps).filter(function (k) { return C.gaps[k]; }).map(Number).sort(function (a, b) { return a - b; });
+      if (!C.level) { C.grpRes = { ok: false, t: L('再选一下：读到哪一级？', 'Also choose the highest level.'), tone: 'warn' }; render(); return; }
+      var sepOk = want.join() === have.join(), lvOk = C.level === levelOf(c.n);
+      B.attempt('grp:' + c.id, { correct: sepOk && lvOk, response: { gaps: have, level: C.level, sepOk: sepOk, levelOk: lvOk } });
+      C.grpRes = { ok: sepOk && lvOk, sepOk: sepOk, lvOk: lvOk };
+      C.grpRes.t = sepOk && lvOk ? L('分组对了。', 'Grouping right.') : (!sepOk ? (EN_T ? L('英语从右往左每三位一组（逗号）。', 'English groups three digits at a time from the right (commas).') : L('中文从右往左每四位一组（万、亿）。', 'Chinese groups four digits at a time from the right (万, 亿).')) : '') + (!lvOk ? L(' 最高一级选得不对。', ' The highest level is not right.') : '') + (sepOk && lvOk ? '' : L(' 改一改再核对。', ' Adjust and check again.'));
+      C.grpRes.tone = sepOk && lvOk ? '' : 'bad';
+      render();
+    }
+    /* ---- step 3 ---- */
+    function readMsg(code) {
+      var M = {
+        'adjacent': EN_T ? L('这几个数词不能这样连在一起。英语三位一级：一万 = ten thousand，十五万 = one hundred and fifty thousand，没有 *fifteen ten thousand。', 'These number words cannot go together like that. English groups by three: 10,000 = ten thousand, 150,000 = one hundred and fifty thousand; there is no *fifteen ten thousand.') : L('数字和单位的顺序不对，两个数字不能直接连在一起。', 'The digits and units are in the wrong order; two digits cannot stand side by side.'),
+        'plural': L('前面有具体数字时，hundred、thousand、million 不加 -s：three million people。', 'After a specific number, hundred, thousand and million take no -s: three million people.'),
+        'plural-nonum': L('没有具体数字时才用 millions of / thousands of。这里有具体数字。', 'millions of / thousands of is only for when there is no specific number. Here there is one.'),
+        'of': L('具体数字后面直接接名词，不加 of：two million people。', 'After a specific number, the noun follows directly, without of: two million people.'),
+        'decimal': EN_T ? L('小数点后面一位一位读：two point seven five，不读 *seventy-five。', 'After the point, read digit by digit: two point seven five, not *seventy-five.') : L('小数点后面一位一位读：零点二五。', 'After 点, read digit by digit: 零点二五.'),
+        'digits': L('只写了阿拉伯数字。这一步要写出读法（数词）。', 'Only digits. This step asks for the words.'),
+        'nonumber': L('没找到数。', 'No number found.'),
+        'order': L('数词的顺序不对。', 'The number words are in the wrong order.'),
+        'baiqian': L('中文四位一级：100,000 是“十万”，不说“一百千”；同一级里单位从大到小。', 'Chinese groups by four: 100,000 is 十万, not *一百千; within a group the units go from large to small.'),
+        'duo': L('“多”紧跟在数后面、量词和名词前面：三万多人、十多个学生。', '多 goes right after the number, before the measure word and noun: 三万多人, 十多个学生.'),
+        'approx-double': L('约数词用了两次。', 'The approximation is marked twice.'),
+        'approx-other': L('这里的约数词意思不对（nearly / under 是“不到”）。', 'That approximation word means something else (nearly / under = less than).')
+      };
+      return M[code] || code;
+    }
+    function checkRead() {
+      var c = cur(), C = st.c, id = 'read:' + c.id;
+      if (!C.text.trim()) return;
+      var p = EN_T ? parseEn(C.text) : parseZh(C.text, c.unit);
+      var res = { text: C.text };
+      if (p.err) { res.ok = false; res.t = readMsg(p.err); res.form = p.err; }
+      else {
+        var unitOk = EN_T ? (!c.unit || c.unit.some(function (u) { return (' ' + p.rest + ' ').indexOf(' ' + u + ' ') >= 0 || p.rest.indexOf(u) === 0; })) : p.unitOk;
+        var valOk = Math.abs(p.value - c.n) < 0.5, apOk = (p.approx || null) === (c.approx || null);
+        res.ok = valOk && apOk && unitOk; res.value = p.value;
+        var parts = [];
+        if (!valOk) parts.push(L('你写的是 ' + comma(p.value) + '（' + wanGroup(p.value) + '），原数是 ' + comma(c.n) + '（' + wanGroup(c.n) + '）。' + (Math.abs(Math.log10(p.value / c.n)) >= 1 ? '差了 ' + Math.round(Math.abs(Math.log10(p.value / c.n))) + ' 个数量级。' : ''), 'You wrote ' + comma(p.value) + ' (' + wanGroup(p.value) + '); the number is ' + comma(c.n) + ' (' + wanGroup(c.n) + ').' + (Math.abs(Math.log10(p.value / c.n)) >= 1 ? ' That is ' + Math.round(Math.abs(Math.log10(p.value / c.n))) + ' order(s) of magnitude off.' : '')));
+        if (!apOk) parts.push(c.approx ? L('原句是约数（' + (c.approx === 'over' ? '“多”、more than' : '“左右”、about') + '），约数词不能丢，也不能换意思。', 'The original is approximate (' + (c.approx === 'over' ? 'more than' : 'about') + '); keep that meaning.') : L('原句是确数，不用加约数词。', 'The original is exact; no approximation word.'));
+        if (!unitOk) parts.push(L('单位或名词没写对（' + c.unit.join(' / ') + '）。', 'The unit or noun is missing (' + c.unit.join(' / ') + ').'));
+        if (p.liang2) parts.push(L('提醒：口语里一般说“两”（两万、两千），页面不判错。', 'Note: in speech 两 is usual here (两万, 两千); not marked wrong.'));
+        res.t = res.ok ? L('对：', 'Right: ') + comma(c.n) + (parts.length ? ' ' + parts.join(' ') : '') : parts.join(' ');
+      }
+      var rec = B.attempt(id, { correct: res.ok, response: { text: C.text, parsed: p.err ? null : p.value, form: p.err || null } });
+      if (res.ok) {
+        C.phase = 'done';
+        var stat = B.status(id), estOk = C.gap === 0;
+        st.streak = estOk && stat === 'independent' ? st.streak + 1 : 0;
+        if (!estOk) res.t += L(' 但第 1 步的量级估错了：算对了，量级感还没跟上。这张卡会再出现。', ' But the estimate in step 1 was off: right answer, but no feel for the size yet. This card will come back.');
+        if (!estOk && cards.indexOf(c) === st.ci % cards.length) cards.push(c);
+        B.emit('complete', { item: c.id, estimateGap: C.gap, read: stat });
+      }
+      if (!res.ok && rec.attempts > 1) B.emit('compare', { item: id, said: res.value, target: c.n });
+      C.readRes = res; render();
+    }
+    function hint(n) { var c = cur(), C = st.c; if (C.hints[n]) return; C.hints[n] = true; B.hint('read:' + c.id, n); render(); }
+
+    /* ---- rule mode ---- */
+    function loadRule() { st.rr = { pick: null, done: false }; var q = st.rq[st.ri]; if (q) B.emit('view', { item: 'rule:' + q.id }); else B.emit('complete', { mode: 'rule' }); render(); }
+    function pickRule(i) {
+      var q = st.rq[st.ri], R = st.rr; if (R.done) return;
+      var ok = q.ok.indexOf(i) >= 0; R.pick = i;
+      B.attempt('rule:' + q.id, { correct: ok, response: { option: q.opts[i] } });
+      if (ok) R.done = true; else R.wrong = (R.wrong || []).concat(i);
+      render();
+    }
+    /* ---- own number ---- */
+    function checkOwn() {
+      var O = st.own, digits = O.n.replace(/[,\s]/g, '');
+      if (!/^\d{1,12}$/.test(digits) || !O.text.trim()) { O.res = { ok: false, t: L('先写一个阿拉伯数字（最多 12 位），再写读法。', 'Write a number in digits (up to 12) and then the words.'), tone: 'warn' }; render(); return; }
+      var n = Number(digits), p = EN_T ? parseEn(O.text) : parseZh(O.text, []);
+      var ok = !p.err && Math.abs(p.value - n) < 0.5;
+      B.attempt('own:' + (++st.ownN), { correct: ok, response: { number: n, what: O.what, text: O.text, parsed: p.err ? null : p.value, form: p.err || null } });
+      O.res = p.err ? { ok: false, t: readMsg(p.err), tone: 'bad' } : ok ? { ok: true, t: L('对：', 'Right: ') + comma(n) + L('（' + wanGroup(n) + '）', ' (' + wanGroup(n) + ')') + L('。页面只核对数值和数词形式，后面的名词和整句没有判断。', '. The page checks only the value and the number words, not the noun or the rest of the sentence.'), tone: '' }
+        : { ok: false, t: L('你写的是 ' + comma(p.value) + '（' + wanGroup(p.value) + '），你的数是 ' + comma(n) + '（' + wanGroup(n) + '）。', 'You wrote ' + comma(p.value) + ' (' + wanGroup(p.value) + '); your number is ' + comma(n) + ' (' + wanGroup(n) + ').'), tone: 'bad' };
+      render();
+    }
+
+    /* ---- render ---- */
+    function ctxEl(c) {
+      var tpl = T(c, 'ctx') || '{n}', parts = tpl.split('{n}');
+      return h('p', { class: 'ctx' }, [parts[0], h('span', { class: 'say', lang: slang, text: c.say }), parts[1] || '']);
+    }
+    function lineEl(c, C) {
+      var truth = truthBand(c.n), locked = C.est !== null;
+      return h('div', { class: 'line', role: 'group', 'aria-label': L('数量级', 'Order of magnitude') }, bands().map(function (b) {
+        var lab = comma(Math.pow(10, b)) + '+';
+        return h('button', { class: 'band' + (locked && b === truth ? ' truth' : ''), 'aria-pressed': C.est === b ? 'true' : 'false', disabled: locked && C.est !== b && b !== truth, onclick: function () { estimate(b); } }, [
+          locked && C.est === b ? h('span', { class: 'tag', text: L('你估的', 'yours') }) : null,
+          locked && b === truth && C.est !== b ? h('span', { class: 'tag', text: L('实际', 'actual') }) : null, lab]);
+      }));
+    }
+    function groupsEl(n, k, labels) {
+      var s = String(n), out = [], lv = 0;
+      while (s.length) { var g = s.slice(-k); s = s.slice(0, -k); out.unshift({ g: g, l: labels[lv] || '' }); lv++; }
+      return h('div', { class: 'ref' }, out.map(function (x) { return h('span', { class: 'grp k' + k }, [x.g, h('small', { text: x.l || '·' })]); }));
+    }
+    var LAB3 = ['', 'thousand', 'million', 'billion'], LAB4 = ['', '万', '亿'];
+    function renderCard() {
+      var c = cur(), C = st.c;
+      stage.append(h('div', { class: 'kb-card' }, [h('p', { class: 'steph', text: L('数量卡', 'Number card') }), ctxEl(c)]));
+      // step 1
+      var s1 = h('div', { class: 'kb-card' }, [h('p', { class: 'steph', text: L('第 1 步：先估。不要算，它大约在哪一级？点一下就锁定。', 'Step 1: estimate first. Do not calculate: roughly which size is it? One click locks it.') }), lineEl(c, C)]);
+      if (C.est !== null) {
+        var g = C.gap;
+        s1.append(h('p', { class: 'gapline' + (g !== 0 ? ' far' : ''), text: g === 0 ? L('估对了量级。', 'Right order of magnitude.') : L('差了 ' + Math.abs(g) + ' 个数量级（' + (g > 0 ? '估大了' : '估小了') + '）。', Math.abs(g) + ' order(s) of magnitude ' + (g > 0 ? 'too big' : 'too small') + '.') }));
+      }
+      stage.append(s1);
+      if (C.est === null) return;
+      // step 2
+      if (!C.skipGrp) {
+        var s = String(c.n), s2 = h('div', { class: 'kb-card' });
+        s2.append(h('p', { class: 'steph', text: EN_T ? L('第 2 步：中文按四位一组（万），英语按三位一组。在数字之间点出英语的逗号位置，再选英语读到哪一级。', 'Step 2: Chinese groups digits by four (万); English by three. Click between the digits where the English commas go, then choose the highest English level.') : L('第 2 步：英语按三位一组（逗号），中文按四位一组。在数字之间点出“万”“亿”的位置，再选中文读到哪一级。', 'Step 2: English groups by three (commas); Chinese by four. Click between the digits where 万 and 亿 go, then choose the highest Chinese level.') }));
+        s2.append(h('p', { class: 'kb-note', text: EN_T ? L('原来的分组（万、亿）：', 'Source grouping (万, 亿):') : L('原来的分组（逗号）：', 'Source grouping (commas):') }));
+        s2.append(groupsEl(c.n, EN_T ? 4 : 3, C.grpRes && C.grpRes.ok ? (EN_T ? LAB4 : LAB3) : []));
+        var dg = h('div', { class: 'digits', role: 'group', 'aria-label': L('数字和分隔线', 'Digits and separators') });
+        for (var i = 0; i < s.length; i++) {
+          dg.append(h('span', { class: 'dg', text: s[i] }));
+          if (i < s.length - 1) (function (i) {
+            var on = !!C.gaps[i];
+            dg.append(h('button', { class: 'gap' + (on ? ' on' + (EN_T ? '' : ' wan') : ''), 'data-gap': String(i), 'aria-pressed': on ? 'true' : 'false', disabled: !!(C.grpRes && C.grpRes.ok),
+              'aria-label': L('第 ' + (i + 1) + ' 位后面（右边还有 ' + (s.length - 1 - i) + ' 位）', 'After digit ' + (i + 1) + ' (' + (s.length - 1 - i) + ' digits to the right)'), onclick: function () { toggleGap(i); } },
+              on ? [h('span', { class: 'mk', text: EN_T ? ',' : '' })] : []));
+          })(i);
+        }
+        s2.append(dg);
+        if (C.grpRes && C.grpRes.ok) s2.append(groupsEl(c.n, K, EN_T ? LAB3 : LAB4));
+        s2.append(h('p', { class: 'kb-note', text: L('读到哪一级：', 'Highest level:') }));
+        s2.append(h('div', { class: 'opts' }, LEVELS.map(function (lv) { return h('button', { class: 'kb-btn', lang: lv.v === 'none' ? null : tlang, 'aria-pressed': C.level === lv.v ? 'true' : 'false', disabled: !!(C.grpRes && C.grpRes.ok), onclick: function () { C.level = lv.v; B.emit('select', { item: 'grp:' + c.id, level: lv.v }); render(); } }, L(lv.zh, lv.en)); })));
+        if (!(C.grpRes && C.grpRes.ok)) s2.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: checkGrp }, L('核对分组', 'Check the grouping'))]));
+        if (C.grpRes) s2.append(h('div', { class: 'kb-feedback ' + (C.grpRes.tone || ''), role: 'status', text: C.grpRes.t }));
+        stage.append(s2);
+        if (!(C.grpRes && C.grpRes.ok)) return;
+      } else stage.append(h('p', { class: 'kb-note', text: L('你已经连续 5 张卡估对量级、第一次就读对，分组条撤掉了。', 'Five cards in a row with the right size and a right first reading: the grouping bar is now left out.') }));
+      // step 3
+      var s3 = h('div', { class: 'kb-card' }, [h('p', { class: 'steph', text: EN_T ? L('第 3 步：用英语写出完整的数量（带名词，约数要保留）。', 'Step 3: write the whole quantity in English (with the noun; keep any approximation).') : L('第 3 步：用中文写出完整的数量（带量词或名词，约数要保留）。', 'Step 3: write the whole quantity in Chinese (with the measure word or noun; keep any approximation).') })]);
+      var inp = h('input', { class: 'readin', type: 'text', lang: tlang, autocomplete: 'off', spellcheck: 'false', 'aria-label': L('读法', 'Reading'), disabled: C.phase === 'done',
+        oninput: function (e) { C.text = e.target.value; }, onkeydown: function (e) { if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); checkRead(); } } });
+      inp.value = C.text;
+      s3.append(inp);
+      if (C.phase !== 'done') {
+        s3.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: checkRead }, L('核对', 'Check')),
+          h('button', { class: 'kb-btn', disabled: !!C.hints[1], onclick: function () { hint(1); } }, L('提示 1：问一句', 'Hint 1: a question')),
+          h('button', { class: 'kb-btn', disabled: !!C.hints[2], onclick: function () { hint(2); } }, L('提示 2：两种分组对齐', 'Hint 2: both groupings lined up')),
+          h('button', { class: 'kb-btn', disabled: !!C.hints[3], onclick: function () { hint(3); } }, L('提示 3：锚点换算', 'Hint 3: anchor conversions'))]));
+        if (C.hints[1]) s3.append(h('p', { class: 'kb-note', text: L('这是几千、几万、几十万，还是几百万？先在分组条上看最左边那一组是哪一级。', 'Is it thousands, tens of thousands, hundreds of thousands or millions? Look at which level the leftmost group is on the bar.') }));
+        if (C.hints[2]) s3.append(h('div', {}, [h('p', { class: 'kb-note', text: L('三位一组：', 'Groups of three:') }), groupsEl(c.n, 3, LAB3), h('p', { class: 'kb-note', text: L('四位一组：', 'Groups of four:') }), groupsEl(c.n, 4, LAB4)]));
+        if (C.hints[3]) s3.append(h('p', { class: 'kb-note' }, [h('span', { lang: 'zh-CN', text: '一万' }), ' = ten thousand · ', h('span', { lang: 'zh-CN', text: '十万' }), ' = one hundred thousand · ', h('span', { lang: 'zh-CN', text: '一百万' }), ' = one million · ', h('span', { lang: 'zh-CN', text: '一千万' }), ' = ten million · ', h('span', { lang: 'zh-CN', text: '一亿' }), ' = one hundred million · ', h('span', { lang: 'zh-CN', text: '十亿' }), ' = one billion']));
+      }
+      if (C.readRes) s3.append(h('div', { class: 'kb-feedback ' + (C.readRes.ok ? '' : 'bad'), role: 'status', text: C.readRes.t }));
+      if (C.phase === 'done') {
+        s3.append(h('p', { class: 'kb-note' }, [L('一种说法：', 'One way to say it: '), h('b', { lang: tlang, text: c.model })]));
+        s3.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () { B.speak(c.model, pack.speech); } }, L('▶ 听一遍', '▶ Listen')),
+          h('button', { class: 'kb-btn primary', onclick: function () { st.ci++; loadCard(); } }, L('下一张 →', 'Next card →'))]));
+        s3.append(h('p', { class: 'kb-note', text: L('读出来时自己或请搭档听；页面不听、不打分。写对不等于能听懂口头的大数。', 'When you say it aloud, listen yourself or ask a partner; the page does not listen or score. Writing it right is not the same as understanding it when spoken.') }));
+      }
+      stage.append(s3);
+    }
+    function renderRule() {
+      var q = st.rq[st.ri], R = st.rr;
+      if (!q) { stage.append(h('div', { class: 'kb-card' }, [h('div', { class: 'done', text: '✔' }), h('p', { class: 'kb-prompt', text: L('这一轮做完了。', 'Round finished.') }), h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: enter }, L('再来一轮', 'Another round'))])])); return; }
+      var box = h('div', { class: 'kb-card' }, [h('p', { class: 'steph', text: L('规则管不到的地方 · 第 ' + (st.ri + 1) + ' / ' + st.rq.length + ' 题', 'Where the rule stops · ' + (st.ri + 1) + ' / ' + st.rq.length) }),
+        h('p', { class: 'kb-prompt', text: T(q, 'q') }), h('div', { class: 'show', lang: q.showLang || null, text: q.show }),
+        h('div', { class: 'mc' }, q.opts.map(function (o, i) {
+          var cls = 'kb-btn' + (R.done && q.ok.indexOf(i) >= 0 ? ' right' : '') + ((R.wrong || []).indexOf(i) >= 0 ? ' wrongpick' : '');
+          return h('button', { class: cls, lang: tlang, disabled: R.done || (R.wrong || []).indexOf(i) >= 0, onclick: function () { pickRule(i); } }, o);
+        }))]);
+      if (R.pick !== null) box.append(h('div', { class: 'kb-feedback ' + (R.done ? '' : 'bad'), role: 'status', text: (R.done ? L('对。', 'Right. ') : L('不对。', 'Not that one. ')) + T(q, 'why') }));
+      if (R.done) box.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: function () { st.ri++; loadRule(); } }, L('下一题 →', 'Next →'))]));
+      stage.append(box);
+    }
+    function renderOwn() {
+      var O = st.own;
+      var n = h('input', { class: 'readin', type: 'text', inputmode: 'numeric', autocomplete: 'off', 'aria-label': L('你的数（阿拉伯数字）', 'Your number (digits)'), oninput: function (e) { O.n = e.target.value; } }); n.value = O.n;
+      var w = h('input', { class: 'readin', type: 'text', autocomplete: 'off', 'aria-label': L('这是什么的数（可不填）', 'What it counts (optional)'), oninput: function (e) { O.what = e.target.value; } }); w.value = O.what;
+      var r = h('input', { class: 'readin', type: 'text', lang: tlang, autocomplete: 'off', spellcheck: 'false', 'aria-label': L('读法', 'Reading'), oninput: function (e) { O.text = e.target.value; }, onkeydown: function (e) { if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); checkOwn(); } } }); r.value = O.text;
+      stage.append(h('div', { class: 'kb-card' }, [h('p', { class: 'steph', text: L('换你自己的数：家乡的人口、一件想买的东西的价格……没有范例。', 'Your own number: the population of your home town, the price of something you want… There is no example.') }),
+        h('p', { class: 'kb-note', text: L('数（阿拉伯数字）', 'The number (digits)') }), n,
+        h('p', { class: 'kb-note', text: L('这是什么的数（只给你自己看，不核对）', 'What it counts (for you; not checked)') }), w,
+        h('p', { class: 'kb-note', text: EN_T ? L('用英语写出来', 'Write it in English') : L('用中文写出来', 'Write it in Chinese') }), r,
+        h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: checkOwn }, L('核对', 'Check'))]),
+        O.res ? h('div', { class: 'kb-feedback ' + (O.res.tone || ''), role: 'status', text: O.res.t }) : null]));
+    }
+    function renderSide() {
+      var log = st.est.map(function (e) { return h('li', { class: e.gap ? 'far' : '', text: e.id + L('：', ': ') + (e.gap === 0 ? L('量级对', 'right size') : L('差 ' + Math.abs(e.gap) + ' 级', Math.abs(e.gap) + ' off')) }); });
+      side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('每张卡的估计误差', 'Estimate error per card') }), log.length ? h('ol', { class: 'estlog' }, log) : h('p', { class: 'kb-note', text: L('还没有。', 'None yet.') }),
+        h('p', { class: 'kb-note', text: L('差一个数量级以上的卡会再出现一次。连续 ' + st.streak + ' 张估对且第一次读对（满 5 张撤掉分组条）。', 'Cards off by one order of magnitude or more come back. Streak: ' + st.streak + ' (at 5 the grouping bar is left out).') })]));
+      var chips = B.items().filter(function (it) { return B.status(it.id) && B.status(it.id) !== 'revealed'; }).map(function (it) { var s0 = B.status(it.id); return h('span', { class: 'chip ' + (s0 === 'independent' ? 'ind' : s0 === 'wrong' ? 'bad' : 'ast'), title: it.id, text: it.id.split(':')[0] === 'est' ? L('估', 'est') : it.id.split(':')[0] === 'grp' ? L('组', 'grp') : it.id.split(':')[0] === 'read' ? L('读', 'say') : it.id.split(':')[0] === 'rule' ? L('规', 'rule') : L('自', 'own') }); });
+      side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('第一次作答', 'First attempts') }), chips.length ? h('div', { class: 'chips' }, chips) : h('p', { class: 'kb-note', text: L('还没有。', 'None yet.') }),
+        h('p', { class: 'kb-note', text: L('蓝 = 第一次就对；黄 = 提示后完成；红 = 第一次不对。只凭阿拉伯数字填对不算会读；写对也不等于听得懂口头的大数。', 'Blue = right first time; yellow = with help; red = wrong first time. Getting the digits right is not knowing how to say it, and writing it is not understanding it spoken.') })]));
+    }
+    function renderBar() {
+      bar.innerHTML = '';
+      if (st.mode === 'card') {
+        bar.append(h('span', { class: 'kb-note', text: L('第 ' + (st.ci + 1) + ' 张', 'Card ' + (st.ci + 1)) }));
+        bar.append(h('button', { class: 'kb-btn', onclick: function () { st.ci++; loadCard(); } }, L('跳过这张', 'Skip this card')));
+      }
+    }
+    function render() {
+      renderBar(); stage.innerHTML = ''; side.innerHTML = '';
+      if (st.mode === 'card') renderCard(); else if (st.mode === 'rule') renderRule(); else renderOwn();
+      renderSide();
+    }
+    enter();
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Repair and backchannel</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .rb-layout { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .rb-layout { grid-template-columns: 1fr; } }
+  .rb-main { display: grid; gap: 12px; min-width: 0; }
+  .rb-side { display: grid; gap: 12px; }
+  .kb-bar select { max-width: min(62vw, 340px); }
+  .role { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px 14px; font-size: .92rem; }
+  .role b { display: block; font-size: .75rem; color: var(--muted); }
+  .chat { display: flex; flex-direction: column; gap: 8px; }
+  .bub { max-width: 88%; padding: 8px 12px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); }
+  .bub.other { align-self: flex-start; border-bottom-left-radius: 4px; }
+  .bub.me { align-self: flex-end; background: var(--accent-soft); border-color: var(--accent); border-bottom-right-radius: 4px; }
+  .bub.narr { align-self: center; border-style: dashed; color: var(--muted); font-size: .9rem; max-width: 100%; background: transparent; }
+  .bub .who { display: block; font-size: .72rem; color: var(--muted); }
+  .bub .tl { font-size: 1.06rem; }
+  .bub .masked { color: var(--muted); letter-spacing: .1em; }
+  .bub button { border: 0; background: none; color: var(--accent); padding: 0 0 0 6px; font-size: .85rem; }
+  .bub.cur { box-shadow: 0 0 0 3px var(--focus); }
+  .actions { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
+  .actions button { border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 7px 8px; text-align: left; font-size: .88rem; }
+  .actions button .k { color: var(--muted); font-size: .72rem; margin-right: 4px; }
+  .actions button.go { border-color: var(--accent); }
+  [data-variant="child"] .actions { grid-template-columns: repeat(2, 1fr); }
+  [data-variant="child"] .actions button { font-size: 1.1rem; padding: 14px; text-align: center; }
+  .actions .ic { font-size: 1.6rem; display: block; }
+  .phr { display: grid; gap: 6px; }
+  .phr button { text-align: left; border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 8px 12px; }
+  .timer { height: 6px; border-radius: 3px; background: var(--accent-soft); margin-bottom: 6px; overflow: hidden; }
+  .timer span { display: block; height: 100%; background: var(--warn); width: 100%; transition: width linear; }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .tline { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tline button { border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 3px 10px; font-size: .82rem; }
+  .tline button[aria-current="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .tline button.ok { border-color: var(--accent); }
+  .tline button.bad { border-color: var(--bad); }
+  .cats { display: flex; flex-wrap: wrap; gap: 6px; }
+  .cats button { border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 4px 10px; font-size: .85rem; }
+  .cats button.right { background: var(--accent-soft); border-color: var(--accent); }
+  .cats button.wrongpick { background: var(--bad-soft); border-color: var(--bad); }
+  .pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; }
+  .pair > div { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; }
+  .pair b { display: block; font-size: .75rem; color: var(--muted); }
+  .pair ul { margin: 4px 0 0; padding-left: 18px; }
+  .endcard { border-left: 4px solid var(--accent); }
+  .endcard.fail { border-left-color: var(--bad); }
+  .flag { display: inline-block; font-size: .78rem; padding: 1px 8px; border-radius: 999px; background: var(--warn-soft); color: var(--warn); }
+  textarea { width: 100%; min-height: 60px; border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 8px; }
+  .checks label { display: block; margin: 3px 0; }
+  .ackopts { display: grid; gap: 8px; }
+  .ackopts button { text-align: left; border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 9px 12px; }
+  .ackopts button.right { background: var(--accent-soft); border-color: var(--accent); }
+  .ackopts button.wrongpick { background: var(--bad-soft); border-color: var(--bad); }
+  .partner ol { padding-left: 20px; font-size: .9rem; }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function () {
+  'use strict';
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t;
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'repair-and-backchannel-en';
+  var reg = (window.KT_REGISTRY && KT_REGISTRY.packs) || {};
+  var entry = reg[setId] || {};
+  if (entry.block && entry.block !== 'repair-and-backchannel') { document.getElementById('app').textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  var file = entry.file || 'data/repair-and-backchannel.js';   // fallback while the registry does not list the pack yet
+  var s = document.createElement('script');
+  s.src = file;
+  s.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else document.getElementById('app').textContent = L('未知的数据包：', 'Unknown data pack: ') + setId; };
+  s.onerror = function () { document.getElementById('app').textContent = L('数据包加载失败：', 'Could not load the data pack: ') + file; };
+  document.head.appendChild(s);
+
+  /* The repair moves, in a fixed order (the row never reorders, so its position gives nothing away). */
+  var ACTIONS = [
+    { id: 'repeat', zh: '请对方再说一遍', en: 'Ask them to repeat', ic: '👂' },
+    { id: 'slow', zh: '请对方说慢一点', en: 'Ask them to slow down', ic: '🐌' },
+    { id: 'word', zh: '问一个词', en: 'Ask about a word', ic: '❓' },
+    { id: 'confirm', zh: '复述确认', en: 'Check by repeating back', ic: '🔁' },
+    { id: 'backchannel', zh: '附和、接话', en: 'Show you are listening', ic: '🙂' },
+    { id: 'time', zh: '争取想一想的时间', en: 'Buy time to think', ic: '⏳' },
+    { id: 'interrupt', zh: '礼貌地插话', en: 'Interrupt politely', ic: '✋' },
+    { id: 'back', zh: '把话题拉回来', en: 'Bring the talk back', ic: '↩️' }
+  ];
+  var CHILD_ACTIONS = ['repeat', 'slow', 'word'];
+  var CATS = [
+    { id: 'matched', zh: '对上了（该修复时修复，该放过时放过）', en: 'Right move (repaired when needed, let it go when not)' },
+    { id: 'wrongType', zh: '修复了，但类型没对上', en: 'Repaired, but the wrong kind of move' },
+    { id: 'blunt', zh: '类型对，但说法生硬或关键信息错了', en: 'Right kind, but blunt wording or a wrong detail' },
+    { id: 'pretend', zh: '假装听懂了，或该出声时没出声', en: 'Pretended to understand, or stayed silent when a response was due' },
+    { id: 'unneeded', zh: '这里其实不需要打断', en: 'No need to interrupt here' }
+  ];
+  function act(id) { return ACTIONS.filter(function (a) { return a.id === id; })[0]; }
+
+  function start(pack) {
+    var B = KTBlock.init({ id: 'repair-and-backchannel', primitive: 'prim:repair-and-backchannel', title: T(pack, 'title'), set: pack.id });
+    document.title = T(pack, 'title') + ' · Repair';
+    var modes = [{ id: 'live', label: L('1 当场修复', '1 Repair on the spot') }, { id: 'review', label: L('2 回看', '2 Look back') }, { id: 'say', label: L('3 自己说', '3 Say it yourself') }, { id: 'ack', label: L('4 对方的“嗯”', '4 Their “uh-huh”') }];
+    function child() { return B.variant === 'child'; }
+    var byId = {}; pack.dialogues.forEach(function (d) { byId[d.id] = d; });
+    function pool(mode) {
+      var list = pack.dialogues.filter(function (d) { return child() ? d.child : !d.child && (mode === 'say' ? d.step3 : !d.step3); });
+      if (!list.length) list = pack.dialogues.filter(function (d) { return child() ? d.child : true; });
+      if (B.kc) { var k = list.filter(function (d) { return (d.kcs || []).indexOf(B.kc) >= 0; }); if (k.length) list = k; }
+      return list;
+    }
+    var st = {
+      mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : 'live',
+      dlg: null, i: 0, shown: [], pending: null, phraseFor: null, ended: false, timerOn: !child(), textOn: false,
+      first: {}, resolved: {}, extra: [], reviewIdx: 0, ackIdx: 0, sayState: null, partner: false, paused: false
+    };
+    function pickDlg() {
+      var focus = params.get('focus'), list = pool(st.mode === 'ack' || st.mode === 'review' ? 'live' : st.mode);
+      if (st.mode === 'review') list = pack.dialogues.filter(function (d) { return child() ? d.child : !d.step3 && !d.child; });
+      if (byId[focus] && list.indexOf(byId[focus]) >= 0) return focus;
+      if (st.dlg && list.indexOf(byId[st.dlg]) >= 0) return st.dlg;
+      return list.length ? list[0].id : pack.dialogues[0].id;
+    }
+    st.dlg = pickDlg();
+    var ui = KTBlock.chrome(B, { title: T(pack, 'title'), subtitle: T(pack, 'subtitle'), modes: modes, mode: st.mode,
+      onMode: function (m) { st.mode = m; ui.setMode(m); st.dlg = pickDlg(); B.emit('view', { mode: m, dialogue: st.dlg }); restart(); },
+      onVariant: function () { st.timerOn = !child(); st.dlg = pickDlg(); restart(); } });
+    var bar = h('div', { class: 'kb-bar' });
+    var mainCol = h('div', { class: 'rb-main' });
+    var side = h('aside', { class: 'rb-side' });
+    document.getElementById('app').append(ui.header, h('main', { class: 'kb-main' }, [bar, h('div', { class: 'rb-layout' }, [mainCol, side])]), ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id, dialogue: st.dlg });
+
+    function dlg() { return byId[st.dlg]; }
+    function mid(mo) { return 'm:' + st.dlg + ':' + mo.id; }
+    var warned = false, noteEl = null;
+    function speak(text, rate) {
+      if (!text) return;
+      if (!B.speak(text, pack.speech, rate ? { rate: rate } : {}) && !warned) { warned = true; st.textOn = true; if (noteEl) noteEl.textContent = L('这个浏览器不能播放语音，已改为显示文字（显示文字时完成的记为辅助）。', 'This browser cannot play speech, so the text is shown (moments done with the text showing count as assisted).'); }
+    }
+    function lineAt(i) { return dlg().lines[i]; }
+    function phrasesFor(a, mo) {
+      if (a === 'confirm' && mo && mo.confirm) return mo.confirm;
+      var list = (pack.phrases[a] || []).map(function (p) { return Object.assign({}, p, { text: fill(p.text, mo) }); });
+      if (mo && mo.extraPhrases && mo.extraPhrases[a]) list = list.concat(mo.extraPhrases[a]);
+      return list;
+    }
+    function fill(t, mo) { return t.replace('{w}', mo && mo.word || '…').replace('{x}', mo && mo.x || '…'); }
+    function okPhrases(mo) {
+      var out = [];
+      (mo.ok || []).forEach(function (a) { phrasesFor(a, mo).filter(function (p) { return p.ok; }).forEach(function (p) { out.push(p.text); }); });
+      return out;
+    }
+
+    /* ---- timer ---- */
+    var timer = null;
+    function stopTimer() { if (timer) { clearTimeout(timer); timer = null; } }
+    function startTimer(line) {
+      stopTimer();
+      if (!st.timerOn || !line.mo || st.mode !== 'live') return;
+      var ms = 7000 + (line.o || '').length * 90;
+      timer = setTimeout(function () { timer = null; if (st.pending === null && lineAt(st.i) === line) { st.timedOut = true; doAction('none', null); } }, ms);
+      st.timerEnd = Date.now() + ms; st.timerMs = ms;
+      animateTimer();
+    }
+    function animateTimer() {
+      var b = mainCol.querySelector('.timer span');
+      if (!b || !timer) return;
+      var rem = Math.max(0, st.timerEnd - Date.now());
+      b.style.transitionDuration = '0ms'; b.style.width = (100 * rem / st.timerMs) + '%';
+      setTimeout(function () { b.style.transitionDuration = rem + 'ms'; b.style.width = '0%'; }, 30);
+    }
+
+    /* ---- live dialogue ---- */
+    function restart() {
+      stopTimer();
+      st.i = 0; st.shown = []; st.pending = null; st.phraseFor = null; st.ended = false; st.extra = []; st.sayState = null; st.paused = false;
+      if (st.mode === 'live' || st.mode === 'say') advanceTo(0); else render();
+    }
+    function advanceTo(i) {
+      st.i = i; st.pending = null; st.phraseFor = null; st.sayState = null; st.timedOut = false; st.paused = false; st.hintLvl = 0;
+      var line = lineAt(i);
+      if (!line) { finish(); return; }
+      st.shown.push({ line: line });
+      render();
+      if (line.o && line.mo && st.textOn && st.mode === 'live') B.hint(mid(line.mo), 'text');   // reading the words is help
+      if (line.o) { speak(line.o, line.mo && line.mo.rate); startTimer(line); }
+    }
+    function cont() {
+      var line = lineAt(st.i);
+      if (line && line.o && line.mo && st.mode === 'live') { doAction('none', null); return; }
+      if (line && line.o && line.mo && st.mode === 'say') { recordSayNone(line); }
+      advanceTo(st.i + 1);
+    }
+    function chooseAction(a) {
+      var line = lineAt(st.i);
+      if (!line || !line.o) return;
+      stopTimer();
+      if (child()) { var p = phrasesFor(a, line.mo).filter(function (x) { return x.ok; })[0] || phrasesFor(a, line.mo)[0]; doAction(a, p); return; }
+      st.phraseFor = a; render();
+    }
+    function doAction(a, phrase) {
+      var line = lineAt(st.i), mo = line.mo;
+      stopTimer();
+      st.phraseFor = null;
+      if (a !== 'none') st.shown.push({ me: phrase ? phrase.text : '', action: a });
+      else if (st.timedOut) st.shown.push({ narr: L('（时间到了，你没有出声）', '(Time ran out; you said nothing)') });
+      if (!mo) {
+        // an ordinary line: no trouble here. A repair move gets a mild reply and is not scored.
+        B.emit('select', { dialogue: st.dlg, line: st.i, action: a, ordinary: true });
+        if (a !== 'none') { st.shown.push({ reply: T(pack, 'ordinaryReply') || '…', narr2: L('（这一句没有麻烦，不记分）', '(No trouble in this line; not scored)') }); }
+        advanceTo(st.i + 1); return;
+      }
+      var id = mid(mo), isFirst = !st.first[id];
+      var ok = mo.type === 'none' ? (a === 'none' || a === 'backchannel') : ((mo.ok || []).indexOf(a) >= 0);
+      var phraseOk = !phrase || phrase.ok !== false;
+      if (isFirst) {
+        st.first[id] = { action: a, phrase: phrase ? phrase.text : null, phraseOk: phraseOk, timed: st.timerOn, timedOut: !!st.timedOut };
+        B.attempt(id, { correct: ok && phraseOk, response: { action: a, phrase: phrase ? phrase.text : null, type: mo.type, timed: st.timerOn, timedOut: !!st.timedOut, textShown: st.textOn } });
+      } else {
+        B.attempt(id, { correct: ok && phraseOk, response: { action: a, phrase: phrase ? phrase.text : null, type: mo.type } });
+      }
+      if (mo.type === 'none') {
+        if (a !== 'none' && a !== 'backchannel') st.shown.push({ reply: mo.over || T(pack, 'ordinaryReply'), why: T(mo, 'why') });
+        st.resolved[id] = true;
+        advanceTo(st.i + 1); return;
+      }
+      if (ok) {
+        st.resolved[id] = true;
+        var rep = (phrase && phrase.reply) || (mo.reply && mo.reply[a]) || (a === 'repeat' || a === 'slow' ? line.o : '');
+        if (phrase && phrase.ok === false && T(phrase, 'why')) st.shown.push({ narr: T(phrase, 'why') });
+        if (rep) { st.shown.push({ reply: rep }); speak(rep, a === 'slow' ? 0.65 : null); }
+        advanceTo(st.i + 1); return;
+      }
+      if (a === 'none' || a === 'backchannel') {
+        // pretending to understand: the talk goes on and the task goes wrong later
+        advanceTo(st.i + 1); return;
+      }
+      // the wrong kind of repair: the other person answers it, but the trouble is still there; stay on this line
+      var stay = (mo.stay && mo.stay[a]) || (a === 'repeat' || a === 'slow' ? line.o : T(pack, 'ordinaryReply'));
+      st.shown.push({ reply: stay, narr2: L('（问题还在。可以换一种修复。）', '(The trouble is still there. Try another move.)') });
+      speak(stay, a === 'slow' ? 0.65 : null);
+      render();
+    }
+    function finish() {
+      st.ended = true; stopTimer();
+      var ms = dlg().lines.filter(function (l) { return l.mo; }).map(function (l) { return l.mo; });
+      var missed = ms.filter(function (m) { return m.type !== 'none' && !st.resolved[mid(m)]; });
+      B.emit('complete', { dialogue: st.dlg, moments: ms.length, missed: missed.map(function (m) { return m.id; }), mode: st.mode });
+      render();
+    }
+
+    /* ---- rendering helpers ---- */
+    function roleCard() {
+      var r = dlg().role;
+      return h('div', { class: 'kb-card role' }, [h('div', {}, [h('b', { text: L('我是', 'I am') }), T(r, 'me')]), h('div', {}, [h('b', { text: L('对方', 'The other person') }), T(r, 'other')]), h('div', {}, [h('b', { text: L('我要做到', 'What I want') }), T(r, 'goal')])]);
+    }
+    function otherBubble(text, isCur, idx) {
+      var showTxt = st.textOn || !isCur || st.mode === 'review';
+      return h('div', { class: 'bub other' + (isCur ? ' cur' : '') }, [h('span', { class: 'who', text: T(dlg().role, 'otherShort') || L('对方', 'Them') }),
+        showTxt ? h('span', { class: 'tl', lang: pack.lang, text: text }) : h('span', { class: 'masked', text: L('（只听声音）', '(audio only)') }),
+        h('button', { 'aria-label': L('再听', 'Listen again'), onclick: function () { var ln = lineAt(st.i); speak(text, ln && ln.mo && ln.o === text ? ln.mo.rate : null); B.emit('select', { dialogue: st.dlg, replay: idx }); } }, '▶'),
+        isCur && !showTxt ? h('button', { onclick: function () { st.textOn = true; var ln = lineAt(st.i); if (ln && ln.mo) B.hint(mid(ln.mo), 'text'); render(); } }, L('显示文字（算辅助）', 'Show text (counts as help)')) : null]);
+    }
+    function renderChat() {
+      var chat = h('div', { class: 'kb-card chat', 'aria-live': 'polite' });
+      st.shown.forEach(function (e, k) {
+        var isCur = k === st.shown.length - 1 && e.line && e.line.o && !st.ended;
+        if (e.line) {
+          if (e.line.n) chat.append(h('div', { class: 'bub narr', text: T(e.line, 'n') }));
+          if (e.line.m) chat.append(h('div', { class: 'bub me' }, [h('span', { class: 'who', text: L('我', 'Me') }), h('span', { class: 'tl', lang: pack.lang, text: e.line.m })]));
+          if (e.line.o) chat.append(otherBubble(e.line.o, isCur, k));
+        }
+        if (e.me !== undefined) chat.append(h('div', { class: 'bub me' }, [h('span', { class: 'who', text: L('我', 'Me') + ' · ' + L(act(e.action).zh, act(e.action).en) }), e.me ? h('span', { class: 'tl', lang: pack.lang, text: e.me }) : null]));
+        if (e.own !== undefined) chat.append(h('div', { class: 'bub me' }, [h('span', { class: 'who', text: L('我（自己说的）', 'Me (my own words)') }), h('span', { class: 'tl', lang: pack.lang, text: e.own || L('（只说了，没打字）', '(said aloud, not typed)') })]));
+        if (e.reply) chat.append(h('div', { class: 'bub other' }, [h('span', { class: 'who', text: T(dlg().role, 'otherShort') || L('对方', 'Them') }), h('span', { class: 'tl', lang: pack.lang, text: e.reply })]));
+        if (e.narr) chat.append(h('div', { class: 'bub narr', text: e.narr }));
+        if (e.narr2) chat.append(h('div', { class: 'bub narr', text: e.narr2 }));
+        if (e.why) chat.append(h('div', { class: 'bub narr', text: e.why }));
+      });
+      return chat;
+    }
+    function actionRow(line) {
+      var list = child() ? ACTIONS.filter(function (a) { return CHILD_ACTIONS.indexOf(a.id) >= 0; }) : ACTIONS;
+      var row = h('div', { class: 'actions', role: 'group', 'aria-label': L('修复动作', 'Repair moves') }, list.map(function (a, k) {
+        return h('button', { onclick: function () { chooseAction(a.id); } }, [child() ? h('span', { class: 'ic', text: a.ic }) : h('span', { class: 'k', text: String(k + 1) }), L(a.zh, a.en)]);
+      }));
+      row.append(h('button', { class: 'go', onclick: cont }, [child() ? h('span', { class: 'ic', text: '➡️' }) : h('span', { class: 'k', text: L('回车', 'Enter') }), L('继续听，不出声', 'Keep listening, say nothing')]));
+      return row;
+    }
+    function phraseChoice(a, line) {
+      var list = KTBlock.shuffle(phrasesFor(a, line.mo));
+      return h('div', { class: 'kb-card' }, [h('p', { class: 'kb-prompt', text: L('你选了“' + act(a).zh + '”。怎么说？', 'You chose “' + act(a).en + '”. How do you say it?') }),
+        h('div', { class: 'phr' }, list.map(function (p) { return h('button', { lang: pack.lang, onclick: function () { doAction(a, p); } }, p.text); })),
+        h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () { st.phraseFor = null; render(); startTimer(line); } }, L('换一个动作', 'Choose another move'))])]);
+    }
+    function endCard() {
+      var ms = dlg().lines.filter(function (l) { return l.mo; }).map(function (l) { return l.mo; });
+      var missed = ms.filter(function (m) { return m.type !== 'none' && !st.resolved[mid(m)]; });
+      var over = ms.filter(function (m) { return m.type === 'none' && st.first[mid(m)] && ['none', 'backchannel'].indexOf(st.first[mid(m)].action) < 0; });
+      return h('div', { class: 'kb-card endcard' + (missed.length ? ' fail' : '') }, [
+        h('p', { class: 'kb-prompt', text: missed.length ? L('对话结束，但有事情出了错：', 'The conversation is over, but something went wrong:') : L('对话结束，事情都办对了。', 'The conversation is over and everything worked out.') }),
+        missed.length ? h('ul', {}, missed.map(function (m) { return h('li', { text: T(m, 'miss') + L('（埋在这个时刻：', ' (this started at the moment: ') + typeName(m.type) + L('）', ')') }); })) : null,
+        over.length ? h('p', { class: 'kb-note', text: L('有 ' + over.length + ' 处其实不需要打断。', 'In ' + over.length + (over.length === 1 ? ' place' : ' places') + ' there was no need to interrupt.') }) : null,
+        h('p', { class: 'kb-note', text: L('对方的话都是预先写好的；页面不听你说话，也不给发音打分。在这里修复得好，不等于在真实对话里一定能做到。', 'The other person’s lines are written in advance; the page does not listen to you or score pronunciation. Doing well here does not mean you will in a real conversation.') }),
+        h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: function () { st.mode = 'review'; ui.setMode('review'); st.reviewIdx = 0; B.emit('view', { mode: 'review', dialogue: st.dlg }); render(); } }, L('去回看每个时刻 →', 'Look back at each moment →')),
+          h('button', { class: 'kb-btn', onclick: restart }, L('再来一遍', 'Again'))])]);
+    }
+    function typeName(t) { var n = (pack.types || {})[t]; return n ? T(n, 'name') : t; }
+
+    function renderLive() {
+      mainCol.append(roleCard());
+      mainCol.append(renderChat());
+      noteEl = h('p', { class: 'kb-note' });
+      if (st.ended) { mainCol.append(endCard(), noteEl); return; }
+      var line = lineAt(st.i);
+      if (line && line.o) {
+        if (st.phraseFor) mainCol.append(phraseChoice(st.phraseFor, line));
+        else {
+          var box = h('div', { class: 'kb-card' });
+          if (st.timerOn && line.mo) box.append(h('div', { class: 'timer', 'aria-hidden': 'true' }, [h('span')]));
+          box.append(h('p', { class: 'kb-note', text: child() ? L('听懂了就点“继续”；没听懂就选一个办法。', 'If you understood, press “go on”; if not, choose what to do.') : L('每一句后面都可以修复，也可以继续。不是每一句都有麻烦。', 'You can repair after any line, or go on. Not every line has trouble.') }));
+          box.append(actionRow(line));
+          if (!child()) box.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () { stopTimer(); st.paused = true; if (line.mo) B.hint(mid(line.mo), 'pause'); B.emit('select', { dialogue: st.dlg, pause: true }); render(); } }, L('暂停（算辅助）', 'Pause (counts as help)')),
+            st.paused ? h('span', { class: 'kb-note', text: L('已暂停，计时停了。', 'Paused; the timer has stopped.') }) : null,
+            h('button', { class: 'kb-btn', onclick: function () { if (line.mo) B.hint(mid(line.mo), 'hint1'); st.hintLvl = 1; render(); } }, L('提示：哪里没跟上？', 'Hint: where did you lose it?'))]));
+          if (st.hintLvl && line.mo && !child()) box.append(h('p', { class: 'kb-feedback warn', text: L('这一句的麻烦类型：', 'The trouble in this line: ') + typeName(line.mo.type) }));
+          mainCol.append(box);
+        }
+      } else {
+        mainCol.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: function () { advanceTo(st.i + 1); } }, L('继续 →', 'Go on →'))]));
+      }
+      mainCol.append(noteEl);
+    }
+
+    /* ---- step 2: look back ---- */
+    function categoryOf(mo, f) {
+      if (mo.type === 'none') return f.action === 'none' || f.action === 'backchannel' ? 'matched' : 'unneeded';
+      if ((mo.ok || []).indexOf(f.action) >= 0) return f.phraseOk ? 'matched' : 'blunt';
+      if (f.action === 'none' || f.action === 'backchannel') return 'pretend';
+      return 'wrongType';
+    }
+    function renderReview() {
+      var ms = dlg().lines.map(function (l, i) { return { l: l, i: i }; }).filter(function (x) { return x.l.mo; });
+      var done = ms.filter(function (x) { return st.first[mid(x.l.mo)]; });
+      mainCol.append(roleCard());
+      if (!done.length) {
+        mainCol.append(h('div', { class: 'kb-card' }, [h('p', { class: 'kb-prompt', text: L('先把这段对话做一遍，再回来看。', 'Do this conversation first, then come back.') }),
+          h('button', { class: 'kb-btn primary', onclick: function () { st.mode = 'live'; ui.setMode('live'); restart(); } }, L('去做一遍', 'Do it'))]));
+        return;
+      }
+      if (st.reviewIdx >= ms.length) st.reviewIdx = 0;
+      var tl = h('div', { class: 'tline', role: 'tablist', 'aria-label': L('对话时间线上的时刻', 'Moments on the timeline') }, ms.map(function (x, k) {
+        var stt = B.status('c:' + st.dlg + ':' + x.l.mo.id);
+        return h('button', { 'aria-current': k === st.reviewIdx ? 'true' : 'false', class: stt === 'independent' || stt === 'assisted' ? 'ok' : stt === 'wrong' ? 'bad' : '', onclick: function () { st.reviewIdx = k; render(); } }, L('时刻 ', 'Moment ') + (k + 1));
+      }));
+      mainCol.append(h('div', { class: 'kb-card' }, [h('p', { class: 'kb-note', text: L('逐个重放麻烦时刻，判断你第一次的做法属于哪一类（判断一次就锁定）。←/→ 切换。', 'Replay each moment and decide which kind your first move was (your first answer is locked). ←/→ to move between moments.') }), tl]));
+      var x = ms[st.reviewIdx], mo = x.l.mo, f = st.first[mid(mo)], cid = 'c:' + st.dlg + ':' + mo.id;
+      var card = h('div', { class: 'kb-card' });
+      card.append(otherBubble(x.l.o, false, x.i));
+      if (!f) { card.append(h('p', { class: 'kb-note', text: L('这个时刻你还没做（对话没走到这里）。', 'You have not reached this moment yet.') })); mainCol.append(card); return; }
+      card.append(h('p', {}, [h('b', { text: L('你第一次的做法：', 'Your first move: ') }), f.action === 'none' ? (f.timedOut ? L('时间到了，没出声', 'time ran out, said nothing') : L('继续听／只说“嗯”', 'went on / just nodded')) : L(act(f.action).zh, act(f.action).en) + (f.phrase ? ' — ' : ''), f.phrase ? h('span', { lang: pack.lang, text: f.phrase }) : null]));
+      var correct = categoryOf(mo, f), stt = B.status(cid), answered = stt && stt !== 'revealed';
+      card.append(h('div', { class: 'cats', role: 'group' }, CATS.map(function (c) {
+        var cls = answered && c.id === correct ? 'right' : (answered && st.catPick && st.catPick[cid] === c.id ? 'wrongpick' : '');
+        return h('button', { class: cls, disabled: answered, onclick: function () { st.catPick = st.catPick || {}; st.catPick[cid] = c.id; B.attempt(cid, { correct: c.id === correct, response: { cat: c.id, actual: correct } }); render(); } }, L(c.zh, c.en));
+      })));
+      if (answered) {
+        var cc = CATS.filter(function (c) { return c.id === correct; })[0];
+        card.append(h('p', { class: 'kb-feedback' + (B.status(cid) === 'wrong' ? ' bad' : '') }, [L('这一类：', 'This one: ') + L(cc.zh, cc.en) + L('。麻烦类型：', '. Kind of trouble: ') + typeName(mo.type) + L('。', '. ') + (T(mo, 'why') || '')]));
+        if (mo.type === 'none') card.append(h('p', {}, [h('span', { class: 'flag', text: L('反向那一半', 'The other half') }), ' ', L('不是每次没听懂都要打断：这里对方马上就解释了，或者跟任务无关。', 'Not every gap needs a repair: here the other person explains straight away, or it does not matter for the task.')]));
+        card.append(h('div', { class: 'pair' }, [
+          h('div', {}, [h('b', { text: L('你第一次说的', 'What you first said') }), f.phrase ? h('span', { lang: pack.lang, text: f.phrase }) : h('span', { class: 'kb-note', text: L('（没说修复的话）', '(no repair)') })]),
+          h('div', {}, [h('b', { text: mo.type === 'none' ? L('这里可以做的', 'What works here') : L('这一类的得体说法', 'Good ways to say it') }),
+            mo.type === 'none' ? h('span', { lang: pack.lang, text: (pack.phrases.backchannel || []).filter(function (p) { return p.ok; }).map(function (p) { return p.text; }).join(' / ') + L('，或者不出声继续听', ', or keep listening') }) : h('ul', {}, okPhrases(mo).map(function (t) { return h('li', { lang: pack.lang, text: t }); }))])]));
+      } else {
+        card.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () { B.hint(cid, 'type'); st.showType = cid; render(); } }, L('提示：这一句是什么麻烦', 'Hint: what was the trouble here')),
+          st.showType === cid ? h('span', { class: 'kb-note', text: typeName(mo.type) }) : null]));
+      }
+      mainCol.append(card);
+    }
+
+    /* ---- step 3: say it yourself (no move buttons) ---- */
+    function recordSayNone(line) {
+      var id = 's:' + st.dlg + ':' + line.mo.id;
+      if (!B.status(id)) B.attempt(id, { correct: line.mo.type === 'none', selfReport: true, response: { action: 'none' } });
+    }
+    function renderSay() {
+      mainCol.append(roleCard());
+      mainCol.append(h('p', { class: 'kb-note', text: L('一段新的对话，没有修复按钮。没听懂就点“我要修复”，自己说（或打字），再选你做的是哪一种修复。页面不听、不评分；和真人搭档演的话，搭档按右边的角色卡制造麻烦。', 'A new conversation with no repair buttons. If you lose track, press “I need to repair”, say it yourself (or type it), then pick which kind of repair you made. The page does not listen or score; with a real partner, the partner makes the trouble using the role card on the right.') }));
+      mainCol.append(renderChat());
+      noteEl = h('p', { class: 'kb-note' });
+      if (st.ended) { mainCol.append(endCard(), noteEl); return; }
+      var line = lineAt(st.i);
+      if (!line || !line.o) { mainCol.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: function () { advanceTo(st.i + 1); } }, L('继续 →', 'Go on →'))]), noteEl); return; }
+      var ss = st.sayState;
+      if (!ss) {
+        mainCol.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () { st.sayState = { text: '', type: null, ticks: {} }; render(); } }, L('我要修复', 'I need to repair')), h('button', { class: 'kb-btn primary', onclick: cont }, L('听懂了，继续', 'Got it, go on'))]), noteEl);
+        return;
+      }
+      var box = h('div', { class: 'kb-card' });
+      if (ss.type === null) {
+        var ta = h('textarea', { lang: pack.lang, 'aria-label': L('你说的修复', 'Your repair'), oninput: function (e) { ss.text = e.target.value; } }); ta.value = ss.text;
+        box.append(h('p', { class: 'kb-prompt', text: L('先自己说出来（也可以打字）。然后选：我做的是——', 'Say it yourself first (or type it). Then choose: what I did was —') }), ta,
+          h('div', { class: 'actions' }, ACTIONS.map(function (a) { return h('button', { onclick: function () { ss.type = a.id; B.emit('explain', { dialogue: st.dlg, selfType: a.id, text: ss.text }); render(); } }, L(a.zh, a.en)); })));
+      } else {
+        var mo = line.mo, list = mo ? okPhrases(mo) : [];
+        box.append(h('div', { class: 'pair' }, [
+          h('div', {}, [h('b', { text: L('你说的（你写下的）', 'What you said (as typed)') }), ss.text ? h('span', { lang: pack.lang, text: ss.text }) : h('span', { class: 'kb-note', text: L('（只说了，没打字）', '(said aloud, not typed)') }), h('div', { class: 'kb-note', text: L('你选的类型：', 'Your kind: ') + L(act(ss.type).zh, act(ss.type).en) })]),
+          h('div', {}, [h('b', { text: L('这一句的麻烦和得体说法', 'The trouble here and good ways to say it') }), h('div', { class: 'kb-note', text: mo ? typeName(mo.type) : L('这一句没有设计麻烦', 'No trouble was planned in this line') }),
+            mo && mo.type !== 'none' ? h('ul', {}, list.map(function (t) { return h('li', { lang: pack.lang, text: t }); })) : h('p', { class: 'kb-note', text: L('这里可以不打断，继续听。', 'You could just keep listening here.') })])]));
+        var checks = [L('类型对上了这一句的麻烦', 'My kind matched the trouble here'), L('说法得体（不生硬，也不像质问）', 'The wording was polite (not blunt, not a challenge)')];
+        if (mo && mo.type === 'number') checks.push(L('复述里有那个数字，而且没说错', 'My check-back included the number, correctly'));
+        box.append(h('div', { class: 'checks' }, [h('b', { text: L('自己勾（或搭档勾）：', 'Tick yourself (or a partner ticks):') })].concat(checks.map(function (c, k) { return h('label', {}, [h('input', { type: 'checkbox', onchange: function (e) { ss.ticks[k] = e.target.checked; } }), ' ' + c]); }))));
+        box.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: function () {
+          var all = checks.every(function (c, k) { return ss.ticks[k]; });
+          if (mo) B.attempt('s:' + st.dlg + ':' + mo.id, { correct: all && mo.type !== 'none', selfReport: true, response: { text: ss.text, selfType: ss.type, type: mo.type, ticked: Object.keys(ss.ticks).filter(function (k) { return ss.ticks[k]; }).length } });
+          else B.emit('select', { dialogue: st.dlg, line: st.i, selfType: ss.type, ordinary: true });
+          st.shown.push({ own: ss.text });
+          if (mo) { st.resolved[mid(mo)] = mo.type !== 'none' && (mo.ok || []).indexOf(ss.type) >= 0 ? true : st.resolved[mid(mo)]; var rep = mo.reply && mo.reply[ss.type]; if (rep) { st.shown.push({ reply: rep }); speak(rep); } }
+          advanceTo(st.i + 1);
+        } }, L('记下来，继续', 'Record it and go on'))]));
+      }
+      mainCol.append(box, noteEl);
+    }
+
+    /* ---- step 4: their "uh-huh" (the listening half) ---- */
+    function renderAck() {
+      var items = (pack.ack || []).filter(function (a) { return child() ? a.child : true; });
+      if (!items.length) items = pack.ack || [];
+      if (st.ackIdx >= items.length) {
+        mainCol.append(h('div', { class: 'kb-card' }, [h('p', { class: 'kb-prompt', text: L('这一组做完了。', 'That is the whole set.') }), h('button', { class: 'kb-btn primary', onclick: function () { st.ackIdx = 0; render(); } }, L('从头看', 'From the start'))]));
+        B.emit('complete', { mode: 'ack', items: items.length });
+        return;
+      }
+      var it = items[st.ackIdx], id = 'a:' + it.id, stt = B.status(id), answered = stt && stt !== 'revealed';
+      mainCol.append(h('p', { class: 'kb-note', text: L('反过来听：对方的“嗯”“はい”“uh-huh”常常只是“我在听”，不等于答应或同意。读这一小段，判断对方到底表态了没有。', 'Listen the other way round: their “uh-huh”, はい or 嗯 often only means “I’m listening”, not yes. Read this short exchange and decide whether they actually agreed.') }));
+      var chat = h('div', { class: 'kb-card chat' }, [h('span', { class: 'kb-note', text: (st.ackIdx + 1) + ' / ' + items.length + (T(it, 'ctx') ? ' · ' + T(it, 'ctx') : '') })]);
+      it.lines.forEach(function (l) {
+        if (l.m) chat.append(h('div', { class: 'bub me' }, [h('span', { class: 'who', text: L('我', 'Me') }), h('span', { class: 'tl', lang: pack.lang, text: l.m })]));
+        if (l.o) chat.append(h('div', { class: 'bub other' }, [h('span', { class: 'who', text: T(it, 'who') || L('对方', 'Them') }), h('span', { class: 'tl', lang: pack.lang, text: l.o }), h('button', { 'aria-label': L('播放', 'Play'), onclick: function () { speak(l.o); } }, '▶')]));
+      });
+      mainCol.append(chat);
+      var opts = [{ id: 'agree', zh: '对方答应了／同意了', en: 'They said yes / agreed' }, { id: 'listen', zh: '对方只是在听，还没表态', en: 'They were only listening; no answer yet' }, { id: 'refuse', zh: '对方其实在委婉地拒绝', en: 'They were actually saying no, gently' }];
+      mainCol.append(h('div', { class: 'ackopts' }, opts.map(function (o, k) {
+        var cls = answered && o.id === it.answer ? 'right' : (answered && st.ackPick && st.ackPick[id] === o.id ? 'wrongpick' : '');
+        return h('button', { class: cls, disabled: answered, onclick: function () { st.ackPick = st.ackPick || {}; st.ackPick[id] = o.id; B.attempt(id, { correct: o.id === it.answer, response: { pick: o.id, answer: it.answer } }); render(); } }, (k + 1) + '. ' + L(o.zh, o.en));
+      })));
+      if (answered) mainCol.append(h('p', { class: 'kb-feedback' + (B.status(id) === 'wrong' ? ' bad' : ''), text: T(it, 'why') }), h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: function () { st.ackIdx++; render(); } }, L('下一段 →', 'Next →'))]));
+      else mainCol.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () { st.ackIdx++; B.emit('select', { skip: id }); render(); } }, L('跳过', 'Skip'))]));
+    }
+
+    /* ---- side ---- */
+    function renderSide() {
+      side.innerHTML = '';
+      if (st.mode === 'ack') { side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('为什么练这个', 'Why this matters') }), h('p', { class: 'kb-note', text: T(pack, 'ackNote') })])); return; }
+      var d = dlg(), ms = d.lines.filter(function (l) { return l.mo; });
+      side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('这段对话', 'This conversation') }), h('p', { class: 'kb-note', text: L('有 ' + ms.length + ' 个预先设计的时刻，有的需要修复，有的不需要。', ms.length + ' planned moments; some need a repair, some do not.') }),
+        h('p', { class: 'kb-note', text: (d.kcs || []).join(' · ') })]));
+      if (st.mode === 'say') {
+        side.append(h('div', { class: 'kb-card partner' }, [h('button', { class: 'kb-btn', 'aria-expanded': st.partner ? 'true' : 'false', onclick: function () { st.partner = !st.partner; render(); } }, L('搭档的角色卡', 'Partner’s role card')),
+          st.partner ? h('div', {}, [h('p', { class: 'kb-note', text: L('搭档演对方，照台词说，在标出的地方照做；不要替学习者说修复的话。记录写在纸上，页面不保存。', 'The partner plays the other person, reads the lines and does what is marked; do not say the repair for the learner. Keep the record on paper; the page does not save it.') }),
+            h('ol', {}, ms.map(function (l) { return h('li', {}, [h('span', { lang: pack.lang, text: l.o }), h('div', { class: 'kb-note', text: '→ ' + (T(l.mo, 'partner') || typeName(l.mo.type)) + L('　☐ 用了哪类修复　☐ 得体　☐ 搭档提示过', '  ☐ kind of repair used  ☐ polite  ☐ partner hinted') })]); }))]) : null]));
+      }
+      side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('选项', 'Settings') }),
+        st.mode === 'live' && !child() ? h('label', { class: 'kb-variant' }, [h('input', { type: 'checkbox', checked: st.timerOn, onchange: function (e) { st.timerOn = e.target.checked; stopTimer(); B.emit('select', { timer: st.timerOn }); render(); } }), L(' 时间窗口（关掉后记为不限时）', ' Time window (off is recorded as untimed)')]) : null,
+        h('label', { class: 'kb-variant' }, [h('input', { type: 'checkbox', checked: st.textOn, onchange: function (e) { st.textOn = e.target.checked; var ln = lineAt(st.i); if (st.textOn && ln && ln.mo && !st.ended) B.hint(mid(ln.mo), 'text'); render(); } }), L(' 显示对方的文字（算辅助）', ' Show their words (counts as help)')]),
+        pack.voiceNote ? h('p', { class: 'kb-note', text: T(pack, 'voiceNote') }) : null]));
+    }
+    function renderBar() {
+      bar.innerHTML = '';
+      if (st.mode === 'ack') return;
+      var list = st.mode === 'review' ? pack.dialogues.filter(function (d) { return child() ? d.child : !d.step3 && !d.child; }) : pool(st.mode);
+      bar.append(h('label', { class: 'kb-variant' }, [L('对话 ', 'Conversation '), h('select', { onchange: function (e) { st.dlg = e.target.value; B.emit('highlight', { dialogue: st.dlg }); restart(); } },
+        list.map(function (d) { return h('option', { value: d.id, text: T(d, 'title'), selected: d.id === st.dlg }); }))]));
+      if (st.mode !== 'review') bar.append(h('button', { class: 'kb-btn', onclick: restart }, L('从头再来', 'Start again')));
+    }
+    function render() {
+      renderBar();
+      mainCol.innerHTML = '';
+      if (st.mode === 'live') renderLive(); else if (st.mode === 'review') renderReview(); else if (st.mode === 'say') renderSay(); else renderAck();
+      renderSide();
+      animateTimer();
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (/^(SELECT|INPUT|TEXTAREA)$/.test(e.target.tagName) || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (st.mode === 'review') {
+        var n = dlg().lines.filter(function (l) { return l.mo; }).length;
+        if (e.key === 'ArrowRight') { st.reviewIdx = (st.reviewIdx + 1) % n; render(); }
+        if (e.key === 'ArrowLeft') { st.reviewIdx = (st.reviewIdx - 1 + n) % n; render(); }
+        return;
+      }
+      if (st.mode !== 'live' || st.ended || st.phraseFor) return;
+      var line = lineAt(st.i); if (!line || !line.o) return;
+      if (e.key === ' ' && e.target.tagName !== 'BUTTON') { e.preventDefault(); stopTimer(); st.paused = true; if (line.mo) B.hint(mid(line.mo), 'pause'); render(); return; }
+      if (e.key === 'Enter' && e.target.tagName !== 'BUTTON') { e.preventDefault(); cont(); return; }
+      var k = parseInt(e.key, 10), list = child() ? ACTIONS.filter(function (a) { return CHILD_ACTIONS.indexOf(a.id) >= 0; }) : ACTIONS;
+      if (k >= 1 && k <= list.length) chooseAction(list[k - 1].id);
+    });
+
+    if (st.mode === 'live' || st.mode === 'say') restart(); else render();
+  }
+})();
+</script>
+</body>
+</html>

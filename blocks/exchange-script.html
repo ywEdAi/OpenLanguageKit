@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Exchange script</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .xs-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .xs-layout { grid-template-columns: 1fr; } }
+  .kb-bar select { max-width: min(62vw, 340px); }
+  .xs-main { display: grid; gap: 12px; min-width: 0; }
+  .xs-side { display: grid; gap: 12px; }
+  .role { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px 14px; }
+  .role div { font-size: .92rem; }
+  .role b { display: block; font-size: .75rem; color: var(--muted); font-weight: 600; }
+  .role.flash { animation: flash 1.2s ease 2; }
+  @keyframes flash { 50% { background: var(--warn-soft); } }
+  .chat { display: flex; flex-direction: column; gap: 8px; }
+  .bub { max-width: 85%; padding: 8px 12px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); }
+  .bub.other { align-self: flex-start; border-bottom-left-radius: 4px; }
+  .bub.me { align-self: flex-end; background: var(--accent-soft); border-color: var(--accent); border-bottom-right-radius: 4px; }
+  .bub.narr { align-self: center; background: transparent; border-style: dashed; color: var(--muted); font-size: .9rem; max-width: 100%; }
+  .bub .who { display: block; font-size: .72rem; color: var(--muted); }
+  .bub .tl { font-size: 1.08rem; }
+  .bub .tl.hidden { filter: blur(5px); user-select: none; }
+  .bub .act { font-style: italic; }
+  .bub button.play { border: 0; background: none; padding: 0 0 0 6px; color: var(--accent); }
+  .opts { display: grid; gap: 8px; }
+  .opt { text-align: left; border: 1px solid var(--line); background: var(--panel); border-radius: var(--radius); padding: 9px 12px; display: flex; gap: 10px; align-items: baseline; width: 100%; }
+  .opt .num { font-size: .75rem; color: var(--muted); min-width: 1.2em; }
+  .opt .pic { font-size: 1.6rem; }
+  [data-variant="child"] .opt { padding: 14px; font-size: 1.15rem; }
+  .opt .fnl { display: block; font-size: .8rem; color: var(--muted); }
+  .opt:hover { border-color: var(--accent); }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hintbox { padding: 8px 12px; border-radius: 10px; background: var(--warn-soft); font-size: .92rem; }
+  .tree ul { list-style: none; margin: 0; padding-left: 14px; border-left: 1px dashed var(--line); }
+  .tree > ul { padding-left: 0; border: 0; }
+  .tree li { margin: 3px 0; }
+  .tree button { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 2px 8px; font-size: .8rem; text-align: left; max-width: 100%; }
+  .tree button.walked { border-color: var(--accent); font-weight: 700; border-width: 2px; }
+  .tree button.cur { background: var(--accent); color: var(--accent-ink); }
+  .tree button:disabled { opacity: .55; cursor: default; }
+  .tree .lbl { font-size: .72rem; color: var(--muted); }
+  .scale { display: grid; gap: 4px; margin: 8px 0; }
+  .scale .bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+  .scale .bar span { height: 10px; border-radius: 4px; background: var(--line); }
+  .scale .bar span.on { background: var(--accent); }
+  .scale .bar.low span.on { background: var(--bad); }
+  .scale .bar.mid span.on { background: var(--warn); }
+  .scale .face { font-size: 1.8rem; }
+  .endcard { border-left: 4px solid var(--accent); }
+  .endcard.fail { border-left-color: var(--bad); }
+  .causes { margin: 6px 0 0; padding-left: 18px; font-size: .9rem; }
+  .cats { display: flex; flex-wrap: wrap; gap: 6px; }
+  .cats button { border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 4px 10px; font-size: .85rem; }
+  .cats button.right { background: var(--accent-soft); border-color: var(--accent); }
+  .cats button.wrongpick { background: var(--bad-soft); border-color: var(--bad); }
+  .turn { display: grid; gap: 8px; }
+  .turn.reverse { border-left: 4px solid var(--warn); }
+  .peek { border: 1px dashed var(--line); border-radius: 10px; padding: 8px 10px; font-size: .9rem; }
+  .flag { display: inline-block; font-size: .78rem; padding: 1px 8px; border-radius: 999px; background: var(--warn-soft); color: var(--warn); }
+  .catlbl { display: inline-block; font-size: .78rem; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); }
+  textarea { width: 100%; min-height: 70px; border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 8px; }
+  .side3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; }
+  .side3 > div { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; }
+  .side3 b { display: block; font-size: .75rem; color: var(--muted); }
+  .parts label { display: block; margin: 4px 0; }
+  .found { font-size: .85rem; color: var(--muted); }
+  .partner { font-size: .9rem; }
+  .partner ol { padding-left: 20px; }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function () {
+  'use strict';
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t;
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'exchange-script-en';
+  var reg = (window.KT_REGISTRY && KT_REGISTRY.packs) || {};
+  var entry = reg[setId] || {};
+  if (entry.block && entry.block !== 'exchange-script') { document.getElementById('app').textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  var file = entry.file || 'data/exchange-script.js';   // fallback while the registry does not list the pack yet
+  var s = document.createElement('script');
+  s.src = file;
+  s.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else document.getElementById('app').textContent = L('未知的数据包：', 'Unknown data pack: ') + setId; };
+  s.onerror = function () { document.getElementById('app').textContent = L('数据包加载失败：', 'Could not load the data pack: ') + file; };
+  document.head.appendChild(s);
+
+  /* Categories for step 2. Every option in the pack carries one of these as `cat`. */
+  var CATS = [
+    { id: 'both', zh: '事情办成了，说法也合适', en: 'Got it done, and it fit the situation' },
+    { id: 'goal', zh: '事情办成了，但对方不舒服', en: 'Got it done, but the other person felt put off' },
+    { id: 'rel', zh: '对方没不高兴，但事情没办成或被耽误', en: 'No one was upset, but it did not get done (or got held up)' },
+    { id: 'neither', zh: '两样都没做到', en: 'Neither' },
+    { id: 'any', zh: '这一回合换哪个都一样', en: 'Any of these works here' }
+  ];
+  var CHILD_CATS = [
+    { id: 'both', zh: '办成了，对方也高兴', en: 'It worked and they were happy' },
+    { id: 'goal', zh: '办成了，可对方不太高兴', en: 'It worked, but they were not happy' },
+    { id: 'rel', zh: '对方没听明白', en: 'They did not understand' },
+    { id: 'any', zh: '说哪句都行', en: 'Any of them is fine' }
+  ];
+  function catOf(id) { return CATS.filter(function (c) { return c.id === id; })[0] || CATS[0]; }
+  function isGood(cat) { return cat === 'both' || cat === 'any'; }
+
+  function start(pack) {
+    var B = KTBlock.init({ id: 'exchange-script', primitive: 'prim:exchange-script', title: T(pack, 'title'), set: pack.id });
+    document.title = T(pack, 'title') + ' · Exchange';
+    var modes = [{ id: 'walk', label: L('1 走一遍', '1 Walk through') }, { id: 'review', label: L('2 回看分支', '2 Look back') }, { id: 'say', label: L('3 自己说', '3 Say it yourself') }];
+    function child() { return B.variant === 'child'; }
+    function pool() {
+      var list = pack.scenarios.filter(function (sc) { return child() ? sc.child : true; });
+      if (!list.length) list = pack.scenarios.slice();
+      var kc = B.kc;
+      if (kc) { var k = list.filter(function (sc) { return (sc.kcs || []).indexOf(kc) >= 0; }); if (k.length) list = k; }
+      return list;
+    }
+    var byId = {}; pack.scenarios.forEach(function (sc) { byId[sc.id] = sc; });
+    var st = {
+      mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : 'walk',
+      scen: null, path: [], cur: null, hint: null, showText: true,
+      firstPath: {}, lastPath: {}, seen: {}, sayState: null, partner: false
+    };
+    var focus = params.get('focus');
+    st.scen = byId[focus] && (!child() || byId[focus].child) ? focus : pool()[0].id;
+
+    var ui = KTBlock.chrome(B, { title: T(pack, 'title'), subtitle: T(pack, 'subtitle'), modes: modes, mode: st.mode,
+      onMode: function (m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m, scenario: st.scen }); restart(); },
+      onVariant: function () { if (pool().indexOf(byId[st.scen]) < 0) st.scen = pool()[0].id; restart(); } });
+    var bar = h('div', { class: 'kb-bar' });
+    var mainCol = h('div', { class: 'xs-main' });
+    var side = h('aside', { class: 'xs-side' });
+    document.getElementById('app').append(ui.header, h('main', { class: 'kb-main' }, [bar, h('div', { class: 'xs-layout' }, [mainCol, side])]), ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id, scenario: st.scen });
+
+    function sc() { return byId[st.scen]; }
+    function node(id) { return sc().nodes[id]; }
+    var warned = false;
+    function speak(text) {
+      if (!text) return;
+      if (!B.speak(text, pack.speech) && !warned) { warned = true; note(L('这个浏览器不能播放语音：请看文字，或由搭档读出对方的话。', 'This browser cannot play speech: read the text, or have a partner read the other person’s lines.')); }
+    }
+    var noteEl = null;
+    function note(t) { if (noteEl) noteEl.textContent = t; }
+    function itemId(prefix, nid) { return prefix + ':' + st.scen + ':' + nid; }
+
+    /* ---- scales ---- */
+    function scales(path) {
+      var r = 2, g = 0, causes = [], endN = null;
+      path.forEach(function (p) {
+        var o = node(p.node).opts[p.opt];
+        if (o.r) { r += o.r; causes.push({ kind: o.r < 0 ? 'rel-' : 'rel+', node: p.node, o: o }); }
+        if (o.g) { g += o.g; causes.push({ kind: 'goal-', node: p.node, o: o }); }
+        else if (o.cat === 'rel' || o.cat === 'neither') causes.push({ kind: 'detour', node: p.node, o: o });
+      });
+      var last = path.length ? node(path[path.length - 1].node).opts[path[path.length - 1].opt].next : sc().start;
+      if (node(last) && node(last).end) endN = node(last);
+      var detours = causes.filter(function (c) { return c.kind === 'detour'; }).length;
+      var goal = endN ? Math.max(0, Math.min(2, endN.end.goal + g)) : null, rel2 = Math.max(0, Math.min(2, r));
+      // passing needs the task done, the relationship intact, and no turn where the task stalled (over-polite, unclear, silent)
+      return { rel: rel2, goal: goal, causes: causes, end: endN, detours: detours, pass: goal === 2 && rel2 === 2 && detours === 0 };
+    }
+    function scaleView(label, v, words) {
+      if (child()) return h('div', { class: 'scale' }, [h('span', { class: 'kb-note', text: label }), h('span', { class: 'face', text: v === null ? '…' : ['☹️', '😐', '😊'][v] })]);
+      var bars = [0, 1, 2].map(function (i) { return h('span', { class: v !== null && i <= v ? 'on' : '' }); });
+      return h('div', { class: 'scale' }, [h('span', { class: 'kb-note', text: label + L('：', ': ') + (v === null ? L('还没到结局', 'not at the end yet') : words[v]) }),
+        h('div', { class: 'bar ' + (v === 0 ? 'low' : v === 1 ? 'mid' : ''), role: 'img', 'aria-label': label + ' ' + (v === null ? '-' : v + '/2') }, bars)]);
+    }
+    var GOALW = [L('没办成', 'not done'), L('办成一部分', 'partly done'), L('办成了', 'done')];
+    var RELW = [L('关系受损', 'relationship damaged'), L('有点别扭', 'a little awkward'), L('关系很好', 'on good terms')];
+
+    /* ---- role card ---- */
+    function roleCard(flash) {
+      var r = sc().role;
+      return h('div', { class: 'kb-card role' + (flash ? ' flash' : '') }, [
+        h('div', {}, [h('b', { text: L('我是', 'I am') }), T(r, 'me')]),
+        h('div', {}, [h('b', { text: L('对方', 'The other person') }), T(r, 'other')]),
+        h('div', {}, [h('b', { text: L('我要做到', 'What I want') }), T(r, 'goal')]),
+        r.rel ? h('div', {}, [h('b', { text: L('关系和场合', 'Relationship and setting') }), T(r, 'rel')]) : null
+      ]);
+    }
+
+    /* ---- bubbles ---- */
+    function otherBubble(n, nid) {
+      if (n.say) {
+        return h('div', { class: 'bub other' }, [h('span', { class: 'who', text: T(sc().role, 'otherShort') || L('对方', 'Them') }),
+          h('span', { class: 'tl' + (st.showText ? '' : ' hidden'), lang: pack.lang, text: n.say }),
+          h('button', { class: 'play', 'aria-label': L('播放', 'Play'), onclick: function () { speak(n.say); B.emit('select', { item: itemId('w', nid), replay: true }); } }, '▶')]);
+      }
+      return null;
+    }
+    function narrBubble(n) { return n.narr ? h('div', { class: 'bub narr', text: T(n, 'narr') }) : null; }
+    function optText(o) { return o.act ? T(o, 'act') : o.text; }
+    function meBubble(o, own) {
+      return h('div', { class: 'bub me' }, [h('span', { class: 'who', text: L('我', 'Me') }),
+        own ? h('span', { class: 'tl', text: own }) : h('span', { class: o.act ? 'act' : 'tl', lang: o.act ? null : pack.lang, text: optText(o) })]);
+    }
+
+    /* ---- walk ---- */
+    function restart() {
+      st.path = []; st.cur = sc().start; st.hint = null; st.sayState = null;
+      render();
+      speakCur();
+    }
+    function speakCur() { var n = node(st.cur); if (n && n.say) setTimeout(function () { speak(n.say); }, 250); }
+    function choose(i) {
+      var nid = st.cur, n = node(nid), o = n.opts[i], id = itemId('w', nid);
+      if (st.seen[st.scen] && B.status(id) === null && !(B.items().filter(function (x) { return x.id === id; })[0] || {}).assisted) B.hint(id, 'seen-ending');
+      B.attempt(id, { correct: isGood(o.cat), response: { opt: i, fn: o.fn, cat: o.cat, mode: st.mode } });
+      st.path.push({ node: nid, opt: i });
+      st.cur = o.next; st.hint = null; st.sayState = null;
+      var nx = node(st.cur);
+      if (nx.end) {
+        var sc2 = scales(st.path);
+        if (!st.firstPath[st.scen]) st.firstPath[st.scen] = st.path.slice();
+        st.lastPath[st.scen] = st.path.slice();
+        st.seen[st.scen] = true;
+        B.emit('complete', { scenario: st.scen, goal: sc2.goal, rel: sc2.rel, passed: sc2.pass, detours: sc2.detours, turns: st.path.length, mode: st.mode });
+      }
+      render();
+      speakCur();
+    }
+    function rewind(k) {
+      st.path = st.path.slice(0, k); st.cur = k ? node(st.path[k - 1].node).opts[st.path[k - 1].opt].next : sc().start;
+      if (k === 0) st.cur = sc().start;
+      st.hint = null; st.sayState = null;
+      B.emit('select', { scenario: st.scen, rewindTo: st.cur });
+      render(); speakCur();
+    }
+    function useHint(level) {
+      var n = node(st.cur), id = itemId(st.mode === 'say' && n.key ? 's' : 'w', st.cur);
+      B.hint(id, level);
+      st.hint = level;
+      if (level === 3) speak(modelOf(n));
+      render();
+    }
+    function modelOf(n) {
+      if (n.model) return n.model;
+      var best = n.opts.filter(function (o) { return o.cat === 'both' && !o.act; })[0] || n.opts.filter(function (o) { return o.cat === 'any' && !o.act; })[0];
+      return best ? best.text : '';
+    }
+
+    /* ---- render ---- */
+    function renderBar() {
+      bar.innerHTML = '';
+      var list = pool();
+      bar.append(h('label', { class: 'kb-variant' }, [L('场景 ', 'Scenario '), h('select', { onchange: function (e) { st.scen = e.target.value; B.emit('highlight', { scenario: st.scen }); restart(); } },
+        list.map(function (x) { return h('option', { value: x.id, text: T(x, 'title'), selected: x.id === st.scen }); }))]));
+      bar.append(h('button', { class: 'kb-btn', onclick: function () { B.emit('select', { scenario: st.scen, restart: true }); restart(); } }, L('从头再来', 'Start again')));
+      bar.append(h('label', { class: 'kb-variant' }, [h('input', { type: 'checkbox', checked: st.showText, onchange: function (e) { st.showText = e.target.checked; render(); } }), L(' 显示对方的文字', ' Show their words')]));
+    }
+    function renderWalk(sayMode) {
+      var s0 = sc();
+      mainCol.append(roleCard(st.hint === 1));
+      var chat = h('div', { class: 'kb-card chat', 'aria-live': 'polite' });
+      var nid = s0.start;
+      st.path.forEach(function (p) {
+        var n = node(p.node);
+        var ob = otherBubble(n, p.node); if (ob) chat.append(ob);
+        var nb = narrBubble(n); if (nb) chat.append(nb);
+        chat.append(meBubble(n.opts[p.opt], p.own));
+        nid = n.opts[p.opt].next;
+      });
+      var cur = node(st.cur);
+      var ob2 = otherBubble(cur, st.cur); if (ob2) chat.append(ob2);
+      var nb2 = narrBubble(cur); if (nb2) chat.append(nb2);
+      mainCol.append(chat);
+      noteEl = h('p', { class: 'kb-note' });
+      if (cur.end) { mainCol.append(endCard(scales(st.path))); mainCol.append(noteEl); return; }
+      if (sayMode && cur.key) { mainCol.append(sayPanel(cur)); mainCol.append(noteEl); return; }
+      var dock = h('div', { class: 'dock' });
+      if (st.hint === 2 && cur.steps) dock.append(h('p', { class: 'hintbox', text: L('这一回合常见的步骤：', 'Usual steps for this turn: ') + T(cur, 'steps') }));
+      if (st.hint === 3) dock.append(h('p', { class: 'hintbox' }, [L('范例：', 'Example: '), h('span', { lang: pack.lang, text: modelOf(cur) })]));
+      dock.append(h('p', { class: 'kb-prompt', text: child() ? L('你说哪一句？', 'What do you say?') : (s0.fnMode ? L('这一回合你要做什么？', 'What do you do in this turn?') : L('你怎么说？', 'What do you say?')) }));
+      dock.append(h('div', { class: 'opts', role: 'group' }, cur.opts.map(function (o, i) {
+        var main = s0.fnMode && !child() ? [h('span', { text: T(o, 'fn') }), h('span', { class: 'fnl', lang: o.act ? null : pack.lang, text: optText(o) })]
+          : [h('span', { class: o.act ? 'act' : '', lang: o.act ? null : pack.lang, text: optText(o) })];
+        return h('button', { class: 'opt', onclick: function () { choose(i); } }, [h('span', { class: 'num', text: String(i + 1) }), o.pic ? h('span', { class: 'pic', text: o.pic }) : null, h('span', {}, main)]);
+      })));
+      dock.append(h('div', { class: 'tools' }, [
+        h('button', { class: 'kb-btn', onclick: function () { useHint(1); } }, L('提示 1：再看角色卡', 'Hint 1: role card again')),
+        cur.steps ? h('button', { class: 'kb-btn', onclick: function () { useHint(2); } }, L('提示 2：步骤名', 'Hint 2: names of the steps')) : null,
+        h('button', { class: 'kb-btn', onclick: function () { useHint(3); } }, L('提示 3：听一个范例', 'Hint 3: hear an example'))
+      ]));
+      mainCol.append(dock, noteEl);
+      mainCol.append(h('p', { class: 'kb-note', text: L('对方的话都是预先写好的，页面不听也不判断你说的话；分支由你选的那一句决定。数字键选择，空格重播对方的话。', 'Everything the other person says is written in advance. The page does not listen to you or judge your speech; the branch follows the line you choose. Number keys choose, Space replays their line.') }));
+    }
+    function endCard(sv) {
+      var e = sv.end.end, pass = sv.pass, nearly = !pass && sv.goal === 2 && sv.rel === 2;
+      var causes = sv.causes.map(function (c) {
+        var n = node(c.node), who = n.say ? '“' + n.say + '”' : T(n, 'narr');
+        var what = c.kind === 'rel-' ? L('这一回合让对方不舒服', 'this turn put the other person off') : c.kind === 'rel+' ? L('这一回合把关系补回来了', 'this turn repaired things') : c.kind === 'goal-' ? L('这一回合让事情没办全', 'this turn left the task unfinished') : L('这一回合对方没听明白，多绕了一圈', 'the other person did not get it here, so it took an extra turn');
+        return h('li', {}, [what + L('：在 ', ': after ') + who + L(' 之后，你选了 ', ', you chose ') + '“' + optText(c.o) + '”' + L('。', '. ') + (T(c.o, 'why') || '')]);
+      });
+      return h('div', { class: 'kb-card endcard' + (pass ? '' : ' fail') }, [
+        h('p', { class: 'kb-prompt', text: pass ? (child() ? L('成功了！', 'You did it!') : L('通关：事情办成了，关系也没受损。', 'Passed: the task is done and the relationship is fine.')) : (child() ? L('还可以更好，回到前面的回合再试试。', 'It could go better. Go back to an earlier turn and try again.') : nearly ? L('差一点：事情办成了，关系也好，但有 ' + sv.detours + ' 个回合对方没听明白或者事情被耽误了。通关要一路都不绕。', 'Nearly: the task is done and you are on good terms, but in ' + sv.detours + (sv.detours === 1 ? ' turn' : ' turns') + ' the other person did not understand or things were held up. To pass, no turn may stall.') : L('还没通关：通关要同时做到“办成了”“关系很好”，而且一路没有绕。', 'Not passed yet: you need “done” and “on good terms”, with no turn that stalls.')) }),
+        T(e, 'note') ? h('p', { text: T(e, 'note') }) : null,
+        scaleView(child() ? L('事情办成了吗', 'Did it work?') : L('目的', 'Task'), sv.goal, GOALW),
+        scaleView(child() ? L('对方的心情', 'How they feel') : L('关系', 'Relationship'), sv.rel, RELW),
+        causes.length ? h('ol', { class: 'causes' }, causes) : h('p', { class: 'kb-note', text: L('一路上没有出问题的回合。', 'No turn caused a problem on the way.') }),
+        h('p', { class: 'kb-note', text: L('这是在这个场合、这两个人的关系下预先写好的结果，不是关于说这种语言的人的普遍规律。在这里通关，也不等于在真实对话里一定能做到。', 'This is a pre-written outcome for this situation and this relationship, not a general rule about people who speak the language. Passing here does not mean you can do it in a real conversation.') }),
+        h('div', { class: 'tools' }, [
+          h('button', { class: 'kb-btn primary', onclick: function () { st.mode = 'review'; ui.setMode('review'); B.emit('view', { mode: 'review', scenario: st.scen }); render(); } }, L('去回看分支 →', 'Look back at the branches →')),
+          h('button', { class: 'kb-btn', onclick: function () { restart(); } }, L('重走一遍（不算独立）', 'Walk it again (not counted as independent)'))])
+      ]);
+    }
+
+    /* ---- step 3: say it yourself at a key turn ---- */
+    function sayPanel(n) {
+      var ss = st.sayState || (st.sayState = { text: '', fn: null, done: false, ticks: {} });
+      var id = itemId('s', st.cur);
+      var box = h('div', { class: 'kb-card dock' });
+      if (st.hint === 2 && n.steps) box.append(h('p', { class: 'hintbox', text: L('这一回合常见的步骤：', 'Usual steps for this turn: ') + T(n, 'steps') }));
+      if (st.hint === 3) box.append(h('p', { class: 'hintbox' }, [L('范例：', 'Example: '), h('span', { lang: pack.lang, text: modelOf(n) })]));
+      if (ss.fn === null) {
+        box.append(h('p', { class: 'kb-prompt', text: L('关键回合：没有选项。先自己说出来（也可以打在下面）。', 'Key turn: no options. Say it yourself first (you can also type it below).') }));
+        var ta = h('textarea', { lang: pack.lang, 'aria-label': L('你要说的话', 'What you say'), oninput: function (e) { ss.text = e.target.value; } });
+        ta.value = ss.text;
+        box.append(ta, h('p', { class: 'kb-note', text: L('页面不录音，也不评判你说或写的内容。说完以后，自己选“我刚才做的是哪一步”，对话按你选的往下走。', 'The page does not record or judge what you say or write. When you have said it, choose which move you made; the conversation follows your choice.') }));
+        box.append(h('p', { class: 'kb-prompt', text: L('我刚才做的是：', 'What I just did:') }));
+        box.append(h('div', { class: 'opts' }, KTBlock.shuffle(n.opts.map(function (o, i) { return i; })).filter(function (i) { return !n.opts[i].act; }).map(function (i) {
+          var o = n.opts[i];
+          return h('button', { class: 'opt', onclick: function () { ss.fn = i; B.emit('explain', { item: id, selfFn: o.fn, text: ss.text }); render(); } }, T(o, 'fn'));
+        })));
+        box.append(h('div', { class: 'tools' }, [
+          h('button', { class: 'kb-btn', onclick: function () { useHint(1); } }, L('提示 1：再看角色卡', 'Hint 1: role card again')),
+          n.steps ? h('button', { class: 'kb-btn', onclick: function () { useHint(2); } }, L('提示 2：步骤名', 'Hint 2: names of the steps')) : null,
+          h('button', { class: 'kb-btn', onclick: function () { useHint(3); } }, L('提示 3：听一个范例', 'Hint 3: hear an example'))]));
+        return box;
+      }
+      var o = n.opts[ss.fn];
+      box.append(h('p', { class: 'kb-prompt', text: L('对照一下：', 'Compare:') }));
+      box.append(h('div', { class: 'side3' }, [
+        h('div', {}, [h('b', { text: L('你说的（你写下的）', 'What you said (as typed)') }), ss.text ? h('span', { lang: pack.lang, text: ss.text }) : h('span', { class: 'kb-note', text: L('（只说了，没打字）', '(said aloud, not typed)') })]),
+        h('div', {}, [h('b', { text: L('你选的这一步的范例', 'Example of the move you chose') }), h('span', { lang: pack.lang, text: o.text }), h('span', { class: 'fnl kb-note', text: ' · ' + catLabel(o.cat) })]),
+        h('div', {}, [h('b', { text: L('这一回合最合适的范例', 'Best fit for this turn') }), h('span', { lang: pack.lang, text: modelOf(n) })])
+      ]));
+      if (n.parts && n.parts.length) {
+        var low = (ss.text || '').toLowerCase();
+        var found = n.parts.map(function (p) { return (p.markers || []).filter(function (m) { return low.indexOf(m.toLowerCase()) >= 0; }); });
+        box.append(h('div', { class: 'parts' }, [h('b', { text: L('这一句要有的成分（自己勾，搭档也可以勾）：', 'What this turn needs (tick it yourself, or a partner ticks):') })].concat(n.parts.map(function (p, i) {
+          return h('label', {}, [h('input', { type: 'checkbox', checked: !!ss.ticks[i], disabled: ss.done, onchange: function (e) { ss.ticks[i] = e.target.checked; } }), ' ' + T(p, 't'),
+            ss.text ? h('span', { class: 'found', text: found[i].length ? L('（打的字里有：', ' (your text contains: ') + found[i].join(L('、', ', ')) + L('）', ')') : L('（打的字里没找到参考词，不代表没说到）', ' (no reference word found in your text; that does not mean it is missing)') }) : null]);
+        }))));
+      }
+      if (!ss.done) {
+        box.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: function () {
+          var all = (n.parts || []).every(function (p, i) { return ss.ticks[i]; });
+          B.attempt(id, { correct: all && isGood(o.cat), selfReport: true, response: { text: ss.text, selfFn: o.fn, cat: o.cat, ticked: Object.keys(ss.ticks).filter(function (k) { return ss.ticks[k]; }).length, parts: (n.parts || []).length } });
+          ss.done = true;
+          st.path.push({ node: st.cur, opt: ss.fn, own: ss.text || null });
+          var nx = o.next; st.cur = nx; st.hint = null; st.sayState = null;
+          if (node(nx).end) { if (!st.lastPath) st.lastPath = {}; st.lastPath[st.scen] = st.path.slice(); var sv = scales(st.path); B.emit('complete', { scenario: st.scen, goal: sv.goal, rel: sv.rel, mode: 'say' }); }
+          render(); speakCur();
+        } }, L('记下来，往下走', 'Record it and go on'))]));
+      }
+      return box;
+    }
+    function catLabel(id) { var c = (child() ? CHILD_CATS : CATS).filter(function (x) { return x.id === id; })[0] || catOf(id); return L(c.zh, c.en); }
+
+    /* ---- step 2: look back ---- */
+    function renderReview() {
+      var path = st.firstPath[st.scen] || st.lastPath[st.scen] || (st.path.length ? st.path : null);
+      mainCol.append(roleCard(false));
+      if (!path || !path.length) {
+        mainCol.append(h('div', { class: 'kb-card' }, [h('p', { class: 'kb-prompt', text: L('先把这个场景走一遍，再回来看分支。', 'Walk through this scenario first, then come back to look at the branches.') }),
+          h('button', { class: 'kb-btn primary', onclick: function () { st.mode = 'walk'; ui.setMode('walk'); restart(); } }, L('去走一遍', 'Walk it'))]));
+        return;
+      }
+      var cats = child() ? CHILD_CATS : CATS;
+      mainCol.append(h('p', { class: 'kb-note', text: L('下面是你第一次走的路。每一回合先判断你那一句属于哪一类（第一次判断会锁定），再点开别的分支看对方会怎么回应。先看分支再判断，算提示后完成。', 'Below is the route you took the first time. For each turn, first decide which kind your line was (your first answer is locked), then open the other branches to see how the other person would have replied. Looking at branches before deciding counts as assisted.') }));
+      path.forEach(function (p, k) {
+        var n = node(p.node), o = n.opts[p.opt], id = itemId('c', p.node);
+        var stt = B.status(id);
+        var card = h('div', { class: 'kb-card turn' + (n.direct && stt ? ' reverse' : '') });
+        card.append(h('span', { class: 'kb-note', text: L('第 ' + (k + 1) + ' 回合', 'Turn ' + (k + 1)) }));
+        if (n.say) card.append(h('div', { class: 'bub other' }, [h('span', { class: 'tl', lang: pack.lang, text: n.say })]));
+        if (n.narr) card.append(h('div', { class: 'bub narr', text: T(n, 'narr') }));
+        card.append(meBubble(o, p.own));
+        var answered = stt && stt !== 'revealed';
+        card.append(h('div', { class: 'cats', role: 'group', 'aria-label': L('这一句属于哪一类', 'Which kind was this line') }, cats.map(function (c) {
+          var cls = '';
+          if (answered && c.id === o.cat) cls = 'right';
+          var it = st.picks && st.picks[id];
+          if (answered && it === c.id && c.id !== o.cat) cls = 'wrongpick';
+          return h('button', { class: cls, disabled: answered, onclick: function () {
+            st.picks = st.picks || {}; st.picks[id] = c.id;
+            var ok = c.id === o.cat || (child() && o.cat === 'neither' && c.id === 'rel');
+            B.attempt(id, { correct: ok, response: { cat: c.id, actual: o.cat } });
+            render();
+          } }, L(c.zh, c.en));
+        })));
+        if (answered) {
+          card.append(h('p', { class: 'kb-feedback' + (B.status(id) === 'wrong' ? ' bad' : ''), text: L('页面的归类：', 'The pack’s answer: ') + catLabel(o.cat) + L('。', '. ') + (T(o, 'why') || '') }));
+          if (n.direct) card.append(h('p', {}, [h('span', { class: 'flag', text: L('反向那一半', 'The other half') }), ' ', L('这一回合简短直接最合适：更长、更客气的说法反而让对方听不出你要什么。', 'Short and direct fits best in this turn: a longer, more polite line makes it harder to hear what you want.')]));
+        }
+        var others = n.opts.map(function (x, i) { return i; }).filter(function (i) { return i !== p.opt; });
+        st.peeked = st.peeked || {};
+        card.append(h('div', { class: 'tools' }, others.map(function (i) {
+          var key = p.node + '#' + i;
+          return h('button', { class: 'kb-btn', 'aria-expanded': st.peeked[key] ? 'true' : 'false', onclick: function () {
+            st.peeked[key] = !st.peeked[key];
+            if (st.peeked[key]) {
+              st.seen[st.scen] = true;
+              if (!B.status(id)) B.hint(id, 'peek');
+              B.emit('compare', { scenario: st.scen, node: p.node, chose: p.opt, other: i });
+            }
+            render();
+          } }, L('看另一个分支：', 'Other branch: ') + (n.opts[i].act ? T(n.opts[i], 'act') : n.opts[i].text).slice(0, 34) + ((n.opts[i].act ? T(n.opts[i], 'act') : n.opts[i].text).length > 34 ? '…' : ''));
+        })));
+        others.forEach(function (i) {
+          if (!st.peeked[p.node + '#' + i]) return;
+          var x = n.opts[i], nx = node(x.next);
+          card.append(h('div', { class: 'peek' }, [
+            h('div', {}, [h('b', { text: L('如果说：', 'If you said: ') }), h('span', { lang: x.act ? null : pack.lang, class: x.act ? 'act' : '', text: optText(x) }), ' ', h('span', { class: 'catlbl', text: catLabel(x.cat) })]),
+            nx.say ? h('div', {}, [h('b', { text: L('对方会说：', 'They would say: ') }), h('span', { lang: pack.lang, text: nx.say })]) : null,
+            nx.narr ? h('div', { class: 'kb-note', text: T(nx, 'narr') }) : null,
+            nx.end && T(nx.end, 'note') ? h('div', { class: 'kb-note', text: L('结局：', 'Ending: ') + T(nx.end, 'note') }) : null,
+            T(x, 'why') ? h('div', { class: 'kb-note', text: T(x, 'why') }) : null]));
+        });
+        mainCol.append(card);
+      });
+      var sv = scales(path);
+      if (sv.end) mainCol.append(h('div', { class: 'kb-card' }, [h('b', { text: L('第一次走的结局', 'Your first ending') }), scaleView(L('目的', 'Task'), sv.goal, GOALW), scaleView(L('关系', 'Relationship'), sv.rel, RELW)]));
+    }
+
+    /* ---- side: tree, scales, partner card ---- */
+    function renderSide() {
+      side.innerHTML = '';
+      var s0 = sc(), walked = {}, curId = st.cur;
+      st.path.forEach(function (p) { walked[p.node + '#' + p.opt] = true; walked[p.node] = true; });
+      walked[curId] = true;
+      var shown = {};
+      function short(t) { return t.length > 30 ? t.slice(0, 30) + '…' : t; }
+      var canJump = st.mode !== 'review';
+      function sub(nid, depth) {
+        var n = s0.nodes[nid];
+        var k = st.path.map(function (p) { return p.node; }).indexOf(nid);
+        var label = n.end ? L('结局', 'End') + (T(n.end, 'note') ? '' : '') : (n.say || T(n, 'narr') || nid);
+        var li = h('li', {});
+        var btn = h('button', { class: (walked[nid] ? 'walked' : '') + (nid === curId && st.mode !== 'review' ? ' cur' : ''), disabled: !(canJump && k >= 0), title: label,
+          onclick: function () { rewind(k); } }, (n.end ? '🏁 ' : '') + (label.length > 28 ? label.slice(0, 28) + '…' : label));
+        li.append(btn);
+        if (shown[nid]) { li.append(h('span', { class: 'lbl', text: L(' （见上）', ' (see above)') })); return li; }
+        shown[nid] = true;
+        // only turns you have reached are expanded; the rest stay one click away (keeps the tree short)
+        if (n.opts && depth < 12 && (walked[nid] || st.mode === 'review' && st.seen[st.scen]) && !(st.mode === 'say' && n.key && nid === curId)) {
+          var ul = h('ul', {});
+          n.opts.forEach(function (o, i) {
+            var oli = h('li', {}, [h('span', { class: 'lbl', text: (walked[nid + '#' + i] ? '● ' : '○ ') + (st.mode === 'review' && !child() ? T(o, 'fn') : short(optText(o))) })]);
+            var inner = h('ul', {}, [sub(o.next, depth + 1)]);
+            oli.append(inner); ul.append(oli);
+          });
+          li.append(ul);
+        }
+        return li;
+      }
+      side.append(h('div', { class: 'kb-card tree' }, [h('b', { text: L('分支树', 'Branch tree') }), h('p', { class: 'kb-note', text: canJump ? L('粗框是走过的回合，点一下回到那一回合重走。', 'Bold frames are turns you took; click one to go back and redo it.') : L('第 2 步里分支树只看不跳。', 'In step 2 the tree is for looking only.') }), h('ul', {}, [sub(s0.start, 0)])]));
+      if (st.mode !== 'review') {
+        var sv = scales(st.path);
+        side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('结局刻度', 'Outcome') }), scaleView(child() ? L('事情办成了吗', 'Did it work?') : L('目的', 'Task'), sv.goal, GOALW), scaleView(child() ? L('对方的心情', 'How they feel') : L('关系', 'Relationship'), sv.rel, RELW)]));
+      }
+      if (st.mode === 'say') {
+        side.append(h('div', { class: 'kb-card partner' }, [h('button', { class: 'kb-btn', 'aria-expanded': st.partner ? 'true' : 'false', onclick: function () { st.partner = !st.partner; render(); } }, L('和真人搭档演：角色卡', 'Play it with a partner: role card')),
+          st.partner ? partnerCard() : null]));
+      }
+      side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('这个场景练的知识点', 'Knowledge points in this scenario') }), h('p', { class: 'kb-note', text: (s0.kcs || []).join(' · ') })]));
+    }
+    function partnerCard() {
+      var s0 = sc(), keys = Object.keys(s0.nodes).filter(function (k) { return s0.nodes[k].key; });
+      return h('div', {}, [
+        h('p', { class: 'kb-note', text: L('搭档演“对方”，照下面的话说，等学习者自己说完再接下一句；不要替学习者说。记录写在纸上，页面不保存。', 'The partner plays the other person, reads these lines and waits for the learner to finish before going on; do not say it for them. Keep the record on paper; the page does not save it.') }),
+        h('p', {}, [h('b', { text: L('对方：', 'Other person: ') }), T(s0.role, 'other')]),
+        h('ol', {}, keys.map(function (k) {
+          var n = s0.nodes[k];
+          return h('li', {}, [n.say ? h('span', { lang: pack.lang, text: n.say }) : h('span', { text: T(n, 'narr') }),
+            h('div', { class: 'kb-note', text: L('勾选：', 'Tick: ') + (n.parts || []).map(function (p) { return '☐ ' + T(p, 't'); }).join('  ') + L('  ☐ 搭档提示过', '  ☐ partner gave a hint') })]);
+        }))]);
+    }
+
+    function render() {
+      renderBar();
+      mainCol.innerHTML = '';
+      if (st.mode === 'review') renderReview(); else renderWalk(st.mode === 'say');
+      renderSide();
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (/^(SELECT|INPUT|TEXTAREA)$/.test(e.target.tagName) || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (st.mode === 'review') return;
+      var n = node(st.cur); if (!n || n.end) return;
+      if (e.key === ' ' && e.target.tagName !== 'BUTTON') { e.preventDefault(); if (n.say) speak(n.say); return; }
+      if (st.mode === 'say' && n.key) return;
+      var k = parseInt(e.key, 10);
+      if (k >= 1 && k <= n.opts.length) choose(k - 1);
+    });
+
+    restart();
+  }
+})();
+</script>
+</body>
+</html>

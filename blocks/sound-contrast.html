@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sound Contrast</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .sc-layout { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .sc-layout { grid-template-columns: minmax(0, 1fr); } }
+  .sc-layout > * { min-width: 0; }
+  .sc-side { display: grid; gap: 12px; }
+  .sc-stage { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; justify-items: center; text-align: center; }
+  .sc-stage .kb-prompt { margin: 0; }
+  .sc-play { font-size: 1.15rem; padding: 10px 26px; }
+  [data-variant="child"] .sc-play { font-size: 1.5rem; padding: 14px 34px; }
+  .sc-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; width: 100%; max-width: 560px; }
+  .sc-card { border: 2px solid var(--line); background: var(--panel); border-radius: var(--radius); padding: 14px 8px; display: flex; flex-direction: column; align-items: center; gap: 4px; min-height: 130px; justify-content: center; position: relative; }
+  .sc-card .pic { font-size: 2.6rem; line-height: 1.15; }
+  [data-variant="child"] .sc-card { min-height: 180px; }
+  [data-variant="child"] .sc-card .pic { font-size: 4.6rem; }
+  .sc-card .pic.num { font-weight: 700; font-size: 2.2rem; }
+  [data-variant="child"] .sc-card .pic.num { font-size: 3.6rem; }
+  .sc-card .word { font-size: 1.5rem; font-weight: 600; }
+  .sc-card .py { font-size: .95rem; color: var(--muted); }
+  .sc-card .gl { font-size: .85rem; color: var(--muted); }
+  .sc-card .key { position: absolute; top: 6px; left: 8px; font-size: .7rem; color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; }
+  .sc-card.right { border-color: var(--accent); background: var(--accent-soft); }
+  .sc-card.wrongpick { border-color: var(--bad); background: var(--bad-soft); }
+  .sc-card:disabled { cursor: default; color: inherit; }
+  .sc-card.wiggle .pic { animation: sc-hop .5s ease-in-out 3; }
+  @keyframes sc-hop { 0%, 100% { transform: translateY(0) rotate(0); } 30% { transform: translateY(-14px) rotate(-8deg); } 60% { transform: translateY(-4px) rotate(6deg); } }
+  mark.d { background: var(--warn-soft); color: var(--warn); border-radius: 4px; padding: 0 2px; box-shadow: inset 0 -2px 0 var(--warn); }
+  mark.gap { display: inline-block; width: .7em; height: 1em; vertical-align: -0.1em; background: var(--warn-soft); box-shadow: inset 0 -2px 0 var(--warn); border-radius: 3px; }
+  .sc-flip { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; font-size: 1.3rem; }
+  .sc-flip span small { display: block; font-size: .75rem; color: var(--muted); }
+  .sc-opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; width: 100%; max-width: 620px; }
+  .sc-opt { border: 1px solid var(--line); background: var(--panel); border-radius: var(--radius); padding: 10px 8px; text-align: left; display: flex; gap: 8px; align-items: flex-start; }
+  .sc-opt .n { font-size: .75rem; color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; margin-top: 2px; }
+  .sc-opt.right { background: var(--accent-soft); border-color: var(--accent); }
+  .sc-opt.wrongpick { background: var(--bad-soft); border-color: var(--bad); }
+  .sc-opt:disabled { cursor: default; }
+  .sc-ref { display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; }
+  .sc-ref .tag { font-size: .8rem; padding: 2px 10px; border-radius: 999px; background: var(--accent-soft); }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .sc-mx { border-collapse: collapse; width: 100%; font-size: .85rem; }
+  .sc-mx th, .sc-mx td { border: 1px solid var(--line); padding: 4px 6px; text-align: center; }
+  .sc-mx th { font-weight: 600; color: var(--muted); }
+  .sc-mx td.hit { background: var(--accent-soft); }
+  .sc-mx td.miss { background: var(--bad-soft); }
+  .sc-status { font-size: .88rem; margin: 6px 0 0; }
+  .sc-status.ok { color: var(--accent); }
+  .sc-status.warn { color: var(--warn); }
+  .sc-list { margin: 4px 0 0; padding-left: 18px; font-size: .85rem; }
+  .sc-list li { margin: 2px 0; }
+  .sc-screen { width: 100%; max-width: 560px; border: 2px dashed var(--line); border-radius: var(--radius); padding: 18px 12px; display: grid; gap: 10px; justify-items: center; }
+  .sc-screen.speaker { border-color: var(--warn); }
+  .sc-screen.listener { border-color: var(--accent); }
+  .sc-screen .who { font-size: .8rem; color: var(--muted); }
+  .sc-big { font-size: 2.2rem; font-weight: 700; }
+  .flag { display: inline-block; font-size: .8rem; padding: 2px 8px; border-radius: 999px; background: var(--warn-soft); color: var(--warn); }
+  .reverse { border-left: 4px solid var(--warn); }
+  .sc-src { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; font-size: .9rem; }
+  .done { font-size: 2.6rem; }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function () {
+  'use strict';
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t;
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'sound-contrast-en';
+  var reg = (window.KT_REGISTRY && KT_REGISTRY.packs) || {};
+  var entry = reg[setId] || {};
+  if (entry.block && entry.block !== 'sound-contrast') { document.getElementById('app').textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  var file = entry.file || 'data/sound-contrast.js';   // fallback while the registry does not list the pack yet
+  var s = document.createElement('script');
+  s.src = file;
+  s.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else document.getElementById('app').textContent = L('未知的数据包：', 'Unknown data pack: ') + setId; };
+  s.onerror = function () { document.getElementById('app').textContent = L('数据包加载失败：', 'Could not load the data pack: ') + file; };
+  document.head.appendChild(s);
+
+  function start(pack) {
+    var title = T(pack, 'title');
+    var B = KTBlock.init({ id: 'sound-contrast', primitive: 'prim:sound-contrast', title: title, set: pack.id });
+    document.title = title + ' · Sound Contrast';
+    var showGloss = KTBlock.lang !== pack.lang;
+    var modes = [{ id: 'listen', label: L('听辨', 'Which one?') }, { id: 'sort', label: L('归类', 'Sort the sound') }, { id: 'say', label: L('说给人听', 'Say it to someone') }];
+    var axes = pack.axes;
+    var axisById = {}; axes.forEach(function (a) { axisById[a.id] = a; });
+    var focus = params.get('focus');
+    var st = {
+      mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : 'listen',
+      axis: axisById[focus] ? focus : (B.variant === 'child' ? 'child' : axes[0].id),
+      queue: [], idx: 0, item: null, round: 0,
+      mx: {},        // axis -> {aa, ab, ba, bb}  (heard x, chose y), first attempts of step 1 only
+      same: {},      // axis -> {n, saidDiff}
+      say: {}        // axis -> [{target, heard, src, ok}]
+    };
+    function child() { return B.variant === 'child'; }
+    function childPairs() { var out = []; axes.forEach(function (a) { a.pairs.forEach(function (p) { if (p.child) out.push({ axis: a, pair: p }); }); }); return out; }
+
+    var ui = KTBlock.chrome(B, { title: title, subtitle: T(pack, 'subtitle'), modes: modes, mode: st.mode,
+      onMode: function (m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m }); newRound(); },
+      onVariant: function () { if (child() && st.axis !== 'child' && childPairs().length) st.axis = 'child'; if (!child() && st.axis === 'child') st.axis = axes[0].id; newRound(); } });
+    var bar = h('div', { class: 'kb-bar' });
+    var stage = h('div', { class: 'kb-card sc-stage' });
+    var side = h('aside', { class: 'sc-side' });
+    document.getElementById('app').append(ui.header, h('main', { class: 'kb-main' }, [bar, h('div', { class: 'sc-layout' }, [stage, side])]), ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id });
+
+    /* ---- speech ---- */
+    var warned = false;
+    function say(w) { return w.say || w.text; }
+    function note(t) { var c = stage.querySelector('.cap'); if (c) c.textContent = t || ''; }
+    function speakText(text, opts) {
+      opts = opts || {};
+      var r = B.speak(text, opts.locale || pack.speech, opts);
+      if (!r && !warned) { warned = true; note(L('这个浏览器不能播放语音：请换一个浏览器，或由老师现场读。', 'This browser cannot play speech: use another browser, or have a teacher read aloud.')); }
+      return r;
+    }
+    function speakWord(w, opts) { return speakText(say(w), opts); }
+    function seq(list) {
+      var r = B.speakSequence(list.map(function (x) { return { text: say(x.w), rate: x.rate, pause: x.pause == null ? 450 : x.pause }; }), pack.speech);
+      if (!r && !warned) { warned = true; note(L('这个浏览器不能播放语音。', 'This browser cannot play speech.')); }
+      return r;
+    }
+    function hasExactVoice(locale) {
+      try { return window.speechSynthesis.getVoices().some(function (v) { return v.lang.replace('_', '-') === locale; }); } catch (e) { return false; }
+    }
+    /** Play a variant: another locale if the device has that exact voice, otherwise slow speech. Returns the variant actually used. */
+    function playVariant(w, v) {
+      if (v.how === 'locale' && hasExactVoice(v.locale)) { speakText(say(w), { locale: v.locale }); return 'locale'; }
+      speakText(say(w), { rate: 0.5 }); return 'rate';
+    }
+    function sayInstruction(zh, en) {   // child version: instructions are spoken, in the interface language
+      speakText(L(zh, en), { locale: KTBlock.lang === 'en' ? 'en-US' : 'zh-CN' });
+    }
+
+    /* ---- words ---- */
+    function word(p, side) { return side === 'third' ? p.third : p[side]; }
+    function other(side) { return side === 'a' ? 'b' : 'a'; }
+    function hlNodes(w) {
+      var src = w.hl || w.text, out = [], re = /\[([^\]]*)\]/g, last = 0, m;
+      while ((m = re.exec(src))) {
+        if (m.index > last) out.push(src.slice(last, m.index));
+        out.push(m[1] ? h('mark', { class: 'd', text: m[1] }) : h('mark', { class: 'gap', title: L('这里少一拍', 'a beat is missing here'), 'aria-label': L('（缺）', '(missing)') }));
+        last = re.lastIndex;
+      }
+      if (last < src.length) out.push(src.slice(last));
+      return out;
+    }
+    function isNum(pic) { return /^[0-9]+$/.test(pic || ''); }
+    function cardBody(w, opt) {
+      opt = opt || {};
+      var kids = [];
+      if (w.pic) kids.push(h('span', { class: 'pic' + (isNum(w.pic) ? ' num' : ''), 'aria-hidden': 'true', text: w.pic }));
+      if (!child() || !w.pic) {
+        kids.push(h('span', { class: 'word' }, opt.hl ? hlNodes(pack.lang === 'zh' ? { hl: w.text } : w) : (pack.lang === 'zh' ? w.text : w.text)));
+        if (w.py) kids.push(h('span', { class: 'py' }, opt.hl ? hlNodes(w) : w.py));
+        if (showGloss && T(w, 'gloss')) kids.push(h('span', { class: 'gl', text: T(w, 'gloss') }));
+        if (w.nonword) kids.push(h('span', { class: 'gl', text: L('（不是常用词）', '(not an everyday word)') }));
+      }
+      return kids;
+    }
+    function wordLabel(w) { return (w.py ? w.text + ' ' + w.py : w.text) + (showGloss && T(w, 'gloss') ? ' (' + T(w, 'gloss') + ')' : ''); }
+
+    /* ---- rounds ---- */
+    function axisPairs() {
+      if (st.axis === 'child') return childPairs();
+      var a = axisById[st.axis];
+      return a.pairs.map(function (p) { return { axis: a, pair: p }; });
+    }
+    function newRound() {
+      st.round++;
+      var list = axisPairs(), q = [], i, n;
+      if (!list.length) { st.queue = []; st.idx = 0; begin(); return; }
+      if (st.mode === 'listen') {
+        n = child() ? 6 : 12;
+        var sides = []; for (i = 0; i < n; i++) sides.push(i % 2 ? 'b' : 'a');
+        sides = KTBlock.shuffle(sides);
+        var pool = KTBlock.shuffle(list);
+        for (i = 0; i < n; i++) {
+          var pp = pool[i % pool.length];
+          q.push({ kind: 'ab', axis: pp.axis, pair: pp.pair, side: sides[i], left: Math.random() < 0.5 ? 'a' : 'b', id: 'ab:' + pp.axis.id + ':' + pp.pair.id + ':' + sides[i] + ':' + st.round + '.' + i });
+        }
+        if (!child()) {
+          var sd = KTBlock.shuffle(list);
+          var mk = function (pp, second, k) { var first = Math.random() < 0.5 ? 'a' : 'b'; return { kind: 'sd', axis: pp.axis, pair: pp.pair, first: first, second: second === 'same' ? first : other(first), truth: second, id: 'sd:' + pp.axis.id + ':' + pp.pair.id + ':' + second + ':' + st.round + '.' + k }; };
+          var extra = [mk(sd[0], 'same', 0), mk(sd[1 % sd.length], 'same', 1), mk(sd[2 % sd.length], 'diff', 2)];
+          extra.forEach(function (x) { q.splice(1 + Math.floor(Math.random() * (q.length - 1)), 0, x); });
+        }
+      } else if (st.mode === 'sort') {
+        var types = [];
+        var withThird = list.filter(function (x) { return x.pair.third; });
+        var variants = [];
+        list.forEach(function (x) { (x.axis.variants || []).forEach(function (v) { if (v.pair === x.pair.id && variants.indexOf(v) < 0) variants.push({ v: v, x: x }); }); });
+        KTBlock.shuffle(variants).slice(0, 2).forEach(function (vv) { types.push({ t: 'variant', x: vv.x, ref: vv.v.side, v: vv.v }); });
+        KTBlock.shuffle(withThird).slice(0, 2).forEach(function (x) { types.push({ t: 'third', x: x }); });
+        var rest = KTBlock.shuffle(list);
+        types.push({ t: 'same', x: rest[0] });
+        var k = 0;
+        while (types.length < (child() ? 6 : 9)) { types.push({ t: 'other', x: rest[(k + 1) % rest.length] }); k++; }
+        q = KTBlock.shuffle(types).map(function (o, j) {
+          var ref = o.ref || (Math.random() < 0.5 ? 'a' : 'b');
+          return { kind: 'sort', axis: o.x.axis, pair: o.x.pair, ref: ref, test: o.t, variant: o.v || null, id: 'sort:' + o.x.axis.id + ':' + o.x.pair.id + ':' + o.t + ':' + st.round + '.' + j };
+        });
+      } else {
+        n = 5;
+        var pl = KTBlock.shuffle(list);
+        for (i = 0; i < n; i++) { var p3 = pl[i % pl.length]; q.push({ kind: 'say', axis: p3.axis, pair: p3.pair, side: Math.random() < 0.5 ? 'a' : 'b', left: Math.random() < 0.5 ? 'a' : 'b', phase: 'speak', id: 'say:' + p3.axis.id + ':' + p3.pair.id + ':' + st.round + '.' + i }); }
+      }
+      st.queue = q; st.idx = 0;
+      begin();
+    }
+    function begin() {
+      try { window.speechSynthesis.cancel(); } catch (e) { /* none */ }
+      var it = st.queue[st.idx];
+      st.item = it ? Object.assign(it, { replays: 0, hints: [], answered: false, pick: null, showWhere: false }) : null;
+      if (it) {
+        B.emit('view', { item: it.id, mode: st.mode, axis: it.axis.id, pair: it.pair.id });
+        if (it.kind === 'ab' || it.kind === 'sd' || it.kind === 'sort') setTimeout(function () { if (st.item === it) playItem(false); }, 350);
+      } else B.emit('complete', { mode: st.mode, items: st.queue.length, axis: st.axis });
+      render();
+    }
+    function next() { st.idx++; begin(); }
+
+    /* ---- playback for the current item ---- */
+    function playItem(isReplay) {
+      var it = st.item; if (!it) return;
+      if (isReplay) { if (!it.answered) it.replays++; B.emit('select', { item: it.id, replay: true, beforeAnswer: !it.answered, replays: it.replays }); }
+      if (it.kind === 'ab') speakWord(word(it.pair, it.side));
+      else if (it.kind === 'sd') seq([{ w: word(it.pair, it.first), pause: 700 }, { w: word(it.pair, it.second) }]);
+      else if (it.kind === 'sort') playSort(it);
+      renderBar();
+    }
+    function playSort(it) {
+      var ref = word(it.pair, it.ref);
+      var test = it.test === 'other' ? word(it.pair, other(it.ref)) : it.test === 'third' ? it.pair.third : ref;
+      var done = speakWord(ref);
+      Promise.resolve(done).then(function () {
+        setTimeout(function () {
+          if (st.item !== it) return;
+          if (it.test === 'variant') it.usedVariant = playVariant(ref, it.variant);
+          else speakWord(test);
+        }, 700);
+      });
+    }
+
+    /* ---- step 1: which one ---- */
+    function pickAB(side) {
+      var it = st.item; if (!it || it.answered) return;
+      var ok = side === it.side;
+      it.answered = true; it.pick = side;
+      B.attempt(it.id, { correct: ok, response: { heard: it.side, chose: side, replays: it.replays, hints: it.hints.slice(), pair: it.pair.id } });
+      var rec = B.items().filter(function (x) { return x.id === it.id; })[0];
+      if (rec && rec.attempts === 1) {
+        var m = st.mx[it.axis.id] || (st.mx[it.axis.id] = { aa: 0, ab: 0, ba: 0, bb: 0 });
+        m[it.side + side]++;
+      }
+      B.emit('compare', { item: it.id, a: it.pair.a.text, b: it.pair.b.text, order: 'A-B-A' });
+      render();
+      var w = word(it.pair, it.side);
+      if (child()) feedback(L('是这个：', 'It was this one: ') + (w.pic || w.text) + L('。再听一遍两个词。', '. Listen to both words once more.'), '');
+      else feedback((ok ? L('对。', 'Right. ') : L('听到的是 ', 'You heard ') + wordLabel(w) + L('，不是 ', ', not ') + wordLabel(word(it.pair, side)) + L('。', '. ')) + L('两个词并排，标色的是不同的地方；现在按 A-B-A 连放一遍。', 'The two words are side by side with the difference marked; now they play A-B-A.'), ok ? '' : 'bad');
+      seq([{ w: it.pair.a, pause: 500 }, { w: it.pair.b, pause: 500 }, { w: it.pair.a }]);
+    }
+    function pickSD(ans) {
+      var it = st.item; if (!it || it.answered) return;
+      var ok = ans === it.truth;
+      it.answered = true; it.pick = ans;
+      B.attempt(it.id, { correct: ok, response: { truth: it.truth, answer: ans, replays: it.replays } });
+      if (it.truth === 'same') { var s2 = st.same[it.axis.id] || (st.same[it.axis.id] = { n: 0, saidDiff: 0 }); s2.n++; if (ans === 'diff') s2.saidDiff++; }
+      render();
+      var w1 = word(it.pair, it.first), w2 = word(it.pair, it.second);
+      feedback(it.truth === 'same' ? (ok ? L('对，两遍是同一个词：', 'Right, the same word twice: ') + wordLabel(w1) + L('。', '.') : L('其实两遍是同一个词：', 'It was actually the same word twice: ') + wordLabel(w1) + L('。觉得不一样时，先想想差在哪个音。', '. When it sounds different, ask yourself which sound differs.'))
+        : (ok ? L('对，先 ', 'Right: first ') + wordLabel(w1) + L('，后 ', ', then ') + wordLabel(w2) + L('。', '.') : L('其实不一样：先 ', 'They were different: first ') + wordLabel(w1) + L('，后 ', ', then ') + wordLabel(w2) + L('。', '.')), ok ? '' : 'bad');
+    }
+
+    /* ---- step 2: sort ---- */
+    var SORT = ['same', 'variant', 'other', 'third'];
+    function sortLabel(k, it) {
+      var o = word(it.pair, other(it.ref));
+      return k === 'same' ? L('和参照完全一样', 'Exactly the same as the reference')
+        : k === 'variant' ? L('同一个词，只是读法不同', 'The same word, said differently')
+        : k === 'other' ? L('换成了另一个词：', 'A different word: ') + (child() && o.pic ? o.pic : o.text + (o.py ? ' ' + o.py : ''))
+        : L('都不是：第三个词', 'Neither: a third word');
+    }
+    function pickSort(k) {
+      var it = st.item; if (!it || it.answered) return;
+      var ok = k === it.test;
+      it.answered = true; it.pick = k;
+      B.attempt(it.id, { correct: ok, response: { test: it.test, answer: k, replays: it.replays, variantUsed: it.usedVariant || null } });
+      render();
+      var ref = word(it.pair, it.ref), msg;
+      if (it.test === 'variant') {
+        var fellBack = it.variant.how === 'locale' && it.usedVariant === 'rate';
+        msg = (ok ? L('对。', 'Right. ') : k === 'other' ? L('不是另一个词。', 'It was not a different word. ') : L('两遍听得出不同。', 'The two playings did differ. ')) +
+          (fellBack ? L('（这台设备没有英式语音，第二遍改成了慢速。）', '(This device has no voice for that accent, so the second playing was slowed down instead.) ') + L('慢速读，还是同一个词。', 'Said slowly, it is still the same word.') : T(it.variant, 'note')) +
+          L(' 不是每个听得出的差异都会换一个词。', ' Not every difference you can hear changes the word.');
+      } else if (it.test === 'third') {
+        msg = (ok ? L('对。', 'Right. ') : '') + L('第二遍是 ', 'The second word was ') + wordLabel(it.pair.third) + L('：既不是 ', ': neither ') + it.pair.a.text + L(' 也不是 ', ' nor ') + it.pair.b.text + L('。', '.');
+      } else if (it.test === 'other') {
+        msg = (ok ? L('对。', 'Right. ') : '') + L('参照是 ', 'The reference was ') + wordLabel(ref) + L('，第二遍是 ', '; the second word was ') + wordLabel(word(it.pair, other(it.ref))) + L('。', '.');
+      } else {
+        msg = (ok ? L('对，', 'Right: ') : L('其实', 'Actually ')) + L('两遍完全一样，都是 ', 'both playings were identical: ') + wordLabel(ref) + L('。', '.');
+      }
+      feedback(msg, ok ? (it.test === 'variant' ? 'warn' : '') : 'bad');
+    }
+
+    /* ---- step 3: say it ---- */
+    var src = 'partner';
+    function handOver() { var it = st.item; it.phase = 'listen'; B.emit('view', { item: it.id, screen: 'listener' }); render(); }
+    function listenerPick(side) {
+      var it = st.item; if (!it || it.phase !== 'listen') return;
+      var ok = side === it.side;
+      it.phase = 'done'; it.pick = side; it.answered = true;
+      B.attempt(it.id, { correct: ok, selfReport: true, response: { target: it.side, heard: side, judge: src, pair: it.pair.id } });
+      (st.say[it.axis.id] || (st.say[it.axis.id] = [])).push({ target: word(it.pair, it.side).text, heard: word(it.pair, side).text, src: src, ok: ok });
+      render();
+    }
+
+    /* ---- hints (step 1 and 2) ---- */
+    function hintWhere() { var it = st.item; if (it.answered || it.showWhere) return; it.showWhere = true; it.hints.push('where'); B.hint(it.id, 1); render(); }
+    function hintABAB() {
+      var it = st.item; if (it.answered) return;
+      it.hints.push('abab'); B.hint(it.id, 2);
+      var target = it.kind === 'ab' ? word(it.pair, it.side) : null;
+      var list = [{ w: it.pair.a, pause: 400 }, { w: it.pair.b, pause: 400 }, { w: it.pair.a, pause: 400 }, { w: it.pair.b, pause: 1000 }];
+      if (target) list.push({ w: target });
+      seq(list); render();
+    }
+    function hintSlow() {
+      var it = st.item; if (it.answered) return;
+      it.hints.push('slow'); B.hint(it.id, 3);
+      if (it.kind === 'ab') speakWord(word(it.pair, it.side), { rate: 0.5 });
+      else if (it.kind === 'sd') B.speakSequence([{ text: say(word(it.pair, it.first)), rate: 0.5, pause: 700 }, { text: say(word(it.pair, it.second)), rate: 0.5 }], pack.speech);
+      render();
+    }
+
+    /* ---- render ---- */
+    function feedback(t, tone) { var f = stage.querySelector('.kb-feedback'); if (f) { f.textContent = t; f.className = 'kb-feedback ' + (tone || ''); f.hidden = !t; } }
+    function renderBar() {
+      bar.innerHTML = '';
+      var opts = axes.map(function (a) { return h('option', { value: a.id, text: T(a, 'label'), selected: st.axis === a.id }); });
+      if (childPairs().length) opts.unshift(h('option', { value: 'child', text: L('图卡（儿童）', 'Picture cards (children)'), selected: st.axis === 'child' }));
+      bar.append(h('label', { class: 'kb-variant' }, [L('对立 ', 'Contrast '), h('select', { onchange: function (e) { st.axis = e.target.value; B.emit('highlight', { axis: st.axis }); newRound(); } }, opts)]));
+      if (st.item) bar.append(h('span', { class: 'kb-note', text: L('第 ' + (st.idx + 1) + ' / ' + st.queue.length + ' 题', 'Item ' + (st.idx + 1) + ' / ' + st.queue.length) + (st.item.replays ? L('　作答前重放 ' + st.item.replays + ' 次', ' · replayed ' + st.item.replays + '× before answering') : '') }));
+      bar.append(h('button', { class: 'kb-btn', onclick: newRound }, L('换一轮', 'New round')));
+    }
+    function hintTools(it) {
+      if (child()) return h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', disabled: it.answered, onclick: hintABAB }, L('提示：两个词连放', 'Hint: play both words'))]);
+      var where = it.axis.where ? T(it.axis, 'where') : '';
+      return h('div', { class: 'tools' }, [
+        h('button', { class: 'kb-btn', disabled: it.answered || it.showWhere || !where, onclick: hintWhere }, L('提示 1：注意哪里', 'Hint 1: where to listen')),
+        h('button', { class: 'kb-btn', disabled: it.answered, onclick: hintABAB }, L('提示 2：A-B-A-B 连放', 'Hint 2: play A-B-A-B')),
+        it.kind === 'sort' ? null : h('button', { class: 'kb-btn', disabled: it.answered, onclick: hintSlow }, L('慢速（算提示）', 'Slow (counts as a hint)'))
+      ]);
+    }
+    function playBtn(it, label) {
+      return h('button', { class: 'kb-btn primary sc-play', onclick: function () { playItem(true); } }, label || L('▶ 再听（空格）', '▶ Listen again (Space)'));
+    }
+    function renderStage() {
+      stage.innerHTML = '';
+      var it = st.item;
+      if (!it) {
+        stage.append(h('div', { class: 'done', text: st.queue.length ? '✔' : '—' }),
+          h('p', { class: 'kb-prompt', text: st.queue.length ? L('这一轮做完了。右边的矩阵记着每一次第一次作答。', 'Round finished. The matrix on the right keeps every first attempt.') : L('这里没有可练的词对。', 'There are no pairs to practise here.') }),
+          h('button', { class: 'kb-btn primary', onclick: newRound }, L('再来一轮', 'Another round')));
+        return;
+      }
+      if (it.kind === 'ab') {
+        stage.append(h('p', { class: 'kb-prompt', text: child() ? L('听一听，是哪一个？', 'Listen. Which one is it?') : L('听一个词，点它是哪一个。（F／J 选左右）', 'Listen to one word and click which one it is. (F / J for left / right)') }));
+        if (child()) stage.append(h('button', { class: 'kb-btn', onclick: function () { sayInstruction('听一听，是哪一个？', 'Listen. Which one is it?'); } }, L('🔊 说明', '🔊 Instructions')));
+        stage.append(playBtn(it));
+        var sidesLR = [it.left, other(it.left)];
+        stage.append(h('div', { class: 'sc-cards' }, sidesLR.map(function (sd, i) {
+          var w = word(it.pair, sd), cls = 'sc-card';
+          if (it.answered) {
+            if (child()) { if (sd === it.side) cls += ' wiggle'; }
+            else if (sd === it.side) cls += ' right'; else if (sd === it.pick) cls += ' wrongpick';
+          }
+          return h('button', { class: cls, disabled: it.answered, 'aria-label': (i ? 'J: ' : 'F: ') + (child() && w.pic ? (showGloss && T(w, 'gloss') ? T(w, 'gloss') : w.text) : wordLabel(w)), onclick: function () { pickAB(sd); } },
+            [child() ? null : h('span', { class: 'key', text: i ? 'J' : 'F' })].concat(cardBody(w, { hl: it.answered })));
+        })));
+        if (it.showWhere && !it.answered) stage.append(h('p', { class: 'kb-note', text: T(it.axis, 'where') }));
+        stage.append(h('p', { class: 'cap kb-note' }));
+        if (!it.answered) stage.append(hintTools(it));
+        if (it.answered && !child()) stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () { seq([{ w: it.pair.a, pause: 500 }, { w: it.pair.b, pause: 500 }, { w: it.pair.a }]); B.emit('compare', { item: it.id, order: 'A-B-A', after: true }); } }, L('▶ 再放 A-B-A', '▶ Play A-B-A again'))]));
+      } else if (it.kind === 'sd') {
+        stage.append(h('p', { class: 'kb-prompt', text: L('听两个词：一样，还是不一样？', 'Listen to two words: the same, or different?') }), playBtn(it),
+          h('p', { class: 'kb-note', text: L('这一对是 ', 'This pair is ') + it.pair.a.text + ' / ' + it.pair.b.text }));
+        var ans = [['same', L('一样', 'Same'), '1'], ['diff', L('不一样', 'Different'), '2'], ['unsure', L('不确定', 'Not sure'), '3']];
+        stage.append(h('div', { class: 'sc-opts' }, ans.map(function (a) {
+          var cls = 'sc-opt';
+          if (it.answered) { if (a[0] === it.truth) cls += ' right'; else if (a[0] === it.pick) cls += ' wrongpick'; }
+          return h('button', { class: cls, disabled: it.answered, onclick: function () { pickSD(a[0]); } }, [h('span', { class: 'n', text: a[2] }), h('span', { text: a[1] })]);
+        })));
+        stage.append(h('p', { class: 'cap kb-note' }));
+        if (!it.answered) stage.append(hintTools(it));
+      } else if (it.kind === 'sort') {
+        var ref = word(it.pair, it.ref);
+        stage.append(h('p', { class: 'kb-prompt', text: L('先听参照词，再听第二遍。第二遍是什么？', 'First the reference word, then a second playing. What is the second one?') }),
+          h('div', { class: 'sc-ref' }, [h('span', { class: 'tag', text: L('参照', 'Reference') }), h('span', { class: 'sc-big' }, child() && ref.pic ? ref.pic : ref.text), ref.py ? h('span', { class: 'kb-note', text: ref.py }) : null, showGloss && T(ref, 'gloss') ? h('span', { class: 'kb-note', text: T(ref, 'gloss') }) : null]),
+          playBtn(it));
+        stage.append(h('div', { class: 'sc-opts' }, SORT.map(function (k, i) {
+          var cls = 'sc-opt';
+          if (it.answered) { if (k === it.test) cls += ' right'; else if (k === it.pick) cls += ' wrongpick'; }
+          return h('button', { class: cls, disabled: it.answered, onclick: function () { pickSort(k); } }, [h('span', { class: 'n', text: String(i + 1) }), h('span', { text: sortLabel(k, it) })]);
+        })));
+        if (it.answered) {
+          var ws = [it.pair.a, it.pair.b].concat(it.test === 'third' ? [it.pair.third] : []);
+          stage.append(h('div', { class: 'sc-flip' }, ws.map(function (w) { return h('span', {}, hlNodes(pack.lang === 'zh' ? { hl: w.hl } : w).concat([pack.lang === 'zh' ? h('small', { text: w.text }) : null, showGloss && T(w, 'gloss') ? h('small', { text: T(w, 'gloss') }) : null])); })));
+          stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () { playSort(it); } }, L('▶ 再听这两遍', '▶ Hear both again'))]));
+        }
+        if (it.showWhere && !it.answered) stage.append(h('p', { class: 'kb-note', text: T(it.axis, 'where') }));
+        stage.append(h('p', { class: 'cap kb-note' }));
+        if (!it.answered) stage.append(hintTools(it));
+      } else if (it.kind === 'say') {
+        var target = word(it.pair, it.side);
+        if (it.phase === 'speak') {
+          stage.append(h('p', { class: 'kb-prompt', text: L('说话人：只有你看这一屏。把这个词说出来，说完把屏幕交给听者。', 'Speaker: only you look at this screen. Say this word, then hand the screen to the listener.') }),
+            h('div', { class: 'sc-screen speaker' }, [h('span', { class: 'who', text: L('说话人屏', 'Speaker screen') }),
+              target.pic ? h('span', { class: 'sc-big', 'aria-hidden': 'true', text: target.pic }) : null,
+              child() && target.pic ? null : h('span', { class: 'sc-big', text: target.text }), target.py ? h('span', { class: 'kb-note', text: target.py }) : null,
+              showGloss && T(target, 'gloss') && !child() ? h('span', { class: 'kb-note', text: T(target, 'gloss') }) : null,
+              h('button', { class: 'kb-btn', onclick: function () { speakWord(target); B.emit('select', { item: it.id, model: true }); } }, L('▶ 先听一遍原声', '▶ Hear the model first'))]),
+            h('div', { class: 'sc-src', role: 'radiogroup', 'aria-label': L('谁来听', 'Who listens') }, [['partner', L('听者是同伴或家长', 'Listener: a partner or parent')], ['assistant', L('听者是语音助手（只算一位听者）', 'Listener: a voice assistant (counts as one listener only)')]].map(function (o) {
+              return h('label', {}, [h('input', { type: 'radio', name: 'src', value: o[0], checked: src === o[0], onchange: function () { src = o[0]; } }), ' ' + o[1]]);
+            })),
+            h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: handOver }, L('我说完了，交给听者 →', 'I have said it: hand over →'))]),
+            h('p', { class: 'kb-note', text: L('页面不录音，也不判断发音，只记下听者听成了哪一个。听者不要看说话人的嘴。', 'The page does not record and does not judge pronunciation; it only notes which word the listener heard. The listener should not watch the speaker\'s mouth.') }));
+        } else {
+          stage.append(h('p', { class: 'kb-prompt', text: it.phase === 'listen' ? L('听者：你听到的是哪一个？', 'Listener: which one did you hear?') : L('结果', 'Result') }),
+            h('div', { class: 'sc-screen listener' }, [h('span', { class: 'who', text: L('听者屏', 'Listener screen') }),
+              h('div', { class: 'sc-cards' }, [it.left, other(it.left)].map(function (sd) {
+                var w = word(it.pair, sd), cls = 'sc-card';
+                if (it.phase === 'done') { if (sd === it.side) cls += ' right'; else if (sd === it.pick) cls += ' wrongpick'; }
+                return h('button', { class: cls, disabled: it.phase === 'done', 'aria-label': wordLabel(w), onclick: function () { listenerPick(sd); } }, cardBody(w, { hl: it.phase === 'done' }));
+              }))]));
+          if (it.phase === 'done') {
+            var ok = it.pick === it.side;
+            stage.append(h('div', { class: 'kb-feedback' + (ok ? '' : ' warn'), text: L('目标：', 'Target: ') + wordLabel(target) + L('；听者听成：', '; the listener heard: ') + wordLabel(word(it.pair, it.pick)) + L('。', '. ') +
+              (ok ? L('对方分辨出来了。', 'The listener could tell.') : L('对方听成了另一个词。比一比两个词标色的地方，再试一次。', 'The listener heard the other word. Compare the marked parts of the two words and try again.')) +
+              L('这一条记为听者判断，和听辨题分开计数。', ' This is recorded as a listener judgement, counted apart from the listening items.') }));
+          }
+        }
+      }
+      stage.append(h('div', { class: 'kb-feedback', hidden: true }));
+      var done = it.kind === 'say' ? it.phase === 'done' : it.answered;
+      stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn' + (done ? ' primary' : ''), onclick: next }, done ? L('下一题 →', 'Next →') : L('跳过', 'Skip'))]));
+    }
+    function pct(a, b) { return b ? Math.round(100 * a / b) + '%' : '–'; }
+    function renderSide() {
+      side.innerHTML = '';
+      var ax = st.axis === 'child' ? null : axisById[st.axis];
+      var list = ax ? [ax] : axes.filter(function (a) { return st.mx[a.id] || st.say[a.id]; });
+      if (!list.length) side.append(h('div', { class: 'kb-card' }, [h('p', { class: 'kb-note', text: L('图卡来自几组不同的对立，每组的矩阵在作答后出现在这里。', 'The picture cards come from several contrasts; each one\'s matrix appears here once answered.') })]));
+      list.forEach(function (a) {
+        var m = st.mx[a.id] || { aa: 0, ab: 0, ba: 0, bb: 0 }, nA = m.aa + m.ab, nB = m.ba + m.bb, n = nA + nB;
+        var sm = st.same[a.id] || { n: 0, saidDiff: 0 };
+        var status, cls = '';
+        var guessing = sm.n && sm.saidDiff * 2 > sm.n;
+        if (guessing) { status = L('“一样”题有一半以上答了“不一样”：这一轮像是在猜差异，不计通过。', 'More than half of the “same” items were answered “different”: this looks like guessing at differences and does not count as a pass.'); cls = 'warn'; }
+        else if (n < 12) status = L('还需要 ' + (12 - n) + ' 次听辨（每次第一次作答才算）。', (12 - n) + ' more listening items needed (first attempts only).');
+        else if (nA && nB && m.aa / nA >= 0.75 && m.bb / nB >= 0.75) { status = L('A、B 两边都不低于 75%：可以暂记为“能在孤立词中听辨这一对立”。不代表能说对，也不代表在句子里听得出。', 'Both A and B are at 75% or above: you may tentatively record “can tell this contrast apart in isolated words”. This does not mean you can say it, or hear it inside sentences.'); cls = 'ok'; }
+        else { status = L('还没通过：A、B 两边各自都要不低于 75%。', 'Not passed yet: A and B each need 75% or more.'); cls = 'warn'; }
+        var chooseA = n ? (m.aa + m.ba) / n : 0;
+        var bias = n >= 8 && (chooseA > 0.75 || chooseA < 0.25) ? L('你选 ' + (chooseA > 0.5 ? 'A' : 'B') + ' 的次数明显更多：可能是把两个都听成了一边。', 'You chose ' + (chooseA > 0.5 ? 'A' : 'B') + ' much more often: you may be hearing both words as one side.') : '';
+        var sayList = st.say[a.id] || [];
+        var nPartner = sayList.filter(function (x) { return x.src === 'partner'; }), okP = nPartner.filter(function (x) { return x.ok; }).length;
+        side.append(h('div', { class: 'kb-card' }, [h('b', { text: T(a, 'label') }),
+          h('table', { class: 'sc-mx' }, [
+            h('tr', {}, [h('th', { text: '' }), h('th', { text: L('选 A', 'chose A') }), h('th', { text: L('选 B', 'chose B') })]),
+            h('tr', {}, [h('th', { text: L('听到 A：', 'heard A: ') + T(a, 'a') }), h('td', { class: m.aa ? 'hit' : '', text: String(m.aa) }), h('td', { class: m.ab ? 'miss' : '', text: String(m.ab) })]),
+            h('tr', {}, [h('th', { text: L('听到 B：', 'heard B: ') + T(a, 'b') }), h('td', { class: m.ba ? 'miss' : '', text: String(m.ba) }), h('td', { class: m.bb ? 'hit' : '', text: String(m.bb) })])
+          ]),
+          h('p', { class: 'kb-note', text: L('A 边 ' + pct(m.aa, nA) + '，B 边 ' + pct(m.bb, nB) + '，共 ' + n + ' 次；“一样”题 ' + sm.n + ' 次，答“不一样” ' + sm.saidDiff + ' 次。', 'A side ' + pct(m.aa, nA) + ', B side ' + pct(m.bb, nB) + ', ' + n + ' in total; “same” items ' + sm.n + ', answered “different” ' + sm.saidDiff + '.') }),
+          h('p', { class: 'sc-status ' + cls, text: status }), bias ? h('p', { class: 'sc-status warn', text: bias }) : null,
+          sayList.length ? h('div', {}, [h('b', { text: L('说给人听', 'Said to someone') }), h('ol', { class: 'sc-list' }, sayList.map(function (x) { return h('li', { text: L('目标 ', 'target ') + x.target + L('，听成 ', ', heard as ') + x.heard + (x.src === 'assistant' ? L('（语音助手）', ' (voice assistant)') : '') }); })),
+            h('p', { class: 'sc-status ' + (nPartner.length >= 5 && okP >= 4 ? 'ok' : ''), text: nPartner.length >= 5 ? (okP >= 4 ? L('真人听者 ' + nPartner.length + ' 次里 ' + okP + ' 次听对：可以暂记为“说出的这一对立能被别人分辨”。', 'A human listener got ' + okP + ' of ' + nPartner.length + ': you may tentatively record “others can tell this contrast apart when I say it”.') : L('真人听者 ' + nPartner.length + ' 次里 ' + okP + ' 次听对：需要 5 次里至少 4 次。', 'A human listener got ' + okP + ' of ' + nPartner.length + ': at least 4 of 5 are needed.')) : L('真人听者至少要听 5 次，其中 4 次听对，才记为“可被分辨”。', 'A human listener needs at least 5 tries with 4 right before it counts as “can be told apart”.') })]) : null,
+          a.note && !child() ? h('p', { class: 'kb-note', text: T(a, 'note') }) : null]));
+      });
+      if (st.mode === 'sort' && pack.reverse && pack.reverse.length && !child()) {
+        side.append(h('div', { class: 'kb-card reverse' }, [h('b', { text: L('同一个词，读法不同', 'Same word, different pronunciation') }),
+          h('ul', { class: 'sc-list' }, pack.reverse.map(function (r) { return h('li', {}, [h('b', { text: r.text }), ' ', T(r, 'note')]); })),
+          h('p', { class: 'kb-note', text: L('这些差别语音合成做不出来，只在这里说明，不出题。', 'Speech synthesis cannot produce these differences, so they are described here and not drilled.') })]));
+      }
+      side.append(h('div', { class: 'kb-card' }, [h('p', { class: 'kb-note', text: T(pack, 'voiceNote') }),
+        h('p', { class: 'kb-note', text: L('本练习只用听觉，不适合用来评估听力障碍的学习者。慢速和“A-B-A-B 连放”后的作答记为提示后完成；重放次数记在每一题上。', 'This activity is hearing-only and is not suitable for assessing learners with a hearing impairment. Answers after slow playback or “A-B-A-B” count as assisted; replays are logged on each item.') })]));
+    }
+    function render() { renderBar(); renderStage(); renderSide(); }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT' || e.metaKey || e.ctrlKey || e.altKey) return;
+      var it = st.item; if (!it) return;
+      var k = e.key.toLowerCase();
+      if (e.key === ' ' && (it.kind === 'ab' || it.kind === 'sd' || it.kind === 'sort')) { if (e.target.tagName !== 'BUTTON') { e.preventDefault(); playItem(true); } return; }
+      if (it.kind === 'ab' && !it.answered && (k === 'f' || k === 'j')) { pickAB(k === 'f' ? it.left : other(it.left)); return; }
+      if (it.kind === 'say' && it.phase === 'listen' && (k === 'f' || k === 'j')) { listenerPick(k === 'f' ? it.left : other(it.left)); return; }
+      var n = parseInt(e.key, 10);
+      if (it.kind === 'sd' && !it.answered && n >= 1 && n <= 3) pickSD(['same', 'diff', 'unsure'][n - 1]);
+      else if (it.kind === 'sort' && !it.answered && n >= 1 && n <= 4) pickSort(SORT[n - 1]);
+      else if (e.key === 'Enter' && (it.answered || it.phase === 'done') && e.target.tagName !== 'BUTTON') { e.preventDefault(); next(); }
+    });
+
+    newRound();
+  }
+})();
+</script>
+</body>
+</html>

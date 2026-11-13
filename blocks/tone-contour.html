@@ -67,17 +67,17 @@
 <script>
 (function () {
   'use strict';
-  var h = KTBlock.h;
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t;
   var params = new URLSearchParams(location.search);
   var setId = params.get('set') || 'tones-zh';
   var entry = KT_REGISTRY.packs[setId] || {};
   var file = entry.file;
-  if (file && entry.block !== 'tone-contour') { document.getElementById('app').textContent = '数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。'; return; }
-  if (!file) { document.getElementById('app').textContent = '未知的数据包：' + setId; return; }
+  if (file && entry.block !== 'tone-contour') { document.getElementById('app').textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  if (!file) { document.getElementById('app').textContent = L('未知的数据包：', 'Unknown data pack: ') + setId; return; }
   var sc = document.createElement('script');
   sc.src = file;
-  sc.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else document.getElementById('app').textContent = '数据包里没有：' + setId; };
-  sc.onerror = function () { document.getElementById('app').textContent = '数据包加载失败：' + file; };
+  sc.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else document.getElementById('app').textContent = L('数据包里没有：', 'Not found in the data pack: ') + setId; };
+  sc.onerror = function () { document.getElementById('app').textContent = L('数据包加载失败：', 'Could not load the data pack: ') + file; };
   document.head.appendChild(sc);
 
   /* ---------- SVG helpers ---------- */
@@ -92,17 +92,18 @@
   function toneClass(c) { return 'tone' + String(c).charAt(0); }
 
   function start(pack) {
-    var B = KTBlock.init({ id: 'tone-contour', primitive: 'prim:contour-match', title: pack.title, set: pack.id });
-    document.title = pack.title + ' · Tone Contour';
+    var title = T(pack, 'title');
+    var B = KTBlock.init({ id: 'tone-contour', primitive: 'prim:contour-match', title: title, set: pack.id });
+    document.title = title + ' · Tone Contour';
     var zh = pack.lang === 'zh';
-    var modes = zh ? [{ id: 'look', label: '看线听音' }, { id: 'listen', label: '听音选线' }, { id: 'sandhi', label: '变调' }]
-                   : [{ id: 'look', label: '看点听音' }, { id: 'listen', label: '听音选型' }];
+    var modes = zh ? [{ id: 'look', label: L('看线听音', 'See the line, hear it') }, { id: 'listen', label: L('听音选线', 'Hear it, pick the line') }, { id: 'sandhi', label: L('变调', 'Tone change') }]
+                   : [{ id: 'look', label: L('看点听音', 'See the dots, hear it') }, { id: 'listen', label: L('听音选型', 'Hear it, pick the pattern') }];
     var st = {
       mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : 'look',
       set: zh ? pack.sets[0].id : pack.groups[0].id,
       particle: true, sel: null, q: null, done: {}
     };
-    var ui = KTBlock.chrome(B, { title: pack.title, subtitle: pack.subtitle, modes: modes, mode: st.mode,
+    var ui = KTBlock.chrome(B, { title: title, subtitle: T(pack, 'subtitle'), modes: modes, mode: st.mode,
       onMode: function (m) { st.mode = m; st.q = null; st.sel = null; ui.setMode(m); B.emit('view', { mode: m }); render(); },
       onVariant: function () { st.q = null; render(); } });
     var bar = h('div', { class: 'kb-bar' });
@@ -114,7 +115,7 @@
 
     function play(text, item, slow) {
       var ok = B.speak(text, pack.speech, { audio: item && item.audio, rate: slow ? 0.55 : undefined });
-      if (!ok) feedback('这个浏览器不能播放语音。', 'warn');
+      if (!ok) feedback(L('这个浏览器不能播放语音。', 'This browser cannot play speech.'), 'warn');
     }
     function feedback(msg, tone) {
       var f = stage.querySelector('.kb-feedback') || side.querySelector('.kb-feedback');
@@ -123,8 +124,11 @@
 
     /* ---------- zh: Chao five-level contours ---------- */
     var C = pack.contours || {};
-    function chaoDigits(c) { return C[c] && C[c].chao ? C[c].chao.join('') : '轻'; }
-    function toneLabel(c) { return child() ? C[c].child : C[c].label + ' ' + chaoDigits(c); }
+    var PAT = T(pack, 'patterns') || {}, RULES = T(pack, 'rules') || {};
+    /* the neutral tone has no Chao digits: Chinese mode shows 轻 in their place, English mode shows nothing */
+    function chaoDigits(c) { return C[c] && C[c].chao ? C[c].chao.join('') : L('轻', ''); }
+    function lab(c) { return T(C[c], 'label'); }
+    function toneLabel(c) { return child() ? T(C[c], 'child') : (lab(c) + ' ' + chaoDigits(c)).replace(/ $/, ''); }
     /** cats: surface categories per syllable; opts: {cw, ht, scale, ghost:[cats], labels, rows:[{cats, label}]} */
     function zhSvg(cats, opts) {
       opts = opts || {};
@@ -133,16 +137,16 @@
       var rowH = ht + (opts.rows ? 18 : 0);
       var w = gut + cats.length * cw, H = rows.length * rowH;
       var svg = s('svg', { class: 'tc', width: w, height: H, viewBox: '0 0 ' + w + ' ' + H, role: 'img',
-        'aria-label': rows.map(function (r) { return (r.label || '') + r.cats.map(function (c) { return C[c] ? C[c].label : c; }).join('，'); }).join('；') });
+        'aria-label': rows.map(function (r) { return (r.label ? r.label + L('', ': ') : '') + r.cats.map(function (c) { return C[c] ? lab(c) : c; }).join(L('，', ', ')); }).join(L('；', '; ')) });
       if (opts.arrows) svg.appendChild(s('defs', {}, [s('marker', { id: 'tc-arr', viewBox: '0 0 10 10', refX: 8, refY: 5, markerWidth: 6, markerHeight: 6, orient: 'auto-start-reverse' },
         [s('path', { d: 'M0 0L10 5L0 10z', style: 'fill: var(--warn)' })])]));
       rows.forEach(function (row, ri) {
         var top = ri * rowH + (opts.rows ? 16 : 0);
-        function y(L) { return top + pad + (5 - L) * (ht - 2 * pad) / 4; }
+        function y(lv) { return top + pad + (5 - lv) * (ht - 2 * pad) / 4; }
         if (row.label) svg.appendChild(s('text', { class: 'layer', x: 0, y: top - 4 }, row.label));
-        for (var L = 1; L <= 5; L++) {
-          svg.appendChild(s('line', { class: 'grid', x1: gut, x2: w, y1: y(L), y2: y(L) }));
-          if (opts.scale) svg.appendChild(s('text', { x: 2, y: y(L) + 4 }, String(L)));
+        for (var lv = 1; lv <= 5; lv++) {
+          svg.appendChild(s('line', { class: 'grid', x1: gut, x2: w, y1: y(lv), y2: y(lv) }));
+          if (opts.scale) svg.appendChild(s('text', { x: 2, y: y(lv) + 4 }, String(lv)));
         }
         function draw(cs, ghost) {
           cs.forEach(function (c, i) {
@@ -154,7 +158,7 @@
               g.appendChild(s('circle', { class: 'dot', cx: (x0 + x1) / 2, cy: y(pack.neutralAfter[prev] || 3), r: child() ? 7 : 5, opacity: ghost ? .4 : 1 }));
             } else {
               var n = spec.chao.length;
-              var pts = spec.chao.map(function (L, k) { return (x0 + (x1 - x0) * k / (n - 1)).toFixed(1) + ',' + y(L).toFixed(1); });
+              var pts = spec.chao.map(function (lv, k) { return (x0 + (x1 - x0) * k / (n - 1)).toFixed(1) + ',' + y(lv).toFixed(1); });
               g.appendChild(s('polyline', { class: 'ln' + (ghost ? ' ghost' : ''), points: pts.join(' ') }));
               if (child() && !ghost) { var last = pts[n - 1].split(','); g.appendChild(s('circle', { class: 'dot', cx: last[0], cy: last[1], r: 6 })); }
             }
@@ -182,7 +186,7 @@
       }
       return out;
     }
-    function patternName(n, a) { return a === 0 ? pack.patterns['0'] : a === 1 ? pack.patterns['1'] : a === n ? pack.patterns.last : pack.patterns.mid; }
+    function patternName(n, a) { return a === 0 ? PAT['0'] : a === 1 ? PAT['1'] : a === n ? PAT.last : PAT.mid; }
     /** opts: {particle, onlyFirst, text:false} */
     function jaSvg(morae, a, opts) {
       opts = opts || {};
@@ -190,7 +194,7 @@
       var yH = 14, yL = child() ? 52 : 44, ty = yL + 26, w = cols * cw, H = opts.text === false ? yL + 10 : ty + 6;
       var hs = heights(n, a);
       var svg = s('svg', { class: 'tc pitch', width: w, height: H, viewBox: '0 0 ' + w + ' ' + H, role: 'img',
-        'aria-label': morae.join('') + (withP ? pack.particle : '') + '：' + hs.slice(0, cols).map(function (x) { return x === 'H' ? '高' : '低'; }).join('') });
+        'aria-label': morae.join('') + (withP ? pack.particle : '') + L('：', ': ') + hs.slice(0, cols).map(function (x) { return x === 'H' ? L('高', 'high') : L('低', 'low'); }).join(L('', ' ')) });
       function cx(i) { return i * cw + cw / 2; }
       function cy(i) { return hs[i] === 'H' ? yH : yL; }
       var shown = opts.onlyFirst ? 1 : cols;
@@ -212,26 +216,26 @@
       if (st.mode === 'look') {
         var list = zh ? pack.sets : pack.groups;
         bar.append(h('div', { class: 'tc-tabs' }, list.map(function (g) {
-          return h('button', { 'aria-pressed': g.id === st.set ? 'true' : 'false', onclick: function () { st.set = g.id; st.sel = null; B.emit('view', { set: g.id }); render(); } }, g.label);
+          return h('button', { 'aria-pressed': g.id === st.set ? 'true' : 'false', onclick: function () { st.set = g.id; st.sel = null; B.emit('view', { set: g.id }); render(); } }, T(g, 'label'));
         })));
         if (!zh) bar.append(h('label', { class: 'kb-variant' }, [h('input', { type: 'checkbox', checked: st.particle,
-          onchange: function (e) { st.particle = e.target.checked; B.emit('highlight', { particle: st.particle }); render(); } }), ' 后接 ' + pack.particle]));
+          onchange: function (e) { st.particle = e.target.checked; B.emit('highlight', { particle: st.particle }); render(); } }), L(' 后接 ', ' Followed by ') + pack.particle]));
       } else {
         var p = pool(), d = p.filter(function (x) { return st.done[x.id]; }).length;
-        bar.append(h('span', { class: 'progress' }, '本组 ' + p.length + ' 题，已做 ' + d + ' 题。第一次作答会被记录；提示和看答案另算。'));
+        bar.append(h('span', { class: 'progress' }, L('本组 ' + p.length + ' 题，已做 ' + d + ' 题。第一次作答会被记录；提示和看答案另算。', p.length + ' items in this set, ' + d + ' done. Your first attempt is recorded; hints and shown answers are counted separately.')));
       }
     }
     function renderSide() {
       side.innerHTML = '';
       if (st.mode === 'look') side.append(st.sel ? detailCard(st.sel) : h('div', { class: 'kb-card' }, [
-        h('p', { class: 'kb-prompt', text: zh ? '点一个字，听它的声调，看它的线。' : '点一个词，听它接上 ' + pack.particle + ' 的读法，看高低点。' }),
-        zh ? h('p', { class: 'kb-note', text: '同一组的字声母韵母都一样，只有线不一样：意思就靠这条线区分。' }) : null,
+        h('p', { class: 'kb-prompt', text: zh ? L('点一个字，听它的声调，看它的线。', 'Click a character to hear its tone and see its line.') : L('点一个词，听它接上 ' + pack.particle + ' 的读法，看高低点。', 'Click a word to hear it with ' + pack.particle + ' attached and see the high and low dots.') }),
+        zh ? h('p', { class: 'kb-note', text: L('同一组的字声母韵母都一样，只有线不一样：意思就靠这条线区分。', 'The characters in one set have the same initial and final; only the line differs, and the line is what tells the meanings apart.') }) : null,
         h('div', { class: 'kb-feedback' })]));
-      if (!zh) side.append(h('div', { class: 'kb-card' }, [h('b', { text: '重音＝往下掉的地方' }), h('p', { class: 'kb-note', text: pack.rule })]));
+      if (!zh) side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('重音＝往下掉的地方', 'Accent = where the pitch drops') }), h('p', { class: 'kb-note', text: T(pack, 'rule') })]));
       var g = !zh && pack.groups.find(function (x) { return x.id === st.set; });
-      if (g && g.note && st.mode === 'look') side.append(h('div', { class: 'kb-card' }, [h('p', { class: 'kb-note', text: g.note })]));
-      side.append(h('div', { class: 'kb-card tts' }, [h('b', { text: '关于机器发音' }), h('p', { class: 'kb-note', text: pack.ttsNote })]));
-      if (pack.reverse) side.append(h('div', { class: 'kb-card reverse' }, [h('b', { text: '写的和说的' }), h('p', { class: 'kb-note', text: pack.reverse })]));
+      if (g && g.note && st.mode === 'look') side.append(h('div', { class: 'kb-card' }, [h('p', { class: 'kb-note', text: T(g, 'note') })]));
+      side.append(h('div', { class: 'kb-card tts' }, [h('b', { text: L('关于机器发音', 'About the machine voice') }), h('p', { class: 'kb-note', text: T(pack, 'ttsNote') })]));
+      if (pack.reverse) side.append(h('div', { class: 'kb-card reverse' }, [h('b', { text: L('写的和说的', 'Written and spoken') }), h('p', { class: 'kb-note', text: T(pack, 'reverse') })]));
     }
     function detailCard(it) {
       if (zh) {
@@ -239,16 +243,16 @@
         return h('div', { class: 'kb-card' }, [
           h('div', { class: 'big', text: it.text }), h('p', { style: 'text-align:center;margin:0' }, [h('b', { text: it.py })]),
           h('div', { style: 'display:flex;justify-content:center;margin:8px 0' }, [zhSvg(cats, { scale: !child(), cw: 80, ht: 110 })]),
-          h('p', { class: 'kb-note' }, cats.map(function (c) { return C[c].label + '（' + (child() ? C[c].child : C[c].name + '，' + chaoDigits(c)) + '）'; }).join(' + ')),
-          it.note ? h('p', { class: 'kb-note', text: it.note }) : null,
-          h('button', { class: 'kb-btn primary', onclick: function () { play(it.text, it); } }, '▶ 再听一次'), h('div', { class: 'kb-feedback' })]);
+          h('p', { class: 'kb-note' }, cats.map(function (c) { return L(C[c].label + '（' + (child() ? C[c].child : C[c].name + '，' + chaoDigits(c)) + '）', (child() ? lab(c) + ': ' + T(C[c], 'child') : toneLabel(c) + ': ' + T(C[c], 'name'))); }).join(' + ')),
+          it.note ? h('p', { class: 'kb-note', text: T(it, 'note') }) : null,
+          h('button', { class: 'kb-btn primary', onclick: function () { play(it.text, it); } }, L('▶ 再听一次', '▶ Listen again')), h('div', { class: 'kb-feedback' })]);
       }
       var n = it.morae.length;
       return h('div', { class: 'kb-card' }, [
-        h('div', { class: 'big', text: it.word }), h('p', { style: 'text-align:center;margin:0' }, [it.kana, '　', it.gloss]),
+        h('div', { class: 'big', text: it.word }), h('p', { style: 'text-align:center;margin:0' }, [it.kana, L('　', ' '), T(it, 'gloss')]),
         h('div', { style: 'display:flex;justify-content:center;margin:8px 0' }, [jaSvg(it.morae, it.accent, { particle: st.particle })]),
-        h('p', { class: 'kb-note', text: patternName(n, it.accent) + ' [' + it.accent + ']：' + (it.accent === 0 ? '整个词都不往下掉，接上的 ' + pack.particle + ' 也是高的。' : '第 ' + it.accent + ' 拍后面往下掉' + (it.accent === n ? '，掉在助词上，所以单念听不出来。' : '。')) }),
-        h('button', { class: 'kb-btn primary', onclick: function () { play(jaSay(it), it); } }, '▶ 再听一次'), h('div', { class: 'kb-feedback' })]);
+        h('p', { class: 'kb-note', text: patternName(n, it.accent) + ' [' + it.accent + ']' + L('：', ': ') + (it.accent === 0 ? L('整个词都不往下掉，接上的 ' + pack.particle + ' 也是高的。', 'The pitch never drops in this word, and the ' + pack.particle + ' attached to it is high too.') : L('第 ' + it.accent + ' 拍后面往下掉', 'The pitch drops after mora ' + it.accent) + (it.accent === n ? L('，掉在助词上，所以单念听不出来。', ', on the particle, so you cannot hear it when the word is said alone.') : L('。', '.'))) }),
+        h('button', { class: 'kb-btn primary', onclick: function () { play(jaSay(it), it); } }, L('▶ 再听一次', '▶ Listen again')), h('div', { class: 'kb-feedback' })]);
     }
 
     /* ---------- look mode ---------- */
@@ -257,16 +261,16 @@
       if (zh) {
         var set = pack.sets.find(function (x) { return x.id === st.set; });
         var ref = ['1', '2', '3', '4'];
-        var chart = s('svg', { class: 'tc', width: 200, height: 130, viewBox: '0 0 200 130', role: 'img', 'aria-label': '五度标调：一声 55，二声 35，三声 214，四声 51' });
-        for (var L = 1; L <= 5; L++) { var yy = 10 + (5 - L) * 27.5; chart.appendChild(s('line', { class: 'grid', x1: 18, x2: 200, y1: yy, y2: yy })); chart.appendChild(s('text', { x: 2, y: yy + 4 }, String(L))); }
+        var chart = s('svg', { class: 'tc', width: 200, height: 130, viewBox: '0 0 200 130', role: 'img', 'aria-label': L('五度标调：一声 55，二声 35，三声 214，四声 51', 'Five-level tone scale: 1st tone 55, 2nd tone 35, 3rd tone 214, 4th tone 51') });
+        for (var lv = 1; lv <= 5; lv++) { var yy = 10 + (5 - lv) * 27.5; chart.appendChild(s('line', { class: 'grid', x1: 18, x2: 200, y1: yy, y2: yy })); chart.appendChild(s('text', { x: 2, y: yy + 4 }, String(lv))); }
         ref.concat(child() ? [] : ['3h']).forEach(function (c) {
-          var pts = C[c].chao.map(function (L, k, a) { return (30 + (c === '3h' ? 80 : 160) * k / (a.length - 1)).toFixed(1) + ',' + (10 + (5 - L) * 27.5).toFixed(1); });
+          var pts = C[c].chao.map(function (lv, k, a) { return (30 + (c === '3h' ? 80 : 160) * k / (a.length - 1)).toFixed(1) + ',' + (10 + (5 - lv) * 27.5).toFixed(1); });
           chart.appendChild(s('g', { class: toneClass(c) }, [s('polyline', { class: 'ln' + (c === '3h' ? ' ghost' : ''), points: pts.join(' ') })]));
         });
         stage.append(h('div', { class: 'kb-card tc-ref' }, [chart, h('div', { class: 'tc-legend' }, ref.concat(['3h', '0']).filter(function (c) { return !(child() && c === '3h'); }).map(function (c) {
           var it = set.items.find(function (x) { return x.t === c; });
           return h('button', { class: toneClass(c), disabled: !it, onclick: function () { if (it) { st.sel = it; play(it.text, it); B.emit('select', { item: it.text, tone: c }); render(); } } },
-            [zhSvg([c], { cw: 44, ht: 30 }), h('span', { text: C[c].label + '　' + chaoDigits(c) + (child() ? '　' + C[c].child : '　' + C[c].name) })]);
+            [zhSvg([c], { cw: 44, ht: 30 }), h('span', { text: [lab(c), chaoDigits(c), child() ? T(C[c], 'child') : T(C[c], 'name')].filter(Boolean).join(L('　', ' · ')) })]);
         }))]));
         stage.append(h('div', { class: 'tc-cards' }, set.items.map(function (it) {
           return h('button', { class: 'tc-item', 'aria-pressed': st.sel === it ? 'true' : 'false', onclick: function () { st.sel = it; play(it.text, it); B.emit('select', { item: it.text, tone: it.t }); render(); } },
@@ -276,9 +280,9 @@
         var g = pack.groups.find(function (x) { return x.id === st.set; });
         stage.append(h('div', { class: 'tc-cards' }, g.words.map(function (wd) {
           return h('button', { class: 'tc-item', 'aria-pressed': st.sel === wd ? 'true' : 'false', onclick: function () { st.sel = wd; play(jaSay(wd), wd); B.emit('select', { item: wd.id, accent: wd.accent, particle: st.particle }); render(); } },
-            [jaSvg(wd.morae, wd.accent, { particle: st.particle }), h('span', { class: 'ch', text: wd.word }), h('span', { class: 'py', text: wd.gloss + ' · ' + patternName(wd.morae.length, wd.accent) })]);
+            [jaSvg(wd.morae, wd.accent, { particle: st.particle }), h('span', { class: 'ch', text: wd.word }), h('span', { class: 'py', text: T(wd, 'gloss') + ' · ' + patternName(wd.morae.length, wd.accent) })]);
         })));
-        if (!st.particle) stage.append(h('p', { class: 'kb-note', text: '去掉 ' + pack.particle + ' 以后，尾高型和平板型的点是一样的：花／鼻、橋／端 单念时分不出来。' }));
+        if (!st.particle) stage.append(h('p', { class: 'kb-note', text: L('去掉 ' + pack.particle + ' 以后，尾高型和平板型的点是一样的：花／鼻、橋／端 单念时分不出来。', 'Without ' + pack.particle + ', tail-high (尾高型) and flat (平板型) words have the same dots: 花／鼻 and 橋／端 cannot be told apart when said alone.') }));
       }
     }
 
@@ -327,13 +331,13 @@
       return h('div', { class: 'slots' }, Array.from({ length: n }, function (_, i) {
         var q = st.q, c = q.picks[i];
         var cls = 'slot' + (q.finished ? (q.picks[i] === q.key[i] ? ' ok' : ' bad') : q.bad[i] ? ' bad' : (i === q.focus ? ' focus' : ''));
-        return h('button', { class: cls, 'aria-label': '第 ' + (i + 1) + ' 个字' + (c ? '：' + C[c].label : '：未选'), onclick: function () { if (!q.finished) { q.focus = i; render(); } } },
-          [c ? zhSvg([c], { cw: child() ? 90 : 70 }) : h('span', { class: 'q', text: '?' }), h('span', { class: 'py', text: show ? show[i] : (c ? toneLabel(c) : '第 ' + (i + 1) + ' 字') })]);
+        return h('button', { class: cls, 'aria-label': L('第 ' + (i + 1) + ' 个字', 'Character ' + (i + 1)) + (c ? L('：', ': ') + lab(c) : L('：未选', ': not chosen')), onclick: function () { if (!q.finished) { q.focus = i; render(); } } },
+          [c ? zhSvg([c], { cw: child() ? 90 : 70 }) : h('span', { class: 'q', text: '?' }), h('span', { class: 'py', text: show ? show[i] : (c ? toneLabel(c) : L('第 ' + (i + 1) + ' 字', 'Character ' + (i + 1))) })]);
       }));
     }
     function palette() {
       var q = st.q;
-      return h('div', { class: 'palette', role: 'group', 'aria-label': '可选的线' }, q.opts.map(function (c) {
+      return h('div', { class: 'palette', role: 'group', 'aria-label': L('可选的线', 'Lines to choose from') }, q.opts.map(function (c) {
         return h('button', { class: 'opt ' + toneClass(c), disabled: q.finished, onclick: function () {
           q.picks[q.focus] = c; delete q.bad[q.focus];
           B.emit('select', { item: q.item.id, slot: q.focus, choice: c });
@@ -350,32 +354,32 @@
       var q = st.q, it = q.item, n = it.surface.length;
       var filled = q.picks.filter(Boolean).length === n;
       var wrap = h('div', { class: 'kb-card' }, [
-        h('p', { class: 'kb-prompt', text: n > 1 ? '听这个词，有几个字就有几格。每一格选你听到的线。' : '听这个字，选你听到的线。' }),
+        h('p', { class: 'kb-prompt', text: n > 1 ? L('听这个词，有几个字就有几格。每一格选你听到的线。', 'Listen to this word. There is one box per character; in each box, pick the line you hear.') : L('听这个字，选你听到的线。', 'Listen to this character and pick the line you hear.') }),
         slotRow(n, q.finished ? it.text.split('').map(function (ch, i) { return ch + ' ' + toneLabel(it.surface[i]); }) : null),
         q.finished ? null : palette(),
         h('div', { class: 'kb-bar', style: 'margin-top:10px' }, [
-          h('button', { class: 'kb-btn', onclick: function () { play(it.text, it); B.emit('view', { item: it.id, replay: true }); } }, '▶ 再听'),
-          q.finished ? null : h('button', { class: 'kb-btn', onclick: function () { B.hint(it.id, 1); play(it.text, it, true); } }, '提示：慢一点'),
+          h('button', { class: 'kb-btn', onclick: function () { play(it.text, it); B.emit('view', { item: it.id, replay: true }); } }, L('▶ 再听', '▶ Listen again')),
+          q.finished ? null : h('button', { class: 'kb-btn', onclick: function () { B.hint(it.id, 1); play(it.text, it, true); } }, L('提示：慢一点', 'Hint: slower')),
           q.finished ? null : (n > 1
-            ? h('button', { class: 'kb-btn', disabled: q.hint >= 2, onclick: function () { q.hint = 2; B.hint(it.id, 2); q.picks[0] = q.key[0]; q.focus = 1; render(); feedback('第一个字的线已经放上了，再听后一个字。', 'warn'); } }, '提示：给出第一个字')
-            : h('button', { class: 'kb-btn', onclick: function () { B.hint(it.id, 2); play('妈', null); setTimeout(function () { play(it.text, it); }, 1100); feedback('先放一声“妈 mā”（55），再放目标字。比一比：比它高、低，还是在变？', 'warn'); } }, '提示：和一声比')),
-          q.finished ? null : h('button', { class: 'kb-btn', onclick: function () { B.reveal(it.id); q.picks = q.key.slice(); finish(false); } }, '看答案'),
-          q.finished ? null : h('button', { class: 'kb-btn primary', disabled: !filled, onclick: submitListen }, '提交'),
-          q.finished ? h('button', { class: 'kb-btn primary', onclick: function () { st.q = null; render(); } }, '下一题') : null
+            ? h('button', { class: 'kb-btn', disabled: q.hint >= 2, onclick: function () { q.hint = 2; B.hint(it.id, 2); q.picks[0] = q.key[0]; q.focus = 1; render(); feedback(L('第一个字的线已经放上了，再听后一个字。', 'The line for the first character is in place. Listen again for the second one.'), 'warn'); } }, L('提示：给出第一个字', 'Hint: give the first character'))
+            : h('button', { class: 'kb-btn', onclick: function () { B.hint(it.id, 2); play('妈', null); setTimeout(function () { play(it.text, it); }, 1100); feedback(L('先放一声“妈 mā”（55），再放目标字。比一比：比它高、低，还是在变？', 'First you hear the 1st tone 妈 mā (55), then the target character. Compare: is it higher, lower, or changing?'), 'warn'); } }, L('提示：和一声比', 'Hint: compare with the 1st tone'))),
+          q.finished ? null : h('button', { class: 'kb-btn', onclick: function () { B.reveal(it.id); q.picks = q.key.slice(); finish(false); } }, L('看答案', 'Show the answer')),
+          q.finished ? null : h('button', { class: 'kb-btn primary', disabled: !filled, onclick: submitListen }, L('提交', 'Submit')),
+          q.finished ? h('button', { class: 'kb-btn primary', onclick: function () { st.q = null; render(); } }, L('下一题', 'Next')) : null
         ]),
-        h('div', { class: 'kb-feedback', text: q.msg || '先选，再提交。答错可以再改；第一次提交的答案会被记录。' })
+        h('div', { class: 'kb-feedback', text: q.msg || L('先选，再提交。答错可以再改；第一次提交的答案会被记录。', 'Choose first, then submit. You can change a wrong answer; the first answer you submit is recorded.') })
       ]);
       if (q.finished) wrap.append(h('div', { style: 'margin-top:10px' }, [
-        h('p', { style: 'margin:0' }, [h('b', { text: it.text }), '　' + it.py]),
+        h('p', { style: 'margin:0' }, [h('b', { text: it.text }), L('　', ' ') + it.py]),
         zhSvg(it.surface, { scale: !child() }), surfaceNote(it) ? h('p', { class: 'kb-note', text: surfaceNote(it) }) : null]));
       stage.innerHTML = ''; stage.append(wrap);
     }
     function surfaceNote(it) {
       var notes = [];
       it.surface.forEach(function (c, i) {
-        if (c === '3h') notes.push('“' + it.text[i] + '”是三声，但在别的字前面只降不升（半三声 21）。');
-        else if (it.tones[i] === '3' && c === '2') notes.push('“' + it.text[i] + '”写作三声，因为后面也是三声，说出来是二声。去“变调”里看两层对照。');
-        else if (c === '0') notes.push('“' + it.text[i] + '”读轻声，又短又轻，高低跟着前一个字走。');
+        if (c === '3h') notes.push(L('“' + it.text[i] + '”是三声，但在别的字前面只降不升（半三声 21）。', it.text[i] + ' is a 3rd tone, but before another character it falls without rising (half 3rd tone, 21).'));
+        else if (it.tones[i] === '3' && c === '2') notes.push(L('“' + it.text[i] + '”写作三声，因为后面也是三声，说出来是二声。去“变调”里看两层对照。', it.text[i] + ' is written as a 3rd tone; because another 3rd tone follows, it is said as a 2nd tone. See the two rows side by side under "Tone change".'));
+        else if (c === '0') notes.push(L('“' + it.text[i] + '”读轻声，又短又轻，高低跟着前一个字走。', it.text[i] + ' is said in the neutral tone: short and light, with its pitch following the character before it.'));
       });
       return notes.join(' ');
     }
@@ -385,12 +389,12 @@
       if (ok) { finish(true); return; }
       q.bad = {}; q.key.forEach(function (c, i) { if (q.picks[i] !== c) q.bad[i] = true; });
       q.focus = +Object.keys(q.bad)[0];
-      q.msg = '标红的格子不对。再听一遍，只改红色的格子。';
+      q.msg = L('标红的格子不对。再听一遍，只改红色的格子。', 'The boxes marked red are wrong. Listen again and change only the red boxes.');
       render(); setTimeout(function () { play(q.item.text, q.item); }, 300);
     }
     function finish(ok) {
       var q = st.q; q.finished = true; st.done[q.item.id] = true;
-      q.msg = ok ? '对。' : '答案已经放上了。这一题记为“看过答案”。';
+      q.msg = ok ? L('对。', 'Correct.') : L('答案已经放上了。这一题记为“看过答案”。', 'The answer has been filled in. This item is recorded as "answer shown".');
       render();
     }
 
@@ -401,30 +405,30 @@
       var changed = it.written.map(function (c, i) { return c !== it.actual[i] ? i : -1; }).filter(function (i) { return i >= 0; });
       var wrap = h('div', { class: 'kb-card' }, [
         h('div', { class: 'big', text: it.text }),
-        h('p', { style: 'text-align:center;margin:0' }, ['写作：', h('b', { text: it.py })]),
+        h('p', { style: 'text-align:center;margin:0' }, [L('写作：', 'Written: '), h('b', { text: it.py })]),
         q.finished
           ? h('div', { style: 'display:flex;justify-content:center;margin:10px 0' }, [zhSvg(it.written, { cw: child() ? 90 : 76, scale: !child(), arrows: changed,
-              rows: [{ cats: it.written, label: '写的（字典调）' }, { cats: it.actual, label: '说的（实际读音）' }] })])
-          : h('div', {}, [h('p', { class: 'kb-note', text: '上面这行是写的调：' }), zhSvg(it.written, { cw: child() ? 90 : 70, scale: !child() }),
-              h('p', { class: 'kb-prompt', style: 'margin-top:12px', text: '先别听。按规则预测：说出来时每个字是什么调？' }), slotRow(n), palette()]),
-        q.finished ? h('p', {}, [h('b', { text: '规则：' }), pack.rules[it.rule]]) : null,
-        q.finished && q.picks.length ? h('p', { class: 'kb-note', text: '你的预测：' + q.picks.map(function (c) { return C[c].label; }).join(' + ') + '。实际：' + it.actual.map(function (c) { return C[c].label; }).join(' + ') + '。' }) : null,
-        q.showRules ? h('ul', { class: 'rulelist' }, Object.keys(pack.rules).map(function (k) { return h('li', { text: pack.rules[k] }); })) : null,
+              rows: [{ cats: it.written, label: L('写的（字典调）', 'Written (dictionary tone)') }, { cats: it.actual, label: L('说的（实际读音）', 'Spoken (actual tone)') }] })])
+          : h('div', {}, [h('p', { class: 'kb-note', text: L('上面这行是写的调：', 'This row shows the written tones:') }), zhSvg(it.written, { cw: child() ? 90 : 70, scale: !child() }),
+              h('p', { class: 'kb-prompt', style: 'margin-top:12px', text: L('先别听。按规则预测：说出来时每个字是什么调？', 'Do not listen yet. Predict from the rules: what tone does each character have when spoken?') }), slotRow(n), palette()]),
+        q.finished ? h('p', {}, [h('b', { text: L('规则：', 'Rule: ') }), RULES[it.rule]]) : null,
+        q.finished && q.picks.length ? h('p', { class: 'kb-note', text: L('你的预测：', 'Your prediction: ') + q.picks.map(lab).join(' + ') + L('。实际：', '. Actual: ') + it.actual.map(lab).join(' + ') + L('。', '.') }) : null,
+        q.showRules ? h('ul', { class: 'rulelist' }, Object.keys(pack.rules).map(function (k) { return h('li', { text: RULES[k] }); })) : null,
         h('div', { class: 'kb-bar', style: 'margin-top:10px' }, q.finished ? [
-          h('button', { class: 'kb-btn', onclick: function () { play(it.text, it); B.emit('view', { item: it.id, replay: true }); } }, '▶ 听实际读音'),
-          h('button', { class: 'kb-btn primary', onclick: function () { st.q = null; render(); } }, '下一题')
+          h('button', { class: 'kb-btn', onclick: function () { play(it.text, it); B.emit('view', { item: it.id, replay: true }); } }, L('▶ 听实际读音', '▶ Hear the actual pronunciation')),
+          h('button', { class: 'kb-btn primary', onclick: function () { st.q = null; render(); } }, L('下一题', 'Next'))
         ] : [
-          h('button', { class: 'kb-btn', disabled: q.showRules, onclick: function () { q.showRules = true; B.hint(it.id, 1); render(); } }, '提示：看规则表'),
+          h('button', { class: 'kb-btn', disabled: q.showRules, onclick: function () { q.showRules = true; B.hint(it.id, 1); render(); } }, L('提示：看规则表', 'Hint: show the rule list')),
           h('button', { class: 'kb-btn primary', disabled: !filled, onclick: function () {
             var ok = sameKey(q.picks, q.key);
             B.attempt(it.id, { correct: ok, response: q.picks.join(' '), layer: 'actual' });
             q.finished = true; st.done[it.id] = true;
-            q.msg = ok ? '预测对了。听一听是不是这样。' : '和实际读音不一样。对照上下两行，看哪个字变了。';
+            q.msg = ok ? L('预测对了。听一听是不是这样。', 'Your prediction was right. Listen to check.') : L('和实际读音不一样。对照上下两行，看哪个字变了。', 'That differs from the actual pronunciation. Compare the two rows to see which character changed.');
             B.emit('compare', { item: it.id, written: it.written, actual: it.actual, predicted: q.picks.slice() });
             render(); play(it.text, it);
-          } }, '提交预测，然后听')
+          } }, L('提交预测，然后听', 'Submit prediction, then listen'))
         ]),
-        h('div', { class: 'kb-feedback' + (q.finished && !sameKey(q.picks, q.key) ? ' bad' : ''), text: q.msg || '只有一次预测机会，预测之后才放音。这里的“对”指和实际读音一致。' })
+        h('div', { class: 'kb-feedback' + (q.finished && !sameKey(q.picks, q.key) ? ' bad' : ''), text: q.msg || L('只有一次预测机会，预测之后才放音。这里的“对”指和实际读音一致。', 'You get one prediction, and the sound plays only after it. "Right" here means matching the actual pronunciation.') })
       ]);
       stage.innerHTML = ''; stage.append(wrap);
     }
@@ -436,34 +440,34 @@
       var g = pack.groups.find(function (x) { return x.words.indexOf(it) >= 0; });
       var partners = g.words.filter(function (w) { return w !== it && w.kana === it.kana; });
       var wrap = h('div', { class: 'kb-card' }, [
-        h('p', { class: 'kb-prompt', text: '听“' + it.kana + pack.particle + '”，选高低的样子。' + (q.finished ? '' : '（先不告诉你是哪个词）') }),
-        q.firstHint ? h('div', {}, [jaSvg(it.morae, it.accent, { onlyFirst: true }), h('p', { class: 'kb-note', text: '第一拍是' + (it.accent === 1 ? '高' : '低') + '的。' })]) : null,
+        h('p', { class: 'kb-prompt', text: L('听“' + it.kana + pack.particle + '”，选高低的样子。', 'Listen to ' + it.kana + pack.particle + ' and pick its high-low shape.') + (q.finished ? '' : L('（先不告诉你是哪个词）', ' (Which word it is stays hidden for now.)')) }),
+        q.firstHint ? h('div', {}, [jaSvg(it.morae, it.accent, { onlyFirst: true }), h('p', { class: 'kb-note', text: L('第一拍是' + (it.accent === 1 ? '高' : '低') + '的。', 'The first mora is ' + (it.accent === 1 ? 'high' : 'low') + '.') })]) : null,
         h('div', { class: 'palette' }, q.opts.map(function (a) {
           var cls = 'opt' + (q.finished && a === it.accent ? ' right' : '') + (q.wrong && q.wrong[a] ? ' wrongpick' : '');
           return h('button', { class: cls, disabled: q.finished, onclick: function () { pickJa(a); } },
             [jaSvg(it.morae, a), h('span', { text: patternName(n, a) + (child() ? '' : ' [' + a + ']') })]);
         })),
         h('div', { class: 'kb-bar', style: 'margin-top:10px' }, [
-          h('button', { class: 'kb-btn', onclick: function () { play(it.word + pack.particle, it); B.emit('view', { item: it.id, replay: true }); } }, '▶ 再听'),
-          q.finished ? null : h('button', { class: 'kb-btn', onclick: function () { B.hint(it.id, 1); play(it.word + pack.particle, it, true); } }, '提示：慢一点'),
-          q.finished ? null : h('button', { class: 'kb-btn', disabled: q.firstHint, onclick: function () { q.firstHint = true; B.hint(it.id, 2); render(); } }, '提示：第一拍高还是低'),
-          q.finished ? null : h('button', { class: 'kb-btn', onclick: function () { B.reveal(it.id); q.finished = true; st.done[it.id] = true; q.msg = '答案已标出。这一题记为“看过答案”。'; render(); } }, '看答案'),
-          q.finished ? h('button', { class: 'kb-btn primary', onclick: function () { st.q = null; render(); } }, '下一题') : null
+          h('button', { class: 'kb-btn', onclick: function () { play(it.word + pack.particle, it); B.emit('view', { item: it.id, replay: true }); } }, L('▶ 再听', '▶ Listen again')),
+          q.finished ? null : h('button', { class: 'kb-btn', onclick: function () { B.hint(it.id, 1); play(it.word + pack.particle, it, true); } }, L('提示：慢一点', 'Hint: slower')),
+          q.finished ? null : h('button', { class: 'kb-btn', disabled: q.firstHint, onclick: function () { q.firstHint = true; B.hint(it.id, 2); render(); } }, L('提示：第一拍高还是低', 'Hint: is the first mora high or low')),
+          q.finished ? null : h('button', { class: 'kb-btn', onclick: function () { B.reveal(it.id); q.finished = true; st.done[it.id] = true; q.msg = L('答案已标出。这一题记为“看过答案”。', 'The answer is marked. This item is recorded as "answer shown".'); render(); } }, L('看答案', 'Show the answer')),
+          q.finished ? h('button', { class: 'kb-btn primary', onclick: function () { st.q = null; render(); } }, L('下一题', 'Next')) : null
         ]),
-        q.finished ? h('p', {}, [h('b', { text: it.word }), '（' + it.kana + '，' + it.gloss + '）：' + patternName(n, it.accent) + ' [' + it.accent + ']']) : null,
-        q.finished && partners.length ? h('div', { class: 'kb-bar' }, ['对比听：'].concat(partners.map(function (w) {
-          return h('button', { class: 'kb-btn', onclick: function () { play(w.word + pack.particle, w); B.emit('compare', { item: it.id, with: w.id }); } }, w.word + pack.particle + '（' + patternName(w.morae.length, w.accent) + '）');
+        q.finished ? h('p', {}, [h('b', { text: it.word }), L('（' + it.kana + '，' + it.gloss + '）：', ' (' + it.kana + ', ' + T(it, 'gloss') + '): ') + patternName(n, it.accent) + ' [' + it.accent + ']']) : null,
+        q.finished && partners.length ? h('div', { class: 'kb-bar' }, [L('对比听：', 'Compare: ')].concat(partners.map(function (w) {
+          return h('button', { class: 'kb-btn', onclick: function () { play(w.word + pack.particle, w); B.emit('compare', { item: it.id, with: w.id }); } }, w.word + pack.particle + L('（', ': ') + patternName(w.morae.length, w.accent) + L('）', ''));
         }))) : null,
-        h('div', { class: 'kb-feedback', text: q.msg || '第一次选择会被记录；选错可以再选，算作重试。' })
+        h('div', { class: 'kb-feedback', text: q.msg || L('第一次选择会被记录；选错可以再选，算作重试。', 'Your first choice is recorded. If it is wrong you can choose again; that counts as a retry.') })
       ]);
       stage.innerHTML = ''; stage.append(wrap);
     }
     function pickJa(a) {
       var q = st.q, it = q.item, ok = a === it.accent;
       B.attempt(it.id, { correct: ok, response: a });
-      if (ok) { q.finished = true; st.done[it.id] = true; q.msg = '对。' + (it.accent === 0 ? '平板型：后面的 ' + pack.particle + ' 也是高的。' : '在第 ' + it.accent + ' 拍后面往下掉。'); render(); return; }
+      if (ok) { q.finished = true; st.done[it.id] = true; q.msg = L('对。', 'Correct. ') + (it.accent === 0 ? L('平板型：后面的 ' + pack.particle + ' 也是高的。', 'Flat (平板型): the following ' + pack.particle + ' is high too.') : L('在第 ' + it.accent + ' 拍后面往下掉。', 'The pitch drops after mora ' + it.accent + '.')); render(); return; }
       q.wrong = q.wrong || {}; q.wrong[a] = true;
-      q.msg = '不是这个。你选的是' + patternName(it.morae.length, a) + '。注意听哪里往下掉，再听一遍。';
+      q.msg = L('不是这个。你选的是' + patternName(it.morae.length, a) + '。注意听哪里往下掉，再听一遍。', 'Not this one. You chose ' + patternName(it.morae.length, a) + '. Listen for where the pitch drops, and listen again.');
       render(); setTimeout(function () { play(it.word + pack.particle, it); }, 300);
     }
 

@@ -12,6 +12,9 @@
  *     - t = caption as told, b = the same event without sequence words (used on the cards to be sorted, so the
  *       connectives cannot give the order away), cue = the starter shown while support is still on.
  *     - checks are regular expressions over the pack's own connective list; nothing tries to understand free text.
+ * English interface text sits beside the Chinese: <field>En (titleEn, whyEn, altEn, noEn, msgEn …), parallel catsEn /
+ * selfCheckEn / orderHintsEn, and directions.*.en beside .zh. The story itself (t, b, cue, w, picks, process, checks) is the
+ * language being taught and is never translated; g is its gloss (Chinese for story-en, English for story-zh).
  * The drawings are original (authored here as SVG, no external image data). */
 
 (function (g) { g.KT_SCENES = g.KT_SCENES || {}; g.KT_DATA = g.KT_DATA || {}; })(typeof window !== 'undefined' ? window : globalThis);
@@ -147,12 +150,12 @@ KT_SCENES["rabbit-carrot"] = (function () {
   return {
     id: 'rabbit-carrot',
     frames: {
-      wake: { svg: clean(wake), alt: '早晨，小兔子站在洞口，摸着肚子，想着胡萝卜。' },
-      garden: { svg: clean(garden), alt: '菜园里，小兔子看见一根很大的胡萝卜，露出地面一截。' },
-      pull: { svg: clean(pull), alt: '小兔子抓着胡萝卜叶子往后拔，胡萝卜没动。' },
-      pop: { svg: clean(pop), alt: '胡萝卜出来了，一只鼹鼠抱着胡萝卜尖一起出来，小兔子仰面摔倒。' },
-      night: { svg: clean(night), alt: '夜里，月亮下，地底下的鼹鼠抱住了胡萝卜的尖。' },
-      share: { svg: clean(share), alt: '小兔子和鼹鼠坐在一起，一人一半吃胡萝卜。' }
+      wake: { svg: clean(wake), alt: '早晨，小兔子站在洞口，摸着肚子，想着胡萝卜。', altEn: 'Morning. A little rabbit stands outside his burrow, rubbing his tummy and thinking of a carrot.' },
+      garden: { svg: clean(garden), alt: '菜园里，小兔子看见一根很大的胡萝卜，露出地面一截。', altEn: 'In the garden, the little rabbit sees a very big carrot with its top showing above the ground.' },
+      pull: { svg: clean(pull), alt: '小兔子抓着胡萝卜叶子往后拔，胡萝卜没动。', altEn: 'The little rabbit grips the carrot leaves and pulls backwards; the carrot does not move.' },
+      pop: { svg: clean(pop), alt: '胡萝卜出来了，一只鼹鼠抱着胡萝卜尖一起出来，小兔子仰面摔倒。', altEn: 'The carrot comes out, and a mole comes out with it, hugging the tip of the carrot; the little rabbit falls flat on his back.' },
+      night: { svg: clean(night), alt: '夜里，月亮下，地底下的鼹鼠抱住了胡萝卜的尖。', altEn: 'Night, under the moon. Underground, a mole has its arms around the tip of the carrot.' },
+      share: { svg: clean(share), alt: '小兔子和鼹鼠坐在一起，一人一半吃胡萝卜。', altEn: 'The little rabbit and the mole sit together, eating half the carrot each.' }
     },
     told: ['wake', 'garden', 'pull', 'pop', 'night', 'share'],
     happened: ['night', 'wake', 'garden', 'pull', 'pop', 'share'],
@@ -160,20 +163,21 @@ KT_SCENES["rabbit-carrot"] = (function () {
     anim: { frame: 'pull', steps: 3 },
     /* where the learner bets before the next frame is shown. child = the two-card version (on / turn), null = no bet */
     junctions: [
-      { before: 'pull', type: 'dir', actual: 'turn', child: 'turn', why: '它动手拔了，可是没有顺利拔出来：故事在这里拐了个弯。' },
-      { before: 'pop', type: 'pick', why: '胡萝卜终于出来了——还带出来一只鼹鼠。' },
-      { before: 'night', type: 'dir', actual: 'back', child: null, why: '故事没有接着往下讲，而是回头交代：鼹鼠为什么会挂在胡萝卜上？这是更早发生的事。' },
-      { before: 'share', type: 'dir', actual: 'close', child: 'on', why: '补完以前的事，故事回到现在，给出结果。' }
+      { before: 'pull', type: 'dir', actual: 'turn', child: 'turn', why: '它动手拔了，可是没有顺利拔出来：故事在这里拐了个弯。', whyEn: 'He starts pulling, but it does not come out easily: the story takes a turn here.' },
+      { before: 'pop', type: 'pick', why: '胡萝卜终于出来了——还带出来一只鼹鼠。', whyEn: 'The carrot comes out at last, and it brings a mole with it.' },
+      { before: 'night', type: 'dir', actual: 'back', child: null, why: '故事没有接着往下讲，而是回头交代：鼹鼠为什么会挂在胡萝卜上？这是更早发生的事。', whyEn: 'The story does not carry on. It turns back to explain why the mole is hanging on the carrot. This happened earlier.' },
+      { before: 'share', type: 'dir', actual: 'close', child: 'on', why: '补完以前的事，故事回到现在，给出结果。', whyEn: 'With the earlier part filled in, the story returns to the present and gives the outcome.' }
     ],
     /* relation between neighbouring frames in the order told */
     slots: [
-      { ok: ['cause', 'seq'], why: '饿了，所以去菜园：说成因果或先后都讲得通。' },
-      { ok: ['seq'], why: '看见了，接着动手拔：一先一后。' },
-      { ok: ['seq', 'contrast'], why: '拔不动之后，胡萝卜突然出来了：是后来的事，也是个转折。' },
-      { ok: ['back'], why: '这一幅讲在后面，却发生在最前面。用表示先后的词，听的人会以为是后来的事；要用补叙的说法标出“更早”。' },
-      { ok: ['end', 'cause', 'seq'], why: '补叙讲完，回到主线收尾。' }
+      { ok: ['cause', 'seq'], why: '饿了，所以去菜园：说成因果或先后都讲得通。', whyEn: 'He is hungry, so he goes to the garden: cause and effect or sequence both make sense.' },
+      { ok: ['seq'], why: '看见了，接着动手拔：一先一后。', whyEn: 'He sees it, then starts pulling: one thing after the other.' },
+      { ok: ['seq', 'contrast'], why: '拔不动之后，胡萝卜突然出来了：是后来的事，也是个转折。', whyEn: 'After it would not budge, the carrot suddenly comes out: it happens later, and it is also a turn.' },
+      { ok: ['back'], why: '这一幅讲在后面，却发生在最前面。用表示先后的词，听的人会以为是后来的事；要用补叙的说法标出“更早”。', whyEn: 'This picture is told later but happened first. With a sequence word, the listener will think it happened afterwards; use a flashback expression to mark "earlier".' },
+      { ok: ['end', 'cause', 'seq'], why: '补叙讲完，回到主线收尾。', whyEn: 'The flashback is over; back to the main line for the ending.' }
     ],
-    orderHints: ['想一想：小兔子来菜园的时候，鼹鼠已经在地底下了吗？', '有一幅讲在后面，其实发生得最早。看看哪一幅是夜里。']
+    orderHints: ['想一想：小兔子来菜园的时候，鼹鼠已经在地底下了吗？', '有一幅讲在后面，其实发生得最早。看看哪一幅是夜里。'],
+    orderHintsEn: ['Think: when the little rabbit came to the garden, was the mole already underground?', 'One picture is told late but actually happened first. Look for the one set at night.']
   };
 })();
 
@@ -185,8 +189,8 @@ KT_DATA["story-en"] = {
     "机器语音读故事的语气不自然；任何一句都可以加 audio 换成真人录音"
   ],
   id: 'story-en', lang: 'en', speech: 'en-US', scene: 'rabbit-carrot',
-  title: '连环画：小兔子拔萝卜',
-  subtitle: '六幅画讲一个小故事。先猜下一幅再揭晓，把打乱的画按“发生”的先后排好，放上连接词，看动画说过程，最后撤掉文字复述。页面听不到你的声音，口头复述由你自己或搭档判断。',
+  title: '连环画：小兔子拔萝卜', titleEn: 'Picture story: the little rabbit pulls a carrot',
+  subtitle: '六幅画讲一个小故事。先猜下一幅再揭晓，把打乱的画按“发生”的先后排好，放上连接词，看动画说过程，最后撤掉文字复述。页面听不到你的声音，口头复述由你自己或搭档判断。', subtitleEn: 'Six pictures tell a short story. Guess the next picture before it is shown, put the shuffled pictures in the order things happened, add connectives, watch the animation and say the process, then retell with the text taken away. The page cannot hear you: a spoken retelling is judged by you or a partner.',
   kcs: ['kt:en-past-sequencing', 'kt:en-fn-past-experience', 'kt:en-skill-listen-stories'],
   readingLabel: null,
   frames: {
@@ -198,20 +202,21 @@ KT_DATA["story-en"] = {
     share: { t: 'In the end, they shared the carrot.', b: 'They shared the carrot.', cue: 'In the end, …', g: '最后，他们把胡萝卜分着吃了。' }
   },
   directions: {
-    on: { w: 'and then …', zh: '接着往下说' },
-    turn: { w: 'but …', zh: '可是，出了意外' },
-    close: { w: 'so … / in the end …', zh: '于是有了结果' },
-    back: { w: 'before that …', zh: '不接这一句：回头说以前的事' }
+    on: { w: 'and then …', zh: '接着往下说', en: 'the story carries on' },
+    turn: { w: 'but …', zh: '可是，出了意外', en: 'but something unexpected happens' },
+    close: { w: 'so … / in the end …', zh: '于是有了结果', en: 'so there is an outcome' },
+    back: { w: 'before that …', zh: '不接这一句：回头说以前的事', en: 'not a continuation: go back to something earlier' }
   },
   picks: { pop: [{ t: 'The carrot came out.', right: true }, { t: 'The rabbit went home.' }, { t: 'The carrot got bigger.' }] },
   cats: { seq: '先后', same: '同时', cause: '因果', contrast: '转折', back: '补叙', end: '收尾' },
+  catsEn: { seq: 'sequence', same: 'at the same time', cause: 'cause and effect', contrast: 'contrast', back: 'flashback', end: 'ending' },
   connectives: [
     { id: 'then', w: 'Then', cat: 'seq' }, { id: 'after', w: 'After that,', cat: 'seq' }, { id: 'so', w: 'So', cat: 'cause' }, { id: 'but', w: 'But then', cat: 'contrast' },
-    { id: 'while', w: 'While', cat: 'same', no: 'While 表示两件事同时发生；这两幅是一先一后。' },
-    { id: 'had', w: 'had + done (the night before)', cat: 'back', no: '这里没有回头说更早的事，用不上过去完成。' },
-    { id: 'end', w: 'In the end,', cat: 'end', no: 'In the end 用在故事的结尾，这里故事还没完。' }
+    { id: 'while', w: 'While', cat: 'same', no: 'While 表示两件事同时发生；这两幅是一先一后。', noEn: 'While means two things happen at the same time; these two pictures come one after the other.' },
+    { id: 'had', w: 'had + done (the night before)', cat: 'back', no: '这里没有回头说更早的事，用不上过去完成。', noEn: 'Nothing here goes back to an earlier event, so the past perfect is not needed.' },
+    { id: 'end', w: 'In the end,', cat: 'end', no: 'In the end 用在故事的结尾，这里故事还没完。', noEn: 'In the end belongs at the close of a story; here the story is not over yet.' }
   ],
-  backNote: '英语用过去完成标出“更早”：The mole had found the carrot the night before.',
+  backNote: '英语用过去完成标出“更早”：The mole had found the carrot the night before.', backNoteEn: 'English marks "earlier" with the past perfect: The mole had found the carrot the night before.',
   process: {
     steps: [
       { t: 'He held the leaves with both hands.', g: '他用两只手抓住叶子。' },
@@ -230,16 +235,17 @@ KT_DATA["story-en"] = {
     ],
     back: '\\bhad\\b|\\bthe night before\\b|\\bearlier\\b',
     traps: [
-      { re: '\\b(rabbit|he|mole|they|carrot|it)\\s+(see|sees|go|goes|pull|pulls|come|comes|find|finds|share|shares|eat|eats|wake|wakes|is|are|hold|holds|fall|falls|want|wants)\\b', msg: '讲过去的事，动词要变过去式：saw、went、pulled、came、found（*Then the rabbit see a carrot）。只靠 one morning 这样的时间词不够。' },
-      { re: '^\\s*after\\s*,', msg: 'after 不能单独当副词用：说 After that, …' },
-      { re: '\\bat last,?\\s+they\\b', msg: 'at last 是“终于”；故事的结局用 In the end。' }
+      { re: '\\b(rabbit|he|mole|they|carrot|it)\\s+(see|sees|go|goes|pull|pulls|come|comes|find|finds|share|shares|eat|eats|wake|wakes|is|are|hold|holds|fall|falls|want|wants)\\b', msg: '讲过去的事，动词要变过去式：saw、went、pulled、came、found（*Then the rabbit see a carrot）。只靠 one morning 这样的时间词不够。', msgEn: 'For past events, put the verb in the past tense: saw, went, pulled, came, found (*Then the rabbit see a carrot). A time expression like one morning is not enough on its own.' },
+      { re: '^\\s*after\\s*,', msg: 'after 不能单独当副词用：说 After that, …', msgEn: 'after cannot stand alone as an adverb: say After that, …' },
+      { re: '\\bat last,?\\s+they\\b', msg: 'at last 是“终于”；故事的结局用 In the end。', msgEn: 'at last means "finally, after a long wait"; for how a story ends, use In the end.' }
     ],
     monoRe: '\\bthen\\b',
-    mono: '全是 then：换几种说法（After that, / Suddenly, / but / In the end,）。',
+    mono: '全是 then：换几种说法（After that, / Suddenly, / but / In the end,）。', monoEn: 'It is all then: vary it (After that, / Suddenly, / but / In the end,).',
     list: ['One morning, …', 'Then …', 'After that, …', '… but …', 'Suddenly, …', '… had (found) … the night before', 'In the end, …']
   },
   selfCheck: ['每一幅图我都说到了', '我用了至少三种不同的连接词，不是一路 then', '讲过去的事，动词变了过去式（went、saw、pulled）', '鼹鼠那一段，我用 had … 说明那是更早的事'],
-  partner: '有搭档更好：一个人只看图复述，另一个人看着原文，在每幅图上打勾。'
+  selfCheckEn: ['I mentioned every picture', 'I used at least three different connectives, not then all the way through', 'For past events I put the verbs in the past tense (went, saw, pulled)', 'For the mole part, I used had … to show it happened earlier'],
+  partner: '有搭档更好：一个人只看图复述，另一个人看着原文，在每幅图上打勾。', partnerEn: 'A partner helps: one person retells from the pictures only, the other follows the original text and ticks each picture.'
 };
 
 KT_DATA["story-zh"] = {
@@ -250,10 +256,10 @@ KT_DATA["story-zh"] = {
     "拼音里“一”“不”标的是变调后的实际读音；机器语音可能读错轻声"
   ],
   id: 'story-zh', lang: 'zh', speech: 'zh-CN', scene: 'rabbit-carrot',
-  title: '连环画：小兔子拔萝卜（中文）',
-  subtitle: '六幅画讲一个小故事。先猜下一幅再揭晓，把打乱的画按“发生”的先后排好，放上连接词，看动画说过程，最后撤掉文字复述。页面听不到你的声音，口头复述由你自己或搭档判断。',
+  title: '连环画：小兔子拔萝卜（中文）', titleEn: 'Picture story: the little rabbit pulls a carrot (Chinese)',
+  subtitle: '六幅画讲一个小故事。先猜下一幅再揭晓，把打乱的画按“发生”的先后排好，放上连接词，看动画说过程，最后撤掉文字复述。页面听不到你的声音，口头复述由你自己或搭档判断。', subtitleEn: 'Six pictures tell a short story. Guess the next picture before it is shown, put the shuffled pictures in the order things happened, add connectives, watch the animation and say the process, then retell with the text taken away. The page cannot hear you: a spoken retelling is judged by you or a partner.',
   kcs: ['kt:zh-xian-zai', 'kt:zh-skill-speak-l3'],
-  readingLabel: '拼音',
+  readingLabel: '拼音', readingLabelEn: 'pinyin',
   frames: {
     wake: { t: '一天早上，小兔子醒了，它觉得很饿。', r: 'Yì tiān zǎoshang, xiǎo tùzi xǐng le, tā juéde hěn è.', b: '小兔子醒了，它觉得很饿。', cue: '一天早上，……', g: 'One morning, a little rabbit woke up. He felt very hungry.' },
     garden: { t: '它去了菜园，看见一根很大的胡萝卜。', r: 'Tā qùle càiyuán, kànjiàn yì gēn hěn dà de húluóbo.', b: '它去了菜园，看见一根很大的胡萝卜。', cue: '于是…… ／ 然后……', g: 'He went to the garden and saw a very big carrot.' },
@@ -263,21 +269,22 @@ KT_DATA["story-zh"] = {
     share: { t: '最后，它们一起吃了这根胡萝卜。', r: 'Zuìhòu, tāmen yìqǐ chīle zhè gēn húluóbo.', b: '它们一起吃了这根胡萝卜。', cue: '最后，……', g: 'In the end, they ate the carrot together.' }
   },
   directions: {
-    on: { w: '然后……', zh: '接着往下说' },
-    turn: { w: '可是……', zh: '可是，出了意外' },
-    close: { w: '所以…… ／ 最后……', zh: '于是有了结果' },
-    back: { w: '原来，以前……', zh: '不接这一句：回头说以前的事' }
+    on: { w: '然后……', zh: '接着往下说', en: 'the story carries on' },
+    turn: { w: '可是……', zh: '可是，出了意外', en: 'but something unexpected happens' },
+    close: { w: '所以…… ／ 最后……', zh: '于是有了结果', en: 'so there is an outcome' },
+    back: { w: '原来，以前……', zh: '不接这一句：回头说以前的事', en: 'not a continuation: go back to something earlier' }
   },
   picks: { pop: [{ t: '胡萝卜出来了。', r: 'Húluóbo chūlai le.', right: true }, { t: '小兔子回家了。', r: 'Xiǎo tùzi huí jiā le.' }, { t: '胡萝卜变大了。', r: 'Húluóbo biàn dà le.' }] },
   cats: { seq: '先后', same: '同时', cause: '因果', contrast: '转折', back: '补叙', end: '收尾', trap: '用错' },
+  catsEn: { seq: 'sequence', same: 'at the same time', cause: 'cause and effect', contrast: 'contrast', back: 'flashback', end: 'ending', trap: 'misused' },
   connectives: [
     { id: 'ranhou', w: '然后', cat: 'seq' }, { id: 'jiezhe', w: '接着', cat: 'seq' }, { id: 'yushi', w: '于是', cat: 'cause' }, { id: 'keshi', w: '可是后来', cat: 'contrast' },
-    { id: 'zai', w: '再', cat: 'trap', no: '已经发生的事不用“再”（*昨天我先吃饭，再看电影）。讲过去的事用“然后”。' },
-    { id: 'yibian', w: '一边……一边……', cat: 'same', no: '“一边……一边”表示两件事同时进行；这两幅是一先一后。' },
-    { id: 'yuanlai', w: '原来……早就／已经……了', cat: 'back', no: '这里没有回头说更早的事。' },
-    { id: 'zuihou', w: '最后', cat: 'end', no: '“最后”用在结尾，这里故事还没完。' }
+    { id: 'zai', w: '再', cat: 'trap', no: '已经发生的事不用“再”（*昨天我先吃饭，再看电影）。讲过去的事用“然后”。', noEn: 'Do not use “再” for things that have already happened (*昨天我先吃饭，再看电影). For past events use “然后”.' },
+    { id: 'yibian', w: '一边……一边……', cat: 'same', no: '“一边……一边”表示两件事同时进行；这两幅是一先一后。', noEn: '“一边……一边” means two things go on at the same time; these two pictures come one after the other.' },
+    { id: 'yuanlai', w: '原来……早就／已经……了', cat: 'back', no: '这里没有回头说更早的事。', noEn: 'Nothing here goes back to an earlier event.' },
+    { id: 'zuihou', w: '最后', cat: 'end', no: '“最后”用在结尾，这里故事还没完。', noEn: '“最后” belongs at the end; here the story is not over yet.' }
   ],
-  backNote: '中文用“原来”“前一天”“早就／已经……了”标出“更早”：原来，前一天晚上鼹鼠就已经发现了这根胡萝卜。',
+  backNote: '中文用“原来”“前一天”“早就／已经……了”标出“更早”：原来，前一天晚上鼹鼠就已经发现了这根胡萝卜。', backNoteEn: 'Chinese marks "earlier" with “原来”, “前一天” or “早就／已经……了”: 原来，前一天晚上鼹鼠就已经发现了这根胡萝卜。',
   process: {
     steps: [
       { t: '它用两只手抓住叶子。', r: 'Tā yòng liǎng zhī shǒu zhuāzhù yèzi.', g: 'He held the leaves with both hands.' },
@@ -296,14 +303,15 @@ KT_DATA["story-zh"] = {
     ],
     back: '(原来|早就|已经|之前|前一天|昨天晚上)',
     traps: [
-      { re: '先.{1,14}再', msg: '已经发生的事不用“再”：*昨天我先吃饭，再看电影。讲过去的事用“然后”。' },
-      { re: '^\\s*以后', msg: '“以后”放在小句的后面：下课以后……，不说 *以后下课。' },
-      { re: '在.{1,6}(以后|以前)', msg: '时间小句前面不加“在”：吃饭以后……，不说 *在吃饭以后。' }
+      { re: '先.{1,14}再', msg: '已经发生的事不用“再”：*昨天我先吃饭，再看电影。讲过去的事用“然后”。', msgEn: 'Do not use “再” for things that have already happened: *昨天我先吃饭，再看电影. For past events use “然后”.' },
+      { re: '^\\s*以后', msg: '“以后”放在小句的后面：下课以后……，不说 *以后下课。', msgEn: '“以后” goes at the end of the clause: 下课以后……, not *以后下课.' },
+      { re: '在.{1,6}(以后|以前)', msg: '时间小句前面不加“在”：吃饭以后……，不说 *在吃饭以后。', msgEn: 'Do not put “在” before the time clause: 吃饭以后……, not *在吃饭以后.' }
     ],
     monoRe: '然后',
-    mono: '全是“然后”：换几种说法（接着、突然、可是、最后）。',
+    mono: '全是“然后”：换几种说法（接着、突然、可是、最后）。', monoEn: 'It is all “然后”: vary it (接着, 突然, 可是, 最后).',
     list: ['一天早上，……', '然后……', '接着……', '……可是……', '突然，……', '原来，前一天晚上……就已经……了', '最后，……']
   },
   selfCheck: ['每一幅图我都说到了', '我用了至少三种不同的连接词，不是一路“然后”', '已经发生的事，我没有用“再”', '鼹鼠那一段，我用“原来／早就／已经”说明那是更早的事'],
-  partner: '有搭档更好：一个人只看图复述，另一个人看着原文，在每幅图上打勾。'
+  selfCheckEn: ['I mentioned every picture', 'I used at least three different connectives, not “然后” all the way through', 'I did not use “再” for things that had already happened', 'For the mole part, I used “原来／早就／已经” to show it happened earlier'],
+  partner: '有搭档更好：一个人只看图复述，另一个人看着原文，在每幅图上打勾。', partnerEn: 'A partner helps: one person retells from the pictures only, the other follows the original text and ticks each picture.'
 };

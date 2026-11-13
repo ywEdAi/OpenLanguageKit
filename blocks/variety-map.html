@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Variety mapping</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .vm-wrap { display: grid; gap: 14px; min-width: 0; }
+  .sort { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 14px; align-items: start; }
+  @media (max-width: 820px) { .sort { grid-template-columns: minmax(0, 1fr); } }
+  .pile { display: grid; gap: 8px; align-content: start; }
+  .pile h3, .vcol h3 { margin: 0 0 4px; font-size: .85rem; color: var(--muted); }
+  .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+  .vcol { border: 2px dashed var(--line); border-radius: var(--radius); padding: 8px; min-height: 120px; background: var(--bg); display: grid; gap: 6px; align-content: start; }
+  .vcol.armed { border-color: var(--accent); background: var(--accent-soft); }
+  .vcol.over { border-style: solid; border-color: var(--accent); }
+  .vcol .colbtn { border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 4px 10px; font-weight: 600; text-align: left; }
+  .vcol .colbtn .k { font-size: .7rem; color: var(--muted); margin-left: 6px; font-weight: 400; }
+  .vcol.v-common { border-color: var(--muted); }
+  .vcol.v-error { border-color: var(--bad); }
+  .card { border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 7px 10px; text-align: left; font-size: 1.08rem; width: 100%; cursor: grab; }
+  .card[aria-pressed="true"] { outline: 3px solid var(--accent); }
+  .card.ok { border-color: var(--accent); border-width: 2px; }
+  .card.bad { border-color: var(--bad); border-width: 2px; background: var(--bad-soft); }
+  .card .why { display: block; font-size: .8rem; color: var(--muted); margin-top: 3px; }
+  mark.key { background: var(--warn-soft); color: inherit; border-bottom: 2px solid var(--warn); padding: 0 1px; }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .grouptbl { border-collapse: collapse; font-size: .9rem; }
+  .grouptbl td, .grouptbl th { border: 1px solid var(--line); padding: 4px 8px; text-align: left; }
+  .scene { border: 1px solid var(--line); border-left: 6px solid var(--accent); border-radius: var(--radius); padding: 10px 14px; background: var(--bg); }
+  .scene b { font-size: 1.05rem; }
+  .expr { border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; display: grid; gap: 6px; background: var(--panel); }
+  .expr .t { font-size: 1.12rem; }
+  .jopts { display: flex; flex-wrap: wrap; gap: 6px; }
+  .jbtn { font-size: .85rem; border: 1px solid var(--line); background: var(--bg); border-radius: 999px; padding: 3px 10px; }
+  .jbtn[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
+  .jbtn.good { background: var(--accent-soft); border-color: var(--accent); }
+  .jbtn.badpick { background: var(--bad-soft); border-color: var(--bad); }
+  .react { font-size: .9rem; padding: 4px 10px; border-left: 4px solid var(--warn); background: var(--warn-soft); border-radius: 0 8px 8px 0; }
+  .para { font-size: 1.2rem; line-height: 2.2; padding: 10px 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); }
+  .slot { display: inline-flex; gap: 2px; vertical-align: middle; border: 2px dashed var(--muted); border-radius: 8px; padding: 1px 3px; margin: 0 2px; }
+  .slot.one2many { border-color: var(--warn); border-style: double; border-width: 4px; border-radius: 999px; padding: 1px 6px; }
+  .slot.ok { border-color: var(--accent); background: var(--accent-soft); }
+  .slot.bad { border-color: var(--bad); background: var(--bad-soft); }
+  .sbtn { border: 1px solid var(--line); background: var(--panel); border-radius: 6px; padding: 0 6px; font-size: 1.1rem; }
+  .sbtn[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .own textarea { width: 100%; min-height: 110px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 8px; padding: 8px; font-size: 1.05rem; line-height: 1.6; }
+  .colored { font-size: 1.08rem; line-height: 1.9; padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); }
+  .mk { padding: 0 2px; border-radius: 4px; border-bottom: 3px solid; }
+  .mk.c0 { background: var(--accent-soft); border-color: var(--accent); }
+  .mk.c1 { background: var(--warn-soft); border-color: var(--warn); }
+  .mk.c2 { background: var(--panel); border-color: var(--t2); }
+  .mk.err { background: var(--bad-soft); border-color: var(--bad); }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px; font-size: .82rem; }
+  .fails { margin: 0; padding-left: 0; list-style: none; display: grid; gap: 6px; }
+  .fails li { border-left: 4px solid var(--bad); padding: 4px 10px; background: var(--bad-soft); border-radius: 0 8px 8px 0; }
+  .done { font-size: 2.4rem; }
+  [data-variant="child"] .card { font-size: 1.3rem; padding: 10px 12px; }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function () {
+  'use strict';
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t;
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'variety-map-en';
+  var reg = (window.KT_REGISTRY && window.KT_REGISTRY.packs) || {};
+  // while the registry does not list this block's packs yet, fall back to the block's own data file
+  var entry = reg[setId] || (/^variety-map-/.test(setId) ? { file: 'data/variety-map.js', block: 'variety-map' } : {});
+  var app = document.getElementById('app');
+  if (entry.file && entry.block !== 'variety-map') { app.textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  if (!entry.file) { app.textContent = L('未知的数据包：', 'Unknown data pack: ') + setId; return; }
+  var sc = document.createElement('script');
+  sc.src = entry.file;
+  sc.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else app.textContent = L('数据包里没有 ' + setId, 'The data pack file does not contain ' + setId); };
+  sc.onerror = function () { app.textContent = L('数据包加载失败：', 'Could not load the data pack: ') + entry.file; };
+  document.head.appendChild(sc);
+
+  function start(pack) {
+    var title = T(pack, 'title');
+    var B = KTBlock.init({ id: 'variety-map', primitive: 'prim:variety-map', title: title, set: pack.id });
+    document.title = title + ' · Variety mapping';
+    var kcFocus = params.get('kc');
+    var CHILD = function () { return B.variant === 'child'; };
+    var EXTRA = { common: { label: '各变体通用', labelEn: 'Used in all of them' }, error: { label: '不是变体，是错误', labelEn: 'Not a variety: a mistake' } };
+    var JUDGE = [['best', L('这里最合适', 'Best here')], ['ok', L('也可以，对方能懂', 'Also fine, understood')], ['odd', L('会显得不得体或混乱', 'Would seem out of place or confusing')], ['error', L('不是变体，是错误', 'Not a variety: a mistake')]];
+    var setIds = pack.sets.map(function (s) { return s.id; });
+    var ps = params.get('group');
+    var modes = function () {
+      var m = [{ id: 'sort', label: L('① 认出来', '① Recognise') }, { id: 'setting', label: L('② 定场合', '② Choose for the setting') }];
+      if (!CHILD()) m.push({ id: 'keep', label: L('③ 保持一致', '③ Keep it consistent') });
+      return m;
+    };
+    var st = { mode: ['sort', 'setting', 'keep'].indexOf(params.get('mode')) >= 0 ? params.get('mode') : 'sort', set: setIds.indexOf(ps) >= 0 ? ps : null, queue: [], idx: 0, item: null, streak: {}, armed: null };
+    if (!st.set) { var bykc = kcFocus && pack.sets.filter(function (s) { return (s.kcs || []).indexOf(kcFocus) >= 0; })[0]; st.set = bykc ? bykc.id : setIds[0]; }
+
+    var ui = KTBlock.chrome(B, { title: title, subtitle: T(pack, 'subtitle'), modes: modes(), mode: st.mode,
+      onMode: function (m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m }); newRound(); },
+      onVariant: function () { if (CHILD() && st.mode === 'keep') { st.mode = 'sort'; ui.setMode('sort'); } newRound(); } });
+    var bar = h('div', { class: 'kb-bar' });
+    var stage = h('div', { class: 'kb-card vm-wrap' });
+    app.append(ui.header, h('main', { class: 'kb-main' }, [bar, stage]), ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id, group: st.set });
+
+    function S() { return pack.sets.filter(function (s) { return s.id === st.set; })[0]; }
+    function feedback(t, tone) { var f = stage.querySelector('.kb-feedback.main'); if (f) { f.textContent = t; f.className = 'kb-feedback main ' + (tone || ''); f.hidden = !t; } }
+    function vById(set, id) { return set.varieties.filter(function (v) { return v.id === id; })[0] || EXTRA[id]; }
+    function vName(set, id) { var v = vById(set, id); return v ? T(v, 'label') : id; }
+    function columns(set) { return set.varieties.map(function (v) { return v.id; }).concat(CHILD() ? [] : ['common', 'error']); }
+    function kcOk(x) { return !kcFocus || !x.kc || x.kc === kcFocus; }
+    function keyed(text, key, show) {
+      if (!show || !key || text.indexOf(key) < 0) return [text];
+      var i = text.indexOf(key);
+      return [text.slice(0, i), h('mark', { class: 'key', text: key }), text.slice(i + key.length)];
+    }
+
+    /* ---- rounds ---- */
+    function newRound() {
+      var set = S();
+      st.armed = null;
+      if (st.mode === 'sort') {
+        var cards = set.cards.filter(kcOk);
+        if (CHILD()) cards = cards.filter(function (c) { return set.varieties.some(function (v) { return v.id === c.v; }); });
+        // whole meaning groups, plus the reverse half: at least one "common" and one "error" card when not a child
+        var groups = {}; cards.forEach(function (c) { (groups[c.g] = groups[c.g] || []).push(c); });
+        var gk = KTBlock.shuffle(Object.keys(groups).filter(function (g) { return groups[g].some(function (c) { return set.varieties.some(function (v) { return v.id === c.v; }); }); }));
+        var pick = [], n = CHILD() ? 6 : 10;
+        if (!CHILD()) ['common', 'error'].forEach(function (k) { var c = KTBlock.shuffle(cards.filter(function (x) { return x.v === k; }))[0]; if (c) pick.push(c); });
+        gk.forEach(function (g) { if (pick.length < n) groups[g].forEach(function (c) { if (pick.indexOf(c) < 0 && (c.v !== 'common' && c.v !== 'error')) pick.push(c); }); });
+        st.queue = [{ kind: 'sort', id: 'sort-round', cards: KTBlock.shuffle(pick).map(function (c) { return { c: c, placed: null, hint: 0, firstOk: null }; }) }];
+      } else if (st.mode === 'setting') {
+        st.queue = KTBlock.shuffle((set.settings || []).filter(kcOk)).map(function (sc) { return { kind: 'setting', sc: sc, id: 'set:' + sc.id, picks: {} }; });
+      } else {
+        st.queue = (set.keep || []).filter(kcOk).map(function (k) { return { kind: 'keep', k: k, id: 'keep:' + k.id, text: k.text || '', slots: {}, result: null }; });
+      }
+      st.idx = 0; begin();
+    }
+    function begin() { st.item = st.queue[st.idx] || null; if (st.item) B.emit('view', { item: st.item.id, mode: st.mode, group: st.set }); else if (st.queue.length) B.emit('complete', { mode: st.mode, group: st.set }); render(); }
+    function next() { st.idx++; begin(); }
+
+    /* ---- ① sort the cards into variety columns ---- */
+    function place(slot, col) {
+      var set = S(), c = slot.c, ok = c.v === col;
+      var first = slot.firstOk === null;
+      if (!first) B.emit('revise', { item: 'sort:' + c.id, to: col });
+      B.attempt('sort:' + c.id, { correct: ok, response: { column: col, expected: c.v, text: c.t } });
+      B.emit('drop', { item: 'sort:' + c.id, column: col });
+      if (first) {
+        slot.firstOk = ok;
+        var sk = st.set; st.streak[sk] = ok && !slot.hint ? (st.streak[sk] || 0) + 1 : 0;
+      }
+      slot.placed = col; slot.ok = ok; st.armed = null;
+      render();
+      var msg = (ok ? L('对。', 'Right. ') : L('不是这一列。它属于：', 'Not this column. It belongs to: ') + vName(set, c.v) + L('。', '. ')) + (c.key ? L('决定的是「' + c.key + '」。', 'What decides it: “' + c.key + '”. ') : '') + (T(c, 'note') || '');
+      feedback(msg.trim(), ok ? '' : 'bad');
+    }
+    function arm(slot) { if (slot.placed && slot.ok) return; st.armed = slot; B.emit('select', { item: 'sort:' + slot.c.id }); render(); }
+    function renderSort() {
+      var it = st.item, set = S(), cols = columns(set);
+      stage.append(h('p', { class: 'kb-prompt', text: CHILD() ? L('点一张卡，再点它属于哪一边。', 'Tap a card, then tap the side it belongs to.')
+        : L('点一张卡（或拖动），再放进它所属的列。卡上没有标签，靠拼写、用词或字形判断。有的说法各变体都用，有的其实是错误。', 'Click a card (or drag it), then put it in its column. Cards carry no labels: decide by spelling, words or character forms. Some expressions are used in all of them, and some are simply mistakes.') }));
+      var pile = h('div', { class: 'pile' }, [h('h3', { text: L('待分的卡', 'Cards to sort') })]);
+      it.cards.forEach(function (slot) {
+        if (slot.placed) return;
+        pile.append(cardEl(slot, set));
+      });
+      if (!it.cards.some(function (s) { return !s.placed; })) pile.append(h('p', { class: 'kb-note', text: L('都分完了。红框的卡可以再点一下，换到对的列（记为重试）。', 'All sorted. Click a red card again to move it to the right column (recorded as a retry).') }));
+      var colEls = h('div', { class: 'cols' }, cols.map(function (col, i) {
+        var box = h('div', { class: 'vcol v-' + col + (st.armed ? ' armed' : ''), dataset: { col: col },
+          ondragover: function (e) { e.preventDefault(); box.classList.add('over'); }, ondragleave: function () { box.classList.remove('over'); },
+          ondrop: function (e) { e.preventDefault(); var id = e.dataTransfer.getData('text/plain'); var s = it.cards.filter(function (x) { return x.c.id === id; })[0]; if (s) place(s, col); } },
+          [h('button', { class: 'colbtn', disabled: !st.armed, onclick: function () { if (st.armed) place(st.armed, col); } }, [vName(set, col), h('span', { class: 'k', text: String(i + 1) })])]);
+        it.cards.forEach(function (slot) { if (slot.placed === col) box.append(cardEl(slot, set)); });
+        return box;
+      }));
+      stage.append(h('div', { class: 'sort' }, [pile, colEls]));
+      var hs = [];
+      if (st.armed && !st.armed.placed) {
+        var a = st.armed;
+        if (a.hint < 1) hs.push(h('button', { class: 'kb-btn', onclick: function () { a.hint = 1; B.hint('sort:' + a.c.id, 1); render(); } }, L('提示 1：问自己', 'Hint 1: ask yourself')));
+        if (a.hint < 2) hs.push(h('button', { class: 'kb-btn', onclick: function () { a.hint = 2; B.hint('sort:' + a.c.id, 2); render(); } }, L('提示 2：标出决定的部分', 'Hint 2: mark the deciding part')));
+        if (a.hint < 3) {
+          if ((st.streak[st.set] || 0) >= 5) hs.push(h('span', { class: 'kb-note', text: L('你已经连续 5 张第一次就分对，不再提供对照小表。', 'You sorted 5 in a row right the first time, so the comparison table is no longer offered.') }));
+          else hs.push(h('button', { class: 'kb-btn', onclick: function () { a.hint = 3; B.hint('sort:' + a.c.id, 3); render(); } }, L('提示 3：看这一组的对照小表', 'Hint 3: see the table for this group')));
+        }
+        if (a.hint >= 1) stage.append(h('p', { class: 'kb-note', text: L('这句话里哪个词、哪个拼写或哪个字告诉你它是哪里的说法？', 'Which word, spelling or character in it tells you where it comes from?') }));
+        if (a.hint >= 3) {
+          var grp = set.cards.filter(function (c) { return c.g === a.c.g && c.id !== a.c.id; });
+          if (grp.length) stage.append(h('table', { class: 'grouptbl' }, grp.map(function (c) { return h('tr', {}, [h('th', { text: vName(set, c.v) }), h('td', { lang: set.lang || pack.lang, text: c.t })]); })));
+          else stage.append(h('p', { class: 'kb-note', text: L('这张卡没有同组的对照。', 'This card has no partner in the table.') }));
+        }
+      }
+      if (hs.length) stage.append(h('div', { class: 'tools' }, hs));
+    }
+    function cardEl(slot, set) {
+      var c = slot.c, showKey = !!slot.placed || slot.hint >= 2;
+      var cls = 'card' + (slot.placed ? (slot.ok ? ' ok' : ' bad') : '');
+      var kids = keyed(c.t, c.key, showKey).map(function (x) { return typeof x === 'string' ? h('span', { lang: set.lang || pack.lang, text: x }) : x; });
+      if (slot.placed && !slot.ok) kids.push(h('span', { class: 'why', text: L('应在：', 'Belongs to: ') + vName(set, c.v) }));
+      if (slot.placed && slot.ok && T(c, 'note')) kids.push(h('span', { class: 'why', text: T(c, 'note') }));
+      return h('button', { class: cls, draggable: !(slot.placed && slot.ok) ? 'true' : null, 'aria-pressed': st.armed === slot ? 'true' : 'false',
+        ondragstart: function (e) { e.dataTransfer.setData('text/plain', c.id); B.emit('drag', { item: 'sort:' + c.id }); },
+        onclick: function () { arm(slot); } }, kids);
+    }
+
+    /* ---- ② judge each expression for one setting ---- */
+    function judge(it, i, j) {
+      var e = it.sc.items[i], ok = e.ans.indexOf(j) >= 0, id = 'set:' + it.sc.id + ':' + i;
+      if (it.picks[i]) B.emit('revise', { item: id, from: it.picks[i], to: j });
+      B.attempt(id, { correct: ok, response: { judged: j, accepted: e.ans } });
+      it.picks[i] = j; render();
+    }
+    function renderSetting() {
+      var it = st.item, sc = it.sc, set = S();
+      stage.append(h('div', { class: 'scene' }, [h('span', { class: 'kb-note', text: L('场合：', 'Setting: ') }), h('b', { text: T(sc, 'scene') })]));
+      stage.append(h('p', { class: 'kb-prompt', text: L('在这个场合里，下面每一句怎么样？选了以后会看到对方的反应，可以改判。', 'In this setting, how does each line work? After you choose you will see how the listener reacts; you may change your mind.') }));
+      sc.items.forEach(function (e, i) {
+        var p = it.picks[i], ok = p && e.ans.indexOf(p) >= 0;
+        var box = h('div', { class: 'expr' }, [h('div', { class: 't', lang: set.lang || pack.lang, text: e.t }),
+          h('div', { class: 'jopts' }, JUDGE.map(function (jj) {
+            var cl = 'jbtn' + (p && e.ans.indexOf(jj[0]) >= 0 && p === jj[0] ? ' good' : '') + (p === jj[0] && !ok ? ' badpick' : '');
+            return h('button', { class: cl, 'aria-pressed': p === jj[0] ? 'true' : 'false', onclick: function () { judge(it, i, jj[0]); } }, jj[1]);
+          }))]);
+        if (p) {
+          box.append(h('div', { class: 'react', text: '💬 ' + T(e, 'react') }));
+          if (!ok) box.append(h('div', { class: 'kb-note', text: L('参考判断：', 'Reference judgement: ') + e.ans.map(function (a) { return JUDGE.filter(function (x) { return x[0] === a; })[0][1]; }).join(L(' 或 ', ' or ')) }));
+        }
+        stage.append(box);
+      });
+      it.solved = sc.items.every(function (e, i) { return it.picks[i]; });
+    }
+
+    /* ---- ③ keep one variety: rewrite (marker check) or choose forms in slots ---- */
+    function findMarkers(text, set) {
+      var hits = [];
+      Object.keys(set.markers || {}).forEach(function (vid) {
+        set.markers[vid].forEach(function (re) {
+          var r = new RegExp(re, 'gi'), m;
+          while ((m = r.exec(text))) { hits.push({ v: vid, s: m.index, e: m.index + m[0].length, t: m[0] }); if (!m[0].length) r.lastIndex++; }
+        });
+      });
+      hits.sort(function (a, b) { return a.s - b.s || (b.e - b.s) - (a.e - a.s); });
+      var out = [], end = -1; hits.forEach(function (x) { if (x.s >= end) { out.push(x); end = x.e; } });
+      return out;
+    }
+    function colorIdx(set, vid) { if (vid === 'error') return 'err'; return 'c' + Math.max(0, set.varieties.map(function (v) { return v.id; }).indexOf(vid)); }
+    function renderColored(text, hits, set) {
+      var kids = [], p = 0;
+      hits.forEach(function (x) { if (x.s > p) kids.push(text.slice(p, x.s)); kids.push(h('span', { class: 'mk ' + colorIdx(set, x.v), title: vName(set, x.v), text: x.t })); p = x.e; });
+      if (p < text.length) kids.push(text.slice(p));
+      return h('div', { class: 'colored', lang: set.lang || pack.lang }, kids);
+    }
+    function checkRewrite() {
+      var it = st.item, k = it.k, set = S(), text = (it.text || '').trim();
+      if (!text) return;
+      var hits = findMarkers(text, set);
+      var mine = hits.filter(function (x) { return x.v === k.target; }), others = hits.filter(function (x) { return x.v !== k.target; });
+      var fails = [];
+      others.forEach(function (x) { fails.push((x.v === 'error' ? L('错误：', 'Mistake: ') : L('另一种变体的形式：', 'A form from the other variety: ')) + x.t + (x.v === 'error' ? '' : L('（', ' (') + vName(set, x.v) + L('）', ')'))); });
+      if (mine.length < k.need) fails.push(L('页面只找到 ' + mine.length + ' 处' + vName(set, k.target) + '形式，应该有 ' + k.need + ' 处：每个地方都要换成对应的说法，不要删掉。', 'The page found only ' + mine.length + ' ' + vName(set, k.target) + ' form(s); there should be ' + k.need + '. Change each place to its counterpart rather than deleting it.'));
+      var pass = !fails.length;
+      B.attempt(it.id, { correct: pass, response: { text: text, target: k.target, found: hits.map(function (x) { return x.v + ':' + x.t; }), checked: 'marker-list-only' } });
+      it.result = { hits: hits, fails: fails, pass: pass, text: text };
+      render();
+      feedback(pass ? L('整段只有一种变体的形式，通过。', 'The whole text uses one variety only. Passed.') : L('有地方没统一，见下面。', 'Not consistent yet; see below.'), pass ? '' : 'bad');
+    }
+    function checkSlots() {
+      var it = st.item, k = it.k;
+      var slots = k.parts.filter(function (p) { return typeof p !== 'string'; });
+      var missing = slots.filter(function (p) { return !it.slots[p.id]; });
+      if (missing.length) { feedback(L('还有 ' + missing.length + ' 个空没选。', missing.length + ' gap(s) still to choose.'), 'warn'); return; }
+      var wrong = slots.filter(function (p) { return it.slots[p.id] !== p.ans; });
+      B.attempt(it.id, { correct: !wrong.length, response: { choices: it.slots, wrong: wrong.map(function (p) { return p.id; }) } });
+      it.result = { wrong: wrong.map(function (p) { return p.id; }), pass: !wrong.length };
+      render();
+      feedback(!wrong.length ? L('全部选对，整段一致。', 'All right; the whole text is consistent.') : L('有 ' + wrong.length + ' 处不对，见红框和说明。', wrong.length + ' place(s) wrong; see the red boxes and notes.'), wrong.length ? 'bad' : '');
+    }
+    function renderKeep() {
+      var it = st.item, k = it.k, set = S();
+      stage.append(h('div', { class: 'scene' }, [h('span', { class: 'kb-note', text: L('任务：', 'Task: ') }), h('b', { text: T(k, 'task') })]));
+      if (k.kind === 'rewrite') {
+        var ta = h('textarea', { lang: set.lang || pack.lang, 'aria-label': L('改写', 'Rewrite'), oninput: function (e) { it.text = e.target.value; } }); ta.value = it.text;
+        stage.append(h('div', { class: 'own' }, ta), h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: checkRewrite }, L('检查', 'Check')),
+          h('button', { class: 'kb-btn', onclick: function () { it.text = k.text; it.result = null; B.emit('revise', { item: it.id, action: 'reset' }); render(); } }, L('恢复原文', 'Restore the original'))]));
+        if (it.result) {
+          stage.append(h('div', { class: 'legend' }, set.varieties.map(function (v) { return h('span', { class: 'mk ' + colorIdx(set, v.id), text: T(v, 'label') }); }).concat([h('span', { class: 'mk err', text: L('错误', 'mistake') })])));
+          stage.append(renderColored(it.result.text, it.result.hits, set));
+          if (it.result.fails.length) stage.append(h('ul', { class: 'fails' }, it.result.fails.map(function (f) { return h('li', { text: f }); })));
+        }
+        stage.append(h('p', { class: 'kb-note', text: L('页面只认数据包里列出的变体词形（拼写和常见用词），其余的词它不判断，也不检查语法。', 'The page only recognises the variety forms listed in the pack (spellings and common words); it does not judge other words or the grammar.') }));
+      } else {
+        stage.append(h('div', { class: 'para', lang: set.lang || pack.lang }, k.parts.map(function (p) {
+          if (typeof p === 'string') return p;
+          var res = it.result, cls = 'slot' + (p.one2many && res ? ' one2many' : '') + (res ? (res.wrong.indexOf(p.id) >= 0 ? ' bad' : ' ok') : '');
+          return h('span', { class: cls, role: 'group' }, p.opts.map(function (o) {
+            return h('button', { class: 'sbtn', 'aria-pressed': it.slots[p.id] === o ? 'true' : 'false', disabled: !!(res && res.pass), onclick: function () { it.slots[p.id] = o; it.result = null; B.emit('select', { item: it.id, slot: p.id, choice: o }); render(); } }, o);
+          }));
+        })));
+        stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', disabled: !!(it.result && it.result.pass), onclick: checkSlots }, L('检查', 'Check'))]));
+        if (it.result) {
+          var notes = k.parts.filter(function (p) { return typeof p !== 'string' && (it.result.wrong.indexOf(p.id) >= 0 || p.one2many) && T(p, 'why'); });
+          if (notes.length) stage.append(h('ul', { class: 'fails' }, notes.map(function (p) { return h('li', { style: it.result.wrong.indexOf(p.id) >= 0 ? null : 'border-color: var(--warn); background: var(--warn-soft)' }, [h('b', { lang: set.lang || pack.lang, text: p.ans + ' ' }), T(p, 'why')]); })));
+        }
+      }
+    }
+
+    function renderBar() {
+      bar.innerHTML = '';
+      if (pack.sets.length > 1) bar.append(h('label', {}, [L('对照组：', 'Variety set: '), h('select', { onchange: function (e) { st.set = e.target.value; B.emit('view', { group: st.set }); newRound(); } },
+        pack.sets.map(function (s) { return h('option', { value: s.id, selected: s.id === st.set, text: T(s, 'label') }); }))]));
+      if (st.mode !== 'sort' && st.item) bar.append(h('span', { class: 'kb-note', text: L('第 ' + (st.idx + 1) + ' / ' + st.queue.length + ' 题', 'Item ' + (st.idx + 1) + ' / ' + st.queue.length) }));
+      bar.append(h('button', { class: 'kb-btn', onclick: newRound }, L('换一组', 'New set')));
+      if (kcFocus) bar.append(h('span', { class: 'kb-note', text: L('知识点：', 'Knowledge point: ') + kcFocus }));
+    }
+    function render() {
+      renderBar(); stage.innerHTML = '';
+      var it = st.item;
+      if (!it) {
+        var msg = st.queue.length ? L('这一组做完了。', 'Set finished.') : L('这个对照组没有这一步的题，换一个对照组试试。', 'This variety set has no items for this step; try another set.');
+        stage.append(h('div', { class: 'done', text: st.queue.length ? '✓' : '·' }), h('p', { class: 'kb-prompt', text: msg }), h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: newRound }, L('再来一组', 'Another set'))]));
+        return;
+      }
+      if (it.kind === 'sort') renderSort(); else if (it.kind === 'setting') renderSetting(); else renderKeep();
+      stage.append(h('div', { class: 'kb-feedback main', hidden: true, 'aria-live': 'polite' }));
+      var done = it.kind === 'sort' ? it.cards.every(function (s) { return s.placed; }) : it.kind === 'setting' ? it.solved : !!(it.result && it.result.pass);
+      stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn' + (done ? ' primary' : ''), onclick: next }, it.kind === 'sort' ? (done ? L('完成 →', 'Done →') : L('跳过这一轮', 'Skip this round')) : (done ? L('下一题 →', 'Next →') : L('跳过', 'Skip')))]));
+    }
+
+    document.addEventListener('keydown', function (e) {
+      var tag = e.target.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || e.metaKey || e.ctrlKey || e.altKey) return;
+      var it = st.item; if (!it || it.kind !== 'sort' || !st.armed) return;
+      var n = parseInt(e.key, 10), cols = columns(S());
+      if (n >= 1 && n <= cols.length) place(st.armed, cols[n - 1]);
+      else if (e.key === 'Escape') { st.armed = null; render(); }
+    });
+
+    newRound();
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Classifier matching</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .cm-layout { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .cm-layout { grid-template-columns: 1fr; } }
+  .cm-side { display: grid; gap: 12px; }
+  .cm-stage { display: grid; gap: 12px; }
+  .table { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 8px; }
+  .thing { border: 1px solid var(--line); background: var(--panel); border-radius: 12px; padding: 6px 4px; display: grid; justify-items: center; gap: 1px; min-height: 92px; }
+  .thing .pic { font-size: 1.9rem; line-height: 1.2; }
+  [data-variant="child"] .thing .pic { font-size: 2.4rem; }
+  .thing .w { font-size: 1.05rem; }
+  .thing .g { font-size: .72rem; color: var(--muted); }
+  .thing .tag { font-size: .75rem; border-radius: 999px; padding: 0 8px; }
+  .thing[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+  .thing.ok { background: var(--accent-soft); }
+  .thing.gen { background: var(--warn-soft); border-color: var(--warn); }
+  .thing.bad { background: var(--bad-soft); border-color: var(--bad); }
+  .thing.like { box-shadow: 0 0 0 3px var(--t2); }
+  .thing:disabled { cursor: default; opacity: .95; }
+  .boxes { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
+  .box { border: 2px dashed var(--line); background: var(--bg); border-radius: 12px; padding: 8px; display: grid; gap: 4px; text-align: left; align-content: start; min-height: 96px; }
+  .box .bt { font-size: 1.5rem; font-weight: 700; }
+  .box .bn { font-size: .7rem; color: var(--muted); }
+  .box .feat { font-size: .78rem; color: var(--accent); }
+  .box .in { font-size: .9rem; color: var(--ink); }
+  .box.hot { border-color: var(--accent); border-style: solid; }
+  .box:disabled { cursor: default; }
+  .heap { font-size: 1.4rem; letter-spacing: -6px; }
+  .pb { border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 5px 12px; }
+  .pb[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .pb.right { background: var(--accent-soft); border-color: var(--accent); }
+  .pb.wrongpick { background: var(--bad-soft); border-color: var(--bad); }
+  .pb.gen { background: var(--warn-soft); border-color: var(--warn); }
+  .pb:disabled { cursor: default; }
+  .chipbtns { display: flex; flex-wrap: wrap; gap: 6px; }
+  .opts { display: grid; gap: 6px; }
+  .opts button { text-align: left; border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 8px 12px; }
+  .opts button.right { background: var(--accent-soft); border-color: var(--accent); }
+  .opts button.wrongpick { background: var(--bad-soft); border-color: var(--bad); }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; }
+  .q { font-size: 1.5rem; margin: 0; }
+  .q .gap { display: inline-block; min-width: 2em; border-bottom: 3px solid var(--accent); text-align: center; color: var(--accent); }
+  .big { font-size: 2.6rem; }
+  .cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  @media (max-width: 560px) { .cols { grid-template-columns: 1fr; } }
+  .col { display: grid; gap: 6px; align-content: start; }
+  .col .lab { font-size: .8rem; color: var(--muted); }
+  .needs { display: flex; flex-wrap: wrap; gap: 8px; }
+  .need { border: 1px solid var(--line); border-radius: 10px; padding: 6px 10px; background: var(--panel); }
+  .need.done { border-color: var(--accent); background: var(--accent-soft); }
+  .need .pics { font-size: 1.3rem; }
+  .list { border: 1px solid var(--line); border-radius: 10px; background: var(--bg); padding: 8px 12px; display: grid; gap: 4px; }
+  .list .row { display: flex; gap: 8px; align-items: center; justify-content: space-between; }
+  .list .row span.t { font-size: 1.15rem; }
+  .list .row.bad span.t { color: var(--bad); }
+  .list .row.gen span.t { text-decoration: underline wavy var(--warn); }
+  .x { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 0 8px; }
+  .checklist { margin: 6px 0 0; padding-left: 20px; }
+  .checklist li.no { color: var(--bad); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font-size: .8rem; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); }
+  .chip.ind { background: var(--accent-soft); border-color: var(--accent); }
+  .chip.ast { background: var(--warn-soft); border-color: var(--warn); }
+  .chip.bad { background: var(--bad-soft); border-color: var(--bad); }
+  .reverse { border-left: 4px solid var(--warn); }
+  .done { font-size: 2.4rem; }
+  .meter { font-size: 1.6rem; font-weight: 700; }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function () {
+  'use strict';
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t;
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'classifier-match-zh';
+  var app = document.getElementById('app');
+  var entry = (window.KT_REGISTRY && KT_REGISTRY.packs && KT_REGISTRY.packs[setId]) || {};
+  if (entry.block && entry.block !== 'classifier-match') { app.textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  var file = entry.file || 'data/classifier-match.js';   // fallback while the registry does not list the pack yet
+  var s = document.createElement('script');
+  s.src = file;
+  s.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else app.textContent = L('数据包里没有 ' + setId, 'The data pack file does not contain ' + setId); };
+  s.onerror = function () { app.textContent = L('数据包加载失败：', 'Could not load the data pack: ') + file; };
+  document.head.appendChild(s);
+
+  var CATS = [
+    { id: 'rule', zh: '按规律放（和盒子里其他东西有同一个共同点）', en: 'By the rule (it shares the box’s common property)' },
+    { id: 'exception', zh: '规律之外，要单独记', en: 'Outside the rule: remember it separately' },
+    { id: 'both', zh: '两个都可以，但意思或语气不同', en: 'Both work, but meaning or tone differs' },
+    { id: 'none', zh: '这里不用量词或单位', en: 'No classifier or unit is used here' }
+  ];
+
+  function start(pack) {
+    var title = T(pack, 'title');
+    var B = KTBlock.init({ id: 'classifier-match', primitive: 'prim:classifier-match', title: title, set: pack.id });
+    document.title = title + ' · Classifiers';
+    var showGloss = KTBlock.lang !== pack.lang;
+    var modes = [{ id: 'sort', label: L('分盒子', 'Sort into boxes') }, { id: 'new', label: L('新东西', 'New things') }, { id: 'order', label: L('自己写单子', 'Write your list') }];
+    var st = { mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : 'sort', setIdx: 0, S: null, record: {}, generic: { used: 0, total: 0 } };
+    function child() { return B.variant === 'child'; }
+    var ui = KTBlock.chrome(B, { title: title, subtitle: T(pack, 'subtitle'), modes: modes, mode: st.mode,
+      onMode: function (m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m }); newRound(); },
+      onVariant: function () { newRound(); } });
+    var bar = h('div', { class: 'kb-bar' }), stage = h('div', { class: 'kb-card cm-stage' }), side = h('aside', { class: 'cm-side' });
+    app.append(ui.header, h('main', { class: 'kb-main' }, [bar, h('div', { class: 'cm-layout' }, [stage, side])]), ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id });
+
+    function box(id) { return id === 'none' ? { t: L('不用量词', 'no classifier') } : pack.boxes[id] || (pack.units || {})[id] || { t: id }; }
+    function boxT(id) { var b = box(id); return b.t || b.sg; }
+    function feat(id) { var f = pack.features.filter(function (x) { return x.id === id; })[0]; return f ? T(f, 'zh') : ''; }
+    function gloss(it) { return showGloss && it.gloss ? T(it.gloss, 'zh') : ''; }
+    function chip(id, text) { var s2 = B.status(id); st.record[id] = { text: text, cls: s2 === 'independent' ? 'ind' : s2 === 'wrong' ? 'bad' : 'ast' }; }
+    function feedback(t, tone) { var f = stage.querySelector('.kb-feedback'); if (f) { f.textContent = t; f.className = 'kb-feedback ' + (tone || ''); f.hidden = !t; } }
+    function usualText(ok) { return ok.map(boxT).join(L('、', ' / ')); }
+    function countGeneric(isGen) { st.generic.total++; if (isGen) st.generic.used++; }
+
+    /* ---------- rounds ---------- */
+    function newRound() {
+      if (st.mode === 'sort') {
+        var sets = pack.sets.filter(function (x) { return !child() || x.child; });
+        if (!sets.length) sets = pack.sets;
+        var set = sets[st.setIdx % sets.length];
+        var bx = child() ? set.boxes.slice(0, 3) : set.boxes;
+        var items = set.items.filter(function (id) { return pack.items[id].ok.some(function (b) { return bx.indexOf(b) >= 0; }); });
+        st.S = { set: set, boxes: bx, items: KTBlock.shuffle(items), placed: {}, wrong: {}, sel: null, hint: {}, like: null, fstep: false, fsel: {}, fdone: {} };
+      } else if (st.mode === 'new') {
+        var list = pack.newItems.filter(function (it) { return !child() || it.cat === 'rule'; });
+        // keep the reverse half in every round: at least a quarter must be exception / both / none
+        var rev = KTBlock.shuffle(list.filter(function (it) { return it.cat !== 'rule'; })), rule = KTBlock.shuffle(list.filter(function (it) { return it.cat === 'rule'; }));
+        var n = child() ? 5 : 8, nrev = child() ? 0 : Math.max(Math.ceil(n / 4), Math.min(rev.length, 3));
+        var q = rev.slice(0, nrev).concat(rule.slice(0, n - nrev));
+        if (B.kc) { var mine = list.filter(function (it) { return it.kc === B.kc; }); if (mine.length) q = mine.concat(q.filter(function (x) { return mine.indexOf(x) < 0; })).slice(0, Math.max(n, mine.length)); }
+        st.S = { queue: KTBlock.shuffle(q), idx: 0 };
+        beginNew();
+        return;
+      } else {
+        var tasks = pack.tasks, task = tasks[st.setIdx % tasks.length];
+        st.S = { task: task, lines: [], cur: { num: null, cl: null, noun: null }, result: null };
+      }
+      render();
+    }
+    function beginNew() {
+      var it = st.S.queue[st.S.idx];
+      st.S.cur = it ? { box: null, tried: [], boxDone: false, cat: null, read: null, readTried: [], det: null, detTried: [], hint: 0 } : null;
+      if (it) B.emit('view', { item: it.id, mode: 'new' }); else B.emit('complete', { mode: 'new', items: st.S.queue.length });
+      render();
+    }
+
+    /* ---------- step 1: sort ---------- */
+    function place(id, b) {
+      var S = st.S, it = pack.items[id], rid = 'sort:' + id;
+      if (S.placed[id]) return;
+      var ok = it.ok.indexOf(b) >= 0, isGen = !ok && b === pack.generic;
+      B.emit('drop', { item: rid, box: b });
+      if (isGen) {
+        B.hint(rid, 'generic');   // not wrong: understood, but not the usual classifier → recorded as assisted
+        B.attempt(rid, { correct: true, response: { box: b, generic: true } });
+        B.emit('compare', { item: rid, usual: it.ok });
+        S.placed[id] = { box: b, gen: true }; S.sel = null; countGeneric(true); chip(rid, it.w);
+        render(); feedback(L('能懂，但更常说：', 'Understood, but people usually say: ') + usualText(it.ok) + L('。可以点“改放”。', '. You can move it.'), 'warn');
+        return;
+      }
+      B.attempt(rid, { correct: ok, response: { box: b } });
+      if (ok) {
+        S.placed[id] = { box: b }; S.sel = null; if (pack.generic) countGeneric(false);
+        chip(rid, it.w);
+        render(); feedback(L('对。', 'Right.'));
+        maybeFeatureStep();
+        return;
+      }
+      S.wrong[id] = b;
+      render();
+      var nm = it.w + (gloss(it) ? L('（' + gloss(it) + '）', ' (' + gloss(it) + ')') : '');
+      var msg = it.fix ? T(it.fix, 'zh') : L('“' + nm + '”不放在“' + boxT(b) + '”。看看这一盒已有的东西有什么共同点。', '“' + nm + '” does not go in “' + boxT(b) + '”. Look at what the things already in that box have in common.');
+      feedback(msg + L(' 再放一次。', ' Try again.'), 'bad');
+    }
+    function revise(id) {
+      var S = st.S, it = pack.items[id];
+      B.emit('revise', { item: 'sort:' + id, from: S.placed[id].box });
+      st.generic.used = Math.max(0, st.generic.used - 1);
+      delete S.placed[id]; S.sel = id; S.wrong[id] = pack.generic;
+      render(); feedback(L('选一个更常用的盒子。', 'Choose the more usual box.'));
+    }
+    function maybeFeatureStep() {
+      var S = st.S;
+      if (child()) return;
+      if (S.items.every(function (id) { return S.placed[id]; }) && !S.fstep) { S.fstep = true; render(); feedback(L('都放好了。现在给每个盒子选一个共同点。', 'All placed. Now choose what each box has in common.')); }
+    }
+    function chooseFeature(b, f) {
+      var S = st.S; if (S.fdone[b]) return;
+      var rid = 'feature:' + S.set.id + ':' + b, ok = f === box(b).feature;
+      B.attempt(rid, { correct: ok, response: { feature: f } });
+      B.emit('select', { item: rid, feature: f });
+      S.fsel[b] = f;
+      if (ok) { S.fdone[b] = true; chip(rid, boxT(b) + L('：', ': ') + feat(f)); render(); feedback(L('对：“', 'Right: what the “') + boxT(b) + L('”这一盒的共同点是：', '” box has in common: ') + feat(f) + L('。', '.')); return; }
+      render(); feedback(L('这个共同点不是所有东西都有。再看盒子里的东西。', 'Not everything in the box has that property. Look at the things again.'), 'bad');
+    }
+
+    /* ---------- step 2: new things ---------- */
+    function newBox(b) {
+      var S = st.S, it = S.queue[S.idx], c = S.cur; if (c.boxDone) return;
+      var rid = 'new:' + it.id, ok = b === 'none' ? !it.ok.length : it.ok.indexOf(b) >= 0, isGen = !ok && b === pack.generic && it.ok.length > 0;
+      c.tried.push(b); c.box = b;
+      B.emit('drop', { item: rid, box: b });
+      if (isGen) { B.hint(rid, 'generic'); B.attempt(rid, { correct: true, response: { box: b, generic: true } }); c.boxDone = true; countGeneric(true); chip(rid, it.w); render(); feedback(L('能懂，但更常说：', 'Understood, but people usually say: ') + usualText(it.ok) + L('。现在判断它属于哪一类。', '. Now decide which kind of case it is.'), 'warn'); return; }
+      B.attempt(rid, { correct: ok, response: { box: b } });
+      if (ok) { c.boxDone = true; if (pack.generic && it.ok.length) countGeneric(false); chip(rid, it.w); render(); feedback(L('对。现在判断它属于哪一类。', 'Right. Now decide which kind of case it is.')); return; }
+      render(); feedback(it.ok.length ? L('不是这个。再试一次。', 'Not this one. Try again.') : L('不对。想一想：这里真的需要量词吗？', 'No. Think: is a classifier really needed here?'), 'bad');
+    }
+    function newCat(cat) {
+      var S = st.S, it = S.queue[S.idx], c = S.cur; if (c.cat) return;
+      var rid = 'cat:' + it.id, ok = cat === it.cat;
+      B.attempt(rid, { correct: ok, response: { category: cat } });
+      c.cat = cat; chip(rid, L('类别：', 'kind: ') + it.w);
+      render(); feedback((ok ? L('对。', 'Right. ') : L('不对。', 'Not quite. ')) + T(it.note, 'zh'), ok ? '' : 'bad');
+      if (ok) B.speak(it.q.replace('＿', it.ok.length ? boxT(it.ok[0]) : '').replace('＿', ''), pack.speech);
+    }
+    function newRead(r) {
+      var S = st.S, it = S.queue[S.idx], c = S.cur; if (c.read === it.read.ok) return;
+      var rid = 'read:' + it.id, ok = r === it.read.ok;
+      B.attempt(rid, { correct: ok, response: { reading: r } });
+      c.read = r; c.readTried.push(r);
+      if (ok) { chip(rid, r); render(); feedback(L('对：', 'Right: ') + r); B.speak(r, pack.speech); return; }
+      render(); feedback(L('读音不对。看数字和助数词合在一起时有没有变音（っ、浊音、半浊音）。', 'Not the right reading. Check whether number and counter change sound together (small っ, voiced or p-sounds).'), 'bad');
+    }
+    function newDet(d) {
+      var S = st.S, it = S.queue[S.idx], c = S.cur; if (c.det === it.det.ok) return;
+      var rid = 'det:' + it.id, ok = d === it.det.ok;
+      B.attempt(rid, { correct: ok, response: { det: d } });
+      c.det = d; c.detTried.push(d);
+      if (ok) { chip(rid, d); render(); feedback(L('对：', 'Right: ') + it.det.q.replace('＿', d)); B.speak(it.det.q.replace('＿', d), pack.speech); return; }
+      render(); feedback(L('这个词和你放的盒子对不上：', 'This word does not match the box: ') + L('能一个个数的用 many / a few / fewer，后接复数；一团的用 much / a little / less，不加 -s。', 'things counted one by one take many / a few / fewer and a plural; a mass takes much / a little / less and no -s.'), 'bad');
+    }
+    function newDone(it, c) { return c.boxDone && c.cat && (!it.read || c.read === it.read.ok) && (!it.det || c.det === it.det.ok); }
+
+    /* ---------- step 3: write the list ---------- */
+    function lineText(l) {
+      var it = pack.items[l.noun], num = pack.numbers[l.num];
+      if (pack.line === 'zh') return num.t + (l.cl === 'none' ? '' : boxT(l.cl)) + it.w;
+      if (pack.line === 'ja') return it.w + 'を' + num.t + (l.cl === 'none' ? '' : boxT(l.cl)) + 'ください';
+      var one = num.v === 1, u = l.cl !== 'none' ? pack.units[l.cl] : null;
+      if (u) return (one ? 'a' : num.t) + ' ' + (one ? u.sg : u.pl) + ' of ' + it.w;
+      return one ? (it.a || 'a') + ' ' + it.w : num.t + ' ' + (it.pl || it.w + 's');
+    }
+    function judgeLine(l) {
+      var it = pack.items[l.noun], num = pack.numbers[l.num];
+      if (num.bad) return { bad: true, why: T(num.bad, 'zh') };
+      if (it.ok.indexOf(l.cl) >= 0) return { ok: true };
+      if (l.cl === pack.generic) return { gen: true, why: L('能懂，但更常说：', 'Understood, but people usually say: ') + it.ok.filter(function (b) { return pack.orderCl.indexOf(b) >= 0; }).map(boxT).join(L('、', ' / ')) };
+      return { bad: true, why: it.fix ? T(it.fix, 'zh') : L('“' + boxT(l.cl) + '”和“' + it.w + '”对不上', '“' + boxT(l.cl) + '” does not fit “' + it.w + '”') };
+    }
+    function addLine() {
+      var S = st.S, c = S.cur;
+      S.lines.push({ num: c.num, cl: c.cl, noun: c.noun });
+      B.emit('connect', { item: 'order:' + S.task.id, line: lineText(c) });
+      S.cur = { num: null, cl: null, noun: null }; S.result = null; render();
+    }
+    function checkOrder() {
+      var S = st.S, task = S.task, out = [], ok = true;
+      function rule(pass, zh, en) { out.push({ ok: pass, t: L(zh, en) }); if (!pass) ok = false; }
+      rule(S.lines.length > 0 && S.lines.every(function (l) { return l.num !== null && l.cl && l.noun; }), '每一行都有数、量词（或单位）和名词', 'Every line has a number, a classifier (or unit) and a noun');
+      var missing = task.needs.filter(function (n) { return !S.lines.some(function (l) { return l.noun === n.item && pack.numbers[l.num].v === n.n; }); });
+      var extra = S.lines.filter(function (l) { return !task.needs.some(function (n) { return n.item === l.noun && n.n === pack.numbers[l.num].v; }); });
+      rule(!missing.length && !extra.length && S.lines.length === task.needs.length, '单子和要买的东西一样：每样一行，数目对' + (missing.length ? '（还缺：' + missing.map(function (n) { return pack.items[n.item].w + ' ×' + n.n; }).join('、') + '）' : ''),
+        'The list matches what is needed: one line each, right number' + (missing.length ? ' (missing: ' + missing.map(function (n) { return pack.items[n.item].w + ' ×' + n.n; }).join(', ') + ')' : ''));
+      var js = S.lines.map(judgeLine), bad = js.filter(function (j) { return j.bad; });
+      rule(!bad.length, '量词（或单位）和数词形式都对得上' + (bad.length ? '：' + bad.map(function (j) { return j.why; }).join('；') : ''), 'Every classifier (or unit) and number form fits' + (bad.length ? ': ' + bad.map(function (j) { return j.why; }).join('; ') : ''));
+      if (pack.generic) {
+        var gen = js.filter(function (j) { return j.gen; }).length, spec = task.needs.filter(function (n) { return pack.items[n.item].ok.indexOf(pack.generic) < 0; }).length;
+        rule(!(S.lines.length && gen / S.lines.length > 0.6 && spec > 0), '没有一律用“' + boxT(pack.generic) + '”回避（超过六成算回避）', 'Not avoiding by using “' + boxT(pack.generic) + '” for everything (over 60% counts as avoiding)');
+        st.generic.used += gen; st.generic.total += S.lines.length;
+      }
+      S.result = { ok: ok, lines: out, js: js };
+      B.attempt('order:' + task.id, { correct: ok, response: S.lines.map(lineText) });
+      chip('order:' + task.id, L('单子 ', 'list ') + (pack.tasks.indexOf(task) + 1));
+      render();
+    }
+
+    /* ---------- render ---------- */
+    function renderBar() {
+      bar.innerHTML = '';
+      if (st.mode === 'new' && st.S.cur) bar.append(h('span', { class: 'kb-note', text: L('第 ' + (st.S.idx + 1) + ' / ' + st.S.queue.length + ' 个', 'Item ' + (st.S.idx + 1) + ' / ' + st.S.queue.length) }));
+      if (st.mode === 'sort') bar.append(h('span', { class: 'kb-note', text: T(st.S.set.title, 'zh') }));
+      bar.append(h('button', { class: 'kb-btn', type: 'button', onclick: function () { st.setIdx++; newRound(); } }, st.mode === 'new' ? L('换一轮', 'New round') : st.mode === 'sort' ? L('换一组', 'Next set') : L('换一张单子', 'Another list')));
+    }
+    function thingCard(id, it, extra) {
+      var S = st.S, p = S.placed && S.placed[id], w = S.wrong && S.wrong[id];
+      var cls = 'thing' + (p ? (p.gen ? ' gen' : ' ok') : w ? ' bad' : '') + (S.like === id ? ' like' : '');
+      return h('button', Object.assign({ type: 'button', class: cls, 'aria-pressed': S.sel === id ? 'true' : 'false', disabled: !!p && !p.gen,
+        'aria-label': it.w + (gloss(it) ? ' (' + gloss(it) + ')' : '') + (p ? L('，已放进 ', ', placed in ') + boxT(p.box) : '') },
+        extra || {}), [h('span', { class: 'pic', 'aria-hidden': 'true', text: it.pic }), h('span', { class: 'w', lang: pack.lang, text: it.w }),
+          gloss(it) ? h('span', { class: 'g', text: gloss(it) }) : null,
+          p ? h('span', { class: 'tag', lang: pack.lang, text: '→ ' + boxT(p.box) }) : null]);
+    }
+    function renderSort() {
+      var S = st.S;
+      stage.append(h('p', { class: 'kb-prompt', text: child() ? L('点一样东西，再点它该去的篮子。', 'Tap a thing, then tap its basket.') : L('点一样东西，再点它该放的盒子（或按盒子编号）。', 'Pick a thing, then pick its box (or press the box number).') }));
+      stage.append(h('div', { class: 'table', role: 'group', 'aria-label': L('物品桌', 'Table of things') }, S.items.map(function (id) {
+        var it = pack.items[id], p = S.placed[id];
+        return thingCard(id, it, { onclick: function () { if (p && p.gen) { revise(id); return; } S.sel = id; S.like = null; B.emit('select', { item: 'sort:' + id }); render(); } });
+      })));
+      stage.append(h('div', { class: 'boxes', role: 'group', 'aria-label': L('盒子', 'Boxes') }, S.boxes.map(function (b, j) {
+        var inside = S.items.filter(function (id) { return S.placed[id] && S.placed[id].box === b; });
+        var showFeat = S.fdone[b];
+        var isMass = pack.lang === 'en' && b === 'mass';
+        return h('button', { type: 'button', class: 'box' + (S.sel ? ' hot' : ''), disabled: !S.sel, onclick: function () { place(S.sel, b); } }, [
+          h('span', { class: 'bt', lang: pack.lang, text: boxT(b) }), h('span', { class: 'bn', text: String(j + 1) + (b === pack.generic ? L(' · 通用', ' · general') : '') }),
+          showFeat ? h('span', { class: 'feat', text: feat(box(b).feature) }) : null,
+          h('span', { class: 'in', lang: pack.lang }, inside.map(function (id) { var it = pack.items[id]; return isMass ? h('span', { class: 'heap', title: it.w, text: it.pic + it.pic + it.pic + ' ' }) : it.pic + ' '; }))]);
+      })));
+      if (S.sel && !S.placed[S.sel]) {
+        var rid = 'sort:' + S.sel, it = pack.items[S.sel];
+        stage.append(h('div', { class: 'tools' }, [
+          h('button', { class: 'kb-btn', type: 'button', onclick: function () { S.hint[S.sel] = 1; B.hint(rid, 1); render(); feedback(T(pack.hintAsk || { zh: '问自己：它是平的、细长的、一对一对的，还是一本一本的？能不能一个一个数？', en: 'Ask yourself: is it flat, long, in pairs, bound like a book? Can it be counted one by one?' }, 'zh')); } }, L('提示 1：问自己', 'Hint 1: ask yourself')),
+          h('button', { class: 'kb-btn', type: 'button', onclick: function () {
+            B.hint(rid, 2);
+            var like = S.items.filter(function (id) { return id !== S.sel && S.placed[id] && !S.placed[id].gen && it.ok.indexOf(S.placed[id].box) >= 0; })[0];
+            S.like = like || null; render(); feedback(like ? L('看高亮的“', 'Look at the highlighted “') + pack.items[like].w + L('”：它和这个放在同一个盒子。', '”: it goes in the same box as this one.') : L('桌上还没有和它同盒的东西被放好。', 'Nothing from its box has been placed yet.')); } }, L('提示 2：找个同类', 'Hint 2: a similar thing')),
+          h('button', { class: 'kb-btn', type: 'button', onclick: function () { B.reveal(rid); var b = it.ok.filter(function (x) { return S.boxes.indexOf(x) >= 0; })[0]; S.placed[S.sel] = { box: b }; chip(rid, it.w); S.sel = null; render(); feedback(L('答案：', 'Answer: ') + boxT(b) + L('。记为“看过答案”。', '. Recorded as “answer shown”.'), 'warn'); maybeFeatureStep(); } }, L('看答案', 'Show the answer'))]));
+      }
+      if (S.fstep) {
+        stage.append(h('p', { class: 'kb-prompt', text: L('给每个盒子选一个共同点（从固定的选项里选）：', 'Choose what each box has in common (from the fixed list):') }));
+        S.boxes.filter(function (b) { return b !== pack.generic && box(b).feature; }).forEach(function (b) {
+          stage.append(h('div', { class: 'chipbtns', role: 'group', 'aria-label': boxT(b) }, [h('b', { lang: pack.lang, text: boxT(b) + '：' })].concat(pack.features.filter(function (f) { return f.id !== 'general'; }).map(function (f) {
+            var picked = S.fsel[b] === f.id;
+            return h('button', { type: 'button', class: 'pb' + (S.fdone[b] && f.id === box(b).feature ? ' right' : picked && !S.fdone[b] ? ' wrongpick' : ''), disabled: !!S.fdone[b], onclick: function () { chooseFeature(b, f.id); } }, T(f, 'zh'));
+          }))));
+        });
+        var allF = S.boxes.every(function (b) { return b === pack.generic || !box(b).feature || S.fdone[b]; });
+        if (allF) stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', type: 'button', onclick: function () { st.setIdx++; newRound(); } }, L('下一组 →', 'Next set →'))]));
+      } else if (child() && S.items.every(function (id) { return S.placed[id]; })) {
+        stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', type: 'button', onclick: function () { st.setIdx++; newRound(); } }, L('再来一组 →', 'Another set →'))]));
+      }
+    }
+    function renderNew() {
+      var S = st.S, it = S.queue[S.idx], c = S.cur;
+      if (!it) { stage.append(h('div', { class: 'done', text: '✔' }), h('p', { class: 'kb-prompt', text: L('这一轮做完了。', 'Round finished.') }), h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', type: 'button', onclick: newRound }, L('再来一轮', 'Another round'))])); return; }
+      stage.append(h('p', { class: 'kb-prompt', text: L('一样没见过的东西：先选盒子，再判断它是按规律、规律之外、两个都行，还是根本不用量词。', 'Something new: choose its box, then decide whether it follows the rule, is outside it, allows both, or needs no classifier at all.') }));
+      var gi = it.q.indexOf('＿'), fill = c.boxDone ? (c.box === 'none' ? '' : boxT(c.box)) : '＿';
+      stage.append(h('div', { class: 'chipbtns' }, [h('span', { class: 'big', 'aria-hidden': 'true', text: it.pic }),
+        h('div', {}, [gi >= 0 ? h('p', { class: 'q', lang: pack.lang }, [it.q.slice(0, gi), h('span', { class: 'gap', text: fill || '∅' }), it.q.slice(gi + 1)]) : h('p', { class: 'q', lang: pack.lang, text: it.w }),
+          gloss(it) ? h('p', { class: 'kb-note', text: gloss(it) }) : null])]));
+      var opts = pack.newBoxes.concat(pack.lang === 'en' ? [] : ['none']);
+      stage.append(h('div', { class: 'chipbtns', role: 'group', 'aria-label': L('盒子', 'Boxes') }, opts.map(function (b) {
+        var tried = c.tried.indexOf(b) >= 0, right = b === 'none' ? !it.ok.length : it.ok.indexOf(b) >= 0;
+        return h('button', { type: 'button', lang: b === 'none' ? null : pack.lang, class: 'pb' + (c.boxDone && c.box === b ? (right ? ' right' : ' gen') : tried && !right ? ' wrongpick' : ''), disabled: c.boxDone, onclick: function () { newBox(b); } }, boxT(b));
+      })));
+      if (!c.boxDone) stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', type: 'button', onclick: function () { var rid = 'new:' + it.id; B.reveal(rid); c.boxDone = true; c.box = it.ok[0] || 'none'; chip(rid, it.w); render(); feedback(L('答案：', 'Answer: ') + (it.ok.length ? usualText(it.ok) : L('不用量词', 'no classifier')) + L('。记为“看过答案”。', '. Recorded as “answer shown”.'), 'warn'); } }, L('看答案', 'Show the answer'))]));
+      if (c.boxDone) {
+        stage.append(h('div', { class: 'opts' }, CATS.map(function (k, j) {
+          return h('button', { type: 'button', class: c.cat ? (k.id === it.cat ? 'right' : c.cat === k.id ? 'wrongpick' : '') : '', disabled: !!c.cat, onclick: function () { newCat(k.id); } }, (j + 1) + '. ' + L(k.zh, k.en));
+        })));
+      }
+      if (c.cat && it.read) {
+        stage.append(h('p', { class: 'kb-prompt', lang: pack.lang, text: L('数字和助数词合起来怎么读？', 'How are the number and counter read together?') }));
+        stage.append(h('div', { class: 'chipbtns' }, it.read.opts.map(function (r) {
+          var done = c.read === it.read.ok;
+          return h('button', { type: 'button', lang: pack.lang, class: 'pb' + (done && r === it.read.ok ? ' right' : c.readTried.indexOf(r) >= 0 && r !== it.read.ok ? ' wrongpick' : ''), disabled: done, onclick: function () { newRead(r); } }, r);
+        })));
+      }
+      if (c.cat && it.det) {
+        var gi2 = it.det.q.indexOf('＿');
+        stage.append(h('p', { class: 'q', lang: pack.lang }, [it.det.q.slice(0, gi2), h('span', { class: 'gap', text: c.det === it.det.ok ? c.det : '＿' }), it.det.q.slice(gi2 + 1)]));
+        stage.append(h('div', { class: 'chipbtns' }, it.det.opts.map(function (d) {
+          var done = c.det === it.det.ok;
+          return h('button', { type: 'button', lang: pack.lang, class: 'pb' + (done && d === it.det.ok ? ' right' : c.detTried.indexOf(d) >= 0 && d !== it.det.ok ? ' wrongpick' : ''), disabled: done, onclick: function () { newDet(d); } }, d);
+        })));
+      }
+    }
+    function renderOrder() {
+      var S = st.S, task = S.task, c = S.cur;
+      stage.append(h('p', { class: 'kb-prompt', text: T(task.title, 'zh') + ' ' + L('每样东西写一行：点数字、量词（或单位）、名词，再点“加到单子”。', 'One line per thing: pick the number, classifier (or unit) and noun, then “Add to list”.') }));
+      var done = S.lines.map(function (l) { return l.noun + ':' + pack.numbers[l.num].v; });
+      stage.append(h('div', { class: 'needs' }, task.needs.map(function (n) {
+        var it = pack.items[n.item], pics = new Array(n.n + 1).join(it.pic);
+        return h('div', { class: 'need' + (done.indexOf(n.item + ':' + n.n) >= 0 ? ' done' : '') }, [h('div', { class: 'pics', 'aria-hidden': 'true', text: pics }), h('div', { class: 'kb-note', text: '× ' + n.n + (gloss(it) ? ' · ' + gloss(it) : '') })]);
+      })));
+      var nouns = task.needs.map(function (n) { return n.item; });
+      function col(label, arr, key, text, lang) {
+        return h('div', { class: 'col' }, [h('span', { class: 'lab', text: label })].concat(arr.map(function (v) {
+          return h('button', { type: 'button', class: 'pb', lang: lang, 'aria-pressed': c[key] === v ? 'true' : 'false', onclick: function () { c[key] = v; B.emit('select', { item: 'order:' + task.id, column: key, value: v }); render(); } }, text(v));
+        })));
+      }
+      stage.append(h('div', { class: 'cols' }, [
+        col(L('数', 'Number'), pack.numbers.map(function (x, i) { return i; }), 'num', function (i) { return pack.numbers[i].t; }, pack.lang),
+        col(pack.lang === 'en' ? L('单位', 'Unit') : L('量词', 'Classifier'), pack.orderCl, 'cl', function (b) { return b === 'none' ? L('（直接数）', '(count directly)') : boxT(b); }, pack.lang),
+        col(L('名词', 'Noun'), nouns, 'noun', function (id) { return pack.items[id].pic + ' ' + pack.items[id].w; }, pack.lang)]));
+      var ready = c.num !== null && c.cl && c.noun;
+      stage.append(h('div', { class: 'tools' }, [h('span', { class: 'kb-note', lang: pack.lang, text: ready ? lineText(c) : '…' }),
+        h('button', { class: 'kb-btn', type: 'button', disabled: !ready || (S.result && S.result.ok), onclick: addLine }, L('加到单子', 'Add to list'))]));
+      stage.append(h('div', { class: 'list', 'aria-label': L('单子', 'List') }, S.lines.length ? S.lines.map(function (l, i) {
+        var j = S.result ? S.result.js[i] : null;
+        return h('div', { class: 'row' + (j && j.bad ? ' bad' : j && j.gen ? ' gen' : '') }, [h('span', { class: 't', lang: pack.lang, text: lineText(l) }),
+          j && j.gen ? h('span', { class: 'kb-note', text: j.why }) : null,
+          S.result && S.result.ok ? null : h('button', { type: 'button', class: 'x', 'aria-label': L('删掉这一行', 'Remove this line'), onclick: function () { S.lines.splice(i, 1); S.result = null; B.emit('disconnect', { item: 'order:' + task.id, line: i }); render(); } }, '×')]);
+      }) : [h('span', { class: 'kb-note', text: L('单子还是空的。', 'The list is empty.') })]));
+      stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', type: 'button', disabled: !S.lines.length || (S.result && S.result.ok), onclick: checkOrder }, L('检查', 'Check')),
+        S.result && S.result.ok ? h('button', { class: 'kb-btn', type: 'button', onclick: function () { st.setIdx++; newRound(); } }, L('换一张单子', 'Another list')) : null]));
+      if (S.result) stage.append(h('div', { class: 'kb-feedback' + (S.result.ok ? '' : ' bad') }, [S.result.ok ? L('通过。照着单子大声说一遍。', 'Passed. Now read the list aloud.') : L('还没通过：', 'Not yet:'),
+        h('ul', { class: 'checklist' }, S.result.lines.map(function (r) { return h('li', { class: r.ok ? '' : 'no', text: (r.ok ? '✓ ' : '✗ ') + r.t }); }))]));
+      stage.append(h('p', { class: 'kb-note', text: L('页面只用固定的数、量词和名词列表拼句并核对，不判断口头说得对不对。', 'The page builds and checks lines only from the fixed number, classifier and noun lists; it does not judge what you say aloud.') }));
+    }
+    function renderStage() {
+      stage.innerHTML = '';
+      if (st.mode === 'sort') renderSort(); else if (st.mode === 'new') renderNew(); else { renderOrder(); return; }
+      stage.append(h('div', { class: 'kb-feedback', hidden: true }));
+      if (st.mode === 'new' && st.S.cur) {
+        var it = st.S.queue[st.S.idx], fin = newDone(it, st.S.cur);
+        stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn' + (fin ? ' primary' : ''), type: 'button', onclick: function () { st.S.idx++; beginNew(); } }, fin ? L('下一个 →', 'Next →') : L('跳过', 'Skip'))]));
+      }
+    }
+    function renderSide() {
+      side.innerHTML = '';
+      var chips = Object.keys(st.record).map(function (k) { var r = st.record[k]; return h('span', { class: 'chip ' + r.cls, lang: pack.lang, text: r.text }); });
+      side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('这一组的记录', 'This set') }),
+        chips.length ? h('div', { class: 'chips' }, chips) : h('p', { class: 'kb-note', text: L('还没有作答。', 'No answers yet.') }),
+        h('p', { class: 'kb-note', text: L('绿 = 第一次就放对；黄 = 用过提示、看过答案，或放进了通用盒子（能懂但不地道）；红 = 第一次放错。', 'Green = right the first time; yellow = after a hint or the answer, or put in the general box (understood but not usual); red = wrong the first time.') })]));
+      if (pack.generic) side.append(h('div', { class: 'kb-card' }, [h('b', { lang: null, text: L('这一轮用了几次“', 'How often “') + boxT(pack.generic) + L('”', '” was used') }),
+        h('p', { class: 'meter', text: st.generic.used + ' / ' + st.generic.total }),
+        h('p', { class: 'kb-note', text: L('用“' + boxT(pack.generic) + '”大多能懂，不算错；只是有更常用的量词时会标黄。单子里超过六成都用它，算在回避。', 'Using “' + boxT(pack.generic) + '” is mostly understood and not wrong; it is only marked yellow when a more usual classifier exists. Over 60% of a list counts as avoiding.') })]));
+      side.append(h('div', { class: 'kb-card reverse' }, [h('b', { text: L('不全按形状', 'Not all about shape') }), h('p', { class: 'kb-note', text: T(pack, 'reverse') || L('有的量词按事件或习惯，不按形状；有时两个都对，语气不同；有时根本不用量词。', 'Some classifiers follow events or habit rather than shape; sometimes two are right with a different tone; sometimes none is used at all.') })]));
+    }
+    function render() { renderBar(); renderStage(); renderSide(); }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT' || e.metaKey || e.ctrlKey || e.altKey) return;
+      var n = parseInt(e.key, 10); if (!(n >= 1 && n <= 9)) return;
+      var S = st.S; if (!S) return;
+      if (st.mode === 'sort' && S.sel && !S.placed[S.sel] && S.boxes[n - 1]) place(S.sel, S.boxes[n - 1]);
+      else if (st.mode === 'new' && S.cur && S.cur.boxDone && !S.cur.cat && CATS[n - 1]) newCat(CATS[n - 1].id);
+    });
+    newRound();
+  }
+})();
+</script>
+</body>
+</html>

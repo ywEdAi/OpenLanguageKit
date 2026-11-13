@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Role marking</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .rm-layout { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .rm-layout { grid-template-columns: 1fr; } }
+  .rm-side { display: grid; gap: 12px; }
+  .rm-stage { display: grid; gap: 12px; }
+  .rm-top { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 14px; align-items: start; }
+  @media (max-width: 700px) { .rm-top { grid-template-columns: 1fr; } }
+  .rm-scene { border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); padding: 4px; }
+  .rm-scene svg { width: 100%; height: auto; display: block; }
+  .sv-t { fill: var(--ink); font-family: var(--font); }
+  .sv-m { fill: var(--muted); font-family: var(--font); }
+  .sv-num { fill: var(--accent); font-weight: 700; font-family: var(--font); }
+  .sv-frame { fill: var(--panel); stroke: var(--line); stroke-width: 2; }
+  .sv-band { fill: var(--accent-soft); }
+  .sv-ghost { fill: none; stroke: var(--bad); stroke-width: 2; stroke-dasharray: 5 4; }
+  .rm-sent { font-size: 1.35rem; line-height: 2.2; margin: 0; }
+  [data-variant="child"] .rm-sent { font-size: 1.6rem; }
+  .tok { white-space: nowrap; }
+  .tok sup { color: var(--accent); font-weight: 700; font-size: .7rem; margin-right: 1px; }
+  .slot { display: inline-block; min-width: 2.2em; text-align: center; border: 2px dashed var(--accent); border-radius: 8px; padding: 0 4px; margin: 0 2px; line-height: 1.5; background: var(--panel); color: var(--accent); }
+  .slot.ok { border-style: solid; background: var(--accent-soft); color: var(--ink); }
+  .slot.no { border-color: var(--bad); background: var(--bad-soft); color: var(--ink); }
+  .slot.none { color: var(--muted); }
+  .fixed { color: var(--ink); }
+  .rm-gloss { color: var(--muted); margin: 0; }
+  .rm-read { color: var(--muted); font-size: .9rem; margin: 0; }
+  .rows { display: grid; gap: 8px; }
+  .row { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; background: var(--panel); display: grid; gap: 6px; }
+  .row.focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--focus); }
+  .row.good { border-color: var(--accent); background: var(--accent-soft); }
+  .row.badrow { border-color: var(--bad); }
+  .row-h { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+  .row-h .n { color: var(--accent); font-weight: 700; }
+  .row-h .w { font-size: 1.15rem; }
+  .row-h .r { color: var(--muted); font-size: .85rem; }
+  .chipbtns { display: flex; flex-wrap: wrap; gap: 6px; }
+  .rb { border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 4px 11px; font-size: .9rem; display: inline-flex; gap: 4px; align-items: center; }
+  .rb .dot { width: .7em; height: .7em; border-radius: 50%; background: var(--rc, var(--muted)); display: inline-block; }
+  .rb[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .rb.right { background: var(--accent-soft); border-color: var(--accent); color: var(--ink); }
+  .rb.wrongpick { background: var(--bad-soft); border-color: var(--bad); color: var(--ink); }
+  .rb:disabled { cursor: default; }
+  .mk { border: 1px solid var(--line); background: var(--panel); border-radius: 10px; min-width: 3em; padding: 6px 10px; font-size: 1.15rem; }
+  [data-variant="child"] .mk { min-width: 4em; padding: 10px 14px; font-size: 1.4rem; }
+  .mk small { display: block; font-size: .65rem; color: var(--muted); }
+  .mk.right { background: var(--accent-soft); border-color: var(--accent); }
+  .mk.wrongpick { background: var(--bad-soft); border-color: var(--bad); }
+  .mk[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .mk[aria-pressed="true"] small { color: var(--accent-ink); }
+  .rtag { display: inline-flex; gap: 4px; align-items: center; font-size: .8rem; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--rc, var(--line)); }
+  .rtag .dot { width: .6em; height: .6em; border-radius: 50%; background: var(--rc, var(--muted)); display: inline-block; }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; }
+  .frame-card { border-left: 4px solid var(--warn); }
+  .frame-card .ft { font-size: 1.1rem; margin: 0 0 4px; }
+  .why .opt { text-align: left; }
+  .whyopts { display: grid; gap: 6px; }
+  .whyopts button { text-align: left; border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 8px 12px; }
+  .whyopts button.right { background: var(--accent-soft); border-color: var(--accent); }
+  .whyopts button.wrongpick { background: var(--bad-soft); border-color: var(--bad); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font-size: .8rem; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); }
+  .chip.ind { background: var(--accent-soft); border-color: var(--accent); }
+  .chip.ast { background: var(--warn-soft); border-color: var(--warn); }
+  .chip.bad { background: var(--bad-soft); border-color: var(--bad); }
+  .tbl { width: 100%; border-collapse: collapse; font-size: .85rem; }
+  .tbl td { border-top: 1px solid var(--line); padding: 4px 2px; vertical-align: top; }
+  .reverse { border-left: 4px solid var(--warn); }
+  .preview { font-size: 1.3rem; min-height: 1.6em; margin: 0; }
+  .checklist { margin: 6px 0 0; padding-left: 20px; }
+  .checklist li.ok { color: var(--ink); }
+  .checklist li.no { color: var(--bad); }
+  .inc { border: 1px dashed var(--line); background: transparent; border-radius: 8px; padding: 2px 10px; }
+  .inc[aria-pressed="true"] { border-style: solid; background: var(--accent-soft); border-color: var(--accent); }
+  .r-agent { --rc: var(--t1); } .r-figure { --rc: var(--t0); } .r-object { --rc: var(--t4); } .r-recipient { --rc: var(--t3); }
+  .r-beneficiary { --rc: var(--t3); } .r-place { --rc: var(--t2); } .r-exist { --rc: var(--t2); } .r-goal { --rc: var(--accent); }
+  .r-direction { --rc: var(--accent); } .r-source { --rc: var(--warn); } .r-path { --rc: var(--accent); } .r-instrument { --rc: var(--t0); }
+  .r-companion { --rc: var(--t1); } .r-target { --rc: var(--t4); } .r-ref { --rc: var(--t3); }
+  .done { font-size: 2.4rem; }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function () {
+  'use strict';
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t, EN = KTBlock.lang === 'en';
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'role-marking-en';
+  var app = document.getElementById('app');
+  var entry = (window.KT_REGISTRY && KT_REGISTRY.packs && KT_REGISTRY.packs[setId]) || {};
+  if (entry.block && entry.block !== 'role-marking') { app.textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  var file = entry.file || 'data/role-marking.js';   // fallback while the registry does not list the pack yet
+  var s = document.createElement('script');
+  s.src = file;
+  s.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else app.textContent = L('数据包里没有 ' + setId, 'The data pack file does not contain ' + setId); };
+  s.onerror = function () { app.textContent = L('数据包加载失败：', 'Could not load the data pack: ') + file; };
+  document.head.appendChild(s);
+
+  /* Semantic roles shared by all packs. Labels are interface text; the pack decides which markers fit. */
+  var ROLE = {
+    agent: ['做事的人', 'Doer', '🙋'], figure: ['在某处的人或物', 'Who or what is somewhere', '📌'], object: ['动作对象', 'Thing acted on', '🎯'],
+    recipient: ['接受的人', 'Receiver', '🤲'], beneficiary: ['受益的人（为谁做）', 'Beneficiary (done for whom)', '🎁'],
+    place: ['动作发生处', 'Where the action happens', '🏟'], exist: ['存在处（待在哪儿）', 'Where someone or something is', '🏠'],
+    goal: ['到达点 / 终点', 'Arrival point / end point', '🏁'], direction: ['方向（朝哪儿去）', 'Direction (heading for)', '🧭'],
+    source: ['起点', 'Starting point', '🚩'], path: ['经过的路线', 'Route taken', '🛤'], instrument: ['工具或手段', 'Tool or means', '🔧'],
+    companion: ['同伴（和谁一起）', 'Companion (together with)', '👫'], target: ['感受、态度或能力的对象', 'What a feeling, attitude or ability is about', '💭'],
+    ref: ['距离的参照点', 'Reference point for distance', '📏']
+  };
+  var CHILD = { place: ['在哪儿做', 'Where it happens', '🏠'], exist: ['在哪儿', 'Where it is', '🏠'], goal: ['去哪儿', 'Where to', '👣'], direction: ['往哪儿', 'Which way', '👣'], companion: ['和谁', 'With whom', '👫'], agent: ['谁', 'Who', '🙋'], figure: ['谁 / 什么', 'Who / what', '📌'], object: ['什么', 'What', '🎯'] };
+  var WHY = [
+    { id: 'role', zh: '角色决定：这个角色就用这个标记', en: 'The role decides: this role takes this marker' },
+    { id: 'verb', zh: '动词或这个词本身固定要求', en: 'Fixed by the verb or by the word itself' },
+    { id: 'split', zh: '母语里的同一个词，在这里要分开选', en: 'One word in your first language splits into different choices here' }
+  ];
+  var NUM = ['①', '②', '③', '④', '⑤', '⑥'];
+  function arr(v) { return v === undefined || v === null ? [] : [].concat(v); }
+  function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  function start(pack) {
+    var title = T(pack, 'title');
+    var B = KTBlock.init({ id: 'role-marking', primitive: 'prim:role-marking', title: title, set: pack.id });
+    document.title = title + ' · Role marking';
+    var showGloss = KTBlock.lang !== pack.lang;
+    var SP = pack.space || '';
+    var modes = [{ id: 'roles', label: L('连角色', 'Link roles') }, { id: 'mark', label: L('选标记', 'Choose markers') }, { id: 'build', label: L('自己造句', 'Make your own') }];
+    var st = { mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : 'roles', queue: [], idx: 0, S: null, record: {}, firstMarks: {}, build: null };
+    function child() { return B.variant === 'child'; }
+    function roleLabel(r) { var c = child() && CHILD[r] ? CHILD[r] : ROLE[r]; return c ? c[2] + ' ' + L(c[0], c[1]) : r; }
+    function roleShort(r) { var c = ROLE[r]; return c ? L(c[0], c[1]) : r; }
+    function markerNote(m) { var o = pack.markers[m]; return o ? T(o, 'note') : ''; }
+    function mlabel(m) { return m === '—' ? L('（不用）', '(none)') : m; }
+
+    var ui = KTBlock.chrome(B, { title: title, subtitle: T(pack, 'subtitle'), modes: modes, mode: st.mode,
+      onMode: function (m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m }); newRound(); },
+      onVariant: function () { newRound(); } });
+    var bar = h('div', { class: 'kb-bar' }), stage = h('div', { class: 'kb-card rm-stage' }), side = h('aside', { class: 'rm-side' });
+    app.append(ui.header, h('main', { class: 'kb-main' }, [bar, h('div', { class: 'rm-layout' }, [stage, side])]), ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id });
+
+    /* ---------- scene diagram (labelled SVG, drawn from the roles) ---------- */
+    var POS = { agent: [150, 112], figure: [200, 112], object: [235, 112], companion: [92, 112], recipient: [305, 112], beneficiary: [305, 112],
+      target: [262, 112], instrument: [205, 168], goal: [362, 92], direction: [362, 92], source: [40, 92], ref: [40, 92], path: [200, 186] };
+    function scene(item, opt) {
+      opt = opt || {};
+      var roleOf = function (n) { return opt.over && opt.over.k === n.k ? opt.over.role : arr(n.role)[0]; };
+      var geoOf = function (n) { if (opt.over && opt.over.k === n.k && opt.over.geo) return opt.over.geo; return n.geo; };
+      var nouns = item.nouns.filter(function (n) { return !n.offstage; });
+      var out = [], P = {}, isTime = item.line === 'time';
+      var frame = null, ground = null;
+      nouns.forEach(function (n) { var r = roleOf(n); if (!isTime && (r === 'place' || r === 'exist')) { if (geoOf(n)) ground = ground || n; else frame = frame || n; } });
+      var used = {};
+      function put(n, xy) { var key = xy.join(','); while (used[key]) { xy = [xy[0], xy[1] + 36]; key = xy.join(','); } used[key] = 1; P[n.k] = xy; }
+      if (isTime) {
+        out.push('<line x1="30" y1="150" x2="370" y2="150" style="stroke:var(--muted);stroke-width:3"/>');
+        for (var x = 50; x <= 350; x += 50) out.push('<line x1="' + x + '" y1="144" x2="' + x + '" y2="156" style="stroke:var(--muted);stroke-width:2"/>');
+        nouns.forEach(function (n) { var r = roleOf(n); put(n, r === 'source' ? [80, 96] : r === 'goal' ? [320, 96] : [200, 60]); });
+      } else if (ground) {
+        var g = geoOf(ground), fig = nouns.filter(function (n) { return n !== ground && (roleOf(n) === 'figure' || roleOf(n) === 'agent'); })[0];
+        var G = { in: [[310, 150], [200, 140]], on: [[200, 150], [200, 80]], under: [[200, 88], [200, 166]], at: [[250, 120], [150, 120]], beside: [[250, 120], [150, 120]] }[g] || [[250, 120], [150, 120]];
+        P[ground.k] = G[0]; if (fig) P[fig.k] = G[1];
+        if (g === 'in') out.push('<path d="M140 92 L140 180 L260 180 L260 92" style="fill:none;stroke:var(--t2);stroke-width:4"/><line x1="262" y1="150" x2="284" y2="150" style="stroke:var(--t2);stroke-width:2;stroke-dasharray:3 3"/>');
+        if (g === 'on') out.push('<line x1="130" y1="120" x2="270" y2="120" style="stroke:var(--t2);stroke-width:4"/>');
+        if (g === 'under') out.push('<line x1="130" y1="128" x2="270" y2="128" style="stroke:var(--t2);stroke-width:4"/>');
+        if (g === 'at') out.push('<text x="200" y="128" text-anchor="middle" font-size="22">📍</text>');
+        nouns.forEach(function (n) { if (!P[n.k]) put(n, POS[roleOf(n)] || [330, 170]); });
+      } else {
+        nouns.forEach(function (n) { if (n !== frame) put(n, POS[roleOf(n)] || [200, 112]); });
+      }
+      if (frame) {
+        var fr = roleOf(frame);
+        out.unshift('<rect x="68" y="22" width="258" height="182" rx="16" class="sv-frame" style="' + (opt.showRoles ? 'stroke:var(--t2);' : '') + (fr === 'exist' ? 'stroke-dasharray:8 6;' : '') + '"/>' +
+          '<text x="80" y="48" font-size="22">' + esc(frame.pic) + '</text><text x="108" y="46" font-size="15" class="sv-t">' + esc(frame.w) + '</text>' +
+          '<text x="72" y="48" font-size="12" class="sv-num" text-anchor="end">' + NUM[item.nouns.indexOf(frame)] + '</text>');
+        if (opt.over && opt.over.k === frame.k) out.push('<rect x="64" y="18" width="266" height="190" rx="18" class="sv-ghost"/>');
+      }
+      var hasPath = nouns.some(function (n) { return roleOf(n) === 'path'; });
+      if (hasPath) out.unshift('<rect x="20" y="172" width="360" height="34" rx="8" class="sv-band"/>');
+      /* arrows only once the roles are known to the learner */
+      if (opt.showRoles) {
+        var from = nouns.filter(function (n) { return roleOf(n) === 'agent' || roleOf(n) === 'figure'; })[0];
+        nouns.forEach(function (n) {
+          var r = roleOf(n), a = from && P[from.k], b = P[n.k];
+          if (!a || !b || n === from || n === frame) return;
+          var col = { object: 'var(--t4)', recipient: 'var(--t3)', beneficiary: 'var(--t3)', goal: 'var(--accent)', direction: 'var(--accent)', source: 'var(--warn)', instrument: 'var(--t0)', companion: 'var(--t1)', target: 'var(--t4)', ref: 'var(--t3)', path: 'var(--accent)' }[r];
+          if (!col) return;
+          if (r === 'source') out.push(arrow(b, a, col, true));
+          else if (r === 'path') out.push(arrow([40, 189], [360, 189], col, true));
+          else if (r === 'direction') out.push(arrow(a, [a[0] + (b[0] - a[0]) * .7, a[1] + (b[1] - a[1]) * .7], col, true, true));
+          else if (r === 'companion' || r === 'instrument' || r === 'ref') out.push('<line x1="' + a[0] + '" y1="' + (a[1] + 40) + '" x2="' + b[0] + '" y2="' + (b[1] + 40) + '" style="stroke:' + col + ';stroke-width:3;stroke-dasharray:' + (r === 'companion' ? '0' : '3 4') + '"/>');
+          else out.push(arrow(a, b, col, r === 'goal' || r === 'beneficiary' || r === 'target'));
+        });
+      }
+      nouns.forEach(function (n) {
+        if (n === frame) return;
+        var p = P[n.k]; if (!p) return;
+        var big = n === ground ? 46 : 32;
+        out.push('<text x="' + p[0] + '" y="' + (p[1] + 8) + '" font-size="' + big + '" text-anchor="middle">' + esc(n.pic) + '</text>' +
+          '<text x="' + p[0] + '" y="' + (p[1] + (n === ground ? 46 : 36)) + '" font-size="13" text-anchor="middle" class="sv-t">' + esc(n.w) + '</text>' +
+          '<text x="' + (p[0] - big / 2 - 4) + '" y="' + (p[1] - big / 2 + 4) + '" font-size="12" class="sv-num" text-anchor="middle">' + NUM[item.nouns.indexOf(n)] + '</text>');
+        if (opt.over && opt.over.k === n.k) out.push('<circle cx="' + p[0] + '" cy="' + (p[1] + 6) + '" r="' + (big / 2 + 14) + '" class="sv-ghost"/>');
+      });
+      if (item.verbPic) out.push('<text x="372" y="200" font-size="20" text-anchor="middle">' + esc(item.verbPic) + '</text>');
+      var d = h('div', { class: 'rm-scene', role: 'img', 'aria-label': L('场景图：', 'Scene: ') + (T(item.gloss || {}, KTBlock.lang) || item.nouns.map(function (n) { return n.w; }).join(', ')) });
+      d.innerHTML = '<svg viewBox="0 0 400 214" xmlns="http://www.w3.org/2000/svg">' + out.join('') + '</svg>';   // built from authored pack data, text escaped
+      return d;
+    }
+    function arrow(a, b, col, dashed, open) {
+      var dx = b[0] - a[0], dy = b[1] - a[1], len = Math.sqrt(dx * dx + dy * dy) || 1, ux = dx / len, uy = dy / len;
+      var x1 = a[0] + ux * 26, y1 = a[1] + uy * 26 - 10, x2 = b[0] - ux * (open ? 0 : 28), y2 = b[1] - uy * (open ? 0 : 28) - 10;
+      var hx = x2 - ux * 10, hy = y2 - uy * 10, px = -uy * 6, py = ux * 6;
+      return '<line x1="' + x1.toFixed(1) + '" y1="' + y1.toFixed(1) + '" x2="' + x2.toFixed(1) + '" y2="' + y2.toFixed(1) + '" style="stroke:' + col + ';stroke-width:3;' + (dashed ? 'stroke-dasharray:7 5;' : '') + '"/>' +
+        '<polygon points="' + x2.toFixed(1) + ',' + y2.toFixed(1) + ' ' + (hx + px).toFixed(1) + ',' + (hy + py).toFixed(1) + ' ' + (hx - px).toFixed(1) + ',' + (hy - py).toFixed(1) + '" style="fill:' + (open ? 'none' : col) + ';stroke:' + col + ';stroke-width:2"/>';
+    }
+
+    /* ---------- sentence ---------- */
+    function isSlot(n) { return n.mark !== undefined; }
+    function pos(n) { return n.pos || pack.markerPos; }
+    function sentence(item, slotView) {
+      var byK = {}; item.nouns.forEach(function (n) { byK[n.k] = n; });
+      var parts = item.s.split(/\{(\w+)\}/);
+      return h('p', { class: 'rm-sent', lang: pack.lang }, parts.map(function (p, i) {
+        if (!(i % 2)) return p;
+        var n = byK[p], num = h('sup', { text: NUM[item.nouns.indexOf(n)] });
+        var word = h('span', {}, [num, n.w]);
+        var slot = isSlot(n) ? slotView(n) : null;
+        var kids = pos(n) === 'pre' ? [slot, slot && SP ? SP : null, word] : [word, slot];
+        if (n.fixed) kids.push(h('span', { class: 'fixed', text: n.fixed }));
+        return h('span', { class: 'tok' }, kids);
+      }));
+    }
+    function filled(item, pick) {
+      var byK = {}; item.nouns.forEach(function (n) { byK[n.k] = n; });
+      return item.s.split(/\{(\w+)\}/).map(function (p, i) {
+        if (!(i % 2)) return p;
+        var n = byK[p], m = isSlot(n) ? (pick ? pick(n) : arr(n.mark)[0]) : '';
+        if (m === '—') m = '';
+        var w = pos(n) === 'pre' ? (m ? m + SP : '') + n.w : n.w + m;
+        return w + (n.fixed || '');
+      }).join('');
+    }
+    function glossLine(item) { var g = showGloss && item.gloss ? item.gloss[KTBlock.lang] : ''; return g ? h('p', { class: 'rm-gloss', text: g }) : null; }
+    function readLine(n) { return n.r ? h('span', { class: 'r', text: n.r }) : null; }
+
+    /* ---------- rounds ---------- */
+    function pool() {
+      var items = pack.items.filter(function (it) { return !child() || it.child; });
+      if (!items.length) items = pack.items;
+      var kc = B.kc, mine = items.filter(function (it) { return kc && arr(it.kc).indexOf(kc) >= 0; });
+      var sh = KTBlock.shuffle(items);
+      if (mine.length >= 3) sh = KTBlock.shuffle(mine).concat(sh.filter(function (it) { return mine.indexOf(it) < 0; }));
+      var out = [], byId = {}; items.forEach(function (it) { byId[it.id] = it; });
+      sh.forEach(function (it) { if (out.indexOf(it) >= 0) return; out.push(it); if (it.pair && byId[it.pair] && out.indexOf(byId[it.pair]) < 0) out.push(byId[it.pair]); });
+      return out;
+    }
+    function newRound() {
+      if (st.mode === 'build') { st.queue = KTBlock.shuffle(pack.builds || []); st.idx = 0; beginBuild(); return; }
+      var n = child() ? 5 : 8;
+      st.queue = pool().slice(0, n); st.idx = 0; begin();
+    }
+    function begin() {
+      var it = st.queue[st.idx];
+      st.S = it ? { links: {}, rolesOk: {}, checked: false, marks: {}, ok: {}, tried: {}, over: null, showRoles: false, hintQ: false, frame: false, why: null, focus: null, solved: false } : null;
+      if (it) { if (st.mode === 'roles') { /* nothing linked yet */ } else it.nouns.forEach(function (n) { st.S.links[n.k] = arr(n.role)[0]; }); B.emit('view', { item: it.id, mode: st.mode }); }
+      else B.emit('complete', { mode: st.mode, items: st.queue.length });
+      render();
+    }
+    function next() { st.idx++; if (st.mode === 'build') beginBuild(); else begin(); }
+    function feedback(t, tone) { var f = stage.querySelector('.kb-feedback'); if (f) { f.textContent = t; f.className = 'kb-feedback ' + (tone || ''); f.hidden = !t; } }
+    function chip(id, text) { var s = B.status(id); st.record[id] = { text: text, cls: s === 'independent' ? 'ind' : s === 'assisted' ? 'ast' : s === 'wrong' ? 'bad' : 'ast' }; }
+    function slotNouns(it) { return it.nouns.filter(isSlot); }
+    function ring(it) {
+      var rs = []; it.nouns.forEach(function (n) { arr(n.role).slice(0, 1).forEach(function (r) { if (rs.indexOf(r) < 0) rs.push(r); }); });
+      arr(it.decoy).forEach(function (r) { if (rs.indexOf(r) < 0 && !(child() && !CHILD[r])) rs.push(r); });
+      var order = Object.keys(ROLE); return rs.sort(function (a, b) { return order.indexOf(a) - order.indexOf(b); });
+    }
+
+    /* ---------- step 1: link roles ---------- */
+    function linkRole(n, r) {
+      var S = st.S; if (S.rolesOk[n.k]) return;
+      if (S.links[n.k] === r) { delete S.links[n.k]; B.emit('disconnect', { item: st.queue[st.idx].id, noun: n.k }); }
+      else { if (S.links[n.k]) B.emit('disconnect', { item: st.queue[st.idx].id, noun: n.k, role: S.links[n.k] }); S.links[n.k] = r; B.emit('connect', { item: st.queue[st.idx].id, noun: n.k, role: r }); }
+      S.checked = false; render();
+    }
+    function checkRoles() {
+      var it = st.queue[st.idx], S = st.S, wrong = [];
+      it.nouns.forEach(function (n) {
+        if (S.rolesOk[n.k]) return;
+        var ok = arr(n.role).indexOf(S.links[n.k]) >= 0, id = 'role:' + it.id + ':' + n.k;
+        B.attempt(id, { correct: ok, response: { role: S.links[n.k] } });
+        if (ok) { S.rolesOk[n.k] = true; chip(id, n.w + ' → ' + roleShort(arr(n.role)[0])); } else wrong.push(n);
+      });
+      S.checked = true;
+      if (!wrong.length) { S.solved = true; S.showRoles = true; render(); feedback(L('角色都连对了。图上的箭头和框就是这些角色：动作从做事的人出发，移动的画轨迹线，待在原地的画范围框。', 'All roles are right. The arrows and frames on the picture show them: the action starts from the doer, movement is drawn as a path, staying somewhere as a frame.') + (it.roleNote ? ' ' + T(it, 'roleNote') : '')); return; }
+      render();
+      feedback(L('还有 ' + wrong.length + ' 个没连对：', wrong.length + ' still not right: ') + wrong.map(function (n) { return NUM[it.nouns.indexOf(n)] + ' ' + n.w; }).join(L('、', ', ')) + L('。看图再想一想：这个东西在这件事里做什么？改好再检查一次。', '. Look at the picture again: what does this thing do in the event? Change it and check again.'), 'bad');
+    }
+
+    /* ---------- step 2: choose markers ---------- */
+    function focusNoun(it) { var S = st.S; var f = slotNouns(it).filter(function (n) { return n.k === S.focus && !S.ok[n.k]; })[0]; return f || slotNouns(it).filter(function (n) { return !S.ok[n.k]; })[0]; }
+    function chooseMark(n, m) {
+      var it = st.queue[st.idx], S = st.S; if (S.ok[n.k]) return;
+      var ok = arr(n.mark).indexOf(m) >= 0, id = 'mark:' + it.id + ':' + n.k;
+      var rec = B.attempt(id, { correct: ok, response: { marker: m, role: arr(n.role)[0] } });
+      B.emit('select', { item: id, marker: m });
+      if (rec.attempts === 1) { var r = arr(n.role)[0]; (st.firstMarks[r] = st.firstMarks[r] || []).push({ m: m, ok: ok }); }
+      S.marks[n.k] = m; S.tried[n.k] = (S.tried[n.k] || []).concat(m); S.showRoles = true; S.focus = n.k;
+      if (ok) {
+        S.ok[n.k] = true; S.over = null; chip(id, pos(n) === 'pre' ? mlabel(m) + SP + n.w : n.w + ' ' + mlabel(m));
+        if (slotNouns(it).every(function (x) { return S.ok[x.k]; })) S.solved = !it.why || child();
+        render();
+        feedback(L('对。', 'Right. ') + (m === '—' ? L('这里不用标记。', 'No marker here.') : m + L('：', ': ') + markerNote(m)) + (n.note ? ' ' + T(n, 'note') : ''));
+        return;
+      }
+      var mk = pack.markers[m] || {};
+      S.over = mk.means ? { k: n.k, role: mk.means === 'none' ? arr(n.role)[0] : mk.means, geo: mk.geo } : null;
+      B.emit('compare', { item: id, chosen: m, means: mk.means || null });
+      if (it.frame && !S.frame) { S.frame = true; B.hint(id, 3); }
+      render();
+      var same = mk.means === arr(n.role)[0];
+      feedback(m === '—' ? L('这里需要一个标记：没有它，听的人不知道这个名词在做什么。', 'A marker is needed here: without it, the listener cannot tell what this noun does.')
+        : same ? L('角色没错，但“' + m + '”表示' + markerNote(m) + '。图上红色虚线是按你选的词画的，和实际的位置不一样。再选一次。', 'The role is right, but “' + m + '” means ' + markerNote(m) + '. The red dashed outline shows what your word says, and it does not match the picture. Choose again.')
+        : L('图上红色虚线是按你选的“' + m + '”画的：' + m + ' 表示' + markerNote(m) + '。可是图上 ' + n.w + ' 的角色是“' + roleShort(arr(n.role)[0]) + '”。再选一次。', 'The red dashed outline shows what your “' + m + '” says: ' + m + ' marks ' + markerNote(m) + '. But in the picture, “' + n.w + '” has the role “' + roleShort(arr(n.role)[0]) + '”. Choose again.') + (it.frame ? L(' 下面的格框卡说明了这个动词的要求。', ' The frame card below shows what this verb requires.') : ''), 'bad');
+    }
+    function answerWhy(w) {
+      var it = st.queue[st.idx], S = st.S; if (S.why) return;
+      var ok = w === it.why.ans, id = 'why:' + it.id;
+      B.attempt(id, { correct: ok, response: { why: w } });
+      S.why = w; S.solved = true; chip(id, L('为什么：', 'Why: ') + it.nouns.filter(function (x) { return x.k === it.why.k; })[0].w);
+      render();
+      feedback((ok ? L('对。', 'Right. ') : L('不是这一类。', 'Not this kind. ')) + T(it.why, 'note'), ok ? '' : 'bad');
+    }
+
+    /* ---------- step 3: build ---------- */
+    function beginBuild() {
+      var b = st.queue[st.idx];
+      st.build = b ? { inc: {}, role: {}, mk: {}, result: null, frame: false } : null;
+      if (b) B.emit('view', { item: 'build:' + b.id, mode: 'build' }); else B.emit('complete', { mode: 'build', items: st.queue.length });
+      render();
+    }
+    function allowed(b, role) { return arr((b.frame || {})[role] || pack.roleMarkers[role]); }
+    function buildSentence(b, U) {
+      var inc = b.nouns.filter(function (n) { return U.inc[n.k]; });
+      var order = b.order.slice();
+      inc.forEach(function (n) { var r = U.role[n.k]; if (r && order.indexOf(r) < 0) order.splice(order.indexOf('VERB'), 0, r); });
+      var parts = [];
+      order.forEach(function (r) {
+        if (r === 'VERB') { parts.push(b.verb); return; }
+        inc.filter(function (n) { return U.role[n.k] === r; }).forEach(function (n) {
+          var m = U.mk[n.k] || '＿'; if (m === '—') m = '';
+          parts.push(pack.markerPos === 'pre' ? (m ? m + SP : '') + n.w : n.w + m);
+        });
+      });
+      var t = parts.join(SP).replace(/\s+/g, ' ').trim();
+      if (SP) t = t.charAt(0).toUpperCase() + t.slice(1);
+      return t + (pack.stop || '.');
+    }
+    function checkBuild() {
+      var b = st.queue[st.idx], U = st.build, inc = b.nouns.filter(function (n) { return U.inc[n.k]; }), lines = [], ok = true;
+      function rule(pass, zh, en) { lines.push({ ok: pass, t: L(zh, en) }); if (!pass) ok = false; }
+      var roles = {}; inc.forEach(function (n) { if (U.role[n.k]) roles[U.role[n.k]] = 1; });
+      var missing = inc.filter(function (n) { return !U.role[n.k] || !U.mk[n.k]; });
+      rule(!missing.length && inc.length > 0, '每个选进句子的名词都定了角色和标记', 'Every noun you used has a role and a marker');
+      rule(Object.keys(roles).length >= 3, '至少三个不同的角色（现在 ' + Object.keys(roles).length + ' 个）', 'At least three different roles (now ' + Object.keys(roles).length + ')');
+      var off = inc.filter(function (n) { return U.role[n.k] && arr(n.roles).indexOf(U.role[n.k]) < 0; });
+      rule(!off.length, '角色和图上的实际关系相符' + (off.length ? '：' + off.map(function (n) { return n.w + (arr(n.roles).length ? '' : '（图上没有）'); }).join('、') + ' 不对' : ''), 'Roles match what the picture shows' + (off.length ? '. Not matching: ' + off.map(function (n) { return n.w + (arr(n.roles).length ? '' : ' (not in the picture)'); }).join(', ') : ''));
+      var bad = inc.filter(function (n) { return U.role[n.k] && U.mk[n.k] && allowed(b, U.role[n.k]).indexOf(U.mk[n.k]) < 0; });
+      rule(!bad.length, '每个标记都和你连的角色一致' + (bad.length ? '：' + bad.map(function (n) { return n.w + ' ' + mlabel(U.mk[n.k]); }).join('、') + ' 不一致' : ''), 'Each marker fits the role you gave it' + (bad.length ? '. Not fitting: ' + bad.map(function (n) { return n.w + ' + ' + mlabel(U.mk[n.k]); }).join(', ') : ''));
+      var overt = inc.map(function (n) { return U.mk[n.k]; }).filter(function (m) { return m && m !== '—'; }), cnt = {}, max = 0;
+      overt.forEach(function (m) { cnt[m] = (cnt[m] || 0) + 1; max = Math.max(max, cnt[m]); });
+      rule(overt.length >= 2 && max / overt.length <= 0.7, '不是一个标记用到底（至少两个标记，同一个不超过七成）', 'Not one marker for everything (at least two markers, no single one above 70%)');
+      U.result = { ok: ok, lines: lines, text: buildSentence(b, U) };
+      B.attempt('build:' + b.id, { correct: ok, response: { sentence: U.result.text, nouns: inc.map(function (n) { return { w: n.w, role: U.role[n.k], marker: U.mk[n.k] }; }), frameOpened: U.frame } });
+      chip('build:' + b.id, b.verb);
+      render();
+    }
+
+    /* ---------- render ---------- */
+    function renderBar() {
+      bar.innerHTML = '';
+      if (st.queue.length && st.idx < st.queue.length) bar.append(h('span', { class: 'kb-note', text: L('第 ' + (st.idx + 1) + ' / ' + st.queue.length + ' 题', 'Item ' + (st.idx + 1) + ' / ' + st.queue.length) }));
+      bar.append(h('button', { class: 'kb-btn', type: 'button', onclick: newRound }, L('换一轮', 'New round')));
+    }
+    function doneView() {
+      var ids = Object.keys(st.record), ind = ids.filter(function (k) { return st.record[k].cls === 'ind'; }).length;
+      stage.append(h('div', { class: 'done', text: '✔' }), h('p', { class: 'kb-prompt', text: st.queue.length ? L('这一轮做完了。独立做对的步骤：' + ind + '。', 'Round finished. Steps done right on your own: ' + ind + '.') : L('这个数据包没有这类题。', 'This pack has no items of this kind.') }),
+        h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', type: 'button', onclick: newRound }, L('再来一轮', 'Another round'))]));
+    }
+    function renderRoles(it) {
+      var S = st.S, rs = ring(it);
+      stage.append(h('p', { class: 'kb-prompt', text: child() ? L('看图。每个东西是“谁”“在哪儿”“去哪儿”还是“和谁”？', 'Look at the picture. Is each one “who”, “where”, “where to” or “with whom”?') : L('读句子，看图：每个编号的名词在这件事里是什么角色？空位先不管。', 'Read the sentence and look at the picture: what role does each numbered noun play in the event? Ignore the blanks for now.') }));
+      stage.append(h('div', { class: 'rm-top' }, [scene(it, { showRoles: S.showRoles }), h('div', {}, [sentence(it, function () { return h('span', { class: 'slot', text: '＿' }); }), glossLine(it)])]));
+      stage.append(h('div', { class: 'rows' }, it.nouns.map(function (n, i) {
+        var got = S.links[n.k], okd = S.rolesOk[n.k], wrongNow = S.checked && !okd && got;
+        return h('div', { class: 'row' + (okd ? ' good' : wrongNow ? ' badrow' : '') }, [
+          h('div', { class: 'row-h' }, [h('span', { class: 'n', text: NUM[i] }), h('span', { text: n.pic }), h('span', { class: 'w', lang: pack.lang, text: n.w }), readLine(n)]),
+          h('div', { class: 'chipbtns', role: 'group', 'aria-label': L('角色', 'Roles') + ' ' + n.w }, rs.map(function (r) {
+            return h('button', { type: 'button', class: 'rb r-' + r + (okd && got === r ? ' right' : ''), 'aria-pressed': got === r ? 'true' : 'false', disabled: okd || S.solved, onclick: function () { linkRole(n, r); } }, [h('span', { class: 'dot' }), roleLabel(r)]);
+          }))]);
+      })));
+      var all = it.nouns.every(function (n) { return S.links[n.k]; });
+      stage.append(h('div', { class: 'tools' }, [
+        h('button', { class: 'kb-btn primary', type: 'button', disabled: S.solved || !all, onclick: checkRoles }, L('检查角色', 'Check roles')),
+        h('button', { class: 'kb-btn', type: 'button', disabled: S.solved || S.hintQ, onclick: function () { S.hintQ = true; it.nouns.forEach(function (n) { if (!S.rolesOk[n.k]) B.hint('role:' + it.id + ':' + n.k, 1); }); render(); } }, L('提示：问自己一个问题', 'Hint: a question to ask')),
+        h('button', { class: 'kb-btn', type: 'button', disabled: S.solved, onclick: function () {
+          it.nouns.forEach(function (n) { if (!S.rolesOk[n.k]) { B.reveal('role:' + it.id + ':' + n.k); S.links[n.k] = arr(n.role)[0]; S.rolesOk[n.k] = true; chip('role:' + it.id + ':' + n.k, n.w); } });
+          S.solved = true; S.showRoles = true; render(); feedback(L('已显示答案，这几项记为“看过答案”。', 'Answer shown; these are recorded as “answer shown”.'), 'warn'); } }, L('看答案', 'Show the answer'))]));
+      if (S.hintQ && !S.solved) stage.append(h('p', { class: 'kb-note', text: L('问自己：这件事是在那儿发生的，还是人或东西到那儿去、待在那儿？谁做这个动作，动作落在谁身上？', 'Ask yourself: does the event happen there, or does someone or something go there or stay there? Who does the action, and what does it land on?') }));
+    }
+    function renderMark(it) {
+      var S = st.S, f = focusNoun(it);
+      stage.append(h('p', { class: 'kb-prompt', text: child() ? L('选一个小词放进空格。', 'Pick a little word for each gap.') : L('角色已经标好。给每个空位选' + (pack.markerName || '标记') + '。', 'The roles are given. Choose the ' + (pack.markerNameEn || 'marker') + ' for each gap.') }));
+      stage.append(h('div', { class: 'rm-top' }, [scene(it, { showRoles: S.showRoles, over: S.over }), h('div', {}, [
+        sentence(it, function (n) {
+          var m = S.marks[n.k];
+          return h('button', { type: 'button', class: 'slot' + (S.ok[n.k] ? ' ok' : m ? ' no' : '') + (m === '—' ? ' none' : ''), 'aria-label': L('空位 ', 'Gap ') + NUM[it.nouns.indexOf(n)], onclick: function () { S.focus = n.k; render(); } }, m ? (m === '—' ? '∅' : m) : '＿');
+        }),
+        glossLine(it),
+        S.solved && it.r ? h('p', { class: 'rm-read', text: it.r }) : null,
+        S.solved ? h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', type: 'button', onclick: function () { B.speak(filled(it), pack.speech); } }, L('▶ 听整句', '▶ Hear the sentence'))]) : null])]));
+      stage.append(h('div', { class: 'rows' }, slotNouns(it).map(function (n) {
+        var i = it.nouns.indexOf(n), opts = (n.opts || pack.markerOrder), okd = S.ok[n.k];
+        opts = pack.markerOrder.filter(function (m) { return opts.indexOf(m) >= 0; });
+        return h('div', { class: 'row' + (okd ? ' good' : '') + (f === n ? ' focus' : '') }, [
+          h('div', { class: 'row-h' }, [h('span', { class: 'n', text: NUM[i] }), h('span', { text: n.pic }), h('span', { class: 'w', lang: pack.lang, text: n.w }), readLine(n),
+            h('span', { class: 'rtag r-' + arr(n.role)[0] }, [h('span', { class: 'dot' }), roleLabel(arr(n.role)[0])])]),
+          h('div', { class: 'chipbtns', role: 'group', 'aria-label': L('标记', 'Markers') + ' ' + n.w }, opts.map(function (m, j) {
+            var tried = (S.tried[n.k] || []).indexOf(m) >= 0;
+            return h('button', { type: 'button', lang: pack.lang, class: 'mk' + (okd && arr(n.mark).indexOf(m) >= 0 ? ' right' : tried && !okd ? ' wrongpick' : ''), disabled: okd, onclick: function () { chooseMark(n, m); } }, [mlabel(m), h('small', { text: String(j + 1) })]);
+          }))]);
+      })));
+      if (S.frame && it.frame) stage.append(h('div', { class: 'kb-card frame-card' }, [h('b', { text: L('格框卡', 'Verb frame card') }), h('p', { class: 'ft', lang: pack.lang, text: it.frame.t }), h('p', { class: 'kb-note', text: T(it.frame, 'note') })]));
+      var allOk = slotNouns(it).every(function (x) { return S.ok[x.k]; });
+      if (allOk && it.why && !child()) {
+        var wn = it.nouns.filter(function (n) { return n.k === it.why.k; })[0];
+        stage.append(h('div', { class: 'kb-card why' }, [h('p', { class: 'kb-prompt', text: L('最后一问：' + NUM[it.nouns.indexOf(wn)] + ' 处的“' + (S.marks[wn.k] === '—' ? '不用标记' : S.marks[wn.k]) + '”是由什么决定的？', 'One more: what decides “' + (S.marks[wn.k] === '—' ? 'no marker' : S.marks[wn.k]) + '” at ' + NUM[it.nouns.indexOf(wn)] + '?') }),
+          h('div', { class: 'whyopts' }, WHY.map(function (w, j) {
+            return h('button', { type: 'button', class: S.why ? (w.id === it.why.ans ? 'right' : S.why === w.id ? 'wrongpick' : '') : '', disabled: !!S.why, onclick: function () { answerWhy(w.id); } }, (j + 1) + '. ' + L(w.zh, w.en));
+          }))]));
+      }
+      if (!allOk) {
+        var fid = f ? 'mark:' + it.id + ':' + f.k : null;
+        stage.append(h('div', { class: 'tools' }, [
+          h('button', { class: 'kb-btn', type: 'button', disabled: !f || S.hintQ, onclick: function () { S.hintQ = true; B.hint(fid, 1); render(); } }, L('提示 1：问一个问题', 'Hint 1: a question')),
+          h('button', { class: 'kb-btn', type: 'button', disabled: !f || S.showRoles, onclick: function () { S.showRoles = true; B.hint(fid, 2); render(); } }, L('提示 2：看图上的箭头', 'Hint 2: show the arrows')),
+          it.frame ? h('button', { class: 'kb-btn', type: 'button', disabled: !f || S.frame, onclick: function () { S.frame = true; B.hint(fid, 3); render(); } }, L('提示 3：格框卡', 'Hint 3: frame card')) : null,
+          h('button', { class: 'kb-btn', type: 'button', disabled: !f, onclick: function () { B.reveal(fid); S.marks[f.k] = arr(f.mark)[0]; S.ok[f.k] = true; S.over = null; chip(fid, f.w); if (slotNouns(it).every(function (x) { return S.ok[x.k]; })) S.solved = !it.why || child(); render(); feedback(L('答案：', 'Answer: ') + mlabel(arr(f.mark)[0]) + L('。记为“看过答案”。', '. Recorded as “answer shown”.'), 'warn'); } }, L('看这一处的答案', 'Show this answer'))]));
+        if (S.hintQ) stage.append(h('p', { class: 'kb-note', text: f && f.hint ? T(f, 'hint') : L('问自己：这个动作是在那儿发生的，还是人或东西到那儿去、待在那儿？', 'Ask yourself: does the action happen there, or does someone or something go there or stay there?') }));
+      }
+    }
+    function renderBuild(b) {
+      var U = st.build, rs = [];
+      b.nouns.forEach(function (n) { arr(n.roles).forEach(function (r) { if (rs.indexOf(r) < 0) rs.push(r); }); });
+      arr(b.decoy).forEach(function (r) { if (rs.indexOf(r) < 0) rs.push(r); });
+      var order = Object.keys(ROLE); rs.sort(function (x, y) { return order.indexOf(x) - order.indexOf(y); });
+      var markers = pack.buildMarkers || pack.markerOrder;
+      stage.append(h('p', { class: 'kb-prompt', text: L('新的一张图。用至少三个名词说一句话：选进名词，给它定角色，再选标记。页面按你的选择排出句子。', 'A new picture. Make one sentence with at least three nouns: pick the nouns, give each a role, then a marker. The page puts the sentence in order from your choices.') }));
+      var fake = { nouns: b.nouns.filter(function (n) { return arr(n.roles).length; }).map(function (n) { return { k: n.k, w: n.w, pic: n.pic, role: n.roles[0], geo: n.geo }; }), gloss: b.gloss, verbPic: b.verbPic };
+      var sc = scene(fake, { showRoles: !!(U.result && U.result.ok) });
+      stage.append(h('div', { class: 'rm-top' }, [sc, h('div', {}, [h('p', { class: 'kb-note', text: L('动词：', 'Verb: ') }), h('p', { class: 'rm-sent', lang: pack.lang, text: b.verb }), glossLine(b)])]));
+      stage.append(h('div', { class: 'rows' }, b.nouns.map(function (n) {
+        var on = !!U.inc[n.k];
+        return h('div', { class: 'row' }, [
+          h('div', { class: 'row-h' }, [h('button', { type: 'button', class: 'inc', 'aria-pressed': on ? 'true' : 'false', disabled: U.result && U.result.ok, onclick: function () { U.inc[n.k] = !on; U.result = null; B.emit(on ? 'disconnect' : 'drop', { item: 'build:' + b.id, noun: n.w }); render(); } }, on ? L('✓ 用', '✓ use') : L('＋ 用', '+ use')),
+            h('span', { text: n.pic }), h('span', { class: 'w', lang: pack.lang, text: n.w }), readLine(n)]),
+          on ? h('div', { class: 'chipbtns', role: 'group', 'aria-label': L('角色', 'Roles') }, rs.map(function (r) {
+            return h('button', { type: 'button', class: 'rb r-' + r, 'aria-pressed': U.role[n.k] === r ? 'true' : 'false', disabled: U.result && U.result.ok, onclick: function () { U.role[n.k] = r; U.result = null; B.emit('connect', { item: 'build:' + b.id, noun: n.w, role: r }); render(); } }, [h('span', { class: 'dot' }), roleLabel(r)]);
+          })) : null,
+          on ? h('div', { class: 'chipbtns', role: 'group', 'aria-label': L('标记', 'Markers') }, markers.map(function (m) {
+            return h('button', { type: 'button', lang: pack.lang, class: 'mk', 'aria-pressed': U.mk[n.k] === m ? 'true' : 'false', disabled: U.result && U.result.ok, onclick: function () { U.mk[n.k] = m; U.result = null; B.emit('select', { item: 'build:' + b.id, noun: n.w, marker: m }); render(); } }, mlabel(m));
+          })) : null]);
+      })));
+      stage.append(h('div', { class: 'kb-card' }, [h('b', { text: L('你的句子', 'Your sentence') }), h('p', { class: 'preview', lang: pack.lang, text: buildSentence(b, U) })]));
+      stage.append(h('div', { class: 'tools' }, [
+        h('button', { class: 'kb-btn primary', type: 'button', disabled: U.result && U.result.ok, onclick: checkBuild }, L('检查', 'Check')),
+        b.frameCard ? h('button', { class: 'kb-btn', type: 'button', disabled: U.frame, onclick: function () { U.frame = true; B.hint('build:' + b.id, 1); render(); } }, L('打开格框卡（会记下）', 'Open the frame card (recorded)')) : null,
+        U.result && U.result.ok ? h('button', { class: 'kb-btn', type: 'button', onclick: function () { B.speak(U.result.text, pack.speech); } }, L('▶ 听', '▶ Listen')) : null]));
+      if (U.frame && b.frameCard) stage.append(h('div', { class: 'kb-card frame-card' }, [h('p', { class: 'ft', lang: pack.lang, text: b.frameCard.t }), h('p', { class: 'kb-note', text: T(b.frameCard, 'note') })]));
+      if (U.result) stage.append(h('div', { class: 'kb-feedback' + (U.result.ok ? '' : ' bad') }, [U.result.ok ? L('通过。再大声说一遍这句话。', 'Passed. Now say the sentence aloud.') : L('还没通过：', 'Not yet:'),
+        h('ul', { class: 'checklist' }, U.result.lines.map(function (l) { return h('li', { class: l.ok ? 'ok' : 'no', text: (l.ok ? '✓ ' : '✗ ') + l.t }); }))]));
+      stage.append(h('p', { class: 'kb-note', text: L('页面只核对你选的角色和标记（按数据包里的角色—标记表），不评判你打出或说出的其他内容。', 'The page only checks the roles and markers you chose (against the role–marker table in the pack); it does not judge anything else you type or say.') }));
+    }
+    function renderStage() {
+      stage.innerHTML = '';
+      if (st.mode === 'build') {
+        var b = st.queue[st.idx];
+        if (!b) { doneView(); return; }
+        renderBuild(b);
+        stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn' + (st.build.result && st.build.result.ok ? ' primary' : ''), type: 'button', onclick: next }, st.build.result && st.build.result.ok ? L('下一张图 →', 'Next picture →') : L('跳过', 'Skip'))]));
+        return;
+      }
+      var it = st.queue[st.idx];
+      if (!it) { doneView(); return; }
+      if (st.mode === 'roles') renderRoles(it); else renderMark(it);
+      stage.append(h('div', { class: 'kb-feedback', hidden: true }));
+      stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn' + (st.S.solved ? ' primary' : ''), type: 'button', onclick: next }, st.S.solved ? L('下一题 →', 'Next →') : L('跳过', 'Skip'))]));
+    }
+    function renderSide() {
+      side.innerHTML = '';
+      var chips = Object.keys(st.record).map(function (k) { var r = st.record[k]; return h('span', { class: 'chip ' + r.cls, lang: pack.lang, text: r.text }); });
+      side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('这一组的记录', 'This set') }),
+        chips.length ? h('div', { class: 'chips' }, chips) : h('p', { class: 'kb-note', text: L('还没有作答。', 'No answers yet.') }),
+        h('p', { class: 'kb-note', text: L('绿 = 第一次就独立做对；黄 = 用过提示或看过答案；红 = 第一次做错。连角色和选标记分开记录。', 'Green = right on your own the first time; yellow = after a hint or the answer; red = wrong the first time. Roles and markers are recorded separately.') })]));
+      var rows = Object.keys(st.firstMarks);
+      if (rows.length) side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('每个角色你第一次选的标记', 'Your first marker for each role') }),
+        h('table', { class: 'tbl' }, rows.map(function (r) { return h('tr', {}, [h('td', {}, roleShort(r)), h('td', { lang: pack.lang }, st.firstMarks[r].map(function (x) { return h('span', { class: 'chip ' + (x.ok ? 'ind' : 'bad'), text: mlabel(x.m) }); }))]); }))]));
+      if (pack.reverse) side.append(h('div', { class: 'kb-card reverse' }, [h('b', { text: L('角色是起点，不是全部规则', 'The role is a start, not the whole rule') }), h('p', { class: 'kb-note', text: T(pack, 'reverse') })]));
+    }
+    function render() { renderBar(); renderStage(); renderSide(); }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.metaKey || e.ctrlKey || e.altKey) return;
+      var n = parseInt(e.key, 10); if (!(n >= 1 && n <= 9)) return;
+      var it = st.queue[st.idx]; if (!it || st.mode !== 'mark' || !st.S) return;
+      var allOk = slotNouns(it).every(function (x) { return st.S.ok[x.k]; });
+      if (allOk && it.why && !child() && !st.S.why && n <= 3) { answerWhy(WHY[n - 1].id); return; }
+      var f = focusNoun(it); if (!f) return;
+      var opts = pack.markerOrder.filter(function (m) { return (f.opts || pack.markerOrder).indexOf(m) >= 0; });
+      if (opts[n - 1]) chooseMark(f, opts[n - 1]);
+    });
+    newRound();
+  }
+})();
+</script>
+</body>
+</html>

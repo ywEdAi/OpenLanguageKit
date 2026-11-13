@@ -17,7 +17,7 @@
    "name": "最小对立辨音",
    "nameEn": "Minimal-contrast discrimination",
    "oneLine": "先听辨只差一个音的一对，再自己说出让对方能辨别的那个",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "母语里没有这对区别，两个音被听成同一个：中国学习者把 think 听成 sink、ship 和 sheep 不分、bad 和 bed 不分，把日语词中的か听写成が、きって听成きて、おばあさん听成おばさん；英语母语者把 bà 和 pà、xī 和 shī 归成一类，前后鼻音不分。听不出就说不出，说出来的词被对方误会成另一个词，学习者自己却察觉不到。",
    "object": "一组同一对立轴上的最小对立卡（6–10 对，每张卡是两个只差一个音的词，各配图或释义和多位说话人的录音）；学习者在第 3 步说的录音也挂在同一张卡上，与原声并排",
    "requires": "需要 media（每个词至少两位说话人的真人录音；只有 TTS 时须人工核对对立确实听得出）。第 3 步需要 mic，或一个 partner 当听者；两者都没有时只做第 1、2 步。学习者能把卡上的两个词对上意思或图片",
@@ -155,7 +155,26 @@
     "ja": "对立轴：清浊 か/が・た/だ・ぱ/ば（对中国学习者关键在声带振动而非送气）、促音 きて/きって、长音 おばさん/おばあさん・ここ/こうこう、拗音 びよういん/びょういん、ん 的一拍；材料来自 kt:ja-sound-kg、kt:ja-sound-td、kt:ja-sound-pb、kt:ja-sound-sokuon、kt:ja-sound-long、kt:ja-sound-yoon；陷阱：拍长对立要用同一语速录制，否则靠整体语速就能猜",
     "zh": "对立轴：送气 b/p・d/t・g/k、j q x 与 zh ch sh、ü/u（lǜ/lù）、前后鼻音 an/ang・in/ing、n/l；材料来自 kt:zh-pinyin-initials-finals；对象主要是英语、日语母语的成人；中文传承儿童一般不需要，声调对立交给 prim:contour-match"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "en-sound-contrast",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "声音只来自浏览器语音合成，一个说话人；第 3 步不录音，只能由真人同伴当听者。-s／-ed 词尾三分类没有做。"
+    },
+    {
+     "artifact": "ja-sound-contrast",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja",
+     "note": "只靠高低区分的词对、元音滑音、ら行没有出题（合成语音不可靠）。"
+    },
+    {
+     "artifact": "zh-sound-contrast",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh",
+     "note": "声调、儿化和轻声对立没有出题。"
+    }
+   ]
   },
   {
    "id": "prim:contour-match",
@@ -1002,7 +1021,7 @@
    "name": "注音逐步撤除",
    "nameEn": "Reading-aid fading",
    "oneLine": "同一段材料的注音（假名/拼音/音标）按掌握情况逐字撤掉，区分有注音和无注音的读对",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "有注音时读得很顺，去掉注音就读不出，而老师和学习者都分不清“读对了”是靠字还是靠注音：英语母语者长期依赖拼音、看到不带拼音的汉字无法认读；中文传承儿童只读带拼音的绘本；日语学习者离不开振假名；英语启蒙的孩子靠图和音标点读。一次性全撤太难，永远不撤又养成依赖。",
    "object": "一段短材料（3–8 句，或一页绘本），每个目标字词上方有一层注音（拼音、假名、英语启蒙的拼读点线或图），这层注音以字为单位有三种状态：显示／点一下才显示／撤除；同一段材料会在后续回合中带着变化了的注音状态再次出现",
    "requires": "学习者能读注音本身（拼音、假名、拼读点线已过 prim:sound-spelling-blend）；材料中大部分字词学习者见过；朗读检查需要 partner，可选；需要逐字可靠的注音数据，多音字需人工核对",
@@ -1145,7 +1164,32 @@
     "ja": "注音层是振假名；撤除单位是汉字词而不是单字，因为同一汉字在不同词中读法不同；材料来自 kt:ja-kanji-n5 至 n2、kt:ja-kanji-joyo；陷阱：中国学习者能看懂意思却读不出，第 1 步必须要求输入假名读音，不能只答意思题",
     "zh": "注音层是拼音（含调号），可分两级撤：先撤调号再撤字母，或反过来，由老师选定；材料来自 kt:zh-hanzi-l1 至 l4；主要使用者是英语母语成人和中文传承儿童；陷阱：传承儿童口语强，常凭句子猜读，要用单字抽查卡住"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "ja-reading-aid-fade",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja",
+     "note": "注音单位是汉字词；平假名上的罗马字注音（kt:ja-script-hiragana）和常用汉字全表（kt:ja-kanji-joyo）没有做。"
+    },
+    {
+     "artifact": "zh-reading-aid-fade",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh",
+     "note": "只能整体撤拼音，不能先撤调号、保留字母。"
+    },
+    {
+     "artifact": "en-reading-aid-fade",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "认读词没有点线，抽查用“听音选词”，需要浏览器语音或大人读；没有先撤点线、再撤图片的两级撤除。"
+    },
+    {
+     "artifact": "en-reading-aid-fade-ipa",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "抽查是从三个音标里选，不能自己写音标。"
+    }
+   ]
   },
   {
    "id": "prim:word-shape-split",
@@ -1883,7 +1927,7 @@
    "name": "计量方式：量词与可数性",
    "nameEn": "Classifier matching",
    "oneLine": "按事物的形状/类别选量词、助数词或可数/不可数的限定方式，先归纳规律再处理例外和读音变化",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "数东西时要在数词和名词之间放一个按事物类别选择的词，或者先判断名词能不能直接数，母语的分法不同：英语母语者说“三书”“这学生”，学了之后又什么都用“个”（一个衣服、一个水）；日语母语者按助数词把“一本笔”“一枚纸”搬进中文；中国学习者学日语时把“一瓶啤酒”说成一瓶，按汉语语序说三つのりんご，读错いっぽん／さんぼん／ろっぽん和ひとり／ふたり；中国学习者学英语时不区分可数和不可数，说 *two breads、*an advice、*informations、*How many money、*a little apples、*less people、*some apple，因为中文名词本身都不标可数性。",
    "object": "一张物品桌：十几样实物图（书、纸、笔、伞、衣服、鞋、鱼、水、米、面包、钱、建议、信息、电脑……）和一排“计量方式”盒子——中文是量词，日语是助数词，英语是“直接数（a/two/many/few）”“不能直接数（much/little/less）”和容器单位（a cup of、a piece of、a loaf of）；学习者把物品放进盒子，同一张桌子随后变成一张购物单或点单",
    "requires": "学习者已认识桌上大多数物品的名词和 1–10 的数词；日语读音变化题需要 media；不认识名词时先用 prim:scene-walkthrough 把词带出来",
@@ -2025,7 +2069,26 @@
     "ja": "对象：つ・人・枚・本・個・台・冊・杯・匹，以及 1、3、6、8、10 前后的音变（いっぽん・さんぼん・ろっぽん・はっぴき）和 ひとり・ふたり；语序 Nを数量V；材料来自 kt:ja-counters；陷阱：中国学习者把一瓶对应到瓶、把本当成书",
     "zh": "对象：个、本、张、杯、口、件、条、双、套、场、顿，动量词次、遍、趟另起一组；材料来自 kt:zh-measure-words-basic、kt:zh-lex-measure-extended；陷阱：英语母语者省略量词或全用个，日语母语者“一本笔”“一枚纸”；中文传承儿童口语多用个，书面要求更细"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "en-classifier-match",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "all / none / enough、most / both / either（kt:en-determiners-broad）和衣物词没有做；any 只出现在一题里。"
+    },
+    {
+     "artifact": "ja-classifier-match",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja",
+     "note": "读音只考 1–6 的常见音变，8 和 10 有两读未出题；和语数词 ひとつ…とお 的读音不单独考。"
+    },
+    {
+     "artifact": "zh-classifier-match",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh",
+     "note": "动量词只有“次、遍”各一题；只、把、台等量词没有进盒子。"
+    }
+   ]
   },
   {
    "id": "prim:context-guess",
@@ -2326,7 +2389,7 @@
    "name": "变形规则用于新词",
    "nameEn": "Paradigm application",
    "oneLine": "先归纳变形规则，再把规则用到没见过的词上，系统显示每一步规则推导",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "背得出课本上那几个词的变形，换一个新词就不会：把帰る当二类动词变成 *帰ます、*帰ない，把行く按规则变成 *行いて，音便类别混用（*読って、*泳いて）；英语里 *goed、*buyed，拼写规则漏掉（*makeing、*stoped、*studyed）；反过来也有把规则硬套到例外上，或者只会背表、看不出表背后的规则。",
    "object": "一张推导卡：左边是一个新词的原形，中间是一列规则步骤槽（判类 → 取词尾 → 变换 → 拼写或音便调整），右边是生成的形式；同一个词在后续回合继续变出其他形式，逐渐在这张卡上长成这个词自己的一行变形表",
    "requires": "学习者已学过这一组规则涉及的至少 6 个示例词及其形式（课本里的那几个）；能读出该词（不能读出时先退回 prim:sound-spelling-blend）；只做书面输入，不需要 mic",
@@ -2463,7 +2526,83 @@
     "ja": "规则组：动词三类判别 → ます形 → て形／た形音便（う・つ・る→って，む・ぶ・ぬ→んで，く→いて，ぐ→いで，す→して）→ ない形（う→わない）→ 可能、受身、使役形；形容词活用；材料来自 kt:ja-verb-groups、kt:ja-te-form、kt:ja-plain-paradigm、kt:ja-plain-adjectives、kt:ja-potential-form、kt:ja-causative-form；陷阱：由ます形还原辞书形时～iます无法确定类别，必须给辞书形",
     "zh": "中文形态变化少，只用于重叠：动词 AA／A一A／ABAB、形容词 AABB；材料来自 kt:zh-verb-reduplication；陷阱：状态和非自主动词不能重叠（*是是、*知道知道），放进反向那一半"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "ja-paradigm-apply-masu",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja"
+    },
+    {
+     "artifact": "ja-paradigm-apply-te",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja",
+     "note": "～てください 只在“放进句子”里练形式（填空），不涉及对上级是否得体。"
+    },
+    {
+     "artifact": "ja-paradigm-apply-ta",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja",
+     "note": "只练た形和ない形；なかった形没有单独成组。"
+    },
+    {
+     "artifact": "ja-paradigm-apply-nai",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja"
+    },
+    {
+     "artifact": "ja-paradigm-apply-adj",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja",
+     "note": "练的是普通体（高くない、高かった）；丁寧体只是在后面加です，页面不要求写出来。过去形在规则组 adjpast。"
+    },
+    {
+     "artifact": "en-paradigm-apply-plural",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en"
+    },
+    {
+     "artifact": "en-paradigm-apply-third",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en"
+    },
+    {
+     "artifact": "en-paradigm-apply-past",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "不规则动词放在例外架上，只算记住例外；没有按元音家族（sing–sang）分组。"
+    },
+    {
+     "artifact": "en-paradigm-apply-ing",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en"
+    },
+    {
+     "artifact": "en-paradigm-apply-comp",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en"
+    },
+    {
+     "artifact": "en-paradigm-apply-wug",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "孩子口头说，大人点孩子说的形式；记为搭档判断，不算孩子独立作答。"
+    },
+    {
+     "artifact": "zh-paradigm-apply-vredup",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh"
+    },
+    {
+     "artifact": "zh-paradigm-apply-aredup",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh"
+    },
+    {
+     "artifact": "zh-paradigm-apply-anota",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh"
+    }
+   ]
   },
   {
    "id": "prim:choose-by-intent",
@@ -2611,7 +2750,7 @@
    "name": "语序槽位",
    "nameEn": "Word-order slots",
    "oneLine": "把词块拖进有名字的句法槽位（时间、地点、方式、动词……），违反语序时指出是哪条槽位规则",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "词都认识，排成句子时按母语顺序走：中国学习者写 *I every day at home study English、*I eat always breakfast、*I like very much music、*You are a student?、*Where you went?；英语母语者学中文写 *我学习汉语每天、*我看书在家、把修饰语后置；中国学习者学日语把动词放在中间、说三つのりんご。学习者知道“好像不对”，但说不出是哪条位置规则被违反了。",
    "object": "一条有名字的句子轨道：轨道上的槽位（主语｜时间｜地点｜方式｜动词｜宾语｜疑问词｜助动词……）按该语言的常规语序排好；学习者手里是一句话切成的词块卡。同一条轨道在多句之间沿用，可以叠一条学习者母语的轨道作对照",
    "requires": "学习者认识句中所有词，能说出每个词块大致是什么意思；词块已切好（切分本身不是这里的任务）；不需要 media 或 mic",
@@ -2747,7 +2886,26 @@
     "ja": "规则：谓语句末、修饰语（含连体从句）在名词前、数量词在格助词后动词前（りんごを三つ買う）；格助词带着走时语序较自由；材料来自 kt:ja-counters、kt:ja-relative-clause、kt:ja-te-sequence；陷阱：日语语序灵活，第 2 步“换了位置也对”的比例应高于英语和中文",
     "zh": "规则：时间、处所在动词前且时间在先、由大到小；多层定语与多层状语次序；时段与动量在动词后；材料来自 kt:zh-time-word-order、kt:zh-complex-attributives、kt:zh-phrase-types；陷阱：英语母语者最常见的是时间地点后置，传承儿童只在书面长句中出错"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "en-slot-order",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "对照轨道是中文语序；用 kc= 只练某一个知识点的句子。"
+    },
+    {
+     "artifact": "ja-slot-order",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja",
+     "note": "带格助词的词块之间顺序自由（free 组），页面只卡谓语位置、数量词和修饰语的位置。"
+    },
+    {
+     "artifact": "zh-slot-order",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh",
+     "note": "对照轨道是英语语序。"
+    }
+   ]
   },
   {
    "id": "prim:role-marking",
@@ -2755,7 +2913,7 @@
    "name": "格与语义角色标记",
    "nameEn": "Role marking",
    "oneLine": "在一个场景图里把名词和它的角色（施事、对象、地点、工具、方向）连起来，再选对助词/介词",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "学习者按母语的介词或语序直接对译来标记名词的角色：学日语的中文母语者把“在”一律对成に或で（*図書館に勉強します、*東京で住んでいます），把“坐车、见人”标成を（*電車を乗ります、*友達を会います）；学中文的英语母语者把介词短语放到句末（*我看书在图书馆、*他很好对我、*我放书在桌子上）；学英语的中文母语者把“墙上”说成 *in the wall、“走进商店”说成 *walked in the shop。缺的不是背助词表，而是先判断“这个名词在这件事里扮演什么角色”，再把角色对到目标语的标记和位置上。",
    "object": "一张场景图加上描述它的一句话：动词固定，句中三到五个名词各留一个待标记的位置。连角色、选标记、自己造句都在这张图和这句话上进行",
    "requires": "认识场景里的名词和动词，能认出标记集合里每个助词／介词的形态（见 prim:form-for-meaning）；名词不认识时先走 prim:scene-walkthrough",
@@ -2892,7 +3050,26 @@
     "ja": "对立集合：が・を・に・で・へ・と・から・まで；重点对立 で（动作场所）／に（存在・居住・到达）、に／へ、で（手段）／を、と／に（会う、言う）；动词格框 乗る・会う→に、住む→に；方位名词要の（机の上に，*かばん中に）；中文母语陷阱是把助词当介词前置（*で駅待ちます）",
     "zh": "对立集合：在（动词前＝动作场所，动词后＝附着终点：住在、放在）、给／对／跟／为、到、把（处置对象）、被（施事）；语序上介词短语在动词前，处所名词要带方位词（桌子上）；英语母语陷阱 *我看书在图书馆、*他很好对我、*我放书在桌子上；日语母语陷阱 *我被雨下了"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "en-role-marking",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "时间介词 in/on/at 没有做；at home、go home 这类固定说法放在反向题里。"
+    },
+    {
+     "artifact": "ja-role-marking",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja",
+     "note": "助词位置由页面排好，不考“助词放在名词前”这类语序错误；授受、受身、使役的格标记没有做。"
+    },
+    {
+     "artifact": "zh-role-marking",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh",
+     "note": "介词短语的位置由句子模板给定，不考“介词短语放到句末”的语序错误；被字句、兼语句没有做。"
+    }
+   ]
   },
   {
    "id": "prim:aspect-timeline",
@@ -4486,7 +4663,7 @@
    "name": "听指令做动作",
    "nameEn": "Listen and do",
    "oneLine": "听一个指令就在画面上做一个动作（点、拖、摆），动作本身就是理解的证据",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "听指令时只抓住动词或第一个名词，漏掉修饰和方位：Colour the small ball red 只涂了球没看大小，on/under、left/right、上/下、前/後ろ 听混；课堂上等别人先做再模仿，看起来听懂了其实没有。成人则在路线和操作说明里只记住第一步，漏掉否定（～ないでください、不要……）和条件。",
    "object": "一幅可操作的场景（教室、桌面、房间、街区地图、设备面板），上面有可点、可拖、可涂色的物件；一串预先录好的指令音频。整个原语都在这一个场景上做，场景状态一直保留",
    "requires": "认识场景中物件的名称（可先用 prim:recall-before-reveal 或 prim:scene-walkthrough）；物件名还不认识时不开始",
@@ -4623,7 +4800,26 @@
     "ja": "课堂指令 ～てください（立ってください、見てください、書いてください）；方位名词 上・下・中・前・後ろ・となり・横＋の＋に／を；路线 まっすぐ行って、二つ目の角を右に曲がって；陷阱 ～ないでください的否定漏听，ここ／そこ／あそこ的参照点",
     "zh": "指令 请坐／把书放在桌子上／拿那个红色的大球；方位词 上／下／里／前边／后边／旁边／左边／右边；路线 一直走、往左拐、过两个路口；陷阱：四／十等声调或近音混听，量词和数量作为线索，方位词后置"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "en-listen-and-do",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "房间：in／on／under／next to、by the boy's left hand、Don't…、If…；地图：go straight、turn left／right、the second corner。"
+    },
+    {
+     "artifact": "ja-listen-and-do",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja",
+     "note": "～てください、～ないでください、～たら；地图用 まっすぐ行って、一つ目／二つ目の角を右／左に曲がって、角を過ぎて。"
+    },
+    {
+     "artifact": "zh-listen-and-do",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh",
+     "note": "把…放在…、方位词（里／上／下面／旁边）、别／不要、如果…就…；地图用 一直往前走、到第…个路口、过两个路口、往左／右拐。"
+    }
+   ]
   },
   {
    "id": "prim:exchange-script",
@@ -4631,7 +4827,7 @@
    "name": "交际回合与分支",
    "nameEn": "Functional exchange",
    "oneLine": "在一个有目的的对话里按回合选择或说出交际功能，对方的反应随你的选择分支",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "会背单句套话，但到了一次有目的的交际里不知道这一回合该做什么：先道歉还是先说明、拒绝时要不要给理由、电话里先报谁；对方的回应一偏离课本就接不上。母语迁移让功能“语法对、交际错”：*Please give me your pen.（对陌生人生硬）、*Who are you?、*这是马克（电话里）、*你是谁？、对上级说ごめんなさい、*ペンを借りてください。",
    "object": "一段有明确目的的预写交际脚本（点餐、借东西、电话改约、投诉、邀请与拒绝、迟到联络），结构是一棵回合树：每一回合对方说一句（录音加可开的文字），学习者选或说一句，对方的下一句按所选分支预先写好。本原语不是聊天机器人：对方的每一句都是预先编写并经人工检核的分支，系统不生成回应，也不对学习者的语音做自动评分；学习者开放说出的回合，要么由学习者自己选择“我刚才做的是哪个功能”来决定分支，要么由页面外的真人搭档扮演对方，页面只提供角色卡和记录表",
    "requires": "已走过该场景的关键词句（见 prim:scene-walkthrough）；场景词汇还不认识时先退回去",
@@ -4761,7 +4957,26 @@
     "ja": "功能对立：すみません的叫人／道谢／道歉、ごめんなさい与申し訳ありません、ペンを貸してください（*借りてください）、点餐答人数说三人です（*三名様です）、迟到联络先道歉再给预计时间（遅れます，*遅いです）、电话报公司名、挂断说失礼いたします、婉拒あいにく／ちょっと…、对外提本公司同事不加さん",
     "zh": "功能对立：点餐我要一碗面（*我要面条一碗）／来一个……、电话我是……／请问您是哪位（*这是马克、*你是谁）、改约能不能改到星期五、投诉这个有问题，能换一个吗（*这个手机不工作）、邀请不用“让我们”、拒绝要给理由、回应道谢说不客气"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "en-exchange-script",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "6 个场景：打电话改预约、向陌生同学借笔、婉拒生日邀请、餐厅上错菜、柜台点午饭（直接说最好）、上课问词（儿童版）。用 focus=<场景 id> 打开一个场景。"
+    },
+    {
+     "artifact": "ja-exchange-script",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja",
+     "note": "6 个场景：拉面店点餐、借笔（貸す／借りる）、打电话说要迟到、替同事接客户电话（内外称呼）、婉拒邀约（ちょっと…）、向好朋友借橡皮（儿童版）。"
+    },
+    {
+     "artifact": "zh-exchange-script",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh",
+     "note": "6 个场景：面馆点餐、打电话改预约、耳机坏了去换、婉拒爬山邀请、夜市讲价和商场不讲价、早上见到老师（儿童版）。没有拼音。"
+    }
+   ]
   },
   {
    "id": "prim:register-calibrate",
@@ -5082,7 +5297,7 @@
    "name": "文化情境判读",
    "nameEn": "Critical incident",
    "oneLine": "读一个跨文化误会小事件，判断哪里出了问题、对方怎么理解，再改写当时的说法",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "语法和用词都对，交际却出了问题，学习者自己看不出原因：把“吃了吗”直译成 Have you eaten?、闲谈直接问工资和婚否、清明节说“清明节快乐”、对外人说“私のお母さんは”、听到“改天请你吃饭”就追问哪天几点。反过来，学习者也容易把一次经历概括成“他们都这样”的绝对规则。",
    "object": "一个跨文化误会的小事件：四到八句对话或叙述，配人物关系卡（上下、亲疏、场合）；两个人物各有一段内心独白，先隐藏，之后揭示",
    "requires": "读得懂事件的语言（事件语言难度低于学习者水平）；读不懂时先降低语言难度，不在这里教语言",
@@ -5207,7 +5422,26 @@
     "ja": "事件素材：对外称自己母亲为お母さん、对客户提本公司同事加さん；进门不说お邪魔します；送礼的 4、9、白色禁忌，婚丧礼金新旧钞；婉拒只说ちょっと…的言外之意；あいにく误用于自己的意愿；中文母语者按中国禁忌（送钟）来判断",
     "zh": "事件素材：“改天请你吃饭”被当成具体约定；受夸只说谢谢；清明节说“快乐”；称呼师傅／阿姨／老师的选择；送礼说“一点儿小意思”；“您们”；英语母语者把 excuse me 一律说成“对不起”；注意地区差异（港台用语）和个人差异"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "en-culture-incident",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "7 个事件＋1 个儿童版：茶水间问工资、Would you mind 答 Yes、老师说叫我 Rachel、社团里的 propaganda、邻居的冷淡回答（没有文化误会）、简历上的照片和年龄、“改天来吃饭”；儿童版：不吃饼干。"
+    },
+    {
+     "artifact": "ja-culture-incident",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja",
+     "note": "7 个事件＋1 个儿童版：对老师说“私のお母さん”、“土曜日はちょっと……”后追问、把天气寒暄当信息纠正、对课长用普通体、送礼时说价钱、“好きじゃない”与过敏、邻居没回招呼（没有文化误会）；儿童版：还橡皮不说谢谢。"
+    },
+    {
+     "artifact": "zh-culture-incident",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh",
+     "note": "6 个事件＋1 个儿童版：“改天请你吃饭”后追问时间、被夸后自夸、“清明节快乐”、叫服务员“小姐”（含地区差异）、给爷爷送钟、“不了，我今天带饭了”（没有文化误会）；儿童版：直接叫老师的名字。"
+    }
+   ]
   },
   {
    "id": "prim:attempt-then-compare",
@@ -6156,7 +6390,7 @@
    "name": "真实单据扫读",
    "nameEn": "Real-document scanning",
    "oneLine": "在菜单、时刻表、告示、表格等真实单据上找到完成任务需要的那一条",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "面对真实单据（菜单、时刻表、告示、表格、通知、账单）时从头逐词翻译，找不到完成任务需要的那一条；误读格式约定：24 小时制与 a.m./p.m.、No smoking 理解成“没有”、漏看～ないでください的禁止、入口看成人口、大家理解为“大家”（实为房东）、看不到脚注里的例外（土休日运休、※要予約）。",
    "object": "一份真实或仿真实、保留原版式的单据，配一个具体任务（“赶上十点前到机场的车”“点一个不含花生、两千日元以内的菜”“找出这张告示禁止做什么”）。定位、取信息、完成产物都在这份单据上进行",
    "requires": "认识任务所需的关键信息类型（数字、时间、价格）和这类单据的核心词；不认识时先走 prim:scene-walkthrough",
@@ -6285,7 +6519,26 @@
     "ja": "单据：时刻表（平日／土休日、始発、快速）、告示、表格（フリガナ、氏名、〒）、价格（税込／税抜）、和历年号；汉字词陷阱 大家、留守、切手；漏看～ないでください",
     "zh": "单据：菜单（常无图）、营业时间、告示（禁止吸烟、请勿……）、表格（姓名、身份证号、联系电话）；陷阱：入口／人口等形近字、大／太、繁简字；日语母语者的汉字词义迁移（走、手纸）"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "en-real-document-scan",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "只有四份单据；没有限时；第 3 步只核对空里的信息。kt:en-skill-write-forms 只练到在表上找对栏位和日期格式，不填整张表（填表见 template-write）。"
+    },
+    {
+     "artifact": "ja-real-document-scan",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja",
+     "note": "单据只用横排；没有和历、フリガナ表格和租房广告。"
+    },
+    {
+     "artifact": "zh-real-document-scan",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh",
+     "note": "单据上没有拼音辅助；形近字（入口／人口）只在提示里讲。"
+    }
+   ]
   },
   {
    "id": "prim:scale-place",
@@ -6452,7 +6705,7 @@
    "name": "视点与方向",
    "nameEn": "Viewpoint & direction",
    "oneLine": "先定下说话人站在哪里、事情朝谁移动，再选授受/来去/被动使役的形式",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "中文“给”“借”“来去”很少强制标出说话人站在哪里，学习者于是不先定视点就选形式：日语里朋友给我东西说成*友達が私にあげました，在家等人说*早く帰っていってね；英语里 lend/borrow 都是“借”，bring/take 都按“拿”，I'm coming（到你那儿）说成 I'm going；学中文的英语母语者说话人在屋里却说*他从外面进去了，或把英语被动直接换成“被”。学习者缺的不是词，而是“我站在哪儿、东西朝谁走”这一步。",
    "object": "一张俯视场景图：两三个人物、两个位置（家／学校、屋里／屋外），一个可拖动的“我在这里”标记和一条表示给予或移动的箭头；同一场景贯穿三步",
    "requires": "已认得授受、来去或被动使役各形式的基本形态；场景里人物和地点的词已经会说；场景图都看不懂时先退到 prim:listen-and-do",
@@ -6582,7 +6835,26 @@
     "ja": "对立集合：あげる／くれる／もらう，てあげる／てくれる／てもらう，ていく／てくる，受身（事件、人、受害）与使役受身的视点；陷阱：*友達が私にあげました、第三者之间误用くれる、*私の荷物 写成 私に、想说“获得允许”却用させられた",
     "zh": "对立集合：来／去，复合趋向补语（上来／上去、进来／进去、回来／回去），“被”字句与意念被动；陷阱：*他进来教室了（处所宾语位置）、说话人在屋里却说进去、英语母语者过度用“被”、日语母语者迁移受害被动（*我被雨下了）"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "en-viewpoint-direction",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "只做一般过去时的被动和 have something done；by 短语、进行时和完成时被动、get something done 没有做。"
+    },
+    {
+     "artifact": "ja-viewpoint-direction",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja",
+     "note": "敬语形（さしあげる、くださる、いただく）和“故障／遗失报告”（kt:ja-fn-trouble-report）没有做。"
+    },
+    {
+     "artifact": "zh-viewpoint-direction",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh",
+     "note": "趋向补语的引申义（想起来、说下去）和“叫／让”被动没有做。"
+    }
+   ]
   },
   {
    "id": "prim:clause-constraint",
@@ -6590,7 +6862,7 @@
    "name": "后句限制核对",
    "nameEn": "Clause-constraint check",
    "oneLine": "给前句选好连接形式后，判断后句能接什么（请求、意志、否定、过去），违反时指出是哪条限制",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "学习者把连接形式当作一个翻译（“如果”“因为”“一……就”），选对了连接词却不知道它对后句有限制：*駅に着くと、電話してください、*家に帰ったとたん、シャワーを浴びるつもりです、*I'll call you when I will arrive、*In case it rains, we'll stay home（指“如果”）、*一他到家，就睡觉了、只有……才 换成 就。错不在前句，而在后句被接上了不允许的类型。",
    "object": "一个两格句框：前句已写好并带连接形式，后句是空槽；旁边一列后句卡，每张卡标着类型（请求、意志、否定、过去事实、恒常事实、评价）",
    "requires": "已会连接形式的接续（*安いだったら 这类接法问题先解决）和后句卡里各句型的意思；接续还不会时先退到 prim:form-for-meaning",
@@ -6721,7 +6993,26 @@
     "ja": "连接形式：と／たら／ば／なら、たとたん、からには、べく、たりとも、ので／から；陷阱：と・ば 后接请求意志、たとたん 后接意志（*帰ったとたん…つもりです）、なら 用于时间先后、向上级请求用から显得像找借口；べく、たりとも 属书面高级，后句多为意志或否定",
     "zh": "连接形式：只要……就／只有……才、一……就、即使……也、既然……就、如果……就；陷阱：只有……就 混搭、漏“就”或“也”、“一”放在主语前、既然 后句接的是推论或建议不能接单纯事实"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "en-clause-constraint",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "含一组“表面像时间从句、其实是宾语从句”的反例（I don't know when he will arrive）。"
+    },
+    {
+     "artifact": "ja-clause-constraint",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja",
+     "note": "用 kc= 只练某一个连接形式。"
+    },
+    {
+     "artifact": "zh-clause-constraint",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh",
+     "note": "限制类别换成了汉语适用的三类：关联词搭配、前句性质、都成立但意思不同；就／才／也的位置错误归在后句卡里。"
+    }
+   ]
   },
   {
    "id": "prim:oral-to-print",
@@ -6729,7 +7020,7 @@
    "name": "口语词连到文字",
    "nameEn": "Oral-to-print linking",
    "oneLine": "从学习者已经会说的词出发，把声音和意义直接连到文字上，再在新组合里认出来",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "学习者会说的词远多于会认的字：海外华裔儿童张口就是“冰箱”“下雨了”，却认不出这几个字，课本又从“你好”和拼音重新开始，既无聊又把已有的口语浪费掉；低龄英语学习者会说 apple、banana 却不知道纸上哪一串字母是它。缺的不是声音和意义，而是把已有的声音—意义直接挂到字形上这一步；先学拼音再识字反而多绕一层。",
    "object": "学习者自己说出的一句话或一组词，被记成一张“我的话”卡（配学习者选的图），文字逐步出现在卡上，并积累成个人识字墙",
    "requires": "能口头说出并理解目标词；这个词口语里还没有时，先退到 prim:scene-walkthrough 建立口语；不要求会拼音或音标",
@@ -6864,7 +7155,20 @@
     "ja": "对象：会说日语的继承语儿童或动漫爱好者已会说的词（ありがとう、かわいい、たべる）；先挂平假名，再把汉字挂到已会说的训读词上（たべる→食べる）；陷阱：口语缩约形（ちゃう、じゃん）与书面形不同",
     "zh": "对象：华裔儿童家庭口语里的高频词（冰箱、下雨、吃饭、妈妈）；不要求先学拼音；陷阱：同音字替代（*我明天在来）、形近字（人／入、大／太）、方言口语词无对应规范字、海外家庭可能用繁体，需要先确定目标字形"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "zh-oral-to-print",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh",
+     "note": "15 个常用字；声音是浏览器合成，不是孩子自己的录音；只有简体。"
+    },
+    {
+     "artifact": "en-oral-to-print",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "want、apple、look、play、like 几题不属于这两个知识点；声音是浏览器合成。"
+    }
+   ]
   },
   {
    "id": "prim:oral-sound-play",
@@ -6872,7 +7176,7 @@
    "name": "音素意识游戏",
    "nameEn": "Phonological awareness play",
    "oneLine": "不看文字，只用声音做押韵、拍音节、拆分和替换音素",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "不看文字时分不清一个词里有几个音节、几拍、几个音素：汉语母语儿童按声母＋韵母切分，cat 只切成 c-at，辅音后自动加元音（/b/ 读成 bu）；学日语的中文母语者按汉语音节把とうきょう数成两拍，促音、长音、ん被吞掉；海外华裔儿童会说“妈”但不知道它和“马”只差声调，后面接拼音和查字典时缺这个意识。",
    "object": "一组图片词（只有声音和图，没有文字），每个词下面有一排可点亮的音块格；同一组词在三步中反复使用",
    "requires": "认识图片代表的口语词；能听页面上的音频。不要求识字",
@@ -7007,7 +7311,25 @@
     "ja": "操作：数拍，特别是促音、长音、拨音和拗音（きって、とうきょう、ほん、きょう）；陷阱：按汉语音节把とうきょう数成两拍、把拗音拆成两拍、长音被吞（おばあさん→おばさん）",
     "zh": "操作：数音节、找押韵（韵母相同）、听出同音节不同声调；面向华裔儿童时不先教拼音符号，只做声音操作；陷阱：把押韵当成同音、受英语影响用句调覆盖字调"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "en-oral-sound-play",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "单个音素合成不出来，只播放整词；“换一格”用一张图的开头音表示新音。"
+    },
+    {
+     "artifact": "ja-oral-sound-play",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja"
+    },
+    {
+     "artifact": "zh-oral-sound-play",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh",
+     "note": "只练音节数、换声母和声调、押韵与同音；不教拼音符号。"
+    }
+   ]
   },
   {
    "id": "prim:reading-select",
@@ -7015,14 +7337,14 @@
    "name": "读音选择",
    "nameEn": "Reading selection",
    "oneLine": "对一个字/词在当前语境下选择读音（音读/训读、多音字、同形异音词），说明依据",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "同一个字形有几种读音，学习者只记住一种就一律套用：日语里“生”只读せい、土産读成*どさん、大人读成*だいじん、一人读成*いちにん，连浊该浊不浊（*てかみ）或一律浊化（*あいがぎ）；中文里“还书”读成 hái shū、“长大”读成 cháng dà、“得”一律读 de；英语里 read 的现在与过去、lead 动词与名词、REcord 与 reCORD 不分。学习者缺的是“先看构词和语境，再定读音”这一步。",
    "object": "一段短文，其中 3–6 处同形字词被标出，每处上方有一个读音槽；整段文字在三步中不变，读音槽逐步填满",
    "requires": "已认得该字词至少一个读音和意义；整段文字需要注音才能读下来时，先退到 prim:reading-aid-fade",
    "learnerAction": [
     "第 1 步 先读后定：给每个标出处选读音，并选一条依据（锁定依据：词性或时态／所在的固定词语或复合词／前面的数字或量词／前后的音（连浊）／没有规律要单独记——最后一类是反向那一半）",
     "第 2 步 换句子：同一个字形放进另一句话，判断读音变不变、依据是哪一条",
-    "第 3 步 自己造：写一句同一字形出现两次、读音不同的句子（银行的行长、今日は今日（こんにち）の…、I read it last week and I'll read it again），标出两处读音"
+    "第 3 步 自己造：写一句同一字形出现两次、读音不同的句子（我还要还书、今日は今日（こんにち）の…、I read it last week and I'll read it again），标出两处读音"
    ],
    "systemResponse": [
     "选读音后播放该处的音频；首次选择保留在读音槽上方的小标签里，改选不覆盖它",
@@ -7149,7 +7471,20 @@
     "ja": "对立集合：音读／训读（生、行、上）、连浊（手紙 てがみ、本棚 ほんだな）、熟字训（今日、大人、土産、一人）、助数词的特殊读法（一人、二人、三本、六本、一回）；陷阱：按普通话音推音读、熟字训逐字读、一律浊化",
     "zh": "对立集合：多音字 行（xíng／háng）、长（cháng／zhǎng）、还（hái／huán）、了（le／liǎo）、得（de／dé／děi）、重（zhòng／chóng）；陷阱：“还书”读 hái、“得”一律读 de、受日语训读影响对字义的预期"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "ja-reading-select",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja",
+     "note": "第 3 步只核对词表里的词形，其余记为自评。"
+    },
+    {
+     "artifact": "zh-reading-select",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh",
+     "note": "页面不播放中文读音（浏览器合成可能把多音字读错）。"
+    }
+   ]
   },
   {
    "id": "prim:false-friend-check",
@@ -7157,7 +7492,7 @@
    "name": "同形异义核对",
    "nameEn": "False-friend check",
    "oneLine": "先写下按母语字面猜的意思，再对照真实用法，标出相同、偏移、完全不同",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "字形或词形看起来透明时，学习者会很有把握地按母语理解：中文母语者学日语把大家当“大家”、手紙当“手纸”、勉強当“勉强”、留守当“留守”；更难察觉的是意思偏移的一类（研究生、検討、意見）；片假名英语（マンション、テンション、スマート）被当成英语原义。学中文的日语、韩语背景学习者把手纸、汽车、新闻、工夫按母语理解；中文母语者学英语时把“宣传”一律译成 propaganda、把 eventually 当“可能”。问题不是不认识，而是太认识。",
    "object": "一张同形词对照卡：左栏是学习者按母语字面写下的猜测，右栏是目标语言的 2–3 个真实例句，中间一个三档标记（相同／偏移／完全不同）；一组卡积累成学习者自己的假朋友表",
    "requires": "能读懂右栏例句的大意；例句读不下来时先退到 prim:context-guess",
@@ -7292,7 +7627,20 @@
     "ja": "对象：汉字同形词（大家、手紙、勉強、留守、娘、汽車、研究生、検討、意見）和片假名外来语（マンション、テンション、スマート、クレーム）；陷阱：完全不同的词容易记住，偏移的词最难察觉；反向题用学生、問題、図書館等真同义词",
     "zh": "对象：日语、韩语背景学习者的同形词（手纸、汽车、新闻、工夫、走、老婆、东西）；英语背景学习者没有字形对象时不使用本原语，只处理“酷、粉丝”这类借词；陷阱：日语母语者把日本字形当作同一个字（単／单）属于字形问题，交给 prim:character-anatomy"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "ja-false-friend-check",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja",
+     "note": "33 个词：完全不同 10、偏移 12（含语体偏移的起床、帰宅）、相同 11。用 kc= 只练一个知识点的词。四字熟语只有两个同义的反向题；ja-str-paraphrase-ja 只有起床一个词。"
+    },
+    {
+     "artifact": "en-false-friend-check",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "20 个词：完全不同 3、偏移 10、相同 7。被核对的中文对译词在英文界面下也显示，因为它就是练习的对象；例句的中文译文在英文界面下不显示。"
+    }
+   ]
   },
   {
    "id": "prim:cross-language-align",
@@ -7300,7 +7648,7 @@
    "name": "翻译与中介对齐",
    "nameEn": "Cross-language alignment",
    "oneLine": "把原文和译文按意义块对齐，标出增、删、换说法的地方，再为指定读者转述",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "翻译和转达时逐词对应：被动句照搬（*这本书被一位年轻作家写了）、代词和“当……的时候”堆满中文、同形词直接搬（勉強→*勉强、手紙→*手纸），转达时又漏掉期限和例外条件、混进自己的意见。学习者缺的不是词汇，而是“先按意义块对齐，再决定哪里要增、删、改说法，最后对着具体的听者重新说”这一步判断。",
    "object": "一份短原文（三到六句的通知、对话或说明），以及学习者在同一页上逐步做出的意义块对齐表和面向指定听者的转述稿",
    "requires": "原文的大意已能读懂或听懂（独立理解原文时生词不超过约 5%）；读不懂原文时先退回去，不在这里同时解决理解和转换",
@@ -7438,7 +7786,26 @@
     "ja": "日→中中介与日→日要点转达；陷阱：勉強になりました、手紙、検討します等同形词和委婉说法、省略主语导致动作者错误、遗漏期限和例外条件；对应 kt:ja-skill-mediate-ja",
     "zh": "外→中与中→外互译、口译；陷阱：英语母语者逐词翻译被动和“当……的时候”、代词过多，日语母语者搬用日语汉字词；高级阶段含合同语体和“三成”“万/亿”换算；对应 kt:zh-skill-translate-mid、kt:zh-skill-translate-advanced"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "en-cross-language-align",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "两份英译中、一份中译英；转述只按关键词表核对，语体靠自评。"
+    },
+    {
+     "artifact": "zh-cross-language-align",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh",
+     "note": "高级部分只有一份商务文本（三成、万的换算、合同语体）；没有口译通道。"
+    },
+    {
+     "artifact": "ja-cross-language-align",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja",
+     "note": "只做日→中；契约里的日→日（简单日语）转达没有做。"
+    }
+   ]
   },
   {
    "id": "prim:number-system-map",
@@ -7446,7 +7813,7 @@
    "name": "数位体系转换",
    "nameEn": "Number-system mapping",
    "oneLine": "在万/亿与 thousand/million 等不同数位分组之间转换，先估再算再读出",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "汉语和日语按四位一级（万、亿），英语按三位一级（thousand、million、billion），学习者在两套分组之间换算时出错：把 15 万说成 *fifteen ten thousand 或 1.5 million、英语母语者把 100,000 说成 *一百千、日语里漏掉一万的いち、把“三成”译成 three percent。错不在不会数数，而在不先估量级就逐字换算。",
    "object": "一个固定的数量卡：一个真实语境中的大数、约数或金额（人口、房价、预算），同时以阿拉伯数字、目标语读法和数位分组条三种形式出现，学习者在同一张卡上估、算、读",
    "requires": "已能读写 1–9999 以内的数（见 kt:zh-numerals、kt:ja-numerals-system、kt:en-fn-numbers）；万以内还不熟时先退回去",
@@ -7574,7 +7941,20 @@
     "ja": "与汉语同为四位一级，但读法有陷阱：一万必须说いちまん、百和千前不加いち、二万不是*りょうまん、三百（さんびゃく）等音便；与英语换算时同汉语；对应 kt:ja-numerals-system、kt:ja-numerals-variants",
     "zh": "面向英语母语者：*一百千、*三十千要改成十万、三万；“多”“左右”的位置（三万多人）、分数语序（三分之一）、二/两（两万）、一百零五的“零”、成数；对应 kt:zh-numbers-large-approx、kt:zh-numerals"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "en-number-system-map",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "给说中文的学习者。kt:en-fn-numbers 只练到 hundred / thousand 的读法和不加 -s，不练听电话号码。"
+    },
+    {
+     "artifact": "zh-number-system-map",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh",
+     "note": "给说英语的学习者；含 多、左右、大约、百分之、成数、分数。读音（含电话号码里的 yāo）不判断。"
+    }
+   ]
   },
   {
    "id": "prim:variety-map",
@@ -7582,7 +7962,7 @@
    "name": "变体对照",
    "nameEn": "Variety mapping",
    "oneLine": "把同一意思的不同变体（地区、方言、繁简字形）并排对照，判断在什么场合用哪一种",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "学习者只认一种变体，把其他变体当成错误：认为 Did you eat yet? 一定错、关西话的～へん听成过去式、港台用语是“错误的中文”；或者反过来，在同一篇文章里英美拼写混用、在正式场合模仿方言、简转繁时一对多转错（头发→*頭發）。缺的是“这些说法各属于哪个变体、在什么场合用哪一个”的地图，以及先能认、再决定是否要产出。",
    "object": "一组同一意思的平行表达（同一句话的英式/美式版本、普通话/港台用语、简体/繁体、标准语/关西话），排成一张变体对照表，配一个可更换的使用场合",
    "requires": "已经掌握其中一种变体（通常是标准变体）里这句话的意思；连标准形式都不懂时先退回去",
@@ -7716,7 +8096,26 @@
     "ja": "对立集合：标准语/关西方言（～へん／～ない、～はる、～や／～だ）；以识别和听懂为主，不要求在正式场合产出方言；陷阱：把～へん当过去式、把～はる当过度尊敬；对应 kt:ja-soc-dialects",
     "zh": "对立集合：简体/繁体（一对多：发/髮/發、后/後、干/乾/幹）、大陆/台湾/香港用语（软件/軟體、出租车/計程車/的士）、普通话/方言；陷阱：日语母语者把日本新字体当简体或繁体（気、対）；对应 kt:zh-soc-varieties"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "en-variety-map",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "28 张卡（英式 11、美式 11、通用 3、错误 3），4 个场合（含美式正式通知和英式随意聊天，防止把变体当语域），2 段整段改写。没有口音题：kt:en-orth-vowel-patterns 的英美 r 音需要真人录音，未覆盖。"
+    },
+    {
+     "artifact": "ja-variety-map",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja",
+     "note": "两个对照组，用 group=dialect 或 group=kanji 打开。方言组 17 张卡，七张关西方言卡里五张不靠 へん／はる 判断；字形组 25 张卡（日本字形／简体／繁体各 7）。方言不放音。"
+    },
+    {
+     "artifact": "zh-variety-map",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh",
+     "note": "两个对照组，用 group=script 或 group=terms 打开。简繁组 17 张卡，含 頭發、皇後、天気 三个“看似变体其实是错误”；一对多的字（发／髮／發、后／後、干／乾／幹）在转换题里成对出现。用语组 18 张卡，台湾说法用简体写，只能按用词判断。没有方言（粤语等）听辨。"
+    }
+   ]
   },
   {
    "id": "prim:figurative-decode",
@@ -7724,7 +8123,7 @@
    "name": "字面与言外之意",
    "nameEn": "Figurative & implied meaning",
    "oneLine": "先写出字面意思，再推出比喻、成语、反讽或言外之意，并指出依据",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "学习者对比喻、成语、惯用句、反讽和言外之意要么完全按字面理解（马马虎虎和马、虎有关；「ちょっと…」是“有一点”；把夸张的“说了一万遍”当确切次数；读不出叙述者的反讽），要么反过来乱套母语的比喻（*add legs to a snake、*一箭双雕 代替一石二鳥、*顔が大きい 表示人脉广）。缺的是先把字面意思写清楚、再说出两者之间的落差和指向它的线索这个过程。",
    "object": "一段带有一个比喻性或言外之意表达的语境（一段小说对白、一段对话、一个成语所在的句子），学习者在同一段语境上先写字面层、再写言外层、再标线索",
    "requires": "表达里的每个词的基本义已经认识；连字面意思都读不出时先退回去处理词汇",
@@ -7859,7 +8258,26 @@
     "ja": "对象：慣用句（顔が広い/顔が大きい）、四字熟語、婉曲（ちょっと…、検討します、考えておきます）、察し；陷阱：按中文成语替换（*一箭双雕）、把八方美人当夸奖、把検討します当同意；对应 kt:ja-lex-yojijukugo-idioms、kt:ja-str-implicature、kt:ja-skill-read-literature-ja",
     "zh": "对象：修辞（比喻、夸张、排比、对偶）、反问句、成语、俗语、歇后语、言外之意（我再考虑考虑、时间不早了）；陷阱：把比较当比喻、成语受程度副词修饰或带宾语、褒贬混淆（差强人意）、语体错位；对应 kt:zh-rhetoric、kt:zh-rhetorical-questions、kt:zh-lex-chengyu-basic、kt:zh-lex-chengyu-advanced、kt:zh-str-implicature"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "en-figurative-decode",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "文学部分是编写者写的短段落，不是真实作品；“用对了吗”只判断选项，学习者自己写的句子只保存不判断。"
+    },
+    {
+     "artifact": "zh-figurative-decode",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh",
+     "note": "修辞只做了比喻和夸张，没有排比和对偶；反问句（kt:zh-rhetorical-questions）没有做。"
+    },
+    {
+     "artifact": "ja-figurative-decode",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja",
+     "note": "可以打开假名读音；没有儿童版看图题。"
+    }
+   ]
   },
   {
    "id": "prim:entry-sense-pick",
@@ -7867,7 +8285,7 @@
    "name": "词典义项选择",
    "nameEn": "Dictionary sense picking",
    "oneLine": "拿着语境里的一句话去查词典，在多个义项中选对的那一个并说明理由",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "查到了词却用错：只看第一个义项或只记中文释义（把 light 一律理解为“光”），拿变形后的形式去查找不到（查 *studied、查 食べた），在汉英词典里挑了不合语境的同义词（*sky hot），查汉字时不会按部首或拼音定位。缺的不是查的意愿，而是“回到词典形—在多个义项中按语境排除—说出理由”这一套操作。",
    "object": "一句含一个目标词的真实句子，加上一个对应的多义项词典条目（学习型词典的简化版，含 3–6 个义项、例句和搭配），学习者在这句话和这个条目之间来回操作",
    "requires": "句子中除目标词以外的部分大体能读懂；已能认出目标词的基本形态变化（见 prim:paradigm-apply）；不会把变形还原到原形时先退回去",
@@ -8003,7 +8421,20 @@
     "ja": "对象：从ます形、て形、た形、ない形还原到辞書形再查（食べた→食べる、行って→行く）、多义动词（かける、とる）、汉字按部首或读音查；陷阱：*飲みる、*起きく 等错误还原、同训异字；对应 kt:ja-verb-groups、kt:ja-kanji-system",
     "zh": "对象：按拼音或部首查字、多音字的读音与义项（还 huán/hái、行 xíng/háng）、多义词（打、开）的义项选择；陷阱：把声旁当读音、只看第一个义项；对应 kt:zh-hanzi-components 及各级汉字知识点"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "en-entry-sense-pick",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "23 句，11 个原创小词条（light、run、fair、change、child、match、take、bank、kind、left、leave）。含不规则变形（ran、took、children、left←leave）、两个义项都说得通的句子 2 句、短语 3 句。部分题隐去中文释义。"
+    },
+    {
+     "artifact": "zh-entry-sense-pick",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh",
+     "note": "30 句，15 个原创词条：多音词按读音分词条（地道、精神、大意、便宜），多义词（意思、把握、消化、包袱、门槛、深入、前提、火、走、打、开），短语（不好意思、打招呼、开夜车）。只做按拼音查，没有部首查字。"
+    }
+   ]
   },
   {
    "id": "prim:ime-convert",
@@ -8011,7 +8442,7 @@
    "name": "输入法转换",
    "nameEn": "Input-method conversion",
    "oneLine": "用拼音或罗马字输入，在候选列表里按语境选对的汉字/假名，并发现同音选错",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "用输入法打字时，读音打对了却在候选里选错同音或近音字：中文的 *我明天在来（再）、*以後（简体环境应为以后）、日语的 帰る/変える、*げにん（原因，ん只打了一个 n）、を打成 o 得到「お」、用中文输入法打出简体字形。手写时会写的字，打字时因为“选第一个”或“看着像”而错，而且学习者自己通常看不出来。",
    "object": "学习者自己用输入法打出的一句话（按给定意思或听写），从键入的罗马字/拼音到候选选择到最终文字，整个转换过程都留在同一个输入条上",
    "requires": "已能把目标词正确拼成拼音或罗马字（见 prim:sound-spelling-blend），并能认出目标汉字；拼音或罗马字本身还拼不对时先退回去",
@@ -8145,7 +8576,20 @@
     "ja": "罗马字输入与假名汉字变换：ん 的 nn 输入（げんいん/*げにん）、助词を 打 wo、长音和促音、同音异字（帰る/変える/替える、会う/合う、暑い/熱い/厚い）、送假名边界、用中文输入法打出简体字形；对应 kt:ja-orth-input",
     "zh": "拼音输入：同音字（再/在、以后/以後 字形体系、即然/既然、做/作、治定/制定）、ü 用 v 输入、声母韵母打错导致错词、整句输入时分词错误；对应 kt:zh-hanzi-l1 至 kt:zh-hanzi-l6 中的同音替代错误"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "ja-ime-convert",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja",
+     "note": "模拟输入法；候选顺序是编写者设定的，不是某个真实输入法的顺序。"
+    },
+    {
+     "artifact": "zh-ime-convert",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh",
+     "note": "模拟输入法，只按最长已知拼音切分，不做整句预测。"
+    }
+   ]
   },
   {
    "id": "prim:repair-and-backchannel",
@@ -8153,7 +8597,7 @@
    "name": "会话修复与接应",
    "nameEn": "Repair & backchannel",
    "oneLine": "在对话进行中处理没听懂、说不出、要接话的时刻：请求重复、确认、复述、附和、抢回话轮",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "对话进行中遇到麻烦时不会当场处理：没听懂就沉默或只说 Yes／はい／嗯，被对方当成听懂了、答应了；要请对方重复时说得生硬（*What?、*Please repeat、*Again、降调的え？なに？）或语序错（*请说再一遍、*请一点儿慢说、*请又说一遍）；问词义说 *What is mean…?；想词时用中文“那个、就是”填空；要插话时直接说 *Wait, I want to say…／等等！；追问说成质问（*你是什么意思？）。课本对话里没有麻烦，所以这些动作从没被练过。",
    "object": "一段有目的的交际（prim:exchange-script 的脚本，或与真人搭档按角色卡进行的对话），其中在预先标好的位置插入“麻烦时刻”：对方说得太快、出现一个学习者不认识的词、报了一串数字、对方停下来等你接话、对方说了一长段没有确认、话题跑偏需要拉回、需要插一句。麻烦时刻的类型是预先编写并已知的，所以开放对话也能被检查：被检查的不是学习者说了什么内容，而是在这个时刻做了哪一种修复动作、用的说法是否得体。页面不生成对方的话，也不对学习者的语音做自动评分",
    "requires": "已能完成该交际脚本的主干（见 prim:exchange-script），并已能调出几句修复说法（见 prim:recall-before-reveal）；修复说法一句都说不出时先退回去",
@@ -8285,7 +8729,26 @@
     "ja": "修复说法：すみません、もう一度お願いします／もう少しゆっくりお願いします／～って何ですか／～ということですか；附和 はい・ええ・そうですか・なるほど（对上司慎用）・うん（亲近关系）；填充 えーと・あのう；陷阱：降调的え？なに？、沉默或只说はい被当作明白了、对老师说うん、用中文“那个”填空、把对方的はい当作同意",
     "zh": "修复说法：请再说一遍／请说慢一点儿／“X”是什么意思？／你的意思是……吗？；接应 嗯、对、是吗、然后呢；插话 不好意思，我插一句；拉回 我们回到刚才的问题；英语母语陷阱 *请说再一遍、*请一点儿慢说、*请又说一遍；追问说成 *你是什么意思？；正式场合用“等等！”"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "en-repair-and-backchannel",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "车站问询处（太快、off-peak、fifteen/fifty、Well, let me think…）、小组会议（跑题拉回、插话、KPI、日期复述）、打电话订青旅（第 3 步）、折纸船（儿童版）；6 段“对方的 uh-huh”。"
+    },
+    {
+     "artifact": "ja-repair-and-backchannel",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja",
+     "note": "市役所窗口（～て处附和、太快、住民票、十四日/四日）、听前辈讲故事（附和、えっ、本当ですか、えーと）、打电话给牙医（第 3 步）、手工课（儿童版）；6 段“对方的はい”。"
+    },
+    {
+     "artifact": "zh-repair-and-backchannel",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh",
+     "note": "火车站买票（太快、靠窗、十四/四十）、社团讨论（我插一句、你的意思是……吗、拉回话题、日期复述）、报修空调（第 3 步）、美术课（儿童版）；6 段“对方的嗯”。"
+    }
+   ]
   },
   {
    "id": "prim:template-write",
@@ -8293,7 +8756,7 @@
    "name": "按真实格式填写",
    "nameEn": "Writing on a real template",
    "oneLine": "在真实格式（表格、便条、留言、邮件模板）上填写或写短文，格式的每一栏都约束要写什么",
-   "status": "spec",
+   "status": "partial",
    "difficulty": "真实格式本身就是规则，学习者却按母语习惯写：把姓填进 First name，日期按年-月-日写造成歧义；フリガナ用平假名或拼音，姓名用简体字形（刘、张）与证件不一致；便条漏收件人或署名，在自己名字后加さん；给老师的邮件不报姓名、先写大段背景最后才说要什么、用～てください像命令、敬称重叠（*山田先生様）；聊天用“在吗？”（*Are you there?）开场而不说事；中文短信拼音选错同音字（*我明天在来），对老师只回“嗯”“哦”。",
    "object": "一份真实格式的空白模板（报名表、登记表、便条、留言卡、聊天界面、邮件模板），加一张情境卡（你是谁、写给谁、要对方做什么、具体信息）；模板的每一栏或每个位置都有自己的约束。首稿、逐栏核对、换对象重写都在这份模板上进行。情境卡用虚构身份，不收集学习者真实个人信息",
    "requires": "读得懂这类格式的栏目名称（见 prim:real-document-scan），能写出所需的文字（汉字或假名字形见 prim:character-anatomy）；栏目名读不懂时先退回去",
@@ -8422,7 +8885,26 @@
     "ja": "格式：フリガナ（片假名）与ふりがな（平假名）、姓名字形与证件一致（劉、張）、住所由大到小、〒、和历；便条写收件人，不在自己名字后加さん；邮件先自报姓名、用件先说、～ていただけないでしょうか而不是～てください、敬称不重叠（*山田先生様）、回复用承知しました／わかりました而不是了解です",
     "zh": "格式：姓名、出生日期按年月日、规范简体字形（日语母语者的対→对、歩→步）；便条要有称呼、正文、署名、日期；短信注意同音字（再／在）、给老师先称呼“老师您好”并自报姓名，回复不只用“嗯”“哦”"
    },
-   "implementations": []
+   "implementations": [
+    {
+     "artifact": "en-template-write",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "en",
+     "note": "只核对数据包词表里的说法；换了说法的地方页面会说判断不了，记为自评。"
+    },
+    {
+     "artifact": "ja-template-write",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "ja",
+     "note": "敬语和语体页面不判；～てください 只作提醒。"
+    },
+    {
+     "artifact": "zh-template-write",
+     "repo": "KnowledgeTraceGraph/blocks",
+     "language": "zh",
+     "note": "kt:zh-skill-write-basic 只练到用汉字填表（字形只核对列出的几组），不练手写笔顺。"
+    }
+   ]
   }
  ]
 }

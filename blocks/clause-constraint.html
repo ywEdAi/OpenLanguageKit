@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Clause constraint</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .cc-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .cc-layout { grid-template-columns: minmax(0, 1fr); } }
+  .cc-side > * { min-width: 0; }
+  .cc-side { display: grid; gap: 12px; min-width: 0; }
+  .cc-stage { display: grid; gap: 12px; min-width: 0; }
+  .cc-stage .kb-prompt { margin: 0; }
+  .frame { font-size: 1.3rem; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); line-height: 2; }
+  .frame .conn { background: var(--accent-soft); border-bottom: 3px solid var(--accent); padding: 0 2px; }
+  .frame .slot { display: inline-block; min-width: 7em; border-bottom: 2px dashed var(--muted); padding: 0 6px; }
+  .frame .slot.ok { border-bottom: 3px solid var(--accent); background: var(--accent-soft); }
+  .frame .slot.bad { border-bottom: 3px solid var(--bad); background: var(--bad-soft); text-decoration: line-through; text-decoration-color: var(--bad); }
+  .cards { display: grid; gap: 8px; }
+  .card { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; border: 1px solid var(--line); background: var(--panel); border-radius: var(--radius); padding: 8px 12px; text-align: left; font-size: 1.05rem; width: 100%; }
+  .card[aria-pressed="true"] { outline: 3px solid var(--accent); }
+  .card.judged-ok { border-color: var(--accent); }
+  .card.judged-bad { border-color: var(--bad); }
+  .card .tag { font-size: .75rem; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 1px 8px; }
+  .card .res { font-size: .8rem; }
+  .why { font-size: .88rem; color: var(--muted); width: 100%; }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .pair { display: grid; gap: 6px; }
+  .pair .lbl { font-size: .78rem; color: var(--muted); }
+  .pair .line { font-size: 1.2rem; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); }
+  .opts { display: grid; gap: 8px; }
+  .opt { border: 1px solid var(--line); background: var(--panel); border-radius: var(--radius); padding: 8px 10px; text-align: left; }
+  .opt .num { font-size: .72rem; color: var(--muted); margin-right: 6px; }
+  .opt.right { background: var(--accent-soft); border-color: var(--accent); }
+  .opt.wrongpick { background: var(--bad-soft); border-color: var(--bad); }
+  .own textarea { width: 100%; box-sizing: border-box; min-height: 64px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 8px; padding: 8px; font-size: 1.05rem; }
+  .detect { display: grid; gap: 6px; font-size: .92rem; }
+  .detect select { font-size: .9rem; border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 6px; }
+  .fails { margin: 0; padding-left: 0; list-style: none; display: grid; gap: 6px; }
+  .fails li { border-left: 4px solid var(--bad); padding: 4px 10px; background: var(--bad-soft); border-radius: 0 8px 8px 0; }
+  .tablewrap { overflow-x: auto; max-width: 100%; }
+  table.ct { border-collapse: collapse; font-size: .78rem; }
+  table.ct th, table.ct td { border: 1px solid var(--line); padding: 3px 5px; text-align: center; }
+  table.ct th { font-weight: 600; background: var(--bg); }
+  table.ct th.row { text-align: left; white-space: nowrap; }
+  table.ct td.y { background: var(--accent-soft); }
+  table.ct td.n { background: var(--bad-soft); }
+  table.ct td.miss { outline: 2px solid var(--warn); outline-offset: -2px; }
+  table.ct td.flash { animation: flash 1s; }
+  @keyframes flash { from { box-shadow: inset 0 0 0 3px var(--accent); } to { box-shadow: none; } }
+  @media (prefers-reduced-motion: reduce) { table.ct td.flash { animation: none; } }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font-size: .8rem; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); }
+  .chip.ind { background: var(--accent-soft); border-color: var(--accent); }
+  .chip.ast { background: var(--warn-soft); border-color: var(--warn); }
+  .chip.bad { background: var(--bad-soft); border-color: var(--bad); }
+  [data-variant="child"] .card, [data-variant="child"] .frame { font-size: 1.35rem; }
+  .done { font-size: 2.6rem; }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function () {
+  'use strict';
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t;
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'clause-constraint-ja';
+  var reg = (window.KT_REGISTRY && window.KT_REGISTRY.packs) || {};
+  // while the registry does not list this block's packs yet, fall back to the block's own data file
+  var entry = reg[setId] || (/^clause-constraint-/.test(setId) ? { file: 'data/clause-constraint.js', block: 'clause-constraint' } : {});
+  var app = document.getElementById('app');
+  if (entry.file && entry.block !== 'clause-constraint') { app.textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  if (!entry.file) { app.textContent = L('未知的数据包：', 'Unknown data pack: ') + setId; return; }
+  var sc = document.createElement('script');
+  sc.src = entry.file;
+  sc.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else app.textContent = L('数据包里没有 ' + setId, 'The data pack file does not contain ' + setId); };
+  sc.onerror = function () { app.textContent = L('数据包加载失败：', 'Could not load the data pack: ') + entry.file; };
+  document.head.appendChild(sc);
+
+  function start(pack) {
+    var title = T(pack, 'title');
+    var B = KTBlock.init({ id: 'clause-constraint', primitive: 'prim:clause-constraint', title: title, set: pack.id });
+    document.title = title + ' · Clause constraint';
+    var EN = KTBlock.lang === 'en';
+    var connById = {}; pack.conns.forEach(function (c) { connById[c.id] = c; });
+    var kcFocus = params.get('focus') || params.get('kc');
+    var modes = [{ id: 'try', label: L('① 试后句', '① Try the clauses') }, { id: 'swap', label: L('② 换连接形式', '② Swap the connective') }, { id: 'own', label: L('③ 自己写', '③ Write your own') }];
+    var st = { mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : 'try', queue: [], idx: 0, item: null, record: {}, table: {}, flash: null };
+
+    var ui = KTBlock.chrome(B, { title: title, subtitle: T(pack, 'subtitle'), modes: modes, mode: st.mode,
+      onMode: function (m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m }); newRound(); },
+      onVariant: function () { render(); } });
+    var bar = h('div', { class: 'kb-bar' });
+    var stage = h('div', { class: 'kb-card cc-stage' });
+    var side = h('aside', { class: 'cc-side' });
+    app.append(ui.header, h('main', { class: 'kb-main' }, [bar, h('div', { class: 'cc-layout' }, [stage, side])]), ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id });
+
+    function connName(c) { return EN ? (c.labelEn || c.formEn || c.form) : (c.label || c.form); }
+    function typeName(t) { var x = pack.types[t] || (pack.endTypes || {})[t]; return x ? T(x, 'label') : L('其他', 'other'); }
+    function speak(text) { if (!B.speak(text, pack.speech)) feedback(L('这个浏览器不能播放语音。', 'This browser cannot play speech.'), 'warn'); }
+    function feedback(t, tone) { var f = stage.querySelector('.kb-feedback'); if (f) { f.textContent = t; f.className = 'kb-feedback ' + (tone || ''); f.hidden = !t; } }
+    function mark(id, label) { var s = B.status(id); st.record[id] = { text: label, cls: s === 'independent' ? 'ind' : s === 'assisted' || s === 'revealed' || s === 'self-yes' ? 'ast' : 'bad' }; }
+    function kcOk(x) { return !kcFocus || x.kc === kcFocus; }
+    function pick(list) { var p = list.filter(kcOk); return p.length ? p : list; }
+    function joinSentence(f, text) { return f.before + (pack.lang === 'en' ? ' ' : '') + text + (f.after || ''); }
+
+    /* ---- rounds ---- */
+    function newRound() {
+      if (st.mode === 'try') st.queue = KTBlock.shuffle(pick(pack.frames)).slice(0, 5).map(function (f) { return { kind: 'try', f: f, id: 'frame:' + f.id }; });
+      else if (st.mode === 'swap') st.queue = KTBlock.shuffle(pick(pack.swaps)).map(function (s) { return { kind: 'swap', s: s, id: 'swap:' + s.id }; });
+      else st.queue = pick(pack.tasks).map(function (t) { return { kind: 'own', t: t, id: 'own:' + t.id }; });
+      st.idx = 0; begin();
+    }
+    function begin() {
+      var it = st.queue[st.idx];
+      if (it && it.kind === 'try') Object.assign(it, { cards: KTBlock.shuffle(it.f.cards), cur: null, judged: {}, hint: 0 });
+      if (it && it.kind === 'swap') Object.assign(it, { picked: null });
+      if (it && it.kind === 'own') Object.assign(it, { text: '', det: null, endOverride: null, result: null, shown: false });
+      st.item = it || null;
+      if (it) B.emit('view', { item: it.id, mode: st.mode }); else B.emit('complete', { mode: st.mode, items: st.queue.length });
+      render();
+    }
+    function next() { st.idx++; begin(); }
+
+    /* ---- ① try each clause card under one connective ---- */
+    function cardId(f, c) { return 'try:' + f.id + ':' + c.id; }
+    function judgeCard(verdict) {
+      var it = st.item, f = it.f, c = it.cards.filter(function (x) { return x.id === it.cur; })[0];
+      if (!c || it.judged[c.id]) return;
+      var right = verdict === c.ok;
+      // a hint seen before this card was judged marks the card as assisted
+      if (it.hint) B.hint(cardId(f, c), it.hint);
+      B.attempt(cardId(f, c), { correct: right, response: { said: verdict ? 'ok' : 'fails', conn: f.conn, type: c.type } });
+      it.judged[c.id] = { said: verdict, right: right };
+      mark(cardId(f, c), c.text);
+      var key = c.type + '|' + f.conn, cell = st.table[key] || { ok: c.ok, right: true };
+      cell.ok = c.ok; cell.right = cell.right && right; st.table[key] = cell; st.flash = key;
+      render();
+      var verdictText = c.ok ? L('成立。', 'It works. ') : L('不成立：', 'It fails: ') + T(c, 'why');
+      feedback(((right ? L('判断对了。', 'Right. ') : L('判断错了。', 'Not right. ')) + verdictText + (c.ok && c.note ? ' ' + T(c, 'note') : '')).trim(), right ? '' : 'bad');
+      if (c.ok) speak(joinSentence(f, c.text) );
+    }
+    function renderTry() {
+      var it = st.item, f = it.f, conn = connById[f.conn], cur = it.cards.filter(function (x) { return x.id === it.cur; })[0];
+      stage.append(h('p', { class: 'kb-prompt', text: L('连接形式「' + connName(conn) + '」不动。点一张后句卡放进空位，判断这句话成立不成立（1 = 成立，2 = 不成立）。', 'The connective “' + connName(conn) + '” stays fixed. Put a clause card in the gap and judge whether the sentence works (1 = works, 2 = fails).') }));
+      var j = cur && it.judged[cur.id];
+      var slotCls = 'slot' + (j ? (cur.ok ? ' ok' : ' bad') : '');
+      var connText = conn.form.replace(/（.*）/, '');
+      var beforeParts = f.before.split(connText);
+      var frameKids = [];
+      if (beforeParts.length === 2 && connText) frameKids.push(beforeParts[0], h('span', { class: 'conn', text: connText }), beforeParts[1]);
+      else frameKids.push(h('span', { class: 'conn', text: f.before }));
+      if (pack.lang === 'en') frameKids.push(' ');
+      frameKids.push(h('span', { class: slotCls, text: cur ? cur.text : '　' }), f.after || '');
+      stage.append(h('div', { class: 'frame', lang: pack.lang }, frameKids));
+      stage.append(h('div', { class: 'tools' }, [
+        h('button', { class: 'kb-btn primary', disabled: !cur || !!j, onclick: function () { judgeCard(true); } }, L('1 成立', '1 Works')),
+        h('button', { class: 'kb-btn primary', disabled: !cur || !!j, onclick: function () { judgeCard(false); } }, L('2 不成立', '2 Fails')),
+        cur && !j ? h('button', { class: 'kb-btn', onclick: function () { speak(joinSentence(f, cur.text)); } }, L('▶ 听这句', '▶ Hear it')) : null]));
+      stage.append(h('div', { class: 'cards' }, it.cards.map(function (c) {
+        var jj = it.judged[c.id];
+        var kids = [h('span', { lang: pack.lang, text: c.text })];
+        if (it.hint >= 1 || jj) kids.push(h('span', { class: 'tag', text: (pack.types[c.type].icon || '') + ' ' + typeName(c.type) }));
+        if (jj) kids.push(h('span', { class: 'res', text: (c.ok ? L('✓ 成立', '✓ works') : L('✗ 不成立', '✗ fails')) + (jj.right ? '' : L('（你判错了）', ' (you judged wrong)')) }));
+        if (jj && !c.ok) kids.push(h('span', { class: 'why', text: T(c, 'why') }));
+        return h('button', { class: 'card' + (jj ? (c.ok ? ' judged-ok' : ' judged-bad') : ''), 'aria-pressed': it.cur === c.id ? 'true' : 'false',
+          onclick: function () { it.cur = c.id; B.emit('select', { item: cardId(f, c), text: c.text }); render(); } }, kids);
+      })));
+      var hintTools = [];
+      if (it.hint < 1) hintTools.push(h('button', { class: 'kb-btn', onclick: function () { it.hint = 1; B.emit('request_hint', { item: it.id, level: 1 }); render(); feedback(L('提示：每张卡上标出了它是哪一类后句。这个连接形式能接哪几类？', 'Hint: each card now shows what kind of clause it is. Which kinds can this connective take?'), 'warn'); } }, L('提示：标出后句类型', 'Hint: show the clause types')));
+      else if (it.hint < 2 && f.hint3) hintTools.push(h('button', { class: 'kb-btn', onclick: function () { it.hint = 2; B.emit('request_hint', { item: it.id, level: 2 }); render(); } }, L('提示：看一对对照句', 'Hint: see a contrast pair')));
+      if (hintTools.length) stage.append(h('div', { class: 'tools' }, hintTools));
+      if (it.hint >= 2 && f.hint3) stage.append(h('p', { class: 'kb-note', lang: null, text: T(f, 'hint3') }));
+      it.solved = it.cards.every(function (c) { return it.judged[c.id]; });
+      if (it.solved) feedbackLater(L('这一组后句都试过了。', 'All the clauses for this connective have been tried.'));
+    }
+    function feedbackLater(t) { stage._after = t; }
+
+    /* ---- ② swap the connective, name the constraint ---- */
+    var catIds = function () { return Object.keys(pack.cats); };
+    function answerSwap(cat) {
+      var it = st.item, s = it.s; if (it.picked) return;
+      var ok = cat === s.cat;
+      B.attempt(it.id, { correct: ok, response: { picked: cat, expected: s.cat } });
+      it.picked = cat; it.solved = true; mark(it.id, s.b);
+      render();
+      feedback((ok ? L('对。', 'Right. ') : L('不是这样。答案是：', 'Not quite. The answer is: ') + T(pack.cats[s.cat], 'label') + L('。', '. ')) + T(s, 'note'), ok ? '' : 'bad');
+    }
+    function renderSwap() {
+      var it = st.item, s = it.s, cats = catIds();
+      stage.append(h('p', { class: 'kb-prompt', text: L('第一句成立。第二句只换了连接形式：它还成立吗？如果不成立，是哪一类限制？', 'The first sentence works. The second only swaps the connective: does it still work? If not, which kind of constraint does it break?') }));
+      stage.append(h('div', { class: 'pair' }, [h('span', { class: 'lbl', text: L('成立的句子', 'Works') }), h('div', { class: 'line', lang: pack.lang, text: s.a }),
+        h('span', { class: 'lbl', text: L('换了连接形式', 'Connective swapped') }), h('div', { class: 'line', lang: pack.lang, text: s.b })]));
+      stage.append(h('div', { class: 'opts' }, cats.map(function (c, i) {
+        var cl = 'opt' + (it.picked && c === s.cat ? ' right' : '') + (it.picked === c && c !== s.cat ? ' wrongpick' : '');
+        return h('button', { class: cl, disabled: !!it.picked, onclick: function () { answerSwap(c); } }, [h('span', { class: 'num', text: String(i + 1) }), T(pack.cats[c], 'label')]);
+      })));
+      if (it.picked) stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () { B.speakSequence([{ text: s.a, pause: 600 }, { text: s.b }], pack.speech); } }, L('▶ 听两句', '▶ Hear both'))]));
+    }
+
+    /* ---- ③ write your own ---- */
+    function detect(text) {
+      var found = null, at = -1;
+      pack.conns.some(function (c) { var m = new RegExp(c.re, 'i').exec(text); if (m) { found = c; at = m.index + m[0].length; return true; } return false; });
+      var end = null;
+      (pack.ends || []).some(function (e) { if (new RegExp(e.re, 'i').test(text.trim())) { end = e.type; return true; } return false; });
+      return { conn: found, after: found ? text.slice(at) : '', before: found ? text.slice(0, at) : '', end: end };
+    }
+    function checkOwn() {
+      var it = st.item, t = it.t, text = (it.text || '').trim();
+      if (text.length < 4) { feedback(L('先写一整句。', 'Write a whole sentence first.'), 'warn'); return; }
+      var d = it.det || detect(text); it.det = d; var fails = [], endType = it.endOverride || d.end;
+      if (!d.conn) fails.push(L('页面在句子里没找到任何一个它认识的连接形式。', 'The page did not find any connective it knows in the sentence.') + ' ' + T(t, 'whyNot'));
+      else {
+        if (t.allowed.indexOf(d.conn.id) < 0) fails.push(L('找到的连接形式是「' + connName(d.conn) + '」。', 'The connective found is “' + connName(d.conn) + '”. ') + T(t, 'whyNot'));
+        var c = d.conn;
+        if (c.partner && !new RegExp(c.partner).test(d.after) && !new RegExp(c.partner).test(c.re)) fails.push(L('「' + c.form + '」的后一分句缺少搭配的词（' + c.partner.replace(/[\[\]|]/g, ' ').trim() + '）。', 'The second clause after “' + c.form + '” is missing its partner word (' + c.partner.replace(/[\[\]|]/g, ' ').trim() + ').'));
+        if (c.choice && !new RegExp(c.choice).test(d.after.split(/[，,]/)[0])) fails.push(L('「' + c.form + '」后面要有疑问词、正反形式（去不去）或“还是”。', '“' + c.form + '” must be followed by a question word, an A-not-A form (去不去) or 还是.'));
+        if (pack.lang === 'zh' && /[，,](就|才|也|都)(我|你|他|她|我们|你们|他们|大家|孩子)/.test(text)) fails.push(L('就／才／也／都 要放在后一分句的主语后面。', '就 / 才 / 也 / 都 go after the subject of the second clause.'));
+        if (c.noWill) { var own = d.after.split(/[,;]/)[0]; if (/\bwill\b|'ll\b|\bwon't\b/i.test(own)) fails.push(L('「' + c.form + '」引出的从句说将来也用一般现在时，不用 will。', 'The clause after “' + c.form + '” uses the present simple for the future, not will.')); }
+      }
+      if (t.need && endType !== t.need) fails.push(L('主句应该是「' + typeName(t.need) + '」，页面认出来的是「' + typeName(endType) + '」。', 'The main clause should be a ' + typeName(t.need) + '; the page read it as ' + typeName(endType) + '.'));
+      var pass = !fails.length, corrected = !!it.endOverride && it.endOverride !== d.end;
+      B.attempt(it.id, { correct: pass, selfReport: corrected || undefined, response: { text: text, conn: d.conn && d.conn.id, end: endType, endDetected: d.end, endCorrectedByLearner: corrected, checked: 'connective-and-ending-only' } });
+      it.det = d; it.result = { fails: fails, pass: pass }; mark(it.id, text);
+      render();
+      feedback(pass ? L('连接形式和句末类型都对得上。', 'The connective and the type of ending both fit.') : L('有地方没对上，见下面。', 'Something does not fit; see below.'), pass ? '' : 'bad');
+    }
+    function renderOwn() {
+      var it = st.item, t = it.t;
+      stage.append(h('p', { class: 'kb-prompt', text: T(t, 'task') }));
+      stage.append(h('div', { class: 'own' }, [h('textarea', { lang: pack.lang, 'aria-label': L('你的句子', 'Your sentence'), oninput: function (e) { it.text = e.target.value; if (it.det || it.result) { it.det = null; it.endOverride = null; it.result = null; } } }, it.text)]));
+      var ta = stage.querySelector('.own textarea'); if (ta) ta.value = it.text;
+      stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: function () {
+          if (it.det && !it.result) { checkOwn(); return; }
+          if ((it.text || '').trim().length < 4) { feedback(L('先写一整句。', 'Write a whole sentence first.'), 'warn'); return; }
+          it.det = detect(it.text.trim()); it.endOverride = null; it.result = null; B.emit('submit', { item: it.id, step: 'detect', text: it.text });
+          render(); feedback(L('先看页面认出了什么；句末类型认错了就改一下，再点“确认并检查”。', 'First see what the page found; if it read the ending wrongly, change it, then press “Confirm and check”.'), 'warn');
+        } }, it.det && !it.result ? L('确认并检查', 'Confirm and check') : L('检查', 'Check')),
+        h('button', { class: 'kb-btn', onclick: function () { B.reveal(it.id); it.shown = true; mark(it.id, t.model); render(); } }, L('看参考句', 'Show a model'))]));
+      if (it.det) {
+        var endTypes = (pack.ends || []).map(function (e) { return e.type; });
+        stage.append(h('div', { class: 'detect' }, [
+          h('span', { text: L('页面找到的连接形式：', 'Connective found: ') + (it.det.conn ? connName(it.det.conn) : L('（没找到）', '(none)')) }),
+          endTypes.length ? h('label', {}, [L('页面认出的句末类型（认错了可以改）：', 'Type of ending as read by the page (change it if it is wrong): '),
+            h('select', { onchange: function (e) { it.endOverride = e.target.value || null; B.emit('revise', { item: it.id, end: e.target.value }); render(); } },
+              [h('option', { value: '', text: L('其他', 'other'), selected: !(it.endOverride || it.det.end) })].concat(endTypes.map(function (x) { return h('option', { value: x, selected: (it.endOverride || it.det.end) === x, text: typeName(x) }); })))]) : null,
+          it.endOverride && it.endOverride !== it.det.end ? h('span', { class: 'kb-note', text: L('你改了句末类型：这一题会记为自评。', 'You changed the type of ending: this item will be recorded as self-report.') }) : null]));
+      }
+      if (it.result && it.result.fails.length) stage.append(h('ul', { class: 'fails' }, it.result.fails.map(function (f) { return h('li', { text: f }); })));
+      if (it.shown) stage.append(h('p', { class: 'kb-note' }, [L('参考句：', 'Model: '), h('span', { lang: pack.lang, text: t.model })]));
+      stage.append(h('p', { class: 'kb-note', text: L('页面只检查两件事：句子里用了哪个连接形式（以及它要求的搭配词），句末是哪一类（请求、建议……）。它不判断句子其余部分的语法和用词，请老师或你自己看。', 'The page checks only two things: which connective the sentence uses (and the partner word it needs), and what kind of ending it has (request, advice …). It does not judge the grammar or wording of the rest of the sentence; a teacher or you should look at that.') }));
+    }
+
+    /* ---- side: the learner's constraint table ---- */
+    function renderSide() {
+      side.innerHTML = '';
+      var conns = [], types = [];
+      pack.frames.forEach(function (f) { if (conns.indexOf(f.conn) < 0) conns.push(f.conn); f.cards.forEach(function (c) { if (types.indexOf(c.type) < 0) types.push(c.type); }); });
+      var filled = Object.keys(st.table).length;
+      var tbl = h('table', { class: 'ct' }, [h('thead', {}, h('tr', {}, [h('th', { text: '' })].concat(conns.map(function (c) { return h('th', { lang: pack.lang, text: connById[c].form.replace(/（.*）/, '') }); })))),
+        h('tbody', {}, types.map(function (ty) {
+          return h('tr', {}, [h('th', { class: 'row', text: (pack.types[ty].icon || '') + ' ' + typeName(ty) })].concat(conns.map(function (c) {
+            var cell = st.table[ty + '|' + c], key = ty + '|' + c;
+            return h('td', { class: (cell ? (cell.ok ? 'y' : 'n') + (cell.right ? '' : ' miss') : '') + (st.flash === key ? ' flash' : ''), title: cell ? (cell.ok ? L('可以', 'allowed') : L('不可以', 'not allowed')) : '', text: cell ? (cell.ok ? '✓' : '✗') : '' });
+          })));
+        }))]);
+      st.flash = null;
+      side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('我的限制表', 'My constraint table') }),
+        h('p', { class: 'kb-note', text: L('每判一张后句卡，就点亮一格：✓ = 这一类后句可以接，✗ = 不可以。黄框 = 你在这一格判错过。', 'Each judged card lights one cell: ✓ = this kind of clause is allowed, ✗ = not allowed. Yellow frame = you judged this cell wrong once.') }),
+        h('div', { class: 'tablewrap' }, tbl), h('p', { class: 'kb-note', text: L('已点亮 ' + filled + ' 格。', filled + (filled === 1 ? ' cell' : ' cells') + ' lit.') })]));
+      var chips = st.queue.length ? Object.keys(st.record).filter(function (id) { return st.mode === 'try' ? id.indexOf('try:') === 0 : st.queue.some(function (q) { return q.id === id; }); }).map(function (id) { var r = st.record[id]; return h('span', { class: 'chip ' + r.cls, lang: pack.lang, text: r.text }); }) : [];
+      side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('这一轮', 'This round') }), chips.length ? h('div', { class: 'chips' }, chips) : h('p', { class: 'kb-note', text: L('还没有作答。', 'No answers yet.') }),
+        h('p', { class: 'kb-note', text: L('颜色看第一次判断：绿 = 独立判对；黄 = 用过提示或看了参考；红 = 判错。', 'Colours follow the first answer: green = right on your own; yellow = after a hint or a model; red = wrong.') })]));
+    }
+    function renderBar() {
+      bar.innerHTML = '';
+      if (st.item) bar.append(h('span', { class: 'kb-note', text: L('第 ' + (st.idx + 1) + ' / ' + st.queue.length + ' 组', 'Set ' + (st.idx + 1) + ' / ' + st.queue.length) }));
+      bar.append(h('button', { class: 'kb-btn', onclick: newRound }, L('换一轮', 'New round')));
+    }
+    function renderStage() {
+      stage.innerHTML = ''; stage._after = null;
+      var it = st.item;
+      if (!it) {
+        stage.append(h('div', { class: 'done', text: '✓' }), h('p', { class: 'kb-prompt', text: L('这一轮做完了。', 'Round finished.') }), h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: newRound }, L('再来一轮', 'Another round'))]));
+        return;
+      }
+      if (it.kind === 'try') renderTry(); else if (it.kind === 'swap') renderSwap(); else renderOwn();
+      stage.append(h('div', { class: 'kb-feedback', hidden: true, 'aria-live': 'polite' }));
+      var done = it.kind === 'own' ? !!(it.result || it.shown) : it.solved;
+      stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn' + (done ? ' primary' : ''), onclick: next }, done ? L('下一组 →', 'Next →') : L('跳过', 'Skip'))]));
+      if (stage._after) feedback(stage._after, '');
+    }
+    function render() { renderBar(); renderStage(); renderSide(); }
+
+    document.addEventListener('keydown', function (e) {
+      var tag = e.target.tagName;
+      if (tag === 'SELECT' || tag === 'INPUT' || tag === 'TEXTAREA' || e.metaKey || e.ctrlKey || e.altKey) return;
+      var it = st.item; if (!it) return;
+      if (it.kind === 'try') {
+        if (e.key === '1') judgeCard(true); else if (e.key === '2') judgeCard(false);
+        else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+          e.preventDefault(); var ids = it.cards.map(function (c) { return c.id; }), p = ids.indexOf(it.cur);
+          it.cur = ids[(p + (e.key === 'ArrowDown' ? 1 : ids.length - 1)) % ids.length]; render();
+          var b = stage.querySelector('.card[aria-pressed="true"]'); if (b) b.focus();
+        }
+      } else if (it.kind === 'swap') {
+        var n = parseInt(e.key, 10), cats = catIds();
+        if (n >= 1 && n <= cats.length) answerSwap(cats[n - 1]);
+      }
+    });
+
+    newRound();
+  }
+})();
+</script>
+</body>
+</html>

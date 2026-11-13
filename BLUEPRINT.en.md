@@ -20,7 +20,7 @@ The look, the story, the device and the game mechanics are yours to design. The 
 
 Everything is plain JSON, Python 3 standard library and dependency-free JavaScript. User-facing text is Chinese; examples are in the target language with a Chinese gloss (`{zh, reading, en}` for Chinese as a second language).
 
-Numbers at the time of writing: 950 KCs (en 353, ja 386, zh 211), 14 tracks, 56 primitives, 6 block engines with 18 data packs. Run the commands; do not quote these numbers from memory.
+Numbers at the time of writing: 950 KCs (en 353, ja 386, zh 211), 14 tracks, 56 primitives, 30 block engines with 85 data packs. Run the commands; do not quote these numbers from memory.
 
 ## 2. From a one-line request to a blueprint
 

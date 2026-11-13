@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Real-document scan</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .ds-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .ds-layout { grid-template-columns: 1fr; } }
+  .ds-stage { display: grid; gap: 12px; min-width: 0; }
+  .ds-side { display: grid; gap: 12px; }
+  .task { position: sticky; top: 0; z-index: 3; border-left: 4px solid var(--accent); }
+  .task .kb-prompt { margin: 2px 0 0; }
+  .step { font-size: .82rem; color: var(--muted); }
+  /* the document */
+  .doc { --paper: #fffdf8; --ink2: #1d1e24; --rule: #cfc8b8; --band: #2c3a8a; --band-ink: #fff; --stamp: #a13d46;
+    background: var(--paper); color: var(--ink2); border: 1px solid var(--rule); border-radius: 4px; padding: 18px clamp(10px, 3vw, 26px) 16px;
+    box-shadow: 0 1px 0 var(--rule), 0 6px 18px rgba(0,0,0,.06); position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; overflow-x: auto; }
+  :root[data-theme="dark"] .doc { --paper: #22242f; --ink2: #ecedf4; --rule: #3a3d50; --band: #3a4596; --band-ink: #fff; --stamp: #e57b84; }
+  .doc .stamp { position: absolute; top: 6px; right: 8px; font-size: .68rem; color: var(--stamp); border: 1px solid var(--stamp); border-radius: 4px; padding: 0 5px; transform: rotate(3deg); background: var(--paper); }
+  .doc h2 { grid-column: 1 / -1; margin: 6px 0 0; font-size: 1.35rem; letter-spacing: .02em; }
+  .doc .dsub { grid-column: 1 / -1; margin: -6px 0 0; font-size: .9rem; opacity: .8; }
+  .zone { grid-column: 1 / -1; position: relative; border-radius: 6px; padding: 6px 6px; min-width: 0; }
+  .zone.half { grid-column: auto; }
+  @media (max-width: 560px) { .doc { grid-template-columns: 1fr; } .zone.half { grid-column: 1 / -1; } }
+  .zone.dim { opacity: .38; }
+  .zone.hinted { outline: 3px dashed var(--warn); outline-offset: 2px; }
+  .zone.chosen { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .zone .cap { font-weight: 700; font-size: .92rem; margin: 0 0 4px; }
+  .zbtn { position: absolute; inset: 0; width: 100%; border: 2px dashed transparent; border-radius: 6px; background: transparent; z-index: 2; }
+  .zbtn:hover, .zbtn:focus-visible { border-color: var(--accent); background: rgba(61, 79, 224, .06); }
+  .row { display: flex; gap: 6px; align-items: baseline; width: 100%; border: 0; background: transparent; color: inherit; text-align: left; padding: 3px 4px; border-radius: 4px; font: inherit; min-height: 30px; }
+  .row:disabled { cursor: default; }
+  .row:not(:disabled):hover { background: rgba(61, 79, 224, .08); }
+  .row.sel { background: var(--accent-soft); outline: 2px solid var(--accent); }
+  .row.sel::before, tr.sel .rowbtn::before { content: "▶ "; color: var(--accent); }
+  .row.seen { text-decoration: underline dotted var(--muted); }
+  .row.foot { font-size: .86rem; }
+  .row.foot-hi { background: var(--warn-soft); outline: 2px solid var(--warn); }
+  .row .nm { flex: 0 1 auto; }
+  .row .lead { flex: 1 1 20px; border-bottom: 2px dotted var(--rule); min-width: 12px; transform: translateY(-4px); }
+  .row .pr { flex: 0 0 auto; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .row .desc { display: block; font-size: .8rem; opacity: .75; }
+  .row .box { flex: 1 1 60px; border: 1px solid var(--rule); height: 1.7em; border-radius: 2px; background: rgba(127,127,127,.04); }
+  .row .fhint { font-size: .78rem; opacity: .75; }
+  .z-fields .row { flex-wrap: wrap; }
+  .z-fields .row .lab { flex: 0 0 auto; min-width: 9em; }
+  .doc table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+  .doc th { background: var(--band); color: var(--band-ink); font-weight: 600; padding: 4px 6px; text-align: left; font-size: .88rem; }
+  .doc td { border-bottom: 1px solid var(--rule); padding: 0 6px; }
+  .doc tr.sel td { background: var(--accent-soft); }
+  .doc tr.seen td { text-decoration: underline dotted var(--muted); }
+  .rowbtn { border: 0; background: transparent; font: inherit; color: inherit; padding: 4px 0; text-align: left; width: 100%; }
+  .rowbtn:disabled { cursor: default; }
+  /* document kinds */
+  .doc.menu h2 { text-align: center; font-family: Georgia, "Times New Roman", "Hiragino Mincho ProN", "Songti SC", serif; font-size: 1.6rem; }
+  .doc.menu .dsub { text-align: center; }
+  .doc.menu .cap { text-transform: uppercase; letter-spacing: .08em; border-bottom: 1px solid var(--rule); }
+  .doc.timetable h2 { background: var(--band); color: var(--band-ink); padding: 6px 10px; border-radius: 3px; font-size: 1.1rem; }
+  .doc.notice { border: 3px solid var(--ink2); }
+  .doc.notice h2 { text-align: center; font-size: 1.5rem; border-bottom: 3px double var(--ink2); padding-bottom: 6px; }
+  .doc.notice .z-lines .row::after { content: ""; }
+  .doc.form h2 { font-size: 1.15rem; border-bottom: 2px solid var(--ink2); padding-bottom: 4px; }
+  .doc.form .zone { border: 1px solid var(--rule); }
+  .doc.poster h2 { text-align: center; font-size: 1.7rem; }
+  .doc.poster .dsub { text-align: center; }
+  .z-notes { border-top: 1px solid var(--rule); }
+  /* side */
+  .slot { border: 1px dashed var(--line); border-radius: 10px; padding: 8px 10px; min-height: 42px; }
+  .slot b { display: block; font-size: .78rem; color: var(--muted); font-weight: 600; }
+  .conds { display: grid; gap: 8px; }
+  .cond { display: grid; gap: 4px; }
+  .cond .ct { font-size: .92rem; }
+  .judg { display: flex; flex-wrap: wrap; gap: 4px; }
+  .judg .kb-btn { padding: 4px 10px; font-size: .86rem; }
+  .judg .kb-btn[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .cond.badc .ct::after { content: " ✗"; color: var(--bad); font-weight: 700; }
+  .cond.okc .ct::after { content: " ✓"; color: var(--t2); font-weight: 700; }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tools.areas { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+  .nexts { display: grid; gap: 6px; }
+  .nexts .kb-btn { text-align: left; border-radius: 10px; }
+  .say { font-size: 1.05rem; padding: 6px 10px; border-radius: 8px; background: var(--accent-soft); }
+  .path { font-size: .82rem; color: var(--muted); margin: 0; padding-left: 18px; max-height: 140px; overflow: auto; }
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; }
+  .chip { font-size: .78rem; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); }
+  .chip.ind { background: var(--accent-soft); border-color: var(--accent); }
+  .chip.ast { background: var(--warn-soft); border-color: var(--warn); }
+  .chip.bad { background: var(--bad-soft); border-color: var(--bad); }
+  .chip.cur { outline: 2px solid var(--ink); }
+  .frame { font-size: 1.1rem; line-height: 2.4; }
+  .frame input { border: 0; border-bottom: 2px solid var(--accent); background: var(--accent-soft); padding: 2px 6px; width: 9em; max-width: 100%; border-radius: 4px 4px 0 0; }
+  .frame input.badin { border-bottom-color: var(--bad); background: var(--bad-soft); }
+  .frame input.okin { border-bottom-color: var(--t2); background: transparent; }
+  .done { font-size: 2.4rem; text-align: center; }
+  .kb-bar select { max-width: 100%; }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* Real-document scan (prim:real-document-scan). Packs: data/real-document-scan.js (format in its header).
+ * Modes: scan (step 1: choose the area of the document first; step 2: pick the entry and judge each task condition
+ * as fits / does not fit / exception (footnote, only on certain days) — or say the document does not say, and choose
+ * what to do next), trap (the reverse half only: tasks whose answer is excluded by a footnote or is not on the
+ * document), use (step 3: put the found information into a short message; checked against the pack's accepted forms).
+ * Evidence: the first area chosen and the first answer are kept; area hints and format explanations mark the task
+ * assisted; a scan path that clicks through most of the document is recorded as "not scanned" and does not pass. */
+(function () {
+  'use strict';
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t;
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'real-document-scan-en';
+  var entry = (window.KT_REGISTRY && KT_REGISTRY.packs && KT_REGISTRY.packs[setId]) || { file: 'data/real-document-scan.js', block: 'real-document-scan' };
+  var app = document.getElementById('app');
+  if (entry.block !== 'real-document-scan') { app.textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  var s = document.createElement('script');
+  s.src = entry.file;
+  s.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else app.textContent = L('数据包里没有 ' + setId, 'The data pack file does not contain ' + setId); };
+  s.onerror = function () { app.textContent = L('数据包加载失败：', 'Could not load the data pack: ') + entry.file; };
+  document.head.appendChild(s);
+
+  function start(pack) {
+    var title = T(pack, 'title');
+    var B = KTBlock.init({ id: 'real-document-scan', primitive: 'prim:real-document-scan', title: title, set: pack.id });
+    document.title = title + ' · Real-document scan';
+    var tlang = pack.lang === 'zh' ? 'zh-CN' : pack.lang;
+    var docs = {}, rowOf = {};
+    pack.docs.forEach(function (d) {
+      docs[d.id] = d; rowOf[d.id] = {};
+      d.zones.forEach(function (z) { z.rows.forEach(function (r) { rowOf[d.id][r.id] = { zone: z, row: r }; }); });
+    });
+    function child() { return B.variant === 'child'; }
+    function isTrap(task) {
+      if (task.type === 'none') return true;
+      var ans = [].concat(task.answer), r = task.rows && task.rows[ans[0]];
+      return !!(r && r.c.some(function (c) { return [].concat(c).indexOf('except') >= 0; }));
+    }
+    var allTasks = pack.tasks.slice();
+    if (B.kc && allTasks.some(function (t) { return t.kc === B.kc; })) allTasks = allTasks.filter(function (t) { return t.kc === B.kc; });
+    var useItems = [];
+    pack.docs.forEach(function (d) { (d.use || []).forEach(function (u) { useItems.push(Object.assign({ doc: d.id }, u)); }); });
+    var modes = [{ id: 'scan', label: L('扫读找答案', 'Scan and find') }, { id: 'trap', label: L('看似是答案', 'Looks right, but…') }, { id: 'use', label: L('用出来', 'Use it') }];
+    var JUDG = [{ v: 'yes', zh: '符合', en: 'Fits' }, { v: 'no', zh: '不符合', en: 'Does not fit' }, { v: 'except', zh: '有例外（脚注、只限某天）', en: 'Exception (footnote, only on…)' }];
+    var st = {
+      mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : 'scan',
+      queue: [], qi: 0, fade: {}, msg: null
+    };
+    var ui = KTBlock.chrome(B, { title: title, subtitle: T(pack, 'subtitle'), modes: modes, mode: st.mode,
+      onMode: function (m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m }); enterMode(); },
+      onVariant: function () { render(); } });
+    var bar = h('div', { class: 'kb-bar' });
+    var stage = h('div', { class: 'ds-stage' });
+    var side = h('aside', { class: 'ds-side' });
+    app.append(ui.header, h('main', { class: 'kb-main' }, [bar, h('div', { class: 'ds-layout' }, [stage, side])]), ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id });
+
+    function enterMode() {
+      st.msg = null; st.qi = 0;
+      if (st.mode === 'use') { st.queue = useItems.slice(); loadUse(); return; }
+      st.queue = st.mode === 'trap' ? allTasks.filter(isTrap) : allTasks.slice();
+      loadTask();
+    }
+    function cur() { return st.queue[st.qi]; }
+    function loadTask() {
+      var t = cur();
+      st.phase = 'locate'; st.zone = null; st.zoneFirst = null; st.row = null; st.judg = []; st.path = []; st.visited = [];
+      st.hints = {}; st.msg = null; st.none = false; st.passed = false; st.foot = null; st.rejected = [];
+      if (t) B.emit('view', { item: t.id, doc: t.doc }); else B.emit('complete', { mode: st.mode, items: st.queue.length });
+      render();
+    }
+    function zoneFaded(t) { return !child() && (st.fade[docs[t.doc].kind] || 0) >= 2; }
+
+    /* ---- step 1: area ---- */
+    function chooseZone(zid) {
+      var t = cur(); if (!t || st.passed) return;
+      var first = st.zoneFirst === null;
+      if (first) st.zoneFirst = zid;
+      var hit = t.zone.indexOf(zid) >= 0;
+      st.zone = zid; st.phase = 'pick';
+      if (st.visited.indexOf(zid) < 0) st.visited.push(zid);
+      B.emit('highlight', { item: t.id, zone: zid, first: first, hit: hit, visited: st.visited.slice() });
+      st.msg = null; render();
+      setTimeout(function () { var b = stage.querySelector('.zone.chosen .row:not(:disabled), .zone.chosen .rowbtn:not(:disabled)'); if (b) b.focus(); }, 0);
+    }
+    function reZone() {
+      var t = cur(); st.phase = 'locate'; st.row = null; st.judg = []; st.msg = null; st.foot = null;
+      B.emit('revise', { item: t.id, step: 'area', from: st.zone });
+      render();
+    }
+
+    /* ---- step 2: entry and conditions ---- */
+    function pickRow(rid) {
+      var t = cur(); if (!t || st.passed) return;
+      st.row = rid; st.none = false; st.msg = null;
+      st.path.push(rid);
+      st.judg = (t.conds || []).map(function () { return null; });
+      var r = rowOf[t.doc][rid].row;
+      st.foot = r.ref || null;
+      B.emit('select', { item: t.id, row: rid, zone: rowOf[t.doc][rid].zone.id, footnote: r.ref || null });
+      render();
+    }
+    function judge(i, v) {
+      var t = cur(); if (!t || st.passed || !st.row) return;
+      st.judg[i] = v; B.emit('select', { item: t.id, row: st.row, cond: i, judged: v });
+      render();
+    }
+    function okCell(truth, v) {
+      var ok = [].concat(truth);
+      if (child()) ok = ok.map(function (x) { return x === 'except' ? 'no' : x; });
+      return ok.indexOf(v) >= 0;
+    }
+    function isAnswer(t, rid) { return [].concat(t.answer).indexOf(rid) >= 0; }
+    function scanned() {
+      var t = cur(), n = 0; Object.keys(rowOf[t.doc]).forEach(function () { n++; });
+      var uniq = st.path.filter(function (x, i, a) { return a.indexOf(x) === i; }).length;
+      return uniq <= Math.max(4, Math.ceil(n / 2));
+    }
+    function response(extra) {
+      return Object.assign({ doc: cur().doc, zoneFirst: st.zoneFirst, zoneHit: cur().zone.indexOf(st.zoneFirst) >= 0, row: st.row, judged: st.judg.slice(), path: st.path.slice(), zones: st.visited.slice(), scanned: scanned() }, extra || {});
+    }
+    function record(correct, extra) {
+      var t = cur(), sc = scanned();
+      if (!sc) correct = false;
+      var first = !B.items().some(function (i) { return i.id === t.id && i.first; });
+      B.attempt(t.id, { correct: correct, response: response(extra) });
+      if (first) {
+        var kind = docs[t.doc].kind, clean = st.zoneFirst !== null && t.zone.indexOf(st.zoneFirst) >= 0 && !st.hints[1] && !st.hints[2];
+        st.fade[kind] = clean ? (st.fade[kind] || 0) + 1 : 0;
+      }
+      return sc;
+    }
+    function truthText(t, rid) {
+      var r = t.rows && t.rows[rid];
+      if (!r) return L('这一条跟任务问的事对不上。', 'This entry has nothing to do with what the task asks.');
+      var bad = (t.conds || []).map(function (c, i) { return okCell(r.c[i], 'yes') ? null : T(c, 't') + L('：', ': ') + labelOf([].concat(r.c[i])[0]); }).filter(Boolean);
+      return (bad.length ? L('不满足的条件：', 'Condition not met: ') + bad.join(L('；', '; ')) + L('。', '. ') : L('各项条件都符合。', 'All conditions fit. ')) + (T(r, 'note') ? ' ' + T(r, 'note') : '');
+    }
+    function labelOf(v) { var j = JUDG.filter(function (x) { return x.v === v; })[0]; if (child() && v === 'except') j = JUDG[1]; return L(j.zh, j.en); }
+    function submit() {
+      var t = cur(); if (!t || st.passed || !st.row) return;
+      if (st.judg.some(function (x) { return x === null; })) { st.msg = { t: L('每个条件都要先判断。', 'Judge every condition first.'), tone: 'warn' }; render(); return; }
+      var r = t.rows && t.rows[st.row];
+      var judgedOk = !!r && st.judg.every(function (v, i) { return okCell(r.c[i], v); });
+      var allYes = st.judg.every(function (v) { return v === 'yes'; });
+      if (t.type === 'find' && !allYes && !isAnswer(t, st.row)) {
+        // the learner rejects an entry: not an answer, but part of scanning
+        B.emit('revise', { item: t.id, rejected: st.row, judged: st.judg.slice(), judgedRight: judgedOk });
+        st.rejected.push(st.row);
+        st.msg = { t: (judgedOk ? L('判断得对：这一条不行。', 'Right: this one does not work. ') : L('这一条确实不行，但你的判断有出入。', 'This one does not work, but your judgement differs. ')) + truthText(t, st.row) + L(' 再找一条。', ' Find another one.'), tone: 'warn' };
+        st.row = null; st.judg = []; st.foot = null;
+        render(); return;
+      }
+      var correct = isAnswer(t, st.row) && judgedOk;
+      var sc = record(correct, { judgedRight: judgedOk });
+      if (!sc) st.msg = { t: L('你几乎把单据上的条目都点了一遍，这不是扫读，这一题不算通过。先想清楚要找哪一类信息，在哪一区，再去点。', 'You clicked through most of the document. That is not scanning, so this task does not pass. Decide what kind of information you need and where it would be before clicking.'), tone: 'bad' };
+      else if (correct) pass();
+      else if (isAnswer(t, st.row)) st.msg = { t: L('这一条找对了，但条件判断有出入：', 'Right entry, but some condition judgements differ: ') + truthText(t, st.row) + L(' 改一改再提交。', ' Change them and submit again.'), tone: 'bad' };
+      else st.msg = { t: L('不是这一条。', 'Not this one. ') + truthText(t, st.row), tone: 'bad' };
+      render();
+    }
+    function markNone() {
+      var t = cur(); if (!t || st.passed) return;
+      B.emit('select', { item: t.id, row: null, none: true });
+      if (t.type !== 'none') {
+        record(false, { none: true });
+        st.msg = { t: L('单据上其实有答案。再看看：' + (T(t, 'where') || ''), 'The answer is on the document. Look again: ' + (T(t, 'where') || '')), tone: 'bad' };
+        render(); return;
+      }
+      st.none = true; st.row = null; st.judg = []; st.msg = null; render();
+    }
+    function chooseNext(i) {
+      var t = cur(); if (!t || st.passed) return;
+      var n = t.next[i];
+      var ok = record(!!n.ok, { none: true, next: T(n, 't') });
+      if (ok && n.ok) pass();
+      else if (ok) st.msg = { t: L('单据上确实没有。但这不是下一步该做的：', 'Right, the document does not say. But that is not the next step: ') + T(n, 'why'), tone: 'bad' };
+      render();
+    }
+    function pass() {
+      var t = cur(); st.passed = true;
+      var stat = B.status(t.id);
+      st.msg = { t: L('对。', 'Right. ') + (T(t, 'done') || '') + statusNote(stat), tone: '' };
+      if (t.type === 'none' && t.say) st.msg.say = t.say;
+      B.emit('complete', { item: t.id, status: stat });
+    }
+    function statusNote(stat) {
+      if (stat === 'wrong') return L('（第一次不对，这次改对了。）', ' (Wrong the first time, right now.)');
+      if (stat === 'assisted') return L('（用过提示，记为提示后完成。）', ' (A hint was used: recorded as assisted.)');
+      return '';
+    }
+    function hint(n) {
+      var t = cur(); if (!t || st.hints[n]) return;
+      st.hints[n] = true; B.hint(t.id, n);
+      render();
+    }
+
+    /* ---- step 3: use ---- */
+    function loadUse() {
+      var u = cur(); st.vals = []; st.useRes = null; st.revealed = false;
+      if (u) B.emit('view', { item: 'use:' + u.id, doc: u.doc }); else B.emit('complete', { mode: 'use', items: st.queue.length });
+      render();
+    }
+    function norm(x) { return String(x || '').normalize('NFKC').toLowerCase().replace(/[\s　]+/g, '').replace(/[。．.、,，!！]+$/, ''); }
+    function checkUse() {
+      var u = cur(), id = 'use:' + u.id;
+      var oks = u.ans.map(function (acc, i) { return acc.some(function (a) { return norm(a) === norm(st.vals[i]); }); });
+      if (st.vals.filter(function (v) { return v && v.trim(); }).length < u.ans.length) { st.useRes = { t: L('每个空都要填。', 'Fill in every gap.'), tone: 'warn' }; render(); return; }
+      var all = oks.every(Boolean);
+      B.attempt(id, { correct: all, response: { values: st.vals.slice(), ok: oks } });
+      st.useRes = { ok: oks, t: all ? L('信息和单据一致，这条消息可以发出去了。', 'The details match the document. This message is ready to send.') + statusNote(B.status(id)) : L('标红的空和单据上的信息对不上。回到单据上再找一次。', 'The gaps marked in red do not match the document. Look at it again.'), tone: all ? '' : 'bad' };
+      render();
+    }
+
+    /* ---- render: document ---- */
+    function docEl(doc, opt) {
+      var t = opt.task, picking = opt.phase === 'pick', locating = opt.phase === 'locate';
+      var hinted = t && st.hints && st.hints[2] ? t.zone : [];
+      var el = h('div', { class: 'doc ' + doc.kind, lang: tlang }, [
+        h('span', { class: 'stamp', lang: B.lang === 'en' ? 'en' : 'zh-CN', text: L('虚构单据 · 练习用', 'Fictional · for practice') }),
+        doc.title ? h('h2', { text: doc.title }) : null,
+        doc.sub ? h('p', { class: 'dsub', text: doc.sub }) : null
+      ]);
+      doc.zones.forEach(function (z) {
+        var chosen = picking && st.zone === z.id;
+        var cls = 'zone z-' + z.type + (z.half ? ' half' : '') + (picking && !chosen ? ' dim' : '') + (chosen ? ' chosen' : '') + (hinted.indexOf(z.id) >= 0 ? ' hinted' : '');
+        var kids = [];
+        if (z.cap) kids.push(h('p', { class: 'cap', text: z.cap }));
+        function rowCls(r) { return (st.row === r.id ? ' sel' : '') + (st.foot === r.id ? ' foot-hi' : '') + (picking && st.path.indexOf(r.id) >= 0 && st.row !== r.id ? ' seen' : ''); }
+        function onRow(r) { return picking ? function () { pickRow(r.id); } : null; }
+        if (z.type === 'table') {
+          kids.push(h('table', {}, [
+            z.cols ? h('thead', {}, [h('tr', {}, z.cols.map(function (c) { return h('th', { scope: 'col', text: c }); }))]) : null,
+            h('tbody', {}, z.rows.map(function (r) {
+              return h('tr', { class: rowCls(r).trim(), onclick: picking ? function (e) { if (e.target.tagName !== 'BUTTON') pickRow(r.id); } : null }, r.c.map(function (c, i) {
+                return i === 0 ? h('td', {}, [h('button', { class: 'rowbtn', disabled: !picking, tabindex: picking ? null : '-1', onclick: onRow(r), 'aria-pressed': st.row === r.id ? 'true' : 'false' }, c)]) : h('td', { text: c });
+              }));
+            }))
+          ]));
+        } else {
+          z.rows.forEach(function (r) {
+            var inner;
+            if (z.type === 'list') inner = [h('span', { class: 'nm' }, [r.c[0], r.c[2] ? h('span', { class: 'desc', text: r.c[2] }) : null]), h('span', { class: 'lead', 'aria-hidden': 'true' }), h('span', { class: 'pr', text: r.c[1] || '' })];
+            else if (z.type === 'fields') inner = [h('span', { class: 'lab', text: r.c[0] }), h('span', { class: 'box', 'aria-hidden': 'true' }), r.c[1] ? h('span', { class: 'fhint', text: r.c[1] }) : null];
+            else inner = [h('span', { text: r.c[0] })];
+            kids.push(h('button', { class: 'row' + (z.type === 'notes' ? ' foot' : '') + rowCls(r), disabled: !picking, tabindex: picking ? null : '-1', onclick: onRow(r), 'aria-pressed': st.row === r.id ? 'true' : 'false' }, inner));
+          });
+        }
+        if (locating) kids.push(h('button', { class: 'zbtn', 'aria-label': L('选这一区：', 'Choose this area: ') + T(z, 'label'), title: T(z, 'label'), onclick: function () { chooseZone(z.id); } }));
+        el.append(h('section', { class: cls, 'aria-label': T(z, 'label') }, kids));
+      });
+      return el;
+    }
+    function feedbackEl(m) {
+      if (!m) return document.createTextNode('');
+      return h('div', { class: 'kb-feedback ' + (m.tone || ''), role: 'status' }, [m.t, m.say ? h('p', { class: 'say', lang: tlang }, [L('可以这样问：', 'You could ask: '), h('b', { text: m.say })]) : null]);
+    }
+
+    /* ---- render: modes ---- */
+    function renderBar() {
+      bar.innerHTML = '';
+      if (!st.queue.length) return;
+      bar.append(h('span', { class: 'kb-note', text: L('第 ' + Math.min(st.qi + 1, st.queue.length) + ' / ' + st.queue.length + ' 题', 'Task ' + Math.min(st.qi + 1, st.queue.length) + ' / ' + st.queue.length) }));
+      var d = cur() && docs[cur().doc];
+      if (d) bar.append(h('span', { class: 'kb-note', text: ' · ' + T(d, 'label') }));
+      bar.append(h('button', { class: 'kb-btn', onclick: enterMode }, L('从头开始', 'Start again')));
+    }
+    function stepText() {
+      if (st.passed) return L('这一题完成了。', 'This task is done.');
+      if (st.phase === 'locate') return L('第 1 步：先别逐行读。要找的是哪一类信息？在单据上点它最可能在的那一区。', 'Step 1: do not read line by line. What kind of information do you need? Click the area of the document where it most likely is.');
+      return L('第 2 步：在这一区里点出答案那一条，再逐项判断条件；单据上没有就说没有。', 'Step 2: click the entry that answers the task in this area, then judge each condition. If the document does not say, say so.');
+    }
+    function renderTask() {
+      var t = cur();
+      if (!t) {
+        stage.append(h('div', { class: 'kb-card' }, [h('div', { class: 'done', text: '✔' }), h('p', { class: 'kb-prompt', text: L('这一轮做完了。', 'Round finished.') }), h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: enterMode }, L('再来一轮', 'Another round'))])]));
+        return;
+      }
+      stage.append(h('div', { class: 'kb-card task' }, [h('span', { class: 'step', text: L('任务', 'Task') }), h('p', { class: 'kb-prompt', text: T(t, 'ask') }), h('span', { class: 'step', text: stepText() })]));
+      stage.append(docEl(docs[t.doc], { task: t, phase: st.passed ? 'view' : st.phase }));
+      // side panel
+      var box = h('div', { class: 'kb-card' });
+      var hs = st.hints, faded = zoneFaded(t);
+      if (st.phase === 'pick' || st.passed) {
+        var rr = st.row && rowOf[t.doc][st.row];
+        box.append(h('div', { class: 'slot' }, [h('b', { text: L('我找到的', 'What I found') }), rr ? h('span', { lang: tlang, text: rr.row.c.filter(Boolean).join('  ') }) : st.none ? h('span', { text: L('单据上没有', 'Not on the document') }) : h('span', { class: 'kb-note', text: L('还没选。', 'Nothing yet.') })]));
+        if (st.foot && rowOf[t.doc][st.foot]) box.append(h('p', { class: 'kb-note' }, [L('这一条带脚注符号，脚注是：', 'This entry has a footnote mark. The footnote says: '), h('b', { lang: tlang, text: rowOf[t.doc][st.foot].row.c[0] })]));
+        if (st.row && (t.conds || []).length) {
+          var r = t.rows && t.rows[st.row], showTruth = st.passed;
+          var opts = child() ? JUDG.slice(0, 2) : JUDG;
+          box.append(h('div', { class: 'conds' }, t.conds.map(function (c, i) {
+            var cc = 'cond' + (showTruth && r ? (okCell(r.c[i], st.judg[i]) ? ' okc' : ' badc') : '');
+            return h('div', { class: cc }, [h('span', { class: 'ct', text: (i + 1) + '. ' + T(c, 't') }), h('div', { class: 'judg', role: 'group', 'aria-label': T(c, 't') }, opts.map(function (o, k) {
+              return h('button', { class: 'kb-btn', 'aria-pressed': st.judg[i] === o.v ? 'true' : 'false', disabled: st.passed, onclick: function () { judge(i, o.v); } }, (k + 1) + ' ' + (child() && o.v === 'no' ? L('不可以', 'No') : child() && o.v === 'yes' ? L('可以', 'Yes') : L(o.zh, o.en)));
+            }))]);
+          })));
+        }
+        if (st.none && !st.passed) {
+          box.append(h('p', { class: 'kb-prompt', text: L('单据上没有。下一步怎么办？', 'The document does not say. What do you do next?') }));
+          box.append(h('div', { class: 'nexts' }, t.next.map(function (n, i) { return h('button', { class: 'kb-btn', onclick: function () { chooseNext(i); } }, T(n, 't')); })));
+        }
+        var tools = [];
+        if (!st.passed) {
+          if (st.row) tools.push(h('button', { class: 'kb-btn primary', onclick: submit }, t.type === 'find' && st.judg.length && st.judg.every(function (v) { return v; }) && !st.judg.every(function (v) { return v === 'yes'; }) ? L('这条不行，换一条', 'This one does not work: next') : L('就是这一条', 'This is my answer')));
+          if (!st.none) tools.push(h('button', { class: 'kb-btn', onclick: markNone }, L('单据上没有', 'The document does not say')));
+          tools.push(h('button', { class: 'kb-btn', onclick: reZone }, L('换一个区域', 'Choose another area')));
+        }
+        box.append(h('div', { class: 'tools' }, tools));
+      } else {
+        box.append(h('p', { class: 'kb-note', text: L('点单据上的一块区域（表头、某一栏、某一列、脚注……），或者用下面的区域按钮。第一次选的区域会被记下来。', 'Click one area of the document (header, a column, a section, the footnotes…), or use the area buttons below. The first area you choose is recorded.') }));
+        box.append(h('b', { text: L('区域', 'Areas') }));
+        box.append(h('div', { class: 'tools areas', role: 'group', 'aria-label': L('区域', 'Areas') }, docs[t.doc].zones.map(function (z) { return h('button', { class: 'kb-btn', onclick: function () { chooseZone(z.id); } }, T(z, 'label')); })));
+      }
+      box.append(feedbackEl(st.msg));
+      if (!st.passed) {
+        var ht = [];
+        if (faded) box.append(h('p', { class: 'kb-note', text: L('这类单据你已经连续两次第一次就找对区域，区域提示不再提供。', 'You have found the right area first time twice in a row for this kind of document, so area hints are no longer offered.') }));
+        else {
+          ht.push(h('button', { class: 'kb-btn', disabled: !!hs[1], onclick: function () { hint(1); } }, L('提示 1：这类信息通常在哪儿？', 'Hint 1: where is this kind of information usually?')));
+          ht.push(h('button', { class: 'kb-btn', disabled: !!hs[2], onclick: function () { hint(2); } }, L('提示 2：标出该看的区域', 'Hint 2: mark the area to look at')));
+        }
+        if (T(t, 'conv')) ht.push(h('button', { class: 'kb-btn', disabled: !!hs[3], onclick: function () { hint(3); } }, L('提示 3：解释一条格式约定', 'Hint 3: explain a format convention')));
+        box.append(h('div', { class: 'tools' }, ht));
+        if (hs[1] && !faded) box.append(h('p', { class: 'kb-note', text: T(t, 'where') }));
+        if (hs[3]) box.append(h('p', { class: 'kb-note', text: T(t, 'conv') }));
+      } else box.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: function () { st.qi++; loadTask(); } }, L('下一题 →', 'Next task →'))]));
+      side.append(box);
+      // scan path
+      var labels = st.path.map(function (rid) { return rowOf[t.doc][rid].row.c[0]; });
+      side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('扫读路径', 'Scan path') }),
+        h('p', { class: 'kb-note', text: L('看过的区域：', 'Areas looked at: ') + (st.visited.map(function (z) { return T(docs[t.doc].zones.filter(function (x) { return x.id === z; })[0], 'label'); }).join(' → ') || L('（还没有）', '(none yet)')) }),
+        labels.length ? h('ol', { class: 'path', lang: tlang }, labels.map(function (l) { return h('li', { text: l }); })) : null]));
+    }
+    function renderUse() {
+      var u = cur();
+      if (!u) {
+        stage.append(h('div', { class: 'kb-card' }, [h('div', { class: 'done', text: '✔' }), h('p', { class: 'kb-prompt', text: L('这一轮做完了。', 'Round finished.') }), h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: enterMode }, L('再来一轮', 'Another round'))])]));
+        return;
+      }
+      var id = 'use:' + u.id;
+      stage.append(h('div', { class: 'kb-card task' }, [h('span', { class: 'step', text: L('第 3 步：用出来', 'Step 3: use it') }), h('p', { class: 'kb-prompt', text: T(u, 'ask') })]));
+      stage.append(docEl(docs[u.doc], { phase: 'view' }));
+      var parts = u.frame.split(/\{(\d)\}/), done = B.status(id) && st.useRes && st.useRes.tone === '';
+      var frame = h('p', { class: 'frame', lang: tlang });
+      parts.forEach(function (p, i) {
+        if (i % 2 === 0) { if (p) frame.append(p); return; }
+        var k = +p, ok = st.useRes && st.useRes.ok;
+        var inp = h('input', { type: 'text', 'aria-label': L('第 ' + (k + 1) + ' 个空', 'Gap ' + (k + 1)), class: ok ? (ok[k] ? 'okin' : 'badin') : '', disabled: done, oninput: function (e) { st.vals[k] = e.target.value; },
+          onkeydown: function (e) { if (e.key === 'Enter') { e.preventDefault(); checkUse(); } } });
+        inp.value = st.vals[k] || '';
+        frame.append(inp);
+      });
+      var box = h('div', { class: 'kb-card' }, [h('b', { text: L('要发出的消息', 'The message to send') }), frame,
+        h('div', { class: 'tools' }, done ? [h('button', { class: 'kb-btn primary', onclick: function () { st.qi++; loadUse(); } }, L('下一条 →', 'Next →'))] : [
+          h('button', { class: 'kb-btn primary', onclick: checkUse }, L('核对', 'Check')),
+          h('button', { class: 'kb-btn', disabled: st.revealed, onclick: function () { st.revealed = true; B.reveal(id); render(); } }, L('看答案', 'Show the answer'))
+        ]),
+        st.revealed ? h('p', { class: 'kb-note', lang: tlang, text: u.ans.map(function (a) { return a[0]; }).join(' / ') }) : null,
+        feedbackEl(st.useRes),
+        h('p', { class: 'kb-note', text: L('页面只核对空里的信息是否和单据一致（按数据包列出的写法），不判断整句写得好不好。', 'The page only checks that the details in the gaps match the document (in the forms the pack lists). It does not judge the rest of the sentence.') })]);
+      side.append(box);
+    }
+    function renderSummary() {
+      var ids = st.mode === 'use' ? st.queue.map(function (u) { return 'use:' + u.id; }) : st.queue.map(function (t) { return t.id; });
+      var chips = ids.map(function (id, i) { var s0 = B.status(id); return h('span', { class: 'chip ' + (s0 === 'independent' ? 'ind' : s0 === 'wrong' ? 'bad' : s0 ? 'ast' : '') + (i === st.qi ? ' cur' : ''), text: String(i + 1) }); });
+      var zf = B.items().filter(function (i) { return i.first && i.first.response && i.first.response.zoneFirst !== undefined; });
+      var hit = zf.filter(function (i) { return i.first.response.zoneHit; }).length;
+      side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('这一轮', 'This round') }), h('div', { class: 'chips' }, chips),
+        st.mode !== 'use' ? h('p', { class: 'kb-note', text: L('第一次选的区域命中：' + hit + ' / ' + zf.length + '。', 'First area right: ' + hit + ' / ' + zf.length + '.') }) : null,
+        h('p', { class: 'kb-note', text: L('蓝 = 第一次就对；黄 = 提示后完成；红 = 第一次不对。找到信息不等于读懂了全文，在这里做得到也不等于在真实场合做得到。', 'Blue = right first time; yellow = done with help; red = wrong first time. Finding information is not the same as understanding the whole text, and doing it here is not the same as doing it in real life.') })]));
+    }
+    function render() {
+      renderBar(); stage.innerHTML = ''; side.innerHTML = '';
+      if (st.mode === 'use') renderUse(); else renderTask();
+      renderSummary();
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (st.mode === 'use' || !cur() || st.passed || !st.row) return;
+      var n = parseInt(e.key, 10), max = child() ? 2 : 3;
+      if (n >= 1 && n <= max && st.judg.length) {
+        var i = st.judg.indexOf(null); if (i < 0) i = st.judg.length - 1;
+        e.preventDefault(); judge(i, JUDG[n - 1].v);
+      }
+    });
+
+    enterMode();
+  }
+})();
+</script>
+</body>
+</html>

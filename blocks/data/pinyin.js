@@ -2,25 +2,25 @@
  * tones[].say = one common character read exactly with that syllable and tone (speech synthesis speaks it). */
 KT_DATA["pinyin"] = {
  "review": ["用来发音的字里有些有第二个读音，单字默认读法是目标音，但要用浏览器语音试听：大 打 看 车 阿 别 跑 泡 胖 喷 佛 哈 嘎 卡 扛 六 俩 给 当 瓦 否 泥 凹", "孩子可能不认识的字：跛 瞟 嗲 腩 馁 凛 吝 傀 窘 糗 谆 忖 璀 蹿 抻", "故意没收的音节：me le ne de zhei shei dei zhuai cen ei eng ê yo lo（没有读音单一的常用字）"],
- "confusableLabel": "易混音辨认",
- "confusableHint": "这些音节只差一点：先听声母是平舌还是翘舌、韵母有没有后鼻音，再选。",
+ "confusableLabel": "易混音辨认", "confusableLabelEn": "Tell apart similar sounds",
+ "confusableHint": "这些音节只差一点：先听声母是平舌还是翘舌、韵母有没有后鼻音，再选。", "confusableHintEn": "These syllables differ only slightly: first listen for whether the initial is a flat-tongue sound (平舌) or a curled-tongue, retroflex sound (翘舌), and whether the final has a back nasal ending (后鼻音), then choose.",
  "id": "pinyin",
  "lang": "zh",
  "speech": "zh-CN",
- "title": "拼音声韵表",
- "subtitle": "每一行是一个声母，每一列是一个韵母；按韵母开头分成 a/o/e、i、u、ü 四张表。灰格表示这个组合在普通话里不存在。格子里是规范拼写，下面的小字是拼写前的“声母+韵母”。",
- "romanLabel": "声母+韵母",
+ "title": "拼音声韵表", "titleEn": "Pinyin initials and finals chart",
+ "subtitle": "每一行是一个声母，每一列是一个韵母；按韵母开头分成 a/o/e、i、u、ü 四张表。灰格表示这个组合在普通话里不存在。格子里是规范拼写，下面的小字是拼写前的“声母+韵母”。", "subtitleEn": "Each row is an initial and each column is a final; the finals are split into four tables by how they begin: a/o/e, i, u, ü. A grey cell means the combination does not exist in Standard Chinese (Putonghua). Each cell shows the standard spelling; the small text underneath is the “initial + final” before the spelling rules are applied.",
+ "romanLabel": "声母+韵母", "romanLabelEn": "Initial + final",
  "recall": false,
  "kcs": [
   "kt:zh-pinyin-initials-finals",
   "kt:zh-pinyin-spelling",
   "kt:zh-pinyin-tones"
  ],
- "toneNote": "每个调号后面的字是读这个音、这个调的常用字，语音合成会读这个字。没有常用字的调就不列。调号位置：有 a 标 a；没有 a 标 o 或 e；iu、ui 标在后一个字母上。",
+ "toneNote": "每个调号后面的字是读这个音、这个调的常用字，语音合成会读这个字。没有常用字的调就不列。调号位置：有 a 标 a；没有 a 标 o 或 e；iu、ui 标在后一个字母上。", "toneNoteEn": "The character after each tone mark is a common character read with this syllable and this tone; speech synthesis reads that character. A tone with no common character is not listed. Where the tone mark goes: on a if there is an a; on o or e if there is no a; in iu and ui, on the second letter.",
  "tables": [
   {
    "id": "kai",
-   "label": "开口呼：a o e 类（含 -i、er）",
+   "label": "开口呼：a o e 类（含 -i、er）", "labelEn": "Finals beginning with a, o, e (开口呼), including -i and er",
    "rows": [
     {
      "id": "b",
@@ -96,13 +96,13 @@ KT_DATA["pinyin"] = {
     },
     {
      "id": "0",
-     "label": "零声母（y/w）"
+     "label": "零声母（y/w）", "labelEn": "No initial (零声母; y/w)"
     }
    ],
    "cols": [
     {
      "id": "-i",
-     "label": "-i（zhi/zi 的 i）"
+     "label": "-i（zhi/zi 的 i）", "labelEn": "-i (the i in zhi/zi)"
     },
     {
      "id": "a",
@@ -358,7 +358,7 @@ KT_DATA["pinyin"] = {
        "say": "二"
       }
      ],
-     "note": "er 只自成音节，不和声母相拼；儿化时写成音节末尾的 -r（哪儿 nǎr）。"
+     "note": "er 只自成音节，不和声母相拼；儿化时写成音节末尾的 -r（哪儿 nǎr）。", "noteEn": "er only forms a syllable on its own and does not combine with initials; in r-coloring (儿化) it is written as -r at the end of the syllable (哪儿 nǎr)."
     },
     {
      "id": "ba",
@@ -412,7 +412,7 @@ KT_DATA["pinyin"] = {
        "say": "跛"
       }
      ],
-     "note": "b p m f 后面写 o，实际读音带一点 u 的滑音（bo 近似 b+uo）。"
+     "note": "b p m f 后面写 o，实际读音带一点 u 的滑音（bo 近似 b+uo）。", "noteEn": "After b p m f the spelling is o, but the actual sound has a slight u glide (bo is close to b+uo)."
     },
     {
      "id": "bai",
@@ -634,7 +634,7 @@ KT_DATA["pinyin"] = {
        "say": "破"
       }
      ],
-     "note": "b p m f 后面写 o，实际读音带一点 u 的滑音（bo 近似 b+uo）。"
+     "note": "b p m f 后面写 o，实际读音带一点 u 的滑音（bo 近似 b+uo）。", "noteEn": "After b p m f the spelling is o, but the actual sound has a slight u glide (bo is close to b+uo)."
     },
     {
      "id": "pai",
@@ -875,7 +875,7 @@ KT_DATA["pinyin"] = {
        "say": "墨"
       }
      ],
-     "note": "b p m f 后面写 o，实际读音带一点 u 的滑音（bo 近似 b+uo）。"
+     "note": "b p m f 后面写 o，实际读音带一点 u 的滑音（bo 近似 b+uo）。", "noteEn": "After b p m f the spelling is o, but the actual sound has a slight u glide (bo is close to b+uo)."
     },
     {
      "id": "mai",
@@ -924,7 +924,7 @@ KT_DATA["pinyin"] = {
        "say": "妹"
       }
      ],
-     "note": "标调：ei 标在 e 上（měi）。"
+     "note": "标调：ei 标在 e 上（měi）。", "noteEn": "Tone mark: in ei it goes on the e (měi)."
     },
     {
      "id": "mao",
@@ -1087,7 +1087,7 @@ KT_DATA["pinyin"] = {
        "say": "佛"
       }
      ],
-     "note": "b p m f 后面写 o，实际读音带一点 u 的滑音（bo 近似 b+uo）。"
+     "note": "b p m f 后面写 o，实际读音带一点 u 的滑音（bo 近似 b+uo）。", "noteEn": "After b p m f the spelling is o, but the actual sound has a slight u glide (bo is close to b+uo)."
     },
     {
      "id": "fei",
@@ -1883,7 +1883,7 @@ KT_DATA["pinyin"] = {
        "say": "漏"
       }
      ],
-     "note": "标调：ou 标在 o 上（lóu）。"
+     "note": "标调：ou 标在 o 上（lóu）。", "noteEn": "Tone mark: in ou it goes on the o (lóu)."
     },
     {
      "id": "lan",
@@ -2432,7 +2432,7 @@ KT_DATA["pinyin"] = {
        "say": "耗"
       }
      ],
-     "note": "标调：有 a 就标在 a 上（hǎo，不是 *haǒ）。"
+     "note": "标调：有 a 就标在 a 上（hǎo，不是 *haǒ）。", "noteEn": "Tone mark: if there is an a, it goes on the a (hǎo, not *haǒ)."
     },
     {
      "id": "hou",
@@ -2572,7 +2572,7 @@ KT_DATA["pinyin"] = {
        "say": "志"
       }
      ],
-     "note": "整体认读：这里的 i 不读 [i]，是舌尖保持在 zh 的位置拉长的元音，不要拼成 zh+衣。"
+     "note": "整体认读：这里的 i 不读 [i]，是舌尖保持在 zh 的位置拉长的元音，不要拼成 zh+衣。", "noteEn": "Read as a whole syllable (整体认读): the i here is not pronounced [i]; it is a vowel drawn out with the tongue tip kept in the position of zh. Do not blend it as zh+衣."
     },
     {
      "id": "zha",
@@ -2833,7 +2833,7 @@ KT_DATA["pinyin"] = {
        "say": "翅"
       }
      ],
-     "note": "整体认读：这里的 i 不读 [i]，是舌尖保持在 ch 的位置拉长的元音，不要拼成 ch+衣。"
+     "note": "整体认读：这里的 i 不读 [i]，是舌尖保持在 ch 的位置拉长的元音，不要拼成 ch+衣。", "noteEn": "Read as a whole syllable (整体认读): the i here is not pronounced [i]; it is a vowel drawn out with the tongue tip kept in the position of ch. Do not blend it as ch+衣."
     },
     {
      "id": "cha",
@@ -3084,7 +3084,7 @@ KT_DATA["pinyin"] = {
        "say": "是"
       }
      ],
-     "note": "整体认读：这里的 i 不读 [i]，是舌尖保持在 sh 的位置拉长的元音，不要拼成 sh+衣。"
+     "note": "整体认读：这里的 i 不读 [i]，是舌尖保持在 sh 的位置拉长的元音，不要拼成 sh+衣。", "noteEn": "Read as a whole syllable (整体认读): the i here is not pronounced [i]; it is a vowel drawn out with the tongue tip kept in the position of sh. Do not blend it as sh+衣."
     },
     {
      "id": "sha",
@@ -3315,7 +3315,7 @@ KT_DATA["pinyin"] = {
        "say": "日"
       }
      ],
-     "note": "整体认读：这里的 i 不读 [i]，是舌尖保持在 r 的位置拉长的元音，不要拼成 r+衣。"
+     "note": "整体认读：这里的 i 不读 [i]，是舌尖保持在 r 的位置拉长的元音，不要拼成 r+衣。", "noteEn": "Read as a whole syllable (整体认读): the i here is not pronounced [i]; it is a vowel drawn out with the tongue tip kept in the position of r. Do not blend it as r+衣."
     },
     {
      "id": "re",
@@ -3488,7 +3488,7 @@ KT_DATA["pinyin"] = {
        "say": "字"
       }
      ],
-     "note": "整体认读：这里的 i 不读 [i]，是舌尖保持在 z 的位置拉长的元音，不要拼成 z+衣。"
+     "note": "整体认读：这里的 i 不读 [i]，是舌尖保持在 z 的位置拉长的元音，不要拼成 z+衣。", "noteEn": "Read as a whole syllable (整体认读): the i here is not pronounced [i]; it is a vowel drawn out with the tongue tip kept in the position of z. Do not blend it as z+衣."
     },
     {
      "id": "za",
@@ -3708,7 +3708,7 @@ KT_DATA["pinyin"] = {
        "say": "次"
       }
      ],
-     "note": "整体认读：这里的 i 不读 [i]，是舌尖保持在 c 的位置拉长的元音，不要拼成 c+衣。"
+     "note": "整体认读：这里的 i 不读 [i]，是舌尖保持在 c 的位置拉长的元音，不要拼成 c+衣。", "noteEn": "Read as a whole syllable (整体认读): the i here is not pronounced [i]; it is a vowel drawn out with the tongue tip kept in the position of c. Do not blend it as c+衣."
     },
     {
      "id": "ca",
@@ -3890,7 +3890,7 @@ KT_DATA["pinyin"] = {
        "say": "四"
       }
      ],
-     "note": "整体认读：这里的 i 不读 [i]，是舌尖保持在 s 的位置拉长的元音，不要拼成 s+衣。"
+     "note": "整体认读：这里的 i 不读 [i]，是舌尖保持在 s 的位置拉长的元音，不要拼成 s+衣。", "noteEn": "Read as a whole syllable (整体认读): the i here is not pronounced [i]; it is a vowel drawn out with the tongue tip kept in the position of s. Do not blend it as s+衣."
     },
     {
      "id": "sa",
@@ -4047,7 +4047,7 @@ KT_DATA["pinyin"] = {
   },
   {
    "id": "qi",
-   "label": "齐齿呼：i 类",
+   "label": "齐齿呼：i 类", "labelEn": "Finals beginning with i (齐齿呼)",
    "rows": [
     {
      "id": "b",
@@ -4091,7 +4091,7 @@ KT_DATA["pinyin"] = {
     },
     {
      "id": "0",
-     "label": "零声母（y/w）"
+     "label": "零声母（y/w）", "labelEn": "No initial (零声母; y/w)"
     }
    ],
    "cols": [
@@ -4113,7 +4113,7 @@ KT_DATA["pinyin"] = {
     },
     {
      "id": "iou",
-     "label": "iou（-iu）"
+     "label": "iou（-iu）", "labelEn": "iou (-iu)"
     },
     {
      "id": "ian",
@@ -4161,7 +4161,7 @@ KT_DATA["pinyin"] = {
        "say": "亿"
       }
      ],
-     "note": "整体认读：韵母 i 单独成音节时写成 yi，y/w 不发音。"
+     "note": "整体认读：韵母 i 单独成音节时写成 yi，y/w 不发音。", "noteEn": "Read as a whole syllable (整体认读): when the final i forms a syllable on its own it is written yi; the y/w is not pronounced."
     },
     {
      "id": "ya",
@@ -4191,7 +4191,7 @@ KT_DATA["pinyin"] = {
        "say": "亚"
       }
      ],
-     "note": "零声母时 i 写成 y（ia → ya）。"
+     "note": "零声母时 i 写成 y（ia → ya）。", "noteEn": "With no initial, i is written y (ia → ya)."
     },
     {
      "id": "ye",
@@ -4221,7 +4221,7 @@ KT_DATA["pinyin"] = {
        "say": "夜"
       }
      ],
-     "note": "零声母时 i 写成 y（ie → ye）。"
+     "note": "零声母时 i 写成 y（ie → ye）。", "noteEn": "With no initial, i is written y (ie → ye)."
     },
     {
      "id": "yao",
@@ -4251,7 +4251,7 @@ KT_DATA["pinyin"] = {
        "say": "药"
       }
      ],
-     "note": "零声母时 i 写成 y（iao → yao）。"
+     "note": "零声母时 i 写成 y（iao → yao）。", "noteEn": "With no initial, i is written y (iao → yao)."
     },
     {
      "id": "you",
@@ -4281,7 +4281,7 @@ KT_DATA["pinyin"] = {
        "say": "右"
       }
      ],
-     "note": "零声母时 i 写成 y（iou → you）。"
+     "note": "零声母时 i 写成 y（iou → you）。", "noteEn": "With no initial, i is written y (iou → you)."
     },
     {
      "id": "yan",
@@ -4311,7 +4311,7 @@ KT_DATA["pinyin"] = {
        "say": "验"
       }
      ],
-     "note": "零声母时 i 写成 y（ian → yan）。"
+     "note": "零声母时 i 写成 y（ian → yan）。", "noteEn": "With no initial, i is written y (ian → yan)."
     },
     {
      "id": "yin",
@@ -4341,7 +4341,7 @@ KT_DATA["pinyin"] = {
        "say": "印"
       }
      ],
-     "note": "零声母时前面加 y（in → yin），读音不变。"
+     "note": "零声母时前面加 y（in → yin），读音不变。", "noteEn": "With no initial, a y is added in front (in → yin); the pronunciation does not change."
     },
     {
      "id": "yang",
@@ -4371,7 +4371,7 @@ KT_DATA["pinyin"] = {
        "say": "样"
       }
      ],
-     "note": "零声母时 i 写成 y（iang → yang）。"
+     "note": "零声母时 i 写成 y（iang → yang）。", "noteEn": "With no initial, i is written y (iang → yang)."
     },
     {
      "id": "ying",
@@ -4401,7 +4401,7 @@ KT_DATA["pinyin"] = {
        "say": "硬"
       }
      ],
-     "note": "零声母时前面加 y（ing → ying），读音不变。"
+     "note": "零声母时前面加 y（ing → ying），读音不变。", "noteEn": "With no initial, a y is added in front (ing → ying); the pronunciation does not change."
     },
     {
      "id": "bi",
@@ -4761,7 +4761,7 @@ KT_DATA["pinyin"] = {
        "say": "谬"
       }
      ],
-     "note": "省写：iou 前有声母时写成 -iu（m+iou → miu），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（miù）。"
+     "note": "省写：iou 前有声母时写成 -iu（m+iou → miu），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（miù）。", "noteEn": "Shortened spelling: after an initial, iou is written -iu (m+iou → miu); the middle vowel is pronounced lightly but is still there. Tone mark: in iu and ui the tone mark goes on the second letter (miù)."
     },
     {
      "id": "mian",
@@ -4919,7 +4919,7 @@ KT_DATA["pinyin"] = {
        "say": "丢"
       }
      ],
-     "note": "省写：iou 前有声母时写成 -iu（d+iou → diu），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（diù）。"
+     "note": "省写：iou 前有声母时写成 -iu（d+iou → diu），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（diù）。", "noteEn": "Shortened spelling: after an initial, iou is written -iu (d+iou → diu); the middle vowel is pronounced lightly but is still there. Tone mark: in iu and ui the tone mark goes on the second letter (diù)."
     },
     {
      "id": "dian",
@@ -5169,7 +5169,7 @@ KT_DATA["pinyin"] = {
        "say": "扭"
       }
      ],
-     "note": "省写：iou 前有声母时写成 -iu（n+iou → niu），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（niù）。"
+     "note": "省写：iou 前有声母时写成 -iu（n+iou → niu），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（niù）。", "noteEn": "Shortened spelling: after an initial, iou is written -iu (n+iou → niu); the middle vowel is pronounced lightly but is still there. Tone mark: in iu and ui the tone mark goes on the second letter (niù)."
     },
     {
      "id": "nian",
@@ -5341,7 +5341,7 @@ KT_DATA["pinyin"] = {
        "say": "六"
       }
      ],
-     "note": "省写：iou 前有声母时写成 -iu（l+iou → liu），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（liù）。"
+     "note": "省写：iou 前有声母时写成 -iu（l+iou → liu），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（liù）。", "noteEn": "Shortened spelling: after an initial, iou is written -iu (l+iou → liu); the middle vowel is pronounced lightly but is still there. Tone mark: in iu and ui the tone mark goes on the second letter (liù)."
     },
     {
      "id": "lian",
@@ -5573,7 +5573,7 @@ KT_DATA["pinyin"] = {
        "say": "旧"
       }
      ],
-     "note": "省写：iou 前有声母时写成 -iu（j+iou → jiu），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（jiù）。"
+     "note": "省写：iou 前有声母时写成 -iu（j+iou → jiu），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（jiù）。", "noteEn": "Shortened spelling: after an initial, iou is written -iu (j+iou → jiu); the middle vowel is pronounced lightly but is still there. Tone mark: in iu and ui the tone mark goes on the second letter (jiù)."
     },
     {
      "id": "jian",
@@ -5785,7 +5785,7 @@ KT_DATA["pinyin"] = {
        "say": "糗"
       }
      ],
-     "note": "省写：iou 前有声母时写成 -iu（q+iou → qiu），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（qiù）。"
+     "note": "省写：iou 前有声母时写成 -iu（q+iou → qiu），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（qiù）。", "noteEn": "Shortened spelling: after an initial, iou is written -iu (q+iou → qiu); the middle vowel is pronounced lightly but is still there. Tone mark: in iu and ui the tone mark goes on the second letter (qiù)."
     },
     {
      "id": "qian",
@@ -6027,7 +6027,7 @@ KT_DATA["pinyin"] = {
        "say": "秀"
       }
      ],
-     "note": "省写：iou 前有声母时写成 -iu（x+iou → xiu），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（xiù）。"
+     "note": "省写：iou 前有声母时写成 -iu（x+iou → xiu），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（xiù）。", "noteEn": "Shortened spelling: after an initial, iou is written -iu (x+iou → xiu); the middle vowel is pronounced lightly but is still there. Tone mark: in iu and ui the tone mark goes on the second letter (xiù)."
     },
     {
      "id": "xian",
@@ -6139,7 +6139,7 @@ KT_DATA["pinyin"] = {
   },
   {
    "id": "he",
-   "label": "合口呼：u 类（含 ong）",
+   "label": "合口呼：u 类（含 ong）", "labelEn": "Finals beginning with u (合口呼), including ong",
    "rows": [
     {
      "id": "b",
@@ -6215,7 +6215,7 @@ KT_DATA["pinyin"] = {
     },
     {
      "id": "0",
-     "label": "零声母（y/w）"
+     "label": "零声母（y/w）", "labelEn": "No initial (零声母; y/w)"
     }
    ],
    "cols": [
@@ -6237,7 +6237,7 @@ KT_DATA["pinyin"] = {
     },
     {
      "id": "uei",
-     "label": "uei（-ui）"
+     "label": "uei（-ui）", "labelEn": "uei (-ui)"
     },
     {
      "id": "uan",
@@ -6245,7 +6245,7 @@ KT_DATA["pinyin"] = {
     },
     {
      "id": "uen",
-     "label": "uen（-un）"
+     "label": "uen（-un）", "labelEn": "uen (-un)"
     },
     {
      "id": "uang",
@@ -6289,7 +6289,7 @@ KT_DATA["pinyin"] = {
        "say": "雾"
       }
      ],
-     "note": "整体认读：韵母 u 单独成音节时写成 wu，y/w 不发音。"
+     "note": "整体认读：韵母 u 单独成音节时写成 wu，y/w 不发音。", "noteEn": "Read as a whole syllable (整体认读): when the final u forms a syllable on its own it is written wu; the y/w is not pronounced."
     },
     {
      "id": "wa",
@@ -6319,7 +6319,7 @@ KT_DATA["pinyin"] = {
        "say": "袜"
       }
      ],
-     "note": "零声母时 u 写成 w（ua → wa）。"
+     "note": "零声母时 u 写成 w（ua → wa）。", "noteEn": "With no initial, u is written w (ua → wa)."
     },
     {
      "id": "wo",
@@ -6344,7 +6344,7 @@ KT_DATA["pinyin"] = {
        "say": "卧"
       }
      ],
-     "note": "零声母时 u 写成 w（uo → wo）。"
+     "note": "零声母时 u 写成 w（uo → wo）。", "noteEn": "With no initial, u is written w (uo → wo)."
     },
     {
      "id": "wai",
@@ -6364,7 +6364,7 @@ KT_DATA["pinyin"] = {
        "say": "外"
       }
      ],
-     "note": "零声母时 u 写成 w（uai → wai）。"
+     "note": "零声母时 u 写成 w（uai → wai）。", "noteEn": "With no initial, u is written w (uai → wai)."
     },
     {
      "id": "wei",
@@ -6394,7 +6394,7 @@ KT_DATA["pinyin"] = {
        "say": "味"
       }
      ],
-     "note": "零声母时 u 写成 w（uei → wei）。"
+     "note": "零声母时 u 写成 w（uei → wei）。", "noteEn": "With no initial, u is written w (uei → wei)."
     },
     {
      "id": "wan",
@@ -6424,7 +6424,7 @@ KT_DATA["pinyin"] = {
        "say": "万"
       }
      ],
-     "note": "零声母时 u 写成 w（uan → wan）。"
+     "note": "零声母时 u 写成 w（uan → wan）。", "noteEn": "With no initial, u is written w (uan → wan)."
     },
     {
      "id": "wen",
@@ -6454,7 +6454,7 @@ KT_DATA["pinyin"] = {
        "say": "问"
       }
      ],
-     "note": "零声母时 u 写成 w（uen → wen）。"
+     "note": "零声母时 u 写成 w（uen → wen）。", "noteEn": "With no initial, u is written w (uen → wen)."
     },
     {
      "id": "wang",
@@ -6484,7 +6484,7 @@ KT_DATA["pinyin"] = {
        "say": "忘"
       }
      ],
-     "note": "零声母时 u 写成 w（uang → wang）。"
+     "note": "零声母时 u 写成 w（uang → wang）。", "noteEn": "With no initial, u is written w (uang → wang)."
     },
     {
      "id": "weng",
@@ -6504,7 +6504,7 @@ KT_DATA["pinyin"] = {
        "say": "瓮"
       }
      ],
-     "note": "零声母时 u 写成 w（ueng → weng）。 ueng 只有零声母一种写法 weng；有声母时写 -ong（dong、gong），两者互补。"
+     "note": "零声母时 u 写成 w（ueng → weng）。 ueng 只有零声母一种写法 weng；有声母时写 -ong（dong、gong），两者互补。", "noteEn": "With no initial, u is written w (ueng → weng). ueng has only the one spelling weng, with no initial; after an initial it is written -ong (dong, gong); the two complement each other."
     },
     {
      "id": "bu",
@@ -6702,7 +6702,7 @@ KT_DATA["pinyin"] = {
        "say": "对"
       }
      ],
-     "note": "省写：uei 前有声母时写成 -ui（d+uei → dui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（duì）。"
+     "note": "省写：uei 前有声母时写成 -ui（d+uei → dui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（duì）。", "noteEn": "Shortened spelling: after an initial, uei is written -ui (d+uei → dui); the middle vowel is pronounced lightly but is still there. Tone mark: in iu and ui the tone mark goes on the second letter (duì)."
     },
     {
      "id": "dun",
@@ -6727,7 +6727,7 @@ KT_DATA["pinyin"] = {
        "say": "盾"
       }
      ],
-     "note": "省写：uen 前有声母时写成 -un（d+uen → dun），中间的元音读得轻但还在。"
+     "note": "省写：uen 前有声母时写成 -un（d+uen → dun），中间的元音读得轻但还在。", "noteEn": "Shortened spelling: after an initial, uen is written -un (d+uen → dun); the middle vowel is pronounced lightly but is still there."
     },
     {
      "id": "duan",
@@ -6868,7 +6868,7 @@ KT_DATA["pinyin"] = {
        "say": "退"
       }
      ],
-     "note": "省写：uei 前有声母时写成 -ui（t+uei → tui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（tuì）。"
+     "note": "省写：uei 前有声母时写成 -ui（t+uei → tui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（tuì）。", "noteEn": "Shortened spelling: after an initial, uei is written -ui (t+uei → tui); the middle vowel is pronounced lightly but is still there. Tone mark: in iu and ui the tone mark goes on the second letter (tuì)."
     },
     {
      "id": "tun",
@@ -6888,7 +6888,7 @@ KT_DATA["pinyin"] = {
        "say": "豚"
       }
      ],
-     "note": "省写：uen 前有声母时写成 -un（t+uen → tun），中间的元音读得轻但还在。"
+     "note": "省写：uen 前有声母时写成 -un（t+uen → tun），中间的元音读得轻但还在。", "noteEn": "Shortened spelling: after an initial, uen is written -un (t+uen → tun); the middle vowel is pronounced lightly but is still there."
     },
     {
      "id": "tuan",
@@ -7060,7 +7060,7 @@ KT_DATA["pinyin"] = {
        "say": "轮"
       }
      ],
-     "note": "省写：uen 前有声母时写成 -un（l+uen → lun），中间的元音读得轻但还在。"
+     "note": "省写：uen 前有声母时写成 -un（l+uen → lun），中间的元音读得轻但还在。", "noteEn": "Shortened spelling: after an initial, uen is written -un (l+uen → lun); the middle vowel is pronounced lightly but is still there."
     },
     {
      "id": "luan",
@@ -7186,7 +7186,7 @@ KT_DATA["pinyin"] = {
        "say": "过"
       }
      ],
-     "note": "标调：没有 a 时标在 o 或 e 上（guó，不是 *gúo）。"
+     "note": "标调：没有 a 时标在 o 或 e 上（guó，不是 *gúo）。", "noteEn": "Tone mark: with no a, it goes on the o or e (guó, not *gúo)."
     },
     {
      "id": "guai",
@@ -7235,7 +7235,7 @@ KT_DATA["pinyin"] = {
        "say": "贵"
       }
      ],
-     "note": "省写：uei 前有声母时写成 -ui（g+uei → gui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（guì）。"
+     "note": "省写：uei 前有声母时写成 -ui（g+uei → gui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（guì）。", "noteEn": "Shortened spelling: after an initial, uei is written -ui (g+uei → gui); the middle vowel is pronounced lightly but is still there. Tone mark: in iu and ui the tone mark goes on the second letter (guì)."
     },
     {
      "id": "gun",
@@ -7255,7 +7255,7 @@ KT_DATA["pinyin"] = {
        "say": "棍"
       }
      ],
-     "note": "省写：uen 前有声母时写成 -un（g+uen → gun），中间的元音读得轻但还在。"
+     "note": "省写：uen 前有声母时写成 -un（g+uen → gun），中间的元音读得轻但还在。", "noteEn": "Shortened spelling: after an initial, uen is written -un (g+uen → gun); the middle vowel is pronounced lightly but is still there."
     },
     {
      "id": "guan",
@@ -7428,7 +7428,7 @@ KT_DATA["pinyin"] = {
        "say": "愧"
       }
      ],
-     "note": "省写：uei 前有声母时写成 -ui（k+uei → kui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（kuì）。"
+     "note": "省写：uei 前有声母时写成 -ui（k+uei → kui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（kuì）。", "noteEn": "Shortened spelling: after an initial, uei is written -ui (k+uei → kui); the middle vowel is pronounced lightly but is still there. Tone mark: in iu and ui the tone mark goes on the second letter (kuì)."
     },
     {
      "id": "kun",
@@ -7453,7 +7453,7 @@ KT_DATA["pinyin"] = {
        "say": "困"
       }
      ],
-     "note": "省写：uen 前有声母时写成 -un（k+uen → kun），中间的元音读得轻但还在。"
+     "note": "省写：uen 前有声母时写成 -un（k+uen → kun），中间的元音读得轻但还在。", "noteEn": "Shortened spelling: after an initial, uen is written -un (k+uen → kun); the middle vowel is pronounced lightly but is still there."
     },
     {
      "id": "kuan",
@@ -7641,7 +7641,7 @@ KT_DATA["pinyin"] = {
        "say": "惠"
       }
      ],
-     "note": "省写：uei 前有声母时写成 -ui（h+uei → hui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（huì）。"
+     "note": "省写：uei 前有声母时写成 -ui（h+uei → hui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（huì）。", "noteEn": "Shortened spelling: after an initial, uei is written -ui (h+uei → hui); the middle vowel is pronounced lightly but is still there. Tone mark: in iu and ui the tone mark goes on the second letter (huì)."
     },
     {
      "id": "hun",
@@ -7661,7 +7661,7 @@ KT_DATA["pinyin"] = {
        "say": "魂"
       }
      ],
-     "note": "省写：uen 前有声母时写成 -un（h+uen → hun），中间的元音读得轻但还在。"
+     "note": "省写：uen 前有声母时写成 -un（h+uen → hun），中间的元音读得轻但还在。", "noteEn": "Shortened spelling: after an initial, uen is written -un (h+uen → hun); the middle vowel is pronounced lightly but is still there."
     },
     {
      "id": "huan",
@@ -7820,7 +7820,7 @@ KT_DATA["pinyin"] = {
        "say": "坠"
       }
      ],
-     "note": "省写：uei 前有声母时写成 -ui（zh+uei → zhui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（zhuì）。"
+     "note": "省写：uei 前有声母时写成 -ui（zh+uei → zhui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（zhuì）。", "noteEn": "Shortened spelling: after an initial, uei is written -ui (zh+uei → zhui); the middle vowel is pronounced lightly but is still there. Tone mark: in iu and ui the tone mark goes on the second letter (zhuì)."
     },
     {
      "id": "zhun",
@@ -7840,7 +7840,7 @@ KT_DATA["pinyin"] = {
        "say": "准"
       }
      ],
-     "note": "省写：uen 前有声母时写成 -un（zh+uen → zhun），中间的元音读得轻但还在。"
+     "note": "省写：uen 前有声母时写成 -un（zh+uen → zhun），中间的元音读得轻但还在。", "noteEn": "Shortened spelling: after an initial, uen is written -un (zh+uen → zhun); the middle vowel is pronounced lightly but is still there."
     },
     {
      "id": "zhuan",
@@ -7979,7 +7979,7 @@ KT_DATA["pinyin"] = {
        "say": "锤"
       }
      ],
-     "note": "省写：uei 前有声母时写成 -ui（ch+uei → chui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（chuì）。"
+     "note": "省写：uei 前有声母时写成 -ui（ch+uei → chui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（chuì）。", "noteEn": "Shortened spelling: after an initial, uei is written -ui (ch+uei → chui); the middle vowel is pronounced lightly but is still there. Tone mark: in iu and ui the tone mark goes on the second letter (chuì)."
     },
     {
      "id": "chun",
@@ -8004,7 +8004,7 @@ KT_DATA["pinyin"] = {
        "say": "蠢"
       }
      ],
-     "note": "省写：uen 前有声母时写成 -un（ch+uen → chun），中间的元音读得轻但还在。"
+     "note": "省写：uen 前有声母时写成 -un（ch+uen → chun），中间的元音读得轻但还在。", "noteEn": "Shortened spelling: after an initial, uen is written -un (ch+uen → chun); the middle vowel is pronounced lightly but is still there."
     },
     {
      "id": "chuan",
@@ -8158,7 +8158,7 @@ KT_DATA["pinyin"] = {
        "say": "睡"
       }
      ],
-     "note": "省写：uei 前有声母时写成 -ui（sh+uei → shui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（shuì）。"
+     "note": "省写：uei 前有声母时写成 -ui（sh+uei → shui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（shuì）。", "noteEn": "Shortened spelling: after an initial, uei is written -ui (sh+uei → shui); the middle vowel is pronounced lightly but is still there. Tone mark: in iu and ui the tone mark goes on the second letter (shuì)."
     },
     {
      "id": "shun",
@@ -8178,7 +8178,7 @@ KT_DATA["pinyin"] = {
        "say": "顺"
       }
      ],
-     "note": "省写：uen 前有声母时写成 -un（sh+uen → shun），中间的元音读得轻但还在。"
+     "note": "省写：uen 前有声母时写成 -un（sh+uen → shun），中间的元音读得轻但还在。", "noteEn": "Shortened spelling: after an initial, uen is written -un (sh+uen → shun); the middle vowel is pronounced lightly but is still there."
     },
     {
      "id": "shuan",
@@ -8293,7 +8293,7 @@ KT_DATA["pinyin"] = {
        "say": "瑞"
       }
      ],
-     "note": "省写：uei 前有声母时写成 -ui（r+uei → rui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（ruì）。"
+     "note": "省写：uei 前有声母时写成 -ui（r+uei → rui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（ruì）。", "noteEn": "Shortened spelling: after an initial, uei is written -ui (r+uei → rui); the middle vowel is pronounced lightly but is still there. Tone mark: in iu and ui the tone mark goes on the second letter (ruì)."
     },
     {
      "id": "run",
@@ -8308,7 +8308,7 @@ KT_DATA["pinyin"] = {
        "say": "润"
       }
      ],
-     "note": "省写：uen 前有声母时写成 -un（r+uen → run），中间的元音读得轻但还在。"
+     "note": "省写：uen 前有声母时写成 -un（r+uen → run），中间的元音读得轻但还在。", "noteEn": "Shortened spelling: after an initial, uen is written -un (r+uen → run); the middle vowel is pronounced lightly but is still there."
     },
     {
      "id": "ruan",
@@ -8414,7 +8414,7 @@ KT_DATA["pinyin"] = {
        "say": "最"
       }
      ],
-     "note": "省写：uei 前有声母时写成 -ui（z+uei → zui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（zuì）。"
+     "note": "省写：uei 前有声母时写成 -ui（z+uei → zui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（zuì）。", "noteEn": "Shortened spelling: after an initial, uei is written -ui (z+uei → zui); the middle vowel is pronounced lightly but is still there. Tone mark: in iu and ui the tone mark goes on the second letter (zuì)."
     },
     {
      "id": "zun",
@@ -8429,7 +8429,7 @@ KT_DATA["pinyin"] = {
        "say": "尊"
       }
      ],
-     "note": "省写：uen 前有声母时写成 -un（z+uen → zun），中间的元音读得轻但还在。"
+     "note": "省写：uen 前有声母时写成 -un（z+uen → zun），中间的元音读得轻但还在。", "noteEn": "Shortened spelling: after an initial, uen is written -un (z+uen → zun); the middle vowel is pronounced lightly but is still there."
     },
     {
      "id": "cong",
@@ -8511,7 +8511,7 @@ KT_DATA["pinyin"] = {
        "say": "脆"
       }
      ],
-     "note": "省写：uei 前有声母时写成 -ui（c+uei → cui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（cuì）。"
+     "note": "省写：uei 前有声母时写成 -ui（c+uei → cui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（cuì）。", "noteEn": "Shortened spelling: after an initial, uei is written -ui (c+uei → cui); the middle vowel is pronounced lightly but is still there. Tone mark: in iu and ui the tone mark goes on the second letter (cuì)."
     },
     {
      "id": "cun",
@@ -8541,7 +8541,7 @@ KT_DATA["pinyin"] = {
        "say": "寸"
       }
      ],
-     "note": "省写：uen 前有声母时写成 -un（c+uen → cun），中间的元音读得轻但还在。"
+     "note": "省写：uen 前有声母时写成 -un（c+uen → cun），中间的元音读得轻但还在。", "noteEn": "Shortened spelling: after an initial, uen is written -un (c+uen → cun); the middle vowel is pronounced lightly but is still there."
     },
     {
      "id": "cuan",
@@ -8657,7 +8657,7 @@ KT_DATA["pinyin"] = {
        "say": "岁"
       }
      ],
-     "note": "省写：uei 前有声母时写成 -ui（s+uei → sui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（suì）。"
+     "note": "省写：uei 前有声母时写成 -ui（s+uei → sui），中间的元音读得轻但还在。 标调：iu、ui 的调号标在后一个字母上（suì）。", "noteEn": "Shortened spelling: after an initial, uei is written -ui (s+uei → sui); the middle vowel is pronounced lightly but is still there. Tone mark: in iu and ui the tone mark goes on the second letter (suì)."
     },
     {
      "id": "sun",
@@ -8677,7 +8677,7 @@ KT_DATA["pinyin"] = {
        "say": "损"
       }
      ],
-     "note": "省写：uen 前有声母时写成 -un（s+uen → sun），中间的元音读得轻但还在。"
+     "note": "省写：uen 前有声母时写成 -un（s+uen → sun），中间的元音读得轻但还在。", "noteEn": "Shortened spelling: after an initial, uen is written -un (s+uen → sun); the middle vowel is pronounced lightly but is still there."
     },
     {
      "id": "suan",
@@ -8702,7 +8702,7 @@ KT_DATA["pinyin"] = {
   },
   {
    "id": "cuo",
-   "label": "撮口呼：ü 类（含 iong）",
+   "label": "撮口呼：ü 类（含 iong）", "labelEn": "Finals beginning with ü (撮口呼), including iong",
    "rows": [
     {
      "id": "n",
@@ -8726,7 +8726,7 @@ KT_DATA["pinyin"] = {
     },
     {
      "id": "0",
-     "label": "零声母（y/w）"
+     "label": "零声母（y/w）", "labelEn": "No initial (零声母; y/w)"
     }
    ],
    "cols": [
@@ -8780,7 +8780,7 @@ KT_DATA["pinyin"] = {
        "say": "玉"
       }
      ],
-     "note": "整体认读：韵母 ü 单独成音节时写成 yu，y/w 不发音。"
+     "note": "整体认读：韵母 ü 单独成音节时写成 yu，y/w 不发音。", "noteEn": "Read as a whole syllable (整体认读): when the final ü forms a syllable on its own it is written yu; the y/w is not pronounced."
     },
     {
      "id": "yue",
@@ -8800,7 +8800,7 @@ KT_DATA["pinyin"] = {
        "say": "月"
       }
      ],
-     "note": "零声母时 ü 写成 yu，两点省去（üe → yue），读音仍是 ü。"
+     "note": "零声母时 ü 写成 yu，两点省去（üe → yue），读音仍是 ü。", "noteEn": "With no initial, ü is written yu and the two dots are dropped (üe → yue); the sound is still ü."
     },
     {
      "id": "yuan",
@@ -8830,7 +8830,7 @@ KT_DATA["pinyin"] = {
        "say": "院"
       }
      ],
-     "note": "零声母时 ü 写成 yu，两点省去（üan → yuan），读音仍是 ü。"
+     "note": "零声母时 ü 写成 yu，两点省去（üan → yuan），读音仍是 ü。", "noteEn": "With no initial, ü is written yu and the two dots are dropped (üan → yuan); the sound is still ü."
     },
     {
      "id": "yun",
@@ -8855,7 +8855,7 @@ KT_DATA["pinyin"] = {
        "say": "运"
       }
      ],
-     "note": "零声母时 ü 写成 yu，两点省去（ün → yun），读音仍是 ü。"
+     "note": "零声母时 ü 写成 yu，两点省去（ün → yun），读音仍是 ü。", "noteEn": "With no initial, ü is written yu and the two dots are dropped (ün → yun); the sound is still ü."
     },
     {
      "id": "yong",
@@ -8880,7 +8880,7 @@ KT_DATA["pinyin"] = {
        "say": "用"
       }
      ],
-     "note": "零声母时 i 写成 y（iong → yong）。 零声母 iong 写成 yong。"
+     "note": "零声母时 i 写成 y（iong → yong）。 零声母 iong 写成 yong。", "noteEn": "With no initial, i is written y (iong → yong). With no initial, iong is written yong."
     },
     {
      "id": "nü",
@@ -8895,7 +8895,7 @@ KT_DATA["pinyin"] = {
        "say": "女"
       }
      ],
-     "note": "ü 的两点保留：n 后面 u 和 ü 都能出现（nu / nü），去掉两点就成了另一个音节。"
+     "note": "ü 的两点保留：n 后面 u 和 ü 都能出现（nu / nü），去掉两点就成了另一个音节。", "noteEn": "The two dots of ü are kept: after n both u and ü can occur (nu / nü), so dropping the dots would give a different syllable."
     },
     {
      "id": "nüe",
@@ -8910,7 +8910,7 @@ KT_DATA["pinyin"] = {
        "say": "虐"
       }
      ],
-     "note": "ü 的两点保留：n 后面 u 和 ü 都能出现（nue / nüe），去掉两点就成了另一个音节。"
+     "note": "ü 的两点保留：n 后面 u 和 ü 都能出现（nue / nüe），去掉两点就成了另一个音节。", "noteEn": "The two dots of ü are kept: after n both u and ü can occur (nue / nüe), so dropping the dots would give a different syllable."
     },
     {
      "id": "lü",
@@ -8935,7 +8935,7 @@ KT_DATA["pinyin"] = {
        "say": "律"
       }
      ],
-     "note": "ü 的两点保留：l 后面 u 和 ü 都能出现（lu / lü），去掉两点就成了另一个音节。"
+     "note": "ü 的两点保留：l 后面 u 和 ü 都能出现（lu / lü），去掉两点就成了另一个音节。", "noteEn": "The two dots of ü are kept: after l both u and ü can occur (lu / lü), so dropping the dots would give a different syllable."
     },
     {
      "id": "lüe",
@@ -8950,7 +8950,7 @@ KT_DATA["pinyin"] = {
        "say": "略"
       }
      ],
-     "note": "ü 的两点保留：l 后面 u 和 ü 都能出现（lue / lüe），去掉两点就成了另一个音节。"
+     "note": "ü 的两点保留：l 后面 u 和 ü 都能出现（lue / lüe），去掉两点就成了另一个音节。", "noteEn": "The two dots of ü are kept: after l both u and ü can occur (lue / lüe), so dropping the dots would give a different syllable."
     },
     {
      "id": "jiong",
@@ -8994,7 +8994,7 @@ KT_DATA["pinyin"] = {
        "say": "句"
       }
      ],
-     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（j+ü → ju）。"
+     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（j+ü → ju）。", "noteEn": "The u here is really ü: j q x can only be followed by ü, so the two dots are dropped (j+ü → ju)."
     },
     {
      "id": "jue",
@@ -9014,7 +9014,7 @@ KT_DATA["pinyin"] = {
        "say": "决"
       }
      ],
-     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（j+üe → jue）。"
+     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（j+üe → jue）。", "noteEn": "The u here is really ü: j q x can only be followed by ü, so the two dots are dropped (j+üe → jue)."
     },
     {
      "id": "juan",
@@ -9034,7 +9034,7 @@ KT_DATA["pinyin"] = {
        "say": "倦"
       }
      ],
-     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（j+üan → juan）。"
+     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（j+üan → juan）。", "noteEn": "The u here is really ü: j q x can only be followed by ü, so the two dots are dropped (j+üan → juan)."
     },
     {
      "id": "jun",
@@ -9054,7 +9054,7 @@ KT_DATA["pinyin"] = {
        "say": "俊"
       }
      ],
-     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（j+ün → jun）。"
+     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（j+ün → jun）。", "noteEn": "The u here is really ü: j q x can only be followed by ü, so the two dots are dropped (j+ün → jun)."
     },
     {
      "id": "qiong",
@@ -9098,7 +9098,7 @@ KT_DATA["pinyin"] = {
        "say": "去"
       }
      ],
-     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（q+ü → qu）。"
+     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（q+ü → qu）。", "noteEn": "The u here is really ü: j q x can only be followed by ü, so the two dots are dropped (q+ü → qu)."
     },
     {
      "id": "que",
@@ -9123,7 +9123,7 @@ KT_DATA["pinyin"] = {
        "say": "却"
       }
      ],
-     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（q+üe → que）。"
+     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（q+üe → que）。", "noteEn": "The u here is really ü: j q x can only be followed by ü, so the two dots are dropped (q+üe → que)."
     },
     {
      "id": "quan",
@@ -9148,7 +9148,7 @@ KT_DATA["pinyin"] = {
        "say": "劝"
       }
      ],
-     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（q+üan → quan）。"
+     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（q+üan → quan）。", "noteEn": "The u here is really ü: j q x can only be followed by ü, so the two dots are dropped (q+üan → quan)."
     },
     {
      "id": "qun",
@@ -9163,7 +9163,7 @@ KT_DATA["pinyin"] = {
        "say": "群"
       }
      ],
-     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（q+ün → qun）。"
+     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（q+ün → qun）。", "noteEn": "The u here is really ü: j q x can only be followed by ü, so the two dots are dropped (q+ün → qun)."
     },
     {
      "id": "xiong",
@@ -9212,7 +9212,7 @@ KT_DATA["pinyin"] = {
        "say": "续"
       }
      ],
-     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（x+ü → xu）。"
+     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（x+ü → xu）。", "noteEn": "The u here is really ü: j q x can only be followed by ü, so the two dots are dropped (x+ü → xu)."
     },
     {
      "id": "xue",
@@ -9237,7 +9237,7 @@ KT_DATA["pinyin"] = {
        "say": "雪"
       }
      ],
-     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（x+üe → xue）。 标调：üe 的调号标在 e 上（xué）。"
+     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（x+üe → xue）。 标调：üe 的调号标在 e 上（xué）。", "noteEn": "The u here is really ü: j q x can only be followed by ü, so the two dots are dropped (x+üe → xue). Tone mark: in üe the tone mark goes on the e (xué)."
     },
     {
      "id": "xuan",
@@ -9267,7 +9267,7 @@ KT_DATA["pinyin"] = {
        "say": "炫"
       }
      ],
-     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（x+üan → xuan）。"
+     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（x+üan → xuan）。", "noteEn": "The u here is really ü: j q x can only be followed by ü, so the two dots are dropped (x+üan → xuan)."
     },
     {
      "id": "xun",
@@ -9292,7 +9292,7 @@ KT_DATA["pinyin"] = {
        "say": "训"
       }
      ],
-     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（x+ün → xun）。"
+     "note": "这里的 u 其实是 ü：j q x 后面只能跟 ü，所以两点省去（x+ün → xun）。", "noteEn": "The u here is really ü: j q x can only be followed by ü, so the two dots are dropped (x+ün → xun)."
     }
    ]
   }
@@ -9303,42 +9303,42 @@ KT_DATA["pinyin"] = {
     "zi",
     "zhi"
    ],
-   "note": "平舌和翘舌：zi 舌尖抵上齿背，zhi 舌尖翘起抵硬腭前部。听摩擦的位置是前还是后。"
+   "note": "平舌和翘舌：zi 舌尖抵上齿背，zhi 舌尖翘起抵硬腭前部。听摩擦的位置是前还是后。", "noteEn": "Flat-tongue (平舌) vs curled-tongue, retroflex (翘舌): for zi the tongue tip touches the back of the upper teeth; for zhi the tongue tip curls up to touch the front of the hard palate. Listen for whether the friction is made further forward or further back."
   },
   {
    "glyphs": [
     "ci",
     "chi"
    ],
-   "note": "平舌和翘舌，两个都送气：听舌尖位置，不是听气流。"
+   "note": "平舌和翘舌，两个都送气：听舌尖位置，不是听气流。", "noteEn": "Flat-tongue (平舌) vs curled-tongue, retroflex (翘舌), both aspirated: listen for the position of the tongue tip, not for the puff of air."
   },
   {
    "glyphs": [
     "si",
     "shi"
    ],
-   "note": "平舌和翘舌：四 sì / 十 shí 就是这一组。"
+   "note": "平舌和翘舌：四 sì / 十 shí 就是这一组。", "noteEn": "Flat-tongue (平舌) vs curled-tongue, retroflex (翘舌): 四 sì / 十 shí are exactly this pair."
   },
   {
    "glyphs": [
     "zi",
     "ci"
    ],
-   "note": "不送气和送气：c 有一股明显的气流，z 没有。两者都不带声。"
+   "note": "不送气和送气：c 有一股明显的气流，z 没有。两者都不带声。", "noteEn": "Unaspirated vs aspirated: c has a clear puff of air, z does not. Neither is voiced."
   },
   {
    "glyphs": [
     "ba",
     "pa"
    ],
-   "note": "不送气和送气：b 不是英语的浊音 b，区别在 p 有气流（爸 / 怕）。"
+   "note": "不送气和送气：b 不是英语的浊音 b，区别在 p 有气流（爸 / 怕）。", "noteEn": "Unaspirated vs aspirated: b is not the voiced b of English; the difference is that p has a puff of air (爸 / 怕)."
   },
   {
    "glyphs": [
     "da",
     "ta"
    ],
-   "note": "不送气和送气：大 / 他，手放嘴前能感到 t 的气流。"
+   "note": "不送气和送气：大 / 他，手放嘴前能感到 t 的气流。", "noteEn": "Unaspirated vs aspirated: 大 / 他; with a hand in front of your mouth you can feel the puff of air of t."
   },
   {
    "glyphs": [
@@ -9346,113 +9346,113 @@ KT_DATA["pinyin"] = {
     "qi",
     "xi"
    ],
-   "note": "三个都是舌面音，舌尖抵下齿：j 不送气，q 送气，x 是摩擦。不是英语的 j / ch / sh。"
+   "note": "三个都是舌面音，舌尖抵下齿：j 不送气，q 送气，x 是摩擦。不是英语的 j / ch / sh。", "noteEn": "All three are made with the surface of the tongue (舌面音), with the tongue tip against the lower teeth: j is unaspirated, q is aspirated, x is a fricative. They are not English j / ch / sh."
   },
   {
    "glyphs": [
     "xi",
     "shi"
    ],
-   "note": "舌面和翘舌：xi 舌尖向下、嘴角展开；shi 舌尖翘起。"
+   "note": "舌面和翘舌：xi 舌尖向下、嘴角展开；shi 舌尖翘起。", "noteEn": "Tongue-surface (舌面) vs curled-tongue, retroflex (翘舌): for xi the tongue tip points down and the corners of the mouth are spread; for shi the tongue tip curls up."
   },
   {
    "glyphs": [
     "ju",
     "zu"
    ],
-   "note": "ju 里是 ü（圆唇的 i），zu 里是 u：听元音是靠前还是靠后。"
+   "note": "ju 里是 ü（圆唇的 i），zu 里是 u：听元音是靠前还是靠后。", "noteEn": "ju has ü (an i with rounded lips), zu has u: listen for whether the vowel is further forward or further back."
   },
   {
    "glyphs": [
     "qu",
     "chu"
    ],
-   "note": "qu 是 q+ü，chu 是 ch+u：声母和韵母都不同。"
+   "note": "qu 是 q+ü，chu 是 ch+u：声母和韵母都不同。", "noteEn": "qu is q+ü, chu is ch+u: both the initial and the final are different."
   },
   {
    "glyphs": [
     "xu",
     "shu"
    ],
-   "note": "xu 是 x+ü，shu 是 sh+u。"
+   "note": "xu 是 x+ü，shu 是 sh+u。", "noteEn": "xu is x+ü, shu is sh+u."
   },
   {
    "glyphs": [
     "lü",
     "lu"
    ],
-   "note": "ü 和 u：lǜ（绿 / 律）嘴唇圆、舌位靠前；lù（路）舌位靠后。"
+   "note": "ü 和 u：lǜ（绿 / 律）嘴唇圆、舌位靠前；lù（路）舌位靠后。", "noteEn": "ü vs u: for lǜ (绿 / 律) the lips are rounded and the tongue is forward; for lù (路) the tongue is further back."
   },
   {
    "glyphs": [
     "nü",
     "nu"
    ],
-   "note": "女 nǚ / 努 nǔ：ü 和 u 的区别。"
+   "note": "女 nǚ / 努 nǔ：ü 和 u 的区别。", "noteEn": "女 nǚ / 努 nǔ: the difference between ü and u."
   },
   {
    "glyphs": [
     "nan",
     "lan"
    ],
-   "note": "鼻音和边音：n 气流从鼻子出，l 从舌头两边出（男 / 蓝）。"
+   "note": "鼻音和边音：n 气流从鼻子出，l 从舌头两边出（男 / 蓝）。", "noteEn": "Nasal vs lateral: for n the air comes out through the nose; for l it comes out past both sides of the tongue (男 / 蓝)."
   },
   {
    "glyphs": [
     "nü",
     "lü"
    ],
-   "note": "n 和 l：女 / 旅。"
+   "note": "n 和 l：女 / 旅。", "noteEn": "n vs l: 女 / 旅."
   },
   {
    "glyphs": [
     "fan",
     "fang"
    ],
-   "note": "前鼻音和后鼻音：-n 舌尖收在上齿龈，-ng 舌根抬起，声音更“空”。"
+   "note": "前鼻音和后鼻音：-n 舌尖收在上齿龈，-ng 舌根抬起，声音更“空”。", "noteEn": "Front nasal ending (前鼻音) vs back nasal ending (后鼻音): -n ends with the tongue tip on the upper gum ridge; for -ng the back of the tongue rises and the sound is more “hollow”."
   },
   {
    "glyphs": [
     "jin",
     "jing"
    ],
-   "note": "前后鼻音：金 / 京。"
+   "note": "前后鼻音：金 / 京。", "noteEn": "Front vs back nasal ending (前后鼻音): 金 / 京."
   },
   {
    "glyphs": [
     "lin",
     "ling"
    ],
-   "note": "前后鼻音：林 / 零。"
+   "note": "前后鼻音：林 / 零。", "noteEn": "Front vs back nasal ending (前后鼻音): 林 / 零."
   },
   {
    "glyphs": [
     "shan",
     "shang"
    ],
-   "note": "前后鼻音：山 / 伤（商）。"
+   "note": "前后鼻音：山 / 伤（商）。", "noteEn": "Front vs back nasal ending (前后鼻音): 山 / 伤 (商)."
   },
   {
    "glyphs": [
     "chen",
     "cheng"
    ],
-   "note": "前后鼻音：沉 / 城。"
+   "note": "前后鼻音：沉 / 城。", "noteEn": "Front vs back nasal ending (前后鼻音): 沉 / 城."
   },
   {
    "glyphs": [
     "hu",
     "fu"
    ],
-   "note": "h 是舌根摩擦，f 是上齿碰下唇：呼 / 夫。日语母语者容易混。"
+   "note": "h 是舌根摩擦，f 是上齿碰下唇：呼 / 夫。日语母语者容易混。", "noteEn": "h is friction made at the back of the tongue, f is the upper teeth touching the lower lip: 呼 / 夫. Native speakers of Japanese tend to confuse them."
   },
   {
    "glyphs": [
     "ru",
     "lu"
    ],
-   "note": "r 舌尖翘起、有摩擦，l 舌尖抵上齿龈：如 / 炉。"
+   "note": "r 舌尖翘起、有摩擦，l 舌尖抵上齿龈：如 / 炉。", "noteEn": "r has the tongue tip curled up, with friction; l has the tongue tip against the upper gum ridge: 如 / 炉."
   }
  ],
- "reverse": "表里每个格子是单念时的读音。说话时会变：两个三声连读前一个读二声（你好 ní hǎo），“一”“不”在不同声调前变调，轻声字失去原调（妈妈 māma），儿化在韵母后加卷舌（哪儿 nǎr）。这些见“声调与音高轮廓”。表里没有收：ê、yo、lo 等只在叹词里出现的音节，以及 me、le、ne、de 这类常读轻声的音节（没有不多音的单字可以读）。"
+ "reverse": "表里每个格子是单念时的读音。说话时会变：两个三声连读前一个读二声（你好 ní hǎo），“一”“不”在不同声调前变调，轻声字失去原调（妈妈 māma），儿化在韵母后加卷舌（哪儿 nǎr）。这些见“声调与音高轮廓”。表里没有收：ê、yo、lo 等只在叹词里出现的音节，以及 me、le、ne、de 这类常读轻声的音节（没有不多音的单字可以读）。", "reverseEn": "Each cell in the chart gives the sound of the syllable said on its own. In speech it changes: when two third tones are read together, the first is read as a second tone (你好 ní hǎo); “一” and “不” change tone before different tones; characters in the neutral tone (轻声) lose their original tone (妈妈 māma); r-coloring (儿化) adds a curling of the tongue after the final (哪儿 nǎr). For these, see “Tone and pitch contours”. Not included in the chart: syllables that occur only in interjections, such as ê, yo, lo, and syllables usually read in the neutral tone, such as me, le, ne, de (there is no character with only one reading that could be used to say them)."
 };

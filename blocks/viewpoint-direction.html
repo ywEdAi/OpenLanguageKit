@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Viewpoint and direction</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .vd-layout { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .vd-layout { grid-template-columns: 1fr; } }
+  .vd-side { display: grid; gap: 12px; }
+  .vd-stage { display: grid; gap: 12px; }
+  .vd-top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; align-items: start; }
+  @media (max-width: 700px) { .vd-top { grid-template-columns: 1fr; } }
+  .vd-scene { border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); padding: 4px; }
+  .vd-scene svg { width: 100%; height: auto; display: block; }
+  .sv-t { fill: var(--ink); font-family: var(--font); }
+  .sv-m { fill: var(--muted); font-family: var(--font); }
+  .sv-box { fill: var(--panel); stroke: var(--line); stroke-width: 2; }
+  .sv-side { fill: none; stroke: var(--t2); stroke-width: 2; stroke-dasharray: 6 5; }
+  .sv-ghost { fill: none; stroke: var(--bad); stroke-width: 2; stroke-dasharray: 5 4; }
+  .sit { font-size: 1.05rem; margin: 0; }
+  .q { font-size: 1.4rem; margin: 0; line-height: 1.8; }
+  [data-variant="child"] .q { font-size: 1.7rem; }
+  .q .gap { display: inline-block; min-width: 3em; border-bottom: 3px solid var(--accent); text-align: center; color: var(--accent); }
+  .q .gap.ok { color: var(--ink); background: var(--accent-soft); border-radius: 6px 6px 0 0; }
+  .read { color: var(--muted); font-size: .9rem; margin: 0; }
+  .ctl { display: grid; gap: 6px; }
+  .ctl .lab { font-size: .85rem; color: var(--muted); }
+  .chipbtns { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pb { border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 5px 12px; }
+  .pb[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .pb:disabled { cursor: default; opacity: .8; }
+  .fb { border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 8px 14px; font-size: 1.15rem; }
+  [data-variant="child"] .fb { padding: 12px 18px; font-size: 1.4rem; }
+  .fb small { display: block; font-size: .65rem; color: var(--muted); }
+  .fb.right { background: var(--accent-soft); border-color: var(--accent); }
+  .fb.wrongpick { background: var(--warn-soft); border-color: var(--warn); }
+  .fb:disabled { cursor: default; }
+  .opts3 { display: grid; gap: 6px; }
+  .opts3 button { text-align: left; border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 8px 12px; }
+  .opts3 button.right { background: var(--accent-soft); border-color: var(--accent); }
+  .opts3 button.wrongpick { background: var(--bad-soft); border-color: var(--bad); }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; }
+  .strip { border-left: 4px solid var(--accent); padding: 6px 12px; background: var(--panel); border-radius: 0 10px 10px 0; }
+  .strip p { margin: 2px 0; }
+  .strip .old { color: var(--muted); text-decoration: line-through; }
+  .strip mark { background: var(--accent-soft); color: var(--ink); padding: 0 3px; border-radius: 4px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font-size: .8rem; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); }
+  .chip.ind { background: var(--accent-soft); border-color: var(--accent); }
+  .chip.ast { background: var(--warn-soft); border-color: var(--warn); }
+  .chip.bad { background: var(--bad-soft); border-color: var(--bad); }
+  .tbl { width: 100%; border-collapse: collapse; font-size: .85rem; }
+  .tbl td { border-top: 1px solid var(--line); padding: 4px 2px; vertical-align: top; }
+  .reverse { border-left: 4px solid var(--warn); }
+  .line { border: 1px solid var(--line); border-radius: 10px; padding: 10px; background: var(--panel); display: grid; gap: 8px; }
+  .line .vd-scene { max-width: 300px; }
+  .line textarea { width: 100%; min-height: 2.6em; border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; background: var(--bg); font-size: 1.05rem; }
+  .checklist { margin: 6px 0 0; padding-left: 20px; }
+  .checklist li.no { color: var(--bad); }
+  .done { font-size: 2.4rem; }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function () {
+  'use strict';
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t;
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'viewpoint-direction-ja';
+  var app = document.getElementById('app');
+  var entry = (window.KT_REGISTRY && KT_REGISTRY.packs && KT_REGISTRY.packs[setId]) || {};
+  if (entry.block && entry.block !== 'viewpoint-direction') { app.textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  var file = entry.file || 'data/viewpoint-direction.js';   // fallback while the registry does not list the pack yet
+  var s = document.createElement('script');
+  s.src = file;
+  s.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else app.textContent = L('数据包里没有 ' + setId, 'The data pack file does not contain ' + setId); };
+  s.onerror = function () { app.textContent = L('数据包加载失败：', 'Could not load the data pack: ') + file; };
+  document.head.appendChild(s);
+
+  var CATS = [
+    { id: 'change', zh: '要变：箭头相对“我”的方向反了', en: 'It changes: the arrow now points the other way relative to “me”' },
+    { id: 'same', zh: '不用变：这个形式不看说话人站在哪儿', en: 'It stays: this form does not depend on where the speaker is' },
+    { id: 'both', zh: '两种都可以，但意思重点或感情色彩不同', en: 'Both work, but the focus or feeling differs' }
+  ];
+  function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  function start(pack) {
+    var title = T(pack, 'title');
+    var B = KTBlock.init({ id: 'viewpoint-direction', primitive: 'prim:viewpoint-direction', title: title, set: pack.id });
+    document.title = title + ' · Viewpoint';
+    var showGloss = KTBlock.lang !== pack.lang;
+    var modes = [{ id: 'place', label: L('定位置', 'Place yourself') }, { id: 'shift', label: L('挪视点', 'Move the viewpoint') }, { id: 'tell', label: L('讲自己的事', 'Tell your own') }];
+    var st = { mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : 'place', queue: [], idx: 0, S: null, record: {}, groups: {}, recent: [] };
+    function child() { return B.variant === 'child'; }
+    function grp(g) { var o = (pack.groups || {})[g]; return o ? T(o, 'zh') : g; }
+    var ui = KTBlock.chrome(B, { title: title, subtitle: T(pack, 'subtitle'), modes: modes, mode: st.mode,
+      onMode: function (m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m }); newRound(); },
+      onVariant: function () { newRound(); } });
+    var bar = h('div', { class: 'kb-bar' }), stage = h('div', { class: 'kb-card vd-stage' }), side = h('aside', { class: 'vd-side' });
+    app.append(ui.header, h('main', { class: 'kb-main' }, [bar, h('div', { class: 'vd-layout' }, [stage, side])]), ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id });
+
+    /* ---------- scene: spots in a row, event arrow, the eye ("me"), my side, a shadow eye ---------- */
+    function spotLabel(sp) { return T(sp.label || {}, 'zh') || sp.w || sp.id; }
+    function spotById(it, id) { return it.spots.filter(function (x) { return x.id === id; })[0]; }
+    function xs(n) { return n === 1 ? [200] : n === 2 ? [105, 295] : n === 3 ? [70, 200, 330] : [55, 150, 250, 345]; }
+    function scene(it, o) {
+      var X = {}, out = [], n = it.spots.length, xx = xs(n);
+      it.spots.forEach(function (sp, i) { X[sp.id] = xx[i]; });
+      if (o.side && o.me && X[o.me] !== undefined) {
+        var ids = o.side.concat([o.me]).filter(function (id) { return X[id] !== undefined; }), lo = Math.min.apply(null, ids.map(function (id) { return X[id]; })), hi = Math.max.apply(null, ids.map(function (id) { return X[id]; }));
+        out.push('<rect x="' + (lo - 62) + '" y="66" width="' + (hi - lo + 124) + '" height="112" rx="18" class="sv-side"/><text x="' + (lo - 56) + '" y="192" font-size="12" class="sv-m">' + esc(L('“我方”', '“my side”')) + '</text>');
+      }
+      it.spots.forEach(function (sp) {
+        var x = X[sp.id];
+        out.push('<rect x="' + (x - 48) + '" y="74" width="96" height="96" rx="14" class="sv-box" style="' + (o.me === sp.id ? 'stroke:var(--accent);' : '') + '"/>' +
+          '<text x="' + x + '" y="122" font-size="34" text-anchor="middle">' + esc(sp.pic) + '</text>' +
+          '<text x="' + x + '" y="152" font-size="13" text-anchor="middle" class="sv-t">' + esc(spotLabel(sp)) + '</text>' +
+          (sp.w && showGloss ? '<text x="' + x + '" y="166" font-size="11" text-anchor="middle" class="sv-m">' + esc(sp.w) + '</text>' : ''));
+      });
+      if (o.arrow && X[o.arrow[0]] !== undefined && X[o.arrow[1]] !== undefined) {
+        var a = X[o.arrow[0]], b = X[o.arrow[1]], dir = b > a ? 1 : -1, x1 = a + dir * 30, x2 = b - dir * 30, mid = (x1 + x2) / 2;
+        var tx = x2 - mid, ty = 68, tn = Math.sqrt(tx * tx + ty * ty), ux = tx / tn, uy = ty / tn, bx = x2 - ux * 14, by = 86 - uy * 14;
+        function pt(x, y) { return Math.round(x * 10) / 10 + ',' + Math.round(y * 10) / 10; }
+        out.push('<path d="M' + x1 + ' 86 Q' + mid + ' 18 ' + x2 + ' 86" style="fill:none;stroke:var(--accent);stroke-width:3"/>' +
+          '<polygon points="' + pt(x2 + ux * 2, 86 + uy * 2) + ' ' + pt(bx - uy * 7, by + ux * 7) + ' ' + pt(bx + uy * 7, by - ux * 7) + '" style="fill:var(--accent)"/>' +
+          (it.thing ? '<text x="' + mid + '" y="50" font-size="24" text-anchor="middle">' + esc(it.thing) + '</text>' : ''));
+      }
+      function eye(id, cls) {
+        if (id === 'none') return '<text x="200" y="196" font-size="13" text-anchor="middle" class="' + (cls ? 'sv-m' : 'sv-t') + '">' + esc(L('👁 我不在场（讲别人的事）', '👁 I am not there (telling someone else’s story)')) + '</text>';
+        var x = X[id]; if (x === undefined) return '';
+        return '<text x="' + (x + 34) + '" y="98" font-size="22" text-anchor="middle">👁</text><text x="' + (x + 34) + '" y="72" font-size="11" text-anchor="middle" class="sv-t">' + esc(o.eyeLabel || L('我', 'me')) + '</text>' +
+          (cls ? '<circle cx="' + (x + 34) + '" cy="90" r="16" class="sv-ghost"/>' : '');
+      }
+      if (o.me) out.push(eye(o.me));
+      if (o.shadow) out.push(eye(o.shadow, true));
+      if (o.line && o.me && o.arrow && X[o.me] !== undefined) {
+        var anchor = o.anchor || o.me, xe = X[anchor] + 34, xa = X[o.arrow[1]];
+        var lab = o.lineText;
+        out.push('<line x1="' + xa + '" y1="60" x2="' + xe + '" y2="80" style="stroke:var(--t2);stroke-width:2;stroke-dasharray:4 3"/>' +
+          '<text x="200" y="14" font-size="13" text-anchor="middle" class="sv-t" style="font-weight:700">' + esc(lab) + '</text>');
+      }
+      var d = h('div', { class: 'vd-scene', role: 'img', 'aria-label': o.alt || '' });
+      d.innerHTML = '<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">' + out.join('') + '</svg>';   // built from authored pack data, text escaped
+      return d;
+    }
+    function orient(it, me, arrow) {
+      var anchor = it.anchor || me, side = (it.side || []).concat([anchor]);
+      if (side.indexOf(arrow[1]) >= 0) return 'to';
+      if (side.indexOf(arrow[0]) >= 0) return 'away';
+      return 'off';
+    }
+    function orientText(it, o) {
+      if (it.anchor) return o === 'to' ? L('箭头朝向听话的人那边', 'The arrow points toward the listener') : o === 'away' ? L('箭头离开听话的人', 'The arrow leaves the listener') : L('箭头两头都不是听话的人', 'The listener is at neither end');
+      return o === 'to' ? L('箭头朝“我”（或我方）来', 'The arrow comes toward “me” (or my side)') : o === 'away' ? L('箭头从“我”（或我方）出去', 'The arrow goes away from “me” (or my side)') : L('“我”不在箭头两头', '“Me” is at neither end of the arrow');
+    }
+    function alt(it, me, arrow) {
+      var parts = it.spots.map(function (sp) { return spotLabel(sp); }).join(L('、', ', '));
+      return L('场景：', 'Scene: ') + parts + (me ? L('。“我”在：', '. “Me” is at: ') + (me === 'none' ? L('不在场', 'not there') : spotLabel(spotById(it, me))) : '') +
+        (arrow ? L('。箭头从“', '. The arrow goes from “') + spotLabel(spotById(it, arrow[0])) + L('”指向“', '” to “') + spotLabel(spotById(it, arrow[1])) + L('”', '”') : '');
+    }
+    function qLine(q, fill, ok) {
+      var i = q.indexOf('＿＿');
+      return h('p', { class: 'q', lang: pack.lang }, i < 0 ? [q] : [q.slice(0, i), h('span', { class: 'gap' + (ok ? ' ok' : ''), text: fill || '？' }), q.slice(i + 2)]);
+    }
+    function filled(q, f) { return q.replace('＿＿', f); }
+
+    /* ---------- rounds ---------- */
+    function pool(list) {
+      var items = list.filter(function (it) { return !child() || it.child; });
+      if (!items.length) items = list;
+      var kc = B.kc, mine = items.filter(function (it) { return kc && [].concat(it.kc || []).indexOf(kc) >= 0; });
+      var sh = KTBlock.shuffle(items);
+      return mine.length >= 3 ? KTBlock.shuffle(mine).concat(sh.filter(function (x) { return mine.indexOf(x) < 0; })) : sh;
+    }
+    function newRound() {
+      st.idx = 0;
+      if (st.mode === 'place') st.queue = pool(pack.items).slice(0, child() ? 5 : 8);
+      else if (st.mode === 'shift') st.queue = pool(pack.shifts || []).slice(0, child() ? 3 : 6);
+      else st.queue = [{ id: 'tell' }];
+      begin();
+    }
+    function begin() {
+      var it = st.queue[st.idx];
+      st.S = it ? { me: null, arrow: null, placed: false, form: null, tried: [], solved: false, shadow: null, line: false, hint: 0, pair: false,
+        moved: null, cat: null, form2: null, tried2: [], lines: [{ o: null, f: null, txt: '' }, { o: null, f: null, txt: '' }], result: null } : null;
+      if (it && st.mode === 'shift') st.S.me = it.me1;
+      if (it) B.emit('view', { item: it.id, mode: st.mode }); else B.emit('complete', { mode: st.mode, items: st.queue.length });
+      render();
+    }
+    function next() { st.idx++; begin(); }
+    function feedback(t, tone) { var f = stage.querySelector('.kb-feedback'); if (f) { f.textContent = t; f.className = 'kb-feedback ' + (tone || ''); f.hidden = !t; } }
+    function chip(id, text, g) {
+      var s2 = B.status(id), cls = s2 === 'independent' ? 'ind' : s2 === 'wrong' ? 'bad' : 'ast';
+      st.record[id] = { text: text, cls: cls };
+      if (g) (st.groups[g] = st.groups[g] || []).push({ text: text, cls: cls });
+    }
+
+    /* ---------- step 1: place me and the arrow, then choose the form ---------- */
+    function confirmPlace() {
+      var it = st.queue[st.idx], S = st.S;
+      var okMe = S.me === it.me, okArrow = S.arrow && S.arrow[0] === it.arrow[0] && S.arrow[1] === it.arrow[1];
+      B.attempt('scene:' + it.id, { correct: okMe && okArrow, response: { me: S.me, arrow: S.arrow } });
+      B.emit('drop', { item: it.id, me: S.me, arrow: S.arrow });
+      S.placed = true;
+      chip('scene:' + it.id, L('位置 ', 'place ') + (st.idx + 1), null);
+      if (!(okMe && okArrow)) { S.me = it.me; S.arrow = it.arrow.slice(); render(); feedback(L('再读一遍情境：', 'Read the situation again: ') + (okMe ? '' : L('“我”应该在“', '“me” belongs at “') + (it.me === 'none' ? L('不在场', 'not there') : spotLabel(spotById(it, it.me))) + L('”。', '”.')) + (okArrow ? '' : L('', ' ')) + (okArrow ? '' : L('箭头是从“', 'The arrow goes from “') + spotLabel(spotById(it, it.arrow[0])) + L('”到“', '” to “') + spotLabel(spotById(it, it.arrow[1])) + L('”。', '”.')) + L(' 图已经改好，现在选形式。', ' The picture is now corrected; choose the form.'), 'bad'); return; }
+      render(); feedback(L('位置摆对了。现在选形式。', 'Placed correctly. Now choose the form.'));
+    }
+    function chooseForm(f) {
+      var it = st.queue[st.idx], S = st.S; if (S.solved) return;
+      var id = 'form:' + it.id;
+      B.attempt(id, { correct: !!f.ok, response: { form: f.t, me: S.me, arrow: S.arrow } });
+      B.emit('select', { item: id, form: f.t });
+      S.form = f.t; S.tried.push(f.t);
+      if (f.ok) {
+        S.solved = true; S.line = true; S.shadow = null; chip(id, f.t, it.group);
+        render(); feedback(L('对。', 'Right. ') + T(it.note || {}, 'zh'));
+        B.speak(filled(it.q, f.t), pack.speech);
+        return;
+      }
+      S.shadow = f.at || null;
+      if (f.at) B.emit('compare', { item: id, impliedMe: f.at });
+      render();
+      var where = f.at ? (f.at === 'none' ? L('不在场的旁观者', 'an onlooker who is not there') : '“' + spotLabel(spotById(it, f.at)) + '”' + L('那边', '')) : '';
+      feedback((where ? L('这样说，听的人会以为你站在' + where + '（图上红色虚线的眼睛）。', 'Said this way, the listener would think you are standing at ' + where + ' (the red dashed eye).') + ' ' : '') + T(f.say || {}, 'zh') + L(' 再选一次。', ' Choose again.'), 'warn');
+    }
+
+    /* ---------- step 2: move the viewpoint ---------- */
+    function moveMe(id) {
+      var it = st.queue[st.idx], S = st.S; if (S.moved) return;
+      S.me = id;
+      var ok = id === it.me2;
+      B.attempt('move:' + it.id, { correct: ok, response: { me: id } });
+      B.emit('drag', { item: it.id, me: id });
+      S.moved = id;
+      if (!ok) { S.me = it.me2; render(); feedback(L('按新的情境，“我”应该在：', 'From the new situation, “me” belongs at: ') + (it.me2 === 'none' ? L('不在场', 'not there') : spotLabel(spotById(it, it.me2))) + L('。图已改好。', '. The picture is corrected.'), 'bad'); return; }
+      render();
+    }
+    function chooseCat(c) {
+      var it = st.queue[st.idx], S = st.S; if (S.cat) return;
+      var ok = c === it.ans, id = 'shift:' + it.id;
+      B.attempt(id, { correct: ok, response: { category: c } });
+      S.cat = c; chip(id, L('挪视点 ', 'shift ') + (st.idx + 1), it.group);
+      st.recent.push({ pick: c, ans: it.ans }); if (st.recent.length > 3) st.recent.shift();
+      var warn = st.recent.length === 3 && st.recent.every(function (r) { return r.pick === 'same'; }) && st.recent.some(function (r) { return r.ans === 'change'; });
+      if (it.ans !== 'change') S.solved = true;
+      render();
+      feedback((ok ? L('对。', 'Right. ') : L('不对。', 'Not quite. ')) + T(it.note || {}, 'zh') + (warn ? L(' 你连着三题都选了“不用变”：你可能没在看“我”在哪儿。', ' You chose “it stays” three times in a row: you may not be looking at where “me” is.') : ''), ok ? '' : 'bad');
+    }
+    function chooseForm2(f) {
+      var it = st.queue[st.idx], S = st.S; if (S.solved) return;
+      var id = 'shiftform:' + it.id;
+      B.attempt(id, { correct: !!f.ok, response: { form: f.t } });
+      S.form2 = f.t; S.tried2.push(f.t);
+      if (f.ok) { S.solved = true; chip(id, f.t, it.group); render(); feedback(L('对：', 'Right: ') + it.s2); B.speak(it.s2, pack.speech); return; }
+      render(); feedback(L('这样说，箭头相对“我”的方向就不对了。看图上的“我”现在在哪儿。', 'That way the arrow points the wrong way relative to “me”. Look at where “me” is now.'), 'bad');
+    }
+
+    /* ---------- step 3: tell your own ---------- */
+    function checkTell() {
+      var S = st.S, lines = S.lines.filter(function (l) { return l.o || l.f || l.txt.trim(); }), out = [], ok = true;
+      function rule(pass, zh, en) { out.push({ ok: pass, t: L(zh, en) }); if (!pass) ok = false; }
+      rule(lines.length >= 2 && lines.every(function (l) { return l.o && l.f; }), '至少两句，每句都摆好箭头方向并选了形式', 'At least two sentences, each with an arrow direction and a form');
+      var forms = pack.tellForms;
+      function fo(t) { return forms.filter(function (f) { return f.t === t; })[0]; }
+      var mismatch = lines.filter(function (l) { var f = l.f && fo(l.f); return f && f.orient !== 'neutral' && f.orient !== l.o; });
+      rule(!mismatch.length, '形式和你摆的箭头方向一致' + (mismatch.length ? '：' + mismatch.map(function (l) { return l.f; }).join('、') + ' 不一致' : ''), 'Each form matches the arrow you set' + (mismatch.length ? '. Not matching: ' + mismatch.map(function (l) { return l.f; }).join(', ') : ''));
+      var dirs = lines.map(function (l) { var f = l.f && fo(l.f); return f ? f.orient : null; });
+      rule(dirs.indexOf('to') >= 0 && dirs.indexOf('away') >= 0, '至少一句朝向“我”、一句离开“我”（全用中性形式不算）', 'At least one sentence toward “me” and one away from “me” (neutral forms only do not count)');
+      var miss = lines.filter(function (l) { return l.f && l.txt.trim() && l.txt.indexOf(fo(l.f).find || l.f) < 0; });
+      var empty = lines.filter(function (l) { return !l.txt.trim(); });
+      rule(!miss.length && !empty.length, '每句都写出来了，而且句子里能找到你选的形式' + (miss.length ? '（页面在“' + miss.map(function (l) { return l.txt.trim(); }).join('”“') + '”里找不到所选形式，判断不了）' : ''), 'Each sentence is written and contains the form you chose' + (miss.length ? ' (the page cannot find the chosen form in “' + miss.map(function (l) { return l.txt.trim(); }).join('”, “') + '”, so it cannot judge)' : ''));
+      S.result = { ok: ok, lines: out };
+      B.attempt('tell', { correct: ok, response: lines.map(function (l) { return { arrow: l.o, form: l.f, text: l.txt }; }) });
+      chip('tell', L('自述', 'own story'), null);
+      render();
+    }
+
+    /* ---------- render ---------- */
+    function renderBar() {
+      bar.innerHTML = '';
+      if (st.mode !== 'tell' && st.idx < st.queue.length) bar.append(h('span', { class: 'kb-note', text: L('第 ' + (st.idx + 1) + ' / ' + st.queue.length + ' 题', 'Item ' + (st.idx + 1) + ' / ' + st.queue.length) }));
+      bar.append(h('button', { class: 'kb-btn', type: 'button', onclick: newRound }, L('换一轮', 'New round')));
+    }
+    function renderPlace(it) {
+      var S = st.S;
+      stage.append(h('p', { class: 'kb-prompt', text: child() ? L('先把眼睛（我）放好，再画箭头，然后选一个词。', 'Put the eye (me) in place, draw the arrow, then pick a word.') : L('先读情境：把“我”放到场景里，画出箭头（谁给谁、往哪儿移动、谁受了影响），再选形式。', 'Read the situation: put “me” in the scene, draw the arrow (who gives to whom, which way someone moves, who is affected), then choose the form.') }));
+      var o = orient(it, S.me || it.me, S.arrow || it.arrow);
+      stage.append(h('div', { class: 'vd-top' }, [
+        scene(it, { me: S.me, arrow: S.arrow, side: S.solved ? it.side : null, shadow: S.shadow, line: S.line, anchor: it.anchor, lineText: orientText(it, o), eyeLabel: it.eyeLabel ? T(it.eyeLabel, 'zh') : null, alt: alt(it, S.me, S.arrow) }),
+        h('div', { class: 'ctl' }, [h('p', { class: 'sit', text: T(it.situation, 'zh') }),
+          h('span', { class: 'lab', text: it.eyeLabel ? L('👁 放在：', '👁 Put it at:') : L('👁 “我”在：', '👁 “Me” is at:') }),
+          h('div', { class: 'chipbtns' }, it.spots.map(function (sp) { return sp.id; }).concat(it.noneOk ? ['none'] : []).map(function (id) {
+            return h('button', { type: 'button', class: 'pb', 'aria-pressed': S.me === id ? 'true' : 'false', disabled: S.placed, onclick: function () { S.me = id; B.emit('drag', { item: it.id, me: id }); render(); } }, id === 'none' ? L('不在场', 'Not there') : spotLabel(spotById(it, id)));
+          })),
+          h('span', { class: 'lab', text: L('箭头：', 'Arrow:') }),
+          h('div', { class: 'chipbtns' }, (it.arrows || [it.arrow, [it.arrow[1], it.arrow[0]]]).map(function (ar) {
+            var on = S.arrow && S.arrow[0] === ar[0] && S.arrow[1] === ar[1];
+            return h('button', { type: 'button', class: 'pb', 'aria-pressed': on ? 'true' : 'false', disabled: S.placed, onclick: function () { S.arrow = ar.slice(); B.emit('connect', { item: it.id, arrow: ar }); render(); } }, spotLabel(spotById(it, ar[0])) + ' → ' + spotLabel(spotById(it, ar[1])));
+          })),
+          S.placed ? null : h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', type: 'button', disabled: !S.me || !S.arrow, onclick: confirmPlace }, L('摆好了', 'Done'))])])]));
+      if (S.placed) {
+        stage.append(qLine(it.q, S.solved ? S.form : null, S.solved));
+        if (S.solved && it.r) stage.append(h('p', { class: 'read', text: it.r }));
+        if (S.solved && showGloss && it.gloss) stage.append(h('p', { class: 'read', text: T(it.gloss, 'zh') }));
+        stage.append(h('div', { class: 'chipbtns', role: 'group', 'aria-label': L('形式', 'Forms') }, it.forms.map(function (f, j) {
+          var tried = S.tried.indexOf(f.t) >= 0;
+          return h('button', { type: 'button', lang: pack.lang, class: 'fb' + (S.solved && f.ok ? ' right' : tried && !f.ok ? ' wrongpick' : ''), disabled: S.solved, onclick: function () { chooseForm(f); } }, [f.t, h('small', { text: String(j + 1) })]);
+        })));
+        if (!S.solved) {
+          var fid = 'form:' + it.id;
+          stage.append(h('div', { class: 'tools' }, [
+            h('button', { class: 'kb-btn', type: 'button', disabled: S.hint >= 1, onclick: function () { S.hint = 1; B.hint(fid, 1); render(); } }, L('提示 1：问自己', 'Hint 1: ask yourself')),
+            h('button', { class: 'kb-btn', type: 'button', disabled: S.line, onclick: function () { S.line = true; B.hint(fid, 2); render(); } }, L('提示 2：连起箭头和“我”', 'Hint 2: link the arrow and “me”')),
+            it.pair ? h('button', { class: 'kb-btn', type: 'button', disabled: S.pair, onclick: function () { S.pair = true; B.hint(fid, 3); render(); } }, L('提示 3：两种视点的对比句', 'Hint 3: two viewpoints side by side')) : null,
+            h('button', { class: 'kb-btn', type: 'button', onclick: function () { B.reveal(fid); var f = it.forms.filter(function (x) { return x.ok; })[0]; S.form = f.t; S.solved = true; S.line = true; S.shadow = null; chip(fid, f.t, it.group); render(); feedback(L('答案：', 'Answer: ') + f.t + L('。记为“看过答案”。', '. Recorded as “answer shown”.'), 'warn'); } }, L('看答案', 'Show the answer'))]));
+          if (S.hint >= 1) stage.append(h('p', { class: 'kb-note', text: it.anchor ? L('问自己：这里的“来／去”以谁为准？是你，还是听你说话的人？', 'Ask yourself: is come / go anchored on you here, or on the person you are talking to?') : L('问自己：你站在哪儿？东西或人是朝你来，还是离你去？谁受了影响？', 'Ask yourself: where are you standing? Is the thing or person coming toward you or going away? Who is affected?') }));
+          if (S.pair && it.pair) stage.append(h('div', { class: 'strip' }, it.pair.map(function (p) { return h('p', {}, [h('span', { lang: pack.lang, text: p.t }), ' ', h('span', { class: 'kb-note', text: T(p, 'note') })]); })));
+        }
+      }
+    }
+    function renderShift(it) {
+      var S = st.S;
+      stage.append(h('p', { class: 'kb-prompt', text: L('事情不变，“我”换个位置。先按新情境把“我”挪过去，再判断形式要不要变。', 'The event stays the same; “me” moves. First move “me” as the new situation says, then decide whether the form changes.') }));
+      var o = orient(it, S.me, it.arrow);
+      stage.append(h('div', { class: 'vd-top' }, [
+        scene(it, { me: S.me, arrow: it.arrow, line: !!S.cat, anchor: it.anchor, lineText: orientText(it, o), eyeLabel: it.eyeLabel ? T(it.eyeLabel, 'zh') : null, alt: alt(it, S.me, it.arrow) }),
+        h('div', { class: 'ctl' }, [
+          h('p', { class: 'sit', text: T(it.situation, 'zh') }),
+          h('div', { class: 'strip' }, [h('p', { class: 'kb-note', text: L('刚才的说法：', 'What was said before:') }), h('p', { lang: pack.lang, class: S.cat && it.ans === 'change' && S.solved ? 'old' : '', text: it.s1 }),
+            S.solved && it.s2 ? h('p', { lang: pack.lang }, [L('现在：', 'Now: '), h('mark', { text: it.s2 })]) : null]),
+          h('p', { class: 'sit', text: T(it.situation2, 'zh') }),
+          h('span', { class: 'lab', text: L('👁 把“我”挪到：', '👁 Move “me” to:') }),
+          h('div', { class: 'chipbtns' }, it.spots.map(function (sp) { return sp.id; }).concat(it.noneOk ? ['none'] : []).map(function (id) {
+            return h('button', { type: 'button', class: 'pb', 'aria-pressed': S.moved && S.me === id ? 'true' : 'false', disabled: !!S.moved, onclick: function () { moveMe(id); } }, id === 'none' ? L('不在场', 'Not there') : spotLabel(spotById(it, id)));
+          }))])]));
+      if (S.moved) {
+        stage.append(h('p', { class: 'kb-prompt', text: L('在新位置上，这句话的形式要不要变？', 'From the new position, does the form change?') }));
+        stage.append(h('div', { class: 'opts3' }, CATS.map(function (c, j) {
+          return h('button', { type: 'button', class: S.cat ? (c.id === it.ans ? 'right' : S.cat === c.id ? 'wrongpick' : '') : '', disabled: !!S.cat, onclick: function () { chooseCat(c.id); } }, (j + 1) + '. ' + L(c.zh, c.en));
+        })));
+      }
+      if (S.cat && it.ans === 'change') {
+        stage.append(qLine(it.q2, S.solved ? S.form2 : null, S.solved));
+        stage.append(h('div', { class: 'chipbtns' }, it.forms2.map(function (f, j) {
+          var tried = S.tried2.indexOf(f.t) >= 0;
+          return h('button', { type: 'button', lang: pack.lang, class: 'fb' + (S.solved && f.ok ? ' right' : tried && !f.ok ? ' wrongpick' : ''), disabled: S.solved, onclick: function () { chooseForm2(f); } }, [f.t, h('small', { text: String(j + 1) })]);
+        })));
+      }
+      if (S.solved && it.ans !== 'change' && it.alt2) stage.append(h('div', { class: 'strip' }, [h('p', { lang: pack.lang, text: it.alt2 })]));
+    }
+    function renderTell() {
+      var S = st.S, forms = pack.tellForms;
+      stage.append(h('p', { class: 'kb-prompt', text: L('讲两件你自己生活里的事：一件是东西或人朝你来（收到、有人来、受了影响），一件是从你这儿出去（给出、你去、你帮别人）。每句先摆好箭头，再选形式，然后写出整句。', 'Tell two things from your own life: one where something or someone comes toward you (you receive, someone comes, you are affected) and one where it goes away from you (you give, you go, you help someone). For each, set the arrow, choose the form, then write the whole sentence.') }));
+      var demo = { spots: [{ id: 'me', pic: '🧑', label: { zh: '我', en: 'me' } }, { id: 'other', pic: '👥', label: { zh: '别人／别处', en: 'someone else / elsewhere' } }] };
+      S.lines.forEach(function (l, i) {
+        var arrow = l.o === 'to' ? ['other', 'me'] : l.o === 'away' ? ['me', 'other'] : null;
+        stage.append(h('div', { class: 'line' }, [
+          h('b', { text: L('第 ' + (i + 1) + ' 句', 'Sentence ' + (i + 1)) }),
+          scene(demo, { me: 'me', arrow: arrow, alt: L('“我”和别人，箭头', '“Me” and someone else, arrow ') + (l.o === 'to' ? L('朝我', 'toward me') : l.o === 'away' ? L('离开我', 'away from me') : L('未定', 'not set')) }),
+          h('div', { class: 'chipbtns' }, [['to', L('箭头朝我来', 'Arrow toward me')], ['away', L('箭头从我出去', 'Arrow away from me')]].map(function (x) {
+            return h('button', { type: 'button', class: 'pb', 'aria-pressed': l.o === x[0] ? 'true' : 'false', disabled: S.result && S.result.ok, onclick: function () { l.o = x[0]; S.result = null; B.emit('drop', { item: 'tell', line: i, arrow: x[0] }); render(); } }, x[1]);
+          })),
+          h('div', { class: 'chipbtns', role: 'group', 'aria-label': L('形式', 'Forms') }, forms.map(function (f) {
+            return h('button', { type: 'button', lang: pack.lang, class: 'pb', 'aria-pressed': l.f === f.t ? 'true' : 'false', disabled: S.result && S.result.ok, onclick: function () { l.f = f.t; S.result = null; B.emit('select', { item: 'tell', line: i, form: f.t }); render(); } }, f.t);
+          })),
+          h('textarea', { lang: pack.lang, 'aria-label': L('写出第 ' + (i + 1) + ' 句', 'Write sentence ' + (i + 1)), placeholder: T(pack.tellPlaceholder || {}, 'zh') || '', oninput: function (e) { l.txt = e.target.value; S.result = null; } }, l.txt)]));
+      });
+      stage.append(h('div', { class: 'tools' }, [
+        S.lines.length < 3 ? h('button', { class: 'kb-btn', type: 'button', onclick: function () { S.lines.push({ o: null, f: null, txt: '' }); render(); } }, L('＋ 再加一句', '+ Add a sentence')) : null,
+        h('button', { class: 'kb-btn primary', type: 'button', disabled: S.result && S.result.ok, onclick: checkTell }, L('检查', 'Check')),
+        S.result && S.result.ok ? h('button', { class: 'kb-btn', type: 'button', onclick: newRound }, L('再讲两件', 'Tell two more')) : null]));
+      if (S.result) stage.append(h('div', { class: 'kb-feedback' + (S.result.ok ? '' : ' bad') }, [S.result.ok ? L('通过。再大声讲一遍，注意从头到尾都站在同一个“我”的位置上。', 'Passed. Now tell it aloud, keeping the same “me” from start to finish.') : L('还没通过：', 'Not yet:'),
+        h('ul', { class: 'checklist' }, S.result.lines.map(function (r) { return h('li', { class: r.ok ? '' : 'no', text: (r.ok ? '✓ ' : '✗ ') + r.t }); }))]));
+      stage.append(h('p', { class: 'kb-note', text: L('页面只核对：你选的形式和你摆的箭头方向是否一致、是否一来一去、句子里能不能找到你选的形式。句子其余部分对不对，页面判断不了，请老师或同伴看。', 'The page only checks whether each chosen form matches the arrow you set, whether there is one toward and one away, and whether the form appears in your sentence. It cannot judge the rest of the sentence; ask a teacher or partner.') }));
+    }
+    function renderStage() {
+      stage.innerHTML = '';
+      var it = st.queue[st.idx];
+      if (!it) {
+        stage.append(h('div', { class: 'done', text: '✔' }), h('p', { class: 'kb-prompt', text: st.queue.length ? L('这一轮做完了。', 'Round finished.') : L('这个数据包没有这类题。', 'This pack has no items of this kind.') }),
+          h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', type: 'button', onclick: newRound }, L('再来一轮', 'Another round'))]));
+        return;
+      }
+      if (st.mode === 'place') renderPlace(it); else if (st.mode === 'shift') renderShift(it); else { renderTell(); return; }
+      stage.append(h('div', { class: 'kb-feedback', hidden: true }));
+      stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn' + (st.S.solved ? ' primary' : ''), type: 'button', onclick: next }, st.S.solved ? L('下一题 →', 'Next →') : L('跳过', 'Skip'))]));
+    }
+    function renderSide() {
+      side.innerHTML = '';
+      var chips = Object.keys(st.record).map(function (k) { var r = st.record[k]; return h('span', { class: 'chip ' + r.cls, lang: pack.lang, text: r.text }); });
+      side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('这一组的记录', 'This set') }),
+        chips.length ? h('div', { class: 'chips' }, chips) : h('p', { class: 'kb-note', text: L('还没有作答。', 'No answers yet.') }),
+        h('p', { class: 'kb-note', text: L('绿 = 第一次就独立做对；黄 = 用过提示或看过答案；红 = 第一次做错。摆位置和选形式分开记录。', 'Green = right on your own the first time; yellow = after a hint or the answer; red = wrong the first time. Placing and choosing the form are recorded separately.') })]));
+      var gs = Object.keys(st.groups);
+      side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('按类别分开记', 'Kept apart by kind') }),
+        gs.length ? h('table', { class: 'tbl' }, gs.map(function (g) { return h('tr', {}, [h('td', {}, grp(g)), h('td', { lang: pack.lang }, st.groups[g].map(function (x) { return h('span', { class: 'chip ' + x.cls, text: x.text }); }))]); })) : null,
+        h('p', { class: 'kb-note', text: L('授受、来去、被动分开记录：一类做得好，不代表另一类也会。', 'Giving, coming/going and passive are kept apart: doing well in one says nothing about the others.') })]));
+      if (pack.reverse) side.append(h('div', { class: 'kb-card reverse' }, [h('b', { text: L('视点不总是你的物理位置', 'The viewpoint is not always where you stand') }), h('p', { class: 'kb-note', text: T(pack, 'reverse') })]));
+    }
+    function render() { renderBar(); renderStage(); renderSide(); }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT' || e.metaKey || e.ctrlKey || e.altKey) return;
+      var n = parseInt(e.key, 10); if (!(n >= 1 && n <= 9)) return;
+      var it = st.queue[st.idx], S = st.S; if (!it || !S) return;
+      if (st.mode === 'place' && S.placed && !S.solved && it.forms[n - 1]) chooseForm(it.forms[n - 1]);
+      else if (st.mode === 'shift' && S.moved && !S.cat && CATS[n - 1]) chooseCat(CATS[n - 1].id);
+      else if (st.mode === 'shift' && S.cat && it.ans === 'change' && !S.solved && it.forms2[n - 1]) chooseForm2(it.forms2[n - 1]);
+    });
+    newRound();
+  }
+})();
+</script>
+</body>
+</html>

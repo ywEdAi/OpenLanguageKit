@@ -69,6 +69,10 @@
   .strokes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; text-align: center; font-size: .8rem; }
   .strokes svg { width: 44px; height: 44px; display: block; margin: 0 auto; color: var(--ink); }
   .legend { display: flex; gap: 6px; flex-wrap: wrap; }
+  /* English interface: <html lang> is "en", so the CJK font for the language being taught comes from data-pack-lang */
+  html[lang="en"] body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", var(--cjk); }
+  html[lang="en"][data-pack-lang="ja"] { --cjk: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans CJK JP", "Yu Gothic", "Meiryo", sans-serif; }
+  html[lang="en"] .strokes { font-size: .72rem; line-height: 1.25; }
 </style>
 <script src="runtime/block.js"></script>
 <script src="registry.js"></script>
@@ -78,40 +82,46 @@
 <script>
 (function () {
   'use strict';
-  var h = KTBlock.h;
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t, EN = KTBlock.lang === 'en';
   var params = new URLSearchParams(location.search);
   var setId = params.get('set') || 'hanzi-zh';
   var entry = KT_REGISTRY.packs[setId] || {};
   var file = entry.file;
-  if (file && entry.block !== 'hanzi-parts') { document.getElementById('app').textContent = '数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。'; return; }
-  if (!file) { document.getElementById('app').textContent = '未知的数据包：' + setId; return; }
+  if (file && entry.block !== 'hanzi-parts') { document.getElementById('app').textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  if (!file) { document.getElementById('app').textContent = L('未知的数据包：', 'Unknown data pack: ') + setId; return; }
   var s = document.createElement('script');
   s.src = file;
   s.onload = function () { start(KT_DATA[setId]); };
-  s.onerror = function () { document.getElementById('app').textContent = '数据包加载失败：' + file; };
+  s.onerror = function () { document.getElementById('app').textContent = L('数据包加载失败：', 'Could not load the data pack: ') + file; };
   document.head.appendChild(s);
 
   /* ---------- structure geometry: [left, top, width, height] in %; first box is the outer part for enclosures ---------- */
   var IDC = {
-    '⿰': { name: '左右结构', boxes: [[0, 0, 40, 100], [43, 0, 57, 100]] },
-    '⿱': { name: '上下结构', boxes: [[0, 0, 100, 40], [0, 43, 100, 57]] },
-    '⿲': { name: '左中右结构', boxes: [[0, 0, 31, 100], [34, 0, 32, 100], [69, 0, 31, 100]] },
-    '⿳': { name: '上中下结构', boxes: [[0, 0, 100, 31], [0, 34, 100, 32], [0, 69, 100, 31]] },
-    '⿴': { name: '全包围结构', outer: 'flex-start;justify-content:flex-start', boxes: [[0, 0, 100, 100], [26, 26, 48, 48]] },
-    '⿵': { name: '上三包围结构', outer: 'flex-start', boxes: [[0, 0, 100, 100], [22, 30, 56, 70]] },
-    '⿶': { name: '下三包围结构', outer: 'flex-end', boxes: [[0, 0, 100, 100], [22, 0, 56, 70]] },
-    '⿷': { name: '左三包围结构', outer: 'center;justify-content:flex-start', boxes: [[0, 0, 100, 100], [30, 22, 70, 56]] },
-    '⿸': { name: '左上包围结构', outer: 'flex-start;justify-content:flex-start', boxes: [[0, 0, 100, 100], [34, 34, 66, 66]] },
-    '⿹': { name: '右上包围结构', outer: 'flex-start;justify-content:flex-end', boxes: [[0, 0, 100, 100], [0, 34, 66, 66]] },
-    '⿺': { name: '左下包围结构', outer: 'flex-end;justify-content:flex-start', boxes: [[0, 0, 100, 100], [34, 0, 66, 66]] },
-    '⿻': { name: '穿插结构', outer: 'center', boxes: [[0, 0, 100, 100], [20, 20, 60, 60]] },
-    '独体': { name: '独体字', boxes: [[0, 0, 100, 100]] }
+    '⿰': { name: '左右结构', nameEn: 'left-right structure', boxes: [[0, 0, 40, 100], [43, 0, 57, 100]] },
+    '⿱': { name: '上下结构', nameEn: 'top-bottom structure', boxes: [[0, 0, 100, 40], [0, 43, 100, 57]] },
+    '⿲': { name: '左中右结构', nameEn: 'left-middle-right structure', boxes: [[0, 0, 31, 100], [34, 0, 32, 100], [69, 0, 31, 100]] },
+    '⿳': { name: '上中下结构', nameEn: 'top-middle-bottom structure', boxes: [[0, 0, 100, 31], [0, 34, 100, 32], [0, 69, 100, 31]] },
+    '⿴': { name: '全包围结构', nameEn: 'full enclosure', outer: 'flex-start;justify-content:flex-start', boxes: [[0, 0, 100, 100], [26, 26, 48, 48]] },
+    '⿵': { name: '上三包围结构', nameEn: 'enclosure from above', outer: 'flex-start', boxes: [[0, 0, 100, 100], [22, 30, 56, 70]] },
+    '⿶': { name: '下三包围结构', nameEn: 'enclosure from below', outer: 'flex-end', boxes: [[0, 0, 100, 100], [22, 0, 56, 70]] },
+    '⿷': { name: '左三包围结构', nameEn: 'enclosure from the left', outer: 'center;justify-content:flex-start', boxes: [[0, 0, 100, 100], [30, 22, 70, 56]] },
+    '⿸': { name: '左上包围结构', nameEn: 'enclosure from the upper left', outer: 'flex-start;justify-content:flex-start', boxes: [[0, 0, 100, 100], [34, 34, 66, 66]] },
+    '⿹': { name: '右上包围结构', nameEn: 'enclosure from the upper right', outer: 'flex-start;justify-content:flex-end', boxes: [[0, 0, 100, 100], [0, 34, 66, 66]] },
+    '⿺': { name: '左下包围结构', nameEn: 'enclosure from the lower left', outer: 'flex-end;justify-content:flex-start', boxes: [[0, 0, 100, 100], [34, 0, 66, 66]] },
+    '⿻': { name: '穿插结构', nameEn: 'overlaid structure', outer: 'center', boxes: [[0, 0, 100, 100], [20, 20, 60, 60]] },
+    '独体': { name: '独体字', nameEn: 'single-component character (独体字)', boxes: [[0, 0, 100, 100]] }
   };
   var ROLE = { meaning: '表意（形旁）', sound: '表音（声旁）', form: '只是字形' };
+  // English labels: the Chinese terms 形旁 / 声旁 are kept only for the Chinese pack (set in start())
+  var ROLE_EN = { meaning: 'meaning part', sound: 'sound part', form: 'shape only' };
+  var ROLE_EN_ZH = { meaning: 'meaning part (形旁)', sound: 'sound part (声旁)', form: 'shape only' };
   var STROKES = [
     ['横', 'M6 21 L34 19'], ['竖', 'M20 5 L20 35'], ['撇', 'M28 6 Q25 24 8 34'], ['点', 'M15 11 L25 23'],
     ['捺', 'M8 8 Q19 25 35 32'], ['提', 'M8 31 L32 14'], ['折（横折）', 'M6 10 L30 10 L30 35'], ['钩（竖钩）', 'M22 5 L22 32 L14 26']
   ];
+  var STROKES_EN = ['horizontal', 'vertical', 'left-falling', 'dot', 'right-falling', 'rising', 'turn', 'hook'];
+  function idcName(k) { var spec = IDC[k] || IDC['独体']; return T(spec, 'name'); }
+  function aName(k) { var n = idcName(k); return (/^[aeiou]/.test(n) ? 'an ' : 'a ') + n; }
 
   /* ---------- reading comparison (zh: pinyin; ja: on-yomi) ---------- */
   var TM = {}; ['āáǎàa', 'ēéěèe', 'īíǐìi', 'ōóǒòo', 'ūúǔùu', 'ǖǘǚǜü'].forEach(function (row) {
@@ -126,16 +136,23 @@
   function pySplit(b) { for (var i = 0; i < INITS.length; i++) if (b.indexOf(INITS[i]) === 0) return [INITS[i], b.slice(INITS[i].length)]; return ['', b]; }
   function kanaNorm(k) { return k.normalize('NFD').replace(/[゙゚]/g, '').replace(/ウ$/, ''); }
   var REL = { same: '和声旁同音', tone: '只差声调', partial: '声母或韵母相同', near: '相近（清浊或长短不同）', none: '声旁已不提示读音' };
+  var REL_EN = { same: 'same sound as the sound part', tone: 'differs only in tone', partial: 'same initial or same final', near: 'close (differs in voicing or length)', none: 'the sound part no longer hints at the reading' };
   var CLUE = { same: '有用', tone: '有用', partial: '部分有用', near: '部分有用', none: '失效' };
+  var CLUE_EN = { same: 'useful', tone: 'useful', partial: 'partly useful', near: 'partly useful', none: 'fails' };
+  function relText(k) { return EN ? REL_EN[k] : REL[k]; }
+  function clueText(k) { return EN ? CLUE_EN[k] : CLUE[k]; }
 
   function start(pack) {
     var JA = pack.lang === 'ja';
-    document.documentElement.lang = JA ? 'ja' : 'zh-CN';
-    var B = KTBlock.init({ id: 'hanzi-parts', primitive: 'prim:character-anatomy', title: pack.title, set: pack.id });
-    document.title = pack.title + ' · Hanzi Parts';
+    // Chinese interface: <html lang> follows the pack (as before). English interface: it stays "en" and the pack language picks the CJK font.
+    if (EN) { document.documentElement.setAttribute('data-pack-lang', JA ? 'ja' : 'zh'); ROLE = JA ? ROLE_EN : ROLE_EN_ZH; }
+    else document.documentElement.lang = JA ? 'ja' : 'zh-CN';
+    var title = T(pack, 'title'), cats = T(pack, 'cats') || {};
+    var B = KTBlock.init({ id: 'hanzi-parts', primitive: 'prim:character-anatomy', title: title, set: pack.id });
+    document.title = title + ' · Hanzi Parts';
     var byGlyph = {}; pack.chars.forEach(function (c) { byGlyph[c.glyph] = c; });
     var comp = {}; pack.components.forEach(function (c) { comp[c.glyph] = c; });
-    var modes = [{ id: 'explore', label: '拆字' }, { id: 'build', label: '拼字' }, { id: 'family', label: '同族' }, { id: 'guess', label: '猜一猜' }];
+    var modes = [{ id: 'explore', label: L('拆字', 'Take apart') }, { id: 'build', label: L('拼字', 'Build') }, { id: 'family', label: L('同族', 'Families') }, { id: 'guess', label: L('猜一猜', 'Guess') }];
     var seenKey = 'hp-seen-' + pack.id;
     var st = {
       mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : 'explore',
@@ -143,7 +160,7 @@
       fam: null, build: null, guess: null, solved: {},
       seen: B.store(seenKey) || {}, gStats: { total: 0, unrel: 0 }
     };
-    var ui = KTBlock.chrome(B, { title: pack.title, subtitle: pack.subtitle, modes: modes, mode: st.mode,
+    var ui = KTBlock.chrome(B, { title: title, subtitle: T(pack, 'subtitle'), modes: modes, mode: st.mode,
       onMode: function (m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m }); render(); }, onVariant: function () { st.build = null; st.guess = null; render(); } });
     var bar = h('div', { class: 'kb-bar' });
     var body = h('div');
@@ -169,7 +186,9 @@
     }
     function soundPart(c) { return c.parts.find(function (p) { return p.role === 'sound'; }); }
     function meaningPart(c) { return c.parts.find(function (p) { return p.role === 'meaning' && p.cat; }); }
-    function catLabel(k) { return (pack.cats || {})[k] || k; }
+    function catLabel(k) { return cats[k] || k; }
+    // meaning in the interface language (Chinese pack: its existing English gloss; Japanese pack: the English sibling of the Chinese gloss)
+    function meaningOf(c) { return T(c.meaning, 'zh'); }
     function say(c, text) {
       var t = text || c.say || c.glyph;
       B.speak(t, pack.speech, { audio: c.audio }); // silent when speech is unavailable; the button says so
@@ -178,7 +197,7 @@
 
     function readingEl(c) {
       if (!JA) { var t = pyParse(c.pinyin).tone; return h('span', { class: 'reading tone' + t, text: c.pinyin }); }
-      return h('span', { class: 'reading kana' }, [c.on.join('・'), c.kun.length ? h('span', { class: 'badge' }, '　/　') : null, c.kun.length ? kunEl(c.kun) : null]);
+      return h('span', { class: 'reading kana' }, [c.on.join('・'), c.kun.length ? h('span', { class: 'badge' }, L('　/　', ' / ')) : null, c.kun.length ? kunEl(c.kun) : null]);
     }
     function kunEl(list) {
       var out = h('span');
@@ -190,19 +209,19 @@
       return out;
     }
     var canSpeak = 'speechSynthesis' in window;
-    function playBtn(c, text, label) { return h('button', { class: 'kb-btn', 'aria-label': '播放读音', disabled: !canSpeak && !c.audio, title: canSpeak ? null : '这个浏览器不能播放语音', onclick: function () { say(c, text); } }, '▶ ' + (label || '听')); }
+    function playBtn(c, text, label) { return h('button', { class: 'kb-btn', 'aria-label': L('播放读音', 'Play the reading'), disabled: !canSpeak && !c.audio, title: canSpeak ? null : L('这个浏览器不能播放语音', 'This browser cannot play speech'), onclick: function () { say(c, text); } }, '▶ ' + (label || L('听', 'Listen'))); }
 
     /* structure diagram. slots: [{glyph, role, onclick, cls}] — missing glyph = empty slot */
     function diagram(structure, slots, opts) {
       opts = opts || {};
       var spec = IDC[structure] || IDC['独体'];
-      var box = h('div', { class: 'dg', role: 'img', 'aria-label': spec.name });
+      var box = h('div', { class: 'dg', role: 'img', 'aria-label': T(spec, 'name') });
       spec.boxes.forEach(function (b, i) {
         var sl = slots[i] || {};
         var outer = spec.outer && i === 0;
         var cls = 'slot ' + (outer ? 'outer' : 'inner') + (sl.glyph ? ' r-' + (sl.role || 'form') : ' empty') + (sl.cls ? ' ' + sl.cls : '');
         var style = 'left:' + b[0] + '%;top:' + b[1] + '%;width:' + b[2] + '%;height:' + b[3] + '%;' + (outer ? 'align-items:' + spec.outer + ';' : '');
-        var el = h(sl.onclick ? 'button' : 'div', { class: cls, style: style, onclick: sl.onclick || null, 'aria-label': sl.glyph ? sl.glyph + (sl.role ? '，' + ROLE[sl.role] : '') : '空位 ' + (i + 1) },
+        var el = h(sl.onclick ? 'button' : 'div', { class: cls, style: style, onclick: sl.onclick || null, 'aria-label': sl.glyph ? sl.glyph + (sl.role ? L('，', ', ') + ROLE[sl.role] : '') : L('空位 ', 'Empty slot ') + (i + 1) },
           [h('span', { class: 'g', text: sl.glyph || '' }), opts.numbers ? h('span', { class: 'n', text: String(i + 1) }) : null]);
         box.append(el);
       });
@@ -212,28 +231,29 @@
 
     /* ---------- side cards ---------- */
     function legend() {
-      return h('div', { class: 'kb-card' }, [h('b', { text: '颜色' }), h('div', { class: 'legend' }, Object.keys(ROLE).map(function (r) { return h('span', { class: 'role r-' + r, text: ROLE[r] }); })),
-        h('p', { class: 'kb-note', text: '部件只是线索：形旁给意思的大类，声旁给读音的方向，都可能失效。这里不讲字源故事。' })]);
+      return h('div', { class: 'kb-card' }, [h('b', { text: L('颜色', 'Colours') }), h('div', { class: 'legend' }, Object.keys(ROLE).map(function (r) { return h('span', { class: 'role r-' + r, text: ROLE[r] }); })),
+        h('p', { class: 'kb-note', text: L('部件只是线索：形旁给意思的大类，声旁给读音的方向，都可能失效。这里不讲字源故事。', 'Components are only clues: the meaning part gives the broad category of meaning, the sound part points towards the reading, and either can fail. No etymology stories here.') })]);
     }
     function strokeCard(c) {
-      return h('details', { class: 'kb-card' }, [h('summary', {}, [h('b', { text: '基本笔画' }), c ? '　这个字 ' + c.strokes + ' 画' : '']),
-        h('div', { class: 'strokes' }, STROKES.map(function (s) {
+      return h('details', { class: 'kb-card' }, [h('summary', {}, [h('b', { text: L('基本笔画', 'Basic strokes') }), c ? L('　这个字 ' + c.strokes + ' 画', ' This character: ' + c.strokes + ' strokes') : '']),
+        h('div', { class: 'strokes' }, STROKES.map(function (s, si) {
           var svg = '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="' + s[1] + '" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="' + s[1].split(' ')[0].slice(1) + '" cy="' + s[1].split(' ')[1] + '" r="3.2" fill="var(--t4)"/></svg>';
-          var d = h('div'); d.innerHTML = svg; d.append(s[0]); return d;
+          var d = h('div'); d.innerHTML = svg; d.append(EN ? STROKES_EN[si] + (JA ? '' : ' ' + s[0].replace('（', ' (').replace('）', ')')) : s[0]); return d;
         })),
-        h('p', { class: 'kb-note', text: '红点是起笔处。没有经过授权核对的笔顺数据，这里不演示逐笔笔顺；请对照' + (JA ? '日本学校教学通行笔顺' : '《现代汉语通用字笔顺规范》') + '或字帖。' })]);
+        h('p', { class: 'kb-note', text: L('红点是起笔处。没有经过授权核对的笔顺数据，这里不演示逐笔笔顺；请对照' + (JA ? '日本学校教学通行笔顺' : '《现代汉语通用字笔顺规范》') + '或字帖。',
+          'The red dot is where the stroke starts. There is no licence-checked stroke-order data here, so stroke-by-stroke order is not shown; check it against ' + (JA ? 'the stroke order commonly taught in Japanese schools' : 'the standard 《现代汉语通用字笔顺规范》') + ' or a copybook.') })]);
     }
     function notesFor(pred) {
       return (pack.notes || []).filter(pred).map(function (n) {
-        return h('div', { class: 'kb-card reverse' }, [h('b', { text: n.kind === 'sound' ? '声旁不总可靠' : '形旁不总可靠' }), h('p', { class: 'kb-note cjk', text: n.note })]);
+        return h('div', { class: 'kb-card reverse' }, [h('b', { text: n.kind === 'sound' ? L('声旁不总可靠', 'The sound part is not always reliable') : L('形旁不总可靠', 'The meaning part is not always reliable') }), h('p', { class: 'kb-note cjk', text: T(n, 'note') })]);
       });
     }
 
     /* ---------- 拆字 explore ---------- */
     function pickerBar() {
       bar.innerHTML = '';
-      bar.append(h('div', { class: 'pick', role: 'group', 'aria-label': '选一个字' }, pack.chars.map(function (c) {
-        return h('button', { 'aria-pressed': st.cur === c ? 'true' : 'false', title: c.meaning.zh, onclick: function () { selectChar(c); } }, c.glyph);
+      bar.append(h('div', { class: 'pick', role: 'group', 'aria-label': L('选一个字', 'Pick a character') }, pack.chars.map(function (c) {
+        return h('button', { 'aria-pressed': st.cur === c ? 'true' : 'false', title: meaningOf(c), onclick: function () { selectChar(c); } }, c.glyph);
       })));
     }
     function selectChar(c) { st.cur = c; markSeen(c); B.emit('select', { item: c.glyph }); say(c); render(); }
@@ -242,41 +262,44 @@
       pickerBar();
       var meta = h('div', { class: 'meta' }, [
         h('p', {}, [readingEl(c), ' ', playBtn(c)]),
-        h('p', { class: 'cjk' }, [h('b', { text: c.meaning.zh }), c.meaning.en ? h('span', { class: 'badge' }, '　' + c.meaning.en) : null]),
-        h('p', { class: 'kb-note' }, [(IDC[c.structure] || IDC['独体']).name + (c.structure !== '独体' ? ' ' + c.structure : '') + ' · ' + c.strokes + ' 画'])
+        // English interface: the English meaning leads; for a Chinese pack the Chinese gloss follows as content in the language being taught
+        EN ? h('p', { class: 'cjk' }, [h('b', { text: meaningOf(c) }), !JA && c.meaning.en ? h('span', { class: 'badge' }, ' ' + c.meaning.zh) : null])
+          : h('p', { class: 'cjk' }, [h('b', { text: c.meaning.zh }), !JA && c.meaning.en ? h('span', { class: 'badge' }, '　' + c.meaning.en) : null]),
+        h('p', { class: 'kb-note' }, [idcName(c.structure) + (c.structure !== '独体' ? ' ' + c.structure : '') + ' · ' + c.strokes + L(' 画', ' strokes')])
       ]);
       var card = h('div', { class: 'kb-card' }, [h('div', { class: 'hero' }, [h('div', { class: 'big', text: c.glyph }), diagram(c.structure, partSlots(c)), meta])]);
       if (c.parts.length) card.append(h('ul', { class: 'parts' }, c.parts.map(function (p) {
         var cc = comp[p.glyph] || {};
         return h('li', { class: 'r-' + p.role }, [h('span', { class: 'pg', text: p.glyph }),
-          h('div', {}, [h('b', { text: p.name }), ' ', h('span', { class: 'role', text: ROLE[p.role] }), p.cat ? h('span', { class: 'badge' }, '　义类：' + catLabel(p.cat)) : null,
-            h('div', { class: 'kb-note cjk', text: p.hint + (p.role === 'sound' && relOf(c, p) ? '。这个字：' + REL[relOf(c, p)] : '') + (cc.standsFor ? '（' + cc.standsFor + ' 作偏旁）' : '') })]),
-          (cc.count || 0) >= 2 ? h('button', { class: 'kb-btn', onclick: function () { openFamily(p.glyph); } }, '同族 ' + cc.count) : h('span')]);
+          h('div', {}, [h('b', { text: T(p, 'name') }), ' ', h('span', { class: 'role', text: ROLE[p.role] }), p.cat ? h('span', { class: 'badge' }, L('　义类：', ' Category: ') + catLabel(p.cat)) : null,
+            h('div', { class: 'kb-note cjk', text: L(p.hint + (p.role === 'sound' && relOf(c, p) ? '。这个字：' + REL[relOf(c, p)] : '') + (cc.standsFor ? '（' + cc.standsFor + ' 作偏旁）' : ''),
+              T(p, 'hint') + (p.role === 'sound' && relOf(c, p) ? '. In this character: ' + relText(relOf(c, p)) : '') + (cc.standsFor ? ' (' + cc.standsFor + ' as a component)' : '')) })]),
+          (cc.count || 0) >= 2 ? h('button', { class: 'kb-btn', onclick: function () { openFamily(p.glyph); } }, L('同族 ', 'Family ') + cc.count) : h('span')]);
       })));
-      else card.append(h('p', { class: 'kb-note', text: '独体字：不再拆成更小的部件，常常自己作别的字的部件。' }));
-      if ((comp[c.glyph] || {}).count) card.append(h('p', {}, [h('button', { class: 'kb-btn', onclick: function () { openFamily(c.glyph); } }, '它作部件的字 ' + comp[c.glyph].count + ' 个')]));
+      else card.append(h('p', { class: 'kb-note', text: L('独体字：不再拆成更小的部件，常常自己作别的字的部件。', 'Single-component character (独体字): it is not split into smaller components, and it often serves as a component of other characters.') }));
+      if ((comp[c.glyph] || {}).count) card.append(h('p', {}, [h('button', { class: 'kb-btn', onclick: function () { openFamily(c.glyph); } }, L('它作部件的字 ' + comp[c.glyph].count + ' 个', 'Characters that use it as a component: ' + comp[c.glyph].count))]));
       if (JA) card.append(jaBlock(c));
       body.innerHTML = ''; body.append(card);
       side.innerHTML = '';
       side.append(legend(), strokeCard(c));
       notesFor(function (n) { return n.chars.indexOf(c.glyph) >= 0; }).forEach(function (e) { side.append(e); });
-      side.append(h('p', { class: 'kb-note', text: pack.source }));
+      side.append(h('p', { class: 'kb-note', text: T(pack, 'source') }));
     }
     function jaBlock(c) {
       var wrap = h('div', { style: 'margin-top:12px' }, [
-        h('p', {}, [h('b', { text: '音読み（音读）' }), '　', h('span', { class: 'kana', text: c.on.join('・') || '—' })]),
-        h('p', {}, [h('b', { text: '訓読み（训读）' }), '　', c.kun.length ? h('span', { class: 'kana' }, [kunEl(c.kun)]) : '—', c.kun.some(function (k) { return k.indexOf('.') > 0; }) ? h('span', { class: 'badge' }, '　灰色部分是送假名') : null]),
+        h('p', {}, [h('b', { text: L('音読み（音读）', 'On reading (音読み)') }), L('　', ' '), h('span', { class: 'kana', text: c.on.join('・') || '—' })]),
+        h('p', {}, [h('b', { text: L('訓読み（训读）', 'Kun reading (訓読み)') }), L('　', ' '), c.kun.length ? h('span', { class: 'kana' }, [kunEl(c.kun)]) : '—', c.kun.some(function (k) { return k.indexOf('.') > 0; }) ? h('span', { class: 'badge' }, L('　灰色部分是送假名', ' The grey part is okurigana')) : null]),
         h('ul', { class: 'words' }, (c.words || []).map(function (w) {
           return h('li', {}, [h('button', { class: 'kb-btn', onclick: function () { say(c, w.r); B.emit('select', { item: c.glyph, word: w.w }); } }, '▶ ' + w.w),
-            ' ', h('span', { class: 'kana', text: w.r }), ' ', w.zh, h('span', { class: 'tag', text: { on: '音读', kun: '训读', special: '特殊读法' }[w.type] })]);
+            ' ', h('span', { class: 'kana', text: w.r }), ' ', T(w, 'zh'), h('span', { class: 'tag', text: (EN ? { on: 'on reading', kun: 'kun reading', special: 'special reading' } : { on: '音读', kun: '训读', special: '特殊读法' })[w.type] })]);
         })),
-        pack.readingNote ? h('p', { class: 'kb-note', text: pack.readingNote }) : null
+        pack.readingNote ? h('p', { class: 'kb-note', text: T(pack, 'readingNote') }) : null
       ]);
       if (c.zhForm || c.zhNote) wrap.append(h('div', { class: 'kb-card', style: 'margin-top:10px' }, [
-        c.zhForm ? h('div', { class: 'compare' }, [h('div', {}, [h('span', { class: 'g', lang: 'ja', text: c.glyph }), '日本字形']), h('div', {}, ['↔']),
-          h('div', {}, [h('span', { class: 'g', lang: 'zh-CN', style: 'font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif', text: c.zhForm }), '中文简体'])]) : null,
-        h('p', { class: 'kb-note', text: (c.zhNote || '') + (c.zhForm ? ' 写日语时用日本字形，不要写成中文简体。' : '') })]));
-      if (c.trap) wrap.append(h('div', { class: 'kb-feedback warn', text: '注意：' + c.trap }));
+        c.zhForm ? h('div', { class: 'compare' }, [h('div', {}, [h('span', { class: 'g', lang: 'ja', text: c.glyph }), L('日本字形', 'Japanese form')]), h('div', {}, ['↔']),
+          h('div', {}, [h('span', { class: 'g', lang: 'zh-CN', style: 'font-family:"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif', text: c.zhForm }), L('中文简体', 'Simplified Chinese')])]) : null,
+        h('p', { class: 'kb-note', text: (T(c, 'zhNote') || '') + (c.zhForm ? L(' 写日语时用日本字形，不要写成中文简体。', ' When writing Japanese, use the Japanese form, not the simplified Chinese one.') : '') })]));
+      if (c.trap) wrap.append(h('div', { class: 'kb-feedback warn', text: L('注意：', 'Note: ') + T(c, 'trap') }));
       return wrap;
     }
 
@@ -287,7 +310,7 @@
       if (!st.fam || !comp[st.fam] || comp[st.fam].count < 2) st.fam = list[0].glyph;
       bar.innerHTML = '';
       bar.append(h('div', { class: 'chips' }, list.map(function (c) {
-        return h('button', { class: 'chip', 'aria-pressed': c.glyph === st.fam ? 'true' : 'false', onclick: function () { st.fam = c.glyph; render(); } }, [h('b', { text: c.glyph }), c.name + ' ' + c.count]);
+        return h('button', { class: 'chip', 'aria-pressed': c.glyph === st.fam ? 'true' : 'false', onclick: function () { st.fam = c.glyph; render(); } }, [h('b', { text: c.glyph }), T(c, 'name') + ' ' + c.count]);
       })));
       var cc = comp[st.fam];
       var members = pack.chars.filter(function (c) { return c.parts.some(function (p) { return p.glyph === st.fam; }); });
@@ -298,26 +321,27 @@
         var p = c.parts.find(function (x) { return x.glyph === st.fam; });
         var rel = p.role === 'sound' ? relOf(c, p) : null;
         var exc = false, label = ROLE[p.role];
-        if (rel) { nSound++; tally[rel]++; label = REL[rel]; exc = rel === 'partial' || rel === 'near' || rel === 'none'; }
-        if (p.role === 'meaning' && cc.cat && p.cat && p.cat !== cc.cat) { exc = true; label = '义类不同：' + catLabel(p.cat); }
-        if (p.role === 'form' && cc.cat) { exc = true; label = '这里只是字形'; }
+        if (rel) { nSound++; tally[rel]++; label = relText(rel); exc = rel === 'partial' || rel === 'near' || rel === 'none'; }
+        if (p.role === 'meaning' && cc.cat && p.cat && p.cat !== cc.cat) { exc = true; label = L('义类不同：', 'Different category: ') + catLabel(p.cat); }
+        if (p.role === 'form' && cc.cat) { exc = true; label = L('这里只是字形', 'Shape only here'); }
         return h('button', { class: 'ftile' + (exc ? ' exc' : ''), onclick: function () { st.cur = c; st.mode = 'explore'; ui.setMode('explore'); B.emit('select', { item: c.glyph, from: 'family' }); render(); } }, [
-          h('span', { class: 'g', text: c.glyph }), readingEl(c), h('span', { class: 'badge cjk', text: c.meaning.zh }),
+          h('span', { class: 'g', text: c.glyph }), readingEl(c), h('span', { class: 'badge cjk', text: meaningOf(c) }),
           h('span', { class: 'badge rel', text: (exc ? '⚠ ' : '') + label })]);
       });
       var head = h('div', { class: 'hero' }, [h('div', { class: 'big', text: cc.glyph }), h('div', { class: 'meta' }, [
-        h('p', {}, [h('b', { text: cc.name })]),
-        cc.cat ? h('p', { class: 'cjk', text: '作形旁时：' + (cc.hint || catLabel(cc.cat)) }) : null,
-        cc.pinyin ? h('p', {}, ['自己读 ', h('span', { class: 'tone' + pyParse(cc.pinyin).tone, text: cc.pinyin })]) : null,
-        cc.on && cc.on.length ? h('p', {}, ['音读 ', h('span', { class: 'kana', text: cc.on.join('・') })]) : null,
-        cc.standsFor ? h('p', { class: 'kb-note', text: '是“' + cc.standsFor + '”作偏旁时的写法' }) : null])]);
-      var summary = nSound ? h('p', { class: 'kb-feedback' }, ['它当声旁的 ' + nSound + ' 个字里：同音 ' + tally.same + '，只差声调 ' + tally.tone + '，' + (JA ? '相近 ' + tally.near : '声母或韵母相同 ' + tally.partial) + '，不提示读音 ' + tally.none + '。虚线框是例外。']) : h('p', { class: 'kb-note', text: '虚线框是例外：同一个部件在这些字里的作用不一样。' });
+        h('p', {}, [h('b', { text: T(cc, 'name') })]),
+        cc.cat ? h('p', { class: 'cjk', text: L('作形旁时：', 'As a meaning part: ') + (T(cc, 'hint') || catLabel(cc.cat)) }) : null,
+        cc.pinyin ? h('p', {}, [L('自己读 ', 'On its own it reads '), h('span', { class: 'tone' + pyParse(cc.pinyin).tone, text: cc.pinyin })]) : null,
+        cc.on && cc.on.length ? h('p', {}, [L('音读 ', 'On reading '), h('span', { class: 'kana', text: cc.on.join('・') })]) : null,
+        cc.standsFor ? h('p', { class: 'kb-note', text: L('是“' + cc.standsFor + '”作偏旁时的写法', 'The form "' + cc.standsFor + '" takes as a component') }) : null])]);
+      var summary = nSound ? h('p', { class: 'kb-feedback' }, [L('它当声旁的 ' + nSound + ' 个字里：同音 ' + tally.same + '，只差声调 ' + tally.tone + '，' + (JA ? '相近 ' + tally.near : '声母或韵母相同 ' + tally.partial) + '，不提示读音 ' + tally.none + '。虚线框是例外。',
+        'Of the ' + nSound + ' characters where it is the sound part: same sound ' + tally.same + ', differs only in tone ' + tally.tone + ', ' + (JA ? 'close ' + tally.near : 'same initial or final ' + tally.partial) + ', no hint at the reading ' + tally.none + '. Dashed boxes are exceptions.')]) : h('p', { class: 'kb-note', text: L('虚线框是例外：同一个部件在这些字里的作用不一样。', 'Dashed boxes are exceptions: the same component plays a different role in these characters.') });
       body.innerHTML = '';
       body.append(h('div', { class: 'kb-card' }, [head, summary, h('div', { class: 'ftiles' }, tiles)]));
       side.innerHTML = '';
       var ns = notesFor(function (n) { return n.part === st.fam; });
       ns.forEach(function (e) { side.append(e); });
-      if (!ns.length) side.append(h('div', { class: 'kb-card reverse' }, [h('b', { text: '反过来想' }), h('p', { class: 'kb-note', text: '同族字帮你归类记忆，但部件不能机械推出字义或读音。看到熟悉的部件，先猜，再查证。' })]));
+      if (!ns.length) side.append(h('div', { class: 'kb-card reverse' }, [h('b', { text: L('反过来想', 'The other way round') }), h('p', { class: 'kb-note', text: L('同族字帮你归类记忆，但部件不能机械推出字义或读音。看到熟悉的部件，先猜，再查证。', 'Families help you group characters and remember them, but a component cannot mechanically give you the meaning or the reading. When you see a familiar component, guess first, then check.') })]));
       side.append(legend());
     }
 
@@ -345,7 +369,7 @@
     function placeTile(t) {
       var b = st.build; if (b.done || !b.structure || t.used) return;
       var i = b.target != null && !b.slots[b.target] ? b.target : b.slots.indexOf(null);
-      if (i < 0) { note('格子都满了。点一个格子把部件拿回来。', 'warn'); return; }
+      if (i < 0) { note(L('格子都满了。点一个格子把部件拿回来。', 'All the slots are full. Click a slot to take its component back.'), 'warn'); return; }
       b.slots[i] = t; t.used = true; b.target = null; b.bad = {};
       B.emit('drop', { item: b.c.glyph, part: t.glyph, slot: i }); render();
     }
@@ -356,7 +380,7 @@
     }
     function submitBuild() {
       var b = st.build, c = b.c;
-      if (!b.structure || b.slots.indexOf(null) >= 0) { note('先选结构，再把每个格子填满。', 'warn'); return; }
+      if (!b.structure || b.slots.indexOf(null) >= 0) { note(L('先选结构，再把每个格子填满。', 'Choose the structure first, then fill every slot.'), 'warn'); return; }
       var parts = b.slots.map(function (t) { return t.glyph; });
       var structOk = b.structure === c.structure;
       var partsOk = structOk && parts.every(function (g, i) { return g === c.parts[i].glyph; });
@@ -364,13 +388,14 @@
       var rec = B.attempt(c.glyph, { correct: partsOk, response: { structure: b.structure, parts: parts } });
       if (partsOk) {
         b.done = true; st.solved[c.glyph] = rec.first.correct && !rec.first.assisted ? 'ind' : 'ast'; render();
-        note('对！' + c.glyph + ' = ' + c.parts.map(function (p) { return p.glyph + '（' + ROLE[p.role] + '）'; }).join(' + ') + '。' + (rec.first.correct && !rec.first.assisted ? '第一次就独立拼对。' : '记为提示后或重试后完成。'));
+        note(L('对！' + c.glyph + ' = ' + c.parts.map(function (p) { return p.glyph + '（' + ROLE[p.role] + '）'; }).join(' + ') + '。' + (rec.first.correct && !rec.first.assisted ? '第一次就独立拼对。' : '记为提示后或重试后完成。'),
+          'Right! ' + c.glyph + ' = ' + c.parts.map(function (p) { return p.glyph + ' [' + ROLE[p.role] + ']'; }).join(' + ') + '. ' + (rec.first.correct && !rec.first.assisted ? 'Built independently on the first attempt.' : 'Recorded as completed after a hint or a retry.')));
         say(c);
       } else {
         b.bad = {}; if (structOk) parts.forEach(function (g, i) { if (g !== c.parts[i].glyph) b.bad[i] = true; });
         render();
-        note(!structOk ? (setOk ? '部件选对了，但结构不对：' + c.glyph + ' 不是' + IDC[b.structure].name + '。' : '结构不对，部件也不全对。先想想这个字是怎么排的。')
-          : setOk ? '部件都对，但位置放反了。红框的格子换一换。' : '结构对了。红框里的部件不对：想想意思该由哪个部件提示，读音该由哪个部件提示。', 'bad');
+        note(!structOk ? (setOk ? L('部件选对了，但结构不对：' + c.glyph + ' 不是' + IDC[b.structure].name + '。', 'The components are right, but the structure is wrong: ' + c.glyph + ' is not ' + aName(b.structure) + '.') : L('结构不对，部件也不全对。先想想这个字是怎么排的。', 'The structure is wrong, and not all the components are right either. First think about how this character is laid out.'))
+          : setOk ? L('部件都对，但位置放反了。红框的格子换一换。', 'All the components are right, but they are in the wrong positions. Swap the slots with a red border.') : L('结构对了。红框里的部件不对：想想意思该由哪个部件提示，读音该由哪个部件提示。', 'The structure is right. The components in the red slots are wrong: think about which component should hint at the meaning and which at the reading.'), 'bad');
       }
     }
     function hintBuild() {
@@ -378,7 +403,7 @@
       if (!b.lockStruct) {
         b.lockStruct = true; B.hint(c.glyph, 1);
         if (b.structure !== c.structure) { b.slots.forEach(function (t) { if (t) t.used = false; }); b.structure = c.structure; b.slots = new Array(c.parts.length).fill(null); }
-        render(); note('提示 1：这是' + IDC[c.structure].name + ' ' + c.structure + '。', 'warn'); return;
+        render(); note(L('提示 1：这是' + IDC[c.structure].name + ' ' + c.structure + '。', 'Hint 1: this is ' + aName(c.structure) + ' ' + c.structure + '.'), 'warn'); return;
       }
       var mi = c.parts.findIndex(function (p) { return p.role === 'meaning'; }); if (mi < 0) mi = 0;
       if (b.locked[mi]) return;
@@ -388,52 +413,53 @@
       if (prev >= 0) { b.slots[prev].used = false; b.slots[prev] = null; }
       var t = b.tiles.find(function (x) { return x.glyph === c.parts[mi].glyph && !x.used; });
       b.slots[mi] = t; t.used = true; b.locked[mi] = true; render();
-      note('提示 2：' + c.parts[mi].glyph + '（' + c.parts[mi].name + '）' + c.parts[mi].hint + '。', 'warn');
+      note(L('提示 2：' + c.parts[mi].glyph + '（' + c.parts[mi].name + '）' + c.parts[mi].hint + '。', 'Hint 2: ' + c.parts[mi].glyph + ', ' + T(c.parts[mi], 'name') + '. ' + T(c.parts[mi], 'hint') + '.'), 'warn');
     }
     function revealBuild() {
       var b = st.build, c = b.c; if (b.done) return;
       B.reveal(c.glyph); b.done = true; st.solved[c.glyph] = 'ast';
       b.structure = c.structure; b.tiles.forEach(function (t) { t.used = false; });
       b.slots = c.parts.map(function (p) { var t = b.tiles.find(function (x) { return x.glyph === p.glyph && !x.used; }); t.used = true; return t; });
-      render(); note('答案：' + c.glyph + '。这一题记为“看过答案”。', 'warn'); say(c);
+      render(); note(L('答案：' + c.glyph + '。这一题记为“看过答案”。', 'Answer: ' + c.glyph + '. This item is recorded as "answer shown".'), 'warn'); say(c);
     }
     function renderBuild() {
       if (!st.build) newBuild();
       var b = st.build;
       bar.innerHTML = '';
       var done = Object.keys(st.solved).length, total = pack.chars.filter(function (c) { return c.parts.length >= 2; }).length;
-      bar.append(h('span', { class: 'kb-note', text: '已拼 ' + done + ' / ' + total + ' 个合体字。第一次提交会被记录；提示和看答案另算。' }));
+      bar.append(h('span', { class: 'kb-note', text: L('已拼 ' + done + ' / ' + total + ' 个合体字。第一次提交会被记录；提示和看答案另算。', 'Built ' + done + ' / ' + total + ' compound characters. Your first submission is recorded; hints and shown answers are counted separately.') }));
       body.innerHTML = ''; side.innerHTML = '';
-      if (b.done === 'all') { body.append(h('div', { class: 'kb-card', text: '这一组合体字都拼过了。' })); return; }
+      if (b.done === 'all') { body.append(h('div', { class: 'kb-card', text: L('这一组合体字都拼过了。', 'You have built every compound character in this set.') })); return; }
       var c = b.c;
       var prompt = h('div', { class: 'kb-card' }, [
-        h('p', { class: 'kb-prompt' }, ['拼出这个字：意思是“', h('b', { class: 'cjk', text: c.meaning.zh }), '”' + (c.meaning.en ? '（' + c.meaning.en + '）' : '') + '，读作 ',
-          readingEl(c), ' ', playBtn(c)]),
-        h('p', { class: 'kb-note', text: '① 选结构　② 点部件放进格子（点格子可以拿回或指定位置）　③ 提交' }),
+        h('p', { class: 'kb-prompt' }, (EN ? ['Build this character: it means "', h('b', { class: 'cjk', text: meaningOf(c) }), '" and is read ']
+          : ['拼出这个字：意思是“', h('b', { class: 'cjk', text: c.meaning.zh }), '”' + (!JA && c.meaning.en ? '（' + c.meaning.en + '）' : '') + '，读作 ']).concat([
+          readingEl(c), ' ', playBtn(c)])),
+        h('p', { class: 'kb-note', text: L('① 选结构　② 点部件放进格子（点格子可以拿回或指定位置）　③ 提交', '① Choose the structure  ② Click components to put them into the slots (click a slot to take a component back or to choose where the next one goes)  ③ Submit') }),
         h('div', { class: 'opts' }, b.structs.map(function (k) {
-          return h('button', { 'aria-pressed': b.structure === k ? 'true' : 'false', disabled: b.done || b.lockStruct, onclick: function () { chooseStructure(k); } }, [h('span', { style: 'font-size:1.4em' }, k), ' ' + IDC[k].name]);
+          return h('button', { 'aria-pressed': b.structure === k ? 'true' : 'false', disabled: b.done || b.lockStruct, onclick: function () { chooseStructure(k); } }, [h('span', { style: 'font-size:1.4em' }, k), ' ' + idcName(k)]);
         })),
         h('div', { class: 'hero' }, [
           b.structure ? diagram(b.structure, b.slots.map(function (t, i) {
             var p = b.done ? c.parts[i] : null;
             return { glyph: t ? t.glyph : '', role: p ? p.role : (t ? 'form' : null), onclick: function () { clickSlot(i); },
               cls: (b.target === i ? 'target' : '') + (b.bad[i] ? ' bad' : '') + (b.locked[i] ? ' locked' : '') };
-          }), { numbers: true }) : h('div', { class: 'dg slot empty', style: 'position:relative' }, [h('span', { class: 'kb-note', text: '先选结构' })]),
+          }), { numbers: true }) : h('div', { class: 'dg slot empty', style: 'position:relative' }, [h('span', { class: 'kb-note', text: L('先选结构', 'Choose the structure first') })]),
           b.done ? h('div', { class: 'big', text: c.glyph }) : null
         ]),
         h('div', { class: 'tiles' }, b.tiles.map(function (t) {
           return h('button', { class: 'tile' + (t.used ? ' used' : ''), disabled: t.used || b.done, onclick: function () { placeTile(t); } }, t.glyph);
         })),
         h('div', { class: 'kb-bar' }, b.done ? [
-          h('button', { class: 'kb-btn primary', onclick: function () { st.build = null; render(); } }, '下一个'),
-          h('button', { class: 'kb-btn', onclick: function () { st.cur = c; st.mode = 'explore'; ui.setMode('explore'); render(); } }, '拆开看这个字')
+          h('button', { class: 'kb-btn primary', onclick: function () { st.build = null; render(); } }, L('下一个', 'Next')),
+          h('button', { class: 'kb-btn', onclick: function () { st.cur = c; st.mode = 'explore'; ui.setMode('explore'); render(); } }, L('拆开看这个字', 'Take this character apart'))
         ] : [
-          h('button', { class: 'kb-btn primary', onclick: submitBuild }, '提交'),
-          h('button', { class: 'kb-btn', disabled: b.locked[0] || b.locked[1] || b.locked[2], onclick: hintBuild }, b.lockStruct ? '提示 2：表意部件' : '提示 1：结构'),
-          h('button', { class: 'kb-btn', onclick: revealBuild }, '看答案'),
-          h('button', { class: 'kb-btn', onclick: function () { st.build = null; render(); } }, '跳过')
+          h('button', { class: 'kb-btn primary', onclick: submitBuild }, L('提交', 'Submit')),
+          h('button', { class: 'kb-btn', disabled: b.locked[0] || b.locked[1] || b.locked[2], onclick: hintBuild }, b.lockStruct ? L('提示 2：表意部件', 'Hint 2: meaning part') : L('提示 1：结构', 'Hint 1: structure')),
+          h('button', { class: 'kb-btn', onclick: revealBuild }, L('看答案', 'Show the answer')),
+          h('button', { class: 'kb-btn', onclick: function () { st.build = null; render(); } }, L('跳过', 'Skip'))
         ]),
-        h('div', { class: 'kb-feedback', text: '有' + (b.tiles.length - c.parts.length) + '个多余的部件。结构和部件位置都要对。' })
+        h('div', { class: 'kb-feedback', text: L('有' + (b.tiles.length - c.parts.length) + '个多余的部件。结构和部件位置都要对。', 'There are ' + (b.tiles.length - c.parts.length) + ' extra components. Both the structure and the position of each component must be right.') })
       ]);
       body.append(prompt);
       side.append(legend(), strokeCard(null));
@@ -473,7 +499,7 @@
     }
     function submitGuess() {
       var q = st.guess, c = q.c;
-      if ((q.catOpts && !q.ans.cat) || (q.readOpts && !q.ans.read)) { note('两个问题都选一个再提交。猜错没关系。', 'warn'); return; }
+      if ((q.catOpts && !q.ans.cat) || (q.readOpts && !q.ans.read)) { note(L('两个问题都选一个再提交。猜错没关系。', 'Pick an answer for both questions before you submit. A wrong guess is fine.'), 'warn'); return; }
       if (q.catOpts) B.attempt(c.glyph + ':meaning', { correct: q.ans.cat === q.cat, response: q.ans.cat });
       if (q.readOpts) B.attempt(c.glyph + ':sound', { correct: q.ans.read === q.read, response: q.ans.read });
       finishGuess();
@@ -484,14 +510,14 @@
       var q = st.guess;
       bar.innerHTML = '';
       var left = pack.chars.filter(function (c) { return !st.seen[c.glyph] && guessable(c); }).length;
-      bar.append(h('span', { class: 'kb-note', text: '只出你还没看过的字（剩 ' + left + ' 个）。这是迁移：用部件线索猜，不靠记忆。' }),
-        h('button', { class: 'kb-btn', onclick: function () { st.seen = {}; B.store(seenKey, {}); st.guess = null; render(); } }, '清空“已看过”'));
+      bar.append(h('span', { class: 'kb-note', text: L('只出你还没看过的字（剩 ' + left + ' 个）。这是迁移：用部件线索猜，不靠记忆。', 'Only characters you have not seen yet come up (' + left + ' left). This is transfer: guess from the component clues, not from memory.') }),
+        h('button', { class: 'kb-btn', onclick: function () { st.seen = {}; B.store(seenKey, {}); st.guess = null; render(); } }, L('清空“已看过”', 'Clear "seen"')));
       body.innerHTML = ''; side.innerHTML = '';
-      if (q.empty) { body.append(h('div', { class: 'kb-card', text: '这个数据包里的字你都看过了。清空“已看过”后可以再来，但那时就不算迁移了。' })); return; }
+      if (q.empty) { body.append(h('div', { class: 'kb-card', text: L('这个数据包里的字你都看过了。清空“已看过”后可以再来，但那时就不算迁移了。', 'You have seen every character in this data pack. Clear "seen" to go again, but then it no longer counts as transfer.') })); return; }
       var c = q.c, mp = meaningPart(c), sp = soundPart(c);
       var card = h('div', { class: 'kb-card' }, [
         h('div', { class: 'hero' }, [h('div', { class: 'big', text: c.glyph }), diagram(c.structure, partSlots(c)),
-          h('div', { class: 'meta' }, c.parts.map(function (p) { return h('p', {}, [h('b', { class: 'cjk', text: p.glyph }), ' ', p.name, ' ', h('span', { class: 'role r-' + p.role, text: ROLE[p.role] })]); }))])
+          h('div', { class: 'meta' }, c.parts.map(function (p) { return h('p', {}, [h('b', { class: 'cjk', text: p.glyph }), ' ', T(p, 'name'), ' ', h('span', { class: 'role r-' + p.role, text: ROLE[p.role] })]); }))])
       ]);
       function optRow(key, opts, truth, labelFn) {
         return h('div', { class: 'opts' }, opts.map(function (o) {
@@ -500,40 +526,40 @@
             onclick: function () { q.ans[key] = o; B.emit('select', { item: c.glyph, question: key, choice: o }); render(); } }, labelFn(o));
         }));
       }
-      if (q.catOpts) card.append(h('p', { class: 'kb-prompt', text: '① 看表意部件：这个字的意思大概和什么有关？' }), optRow('cat', q.catOpts, q.cat, catLabel));
-      if (q.readOpts) card.append(h('p', { class: 'kb-prompt', text: '② 看表音部件：这个字最可能读什么？' }), optRow('read', q.readOpts, q.read, function (o) { return h('span', { class: JA ? 'kana' : 'tone' + pyParse(o).tone, text: o }); }));
+      if (q.catOpts) card.append(h('p', { class: 'kb-prompt', text: L('① 看表意部件：这个字的意思大概和什么有关？', '① Look at the meaning part: what is the meaning of this character probably related to?') }), optRow('cat', q.catOpts, q.cat, catLabel));
+      if (q.readOpts) card.append(h('p', { class: 'kb-prompt', text: L('② 看表音部件：这个字最可能读什么？', '② Look at the sound part: how is this character most likely read?') }), optRow('read', q.readOpts, q.read, function (o) { return h('span', { class: JA ? 'kana' : 'tone' + pyParse(o).tone, text: o }); }));
       if (!q.done) {
         card.append(h('div', { class: 'kb-bar' }, [
-          h('button', { class: 'kb-btn primary', onclick: submitGuess }, '提交'),
+          h('button', { class: 'kb-btn primary', onclick: submitGuess }, L('提交', 'Submit')),
           h('button', { class: 'kb-btn', disabled: q.hints >= (sp ? 2 : 1), onclick: function () {
             q.hints++; B.hint(c.glyph + (q.hints === 1 && mp ? ':meaning' : ':sound'), q.hints);
             render();
-          } }, '提示'),
-          h('button', { class: 'kb-btn', onclick: function () { if (q.catOpts) B.reveal(c.glyph + ':meaning'); if (q.readOpts) B.reveal(c.glyph + ':sound'); finishGuess(); } }, '看答案')
+          } }, L('提示', 'Hint')),
+          h('button', { class: 'kb-btn', onclick: function () { if (q.catOpts) B.reveal(c.glyph + ':meaning'); if (q.readOpts) B.reveal(c.glyph + ':sound'); finishGuess(); } }, L('看答案', 'Show the answer'))
         ]));
         if (q.hints >= 1) {
           var hp = mp || sp;
           var known = pack.chars.filter(function (x) { return x !== c && st.seen[x.glyph] && x.parts.some(function (p) { return p.glyph === hp.glyph; }); });
-          card.append(h('p', { class: 'kb-feedback warn' }, ['提示：这个字的“' + hp.glyph + '”你在哪个字里见过？', known.length ? ' 例如 ' + known.slice(0, 4).map(function (x) { return x.glyph; }).join(' ') : '']));
+          card.append(h('p', { class: 'kb-feedback warn' }, [L('提示：这个字的“' + hp.glyph + '”你在哪个字里见过？', 'Hint: in which character have you seen the "' + hp.glyph + '" of this character?'), known.length ? L(' 例如 ', ' For example ') + known.slice(0, 4).map(function (x) { return x.glyph; }).join(' ') : '']));
         }
         if (q.hints >= 2 && sp) {
           var same = pack.chars.find(function (x) { return x !== c && st.seen[x.glyph] && x.parts.some(function (p) { return p.glyph === sp.glyph && p.role === 'sound'; }); });
-          card.append(h('p', { class: 'kb-feedback warn' }, ['提示：“' + sp.glyph + '”自己读 ', h('b', { text: [].concat(compReading(sp.glyph)).join('・') }), same ? '；' + same.glyph + ' 读 ' + readingKey(same) : '', '。']));
+          card.append(h('p', { class: 'kb-feedback warn' }, [L('提示：“' + sp.glyph + '”自己读 ', 'Hint: "' + sp.glyph + '" on its own reads '), h('b', { text: [].concat(compReading(sp.glyph)).join('・') }), same ? L('；' + same.glyph + ' 读 ' + readingKey(same), '; ' + same.glyph + ' reads ' + readingKey(same)) : '', L('。', '.')]));
         }
-        card.append(h('div', { class: 'kb-feedback', text: '猜意思和猜读音分开记录；只对一个不算猜中。' }));
+        card.append(h('div', { class: 'kb-feedback', text: L('猜意思和猜读音分开记录；只对一个不算猜中。', 'Guessing the meaning and guessing the reading are recorded separately; getting only one of them right does not count as a correct guess.') }));
       } else {
         var rel = sp ? relOf(c, sp) : null;
         card.append(h('div', { class: 'kb-feedback' + (rel && CLUE[rel] === '失效' ? ' warn' : '') }, [
-          h('p', { style: 'margin:0' }, ['答案：', h('b', { class: 'big', style: 'font-size:1.6rem', text: c.glyph }), ' ', readingEl(c), ' ', playBtn(c), '　', c.meaning.zh + (c.meaning.en ? '（' + c.meaning.en + '）' : '')]),
-          mp ? h('p', {}, ['表意线索 ' + mp.glyph + '（' + catLabel(mp.cat) + '）：', h('b', { text: '有用' }), '——只告诉你大类，不等于认识这个字。']) : null,
-          rel ? h('p', {}, ['表音线索 ' + sp.glyph + '（' + [].concat(compReading(sp.glyph)).join('・') + '）：', h('b', { text: CLUE[rel] }), '——' + REL[rel] + '。']) : null,
-          JA && c.zhForm ? h('p', { class: 'kb-note', text: '中文简体写作 ' + c.zhForm + '。' }) : null
-        ]), h('div', { class: 'kb-bar' }, [h('button', { class: 'kb-btn primary', onclick: function () { st.guess = null; render(); } }, '下一个'),
-          h('button', { class: 'kb-btn', onclick: function () { st.cur = c; st.mode = 'explore'; ui.setMode('explore'); render(); } }, '拆开看这个字')]));
+          h('p', { style: 'margin:0' }, [L('答案：', 'Answer: '), h('b', { class: 'big', style: 'font-size:1.6rem', text: c.glyph }), ' ', readingEl(c), ' ', playBtn(c), L('　', ' '), EN ? meaningOf(c) + (!JA && c.meaning.en ? ' (' + c.meaning.zh + ')' : '') : c.meaning.zh + (!JA && c.meaning.en ? '（' + c.meaning.en + '）' : '')]),
+          mp ? h('p', {}, [L('表意线索 ' + mp.glyph + '（' + catLabel(mp.cat) + '）：', 'Meaning clue ' + mp.glyph + ' (' + catLabel(mp.cat) + '): '), h('b', { text: L('有用', 'useful') }), L('——只告诉你大类，不等于认识这个字。', ' — it only tells you the broad category; that is not the same as knowing the character.')]) : null,
+          rel ? h('p', {}, [L('表音线索 ' + sp.glyph + '（' + [].concat(compReading(sp.glyph)).join('・') + '）：', 'Sound clue ' + sp.glyph + ' (' + [].concat(compReading(sp.glyph)).join('・') + '): '), h('b', { text: clueText(rel) }), L('——' + REL[rel] + '。', ' — ' + REL_EN[rel] + '.')]) : null,
+          JA && c.zhForm ? h('p', { class: 'kb-note', text: L('中文简体写作 ' + c.zhForm + '。', 'In simplified Chinese it is written ' + c.zhForm + '.') }) : null
+        ]), h('div', { class: 'kb-bar' }, [h('button', { class: 'kb-btn primary', onclick: function () { st.guess = null; render(); } }, L('下一个', 'Next')),
+          h('button', { class: 'kb-btn', onclick: function () { st.cur = c; st.mode = 'explore'; ui.setMode('explore'); render(); } }, L('拆开看这个字', 'Take this character apart'))]));
       }
       body.append(card);
       notesFor(function (n) { return q.done && n.chars.indexOf(c.glyph) >= 0; }).forEach(function (e) { side.append(e); });
-      side.append(h('div', { class: 'kb-card reverse' }, [h('b', { text: '为什么要猜' }), h('p', { class: 'kb-note', text: '每三题里至少一题的声旁不可靠。总选“和声旁同音”的读法，会被这些题卡住——这正是要学会的：线索什么时候管用，什么时候失效。' })]));
+      side.append(h('div', { class: 'kb-card reverse' }, [h('b', { text: L('为什么要猜', 'Why guess') }), h('p', { class: 'kb-note', text: L('每三题里至少一题的声旁不可靠。总选“和声旁同音”的读法，会被这些题卡住——这正是要学会的：线索什么时候管用，什么时候失效。', 'In at least one of every three questions the sound part is unreliable. If you always pick the reading that is "the same as the sound part", these questions will trip you up — and that is exactly what there is to learn: when a clue works and when it fails.') })]));
     }
 
     function render() {

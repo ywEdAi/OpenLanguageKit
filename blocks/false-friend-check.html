@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>False-friend check</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .ff-wrap { display: grid; gap: 14px; min-width: 0; }
+  .ff-head { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; }
+  .ff-form { font-size: 2rem; font-weight: 700; }
+  .ff-reading { color: var(--muted); font-size: 1rem; }
+  .ff-pair { font-size: .95rem; color: var(--muted); }
+  .ff-pair b { color: var(--ink); }
+  .ff-card { display: grid; grid-template-columns: minmax(0, 1fr) 190px minmax(0, 1.5fr); gap: 12px; align-items: stretch; }
+  @media (max-width: 820px) { .ff-card { grid-template-columns: minmax(0, 1fr); } }
+  .col { border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; background: var(--bg); min-width: 0; }
+  .col h3 { margin: 0 0 6px; font-size: .8rem; color: var(--muted); font-weight: 600; letter-spacing: .02em; }
+  .col input[type=text], .col textarea { width: 100%; border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 8px; padding: 7px 9px; font-size: 1rem; }
+  .guess-locked { font-size: 1.1rem; padding: 4px 0; }
+  .lockmark { font-size: .78rem; color: var(--muted); }
+  .mid { display: grid; gap: 8px; align-content: start; }
+  .vbtn { display: flex; gap: 8px; align-items: center; border: 2px solid var(--line); background: var(--panel); border-radius: 10px; padding: 7px 10px; text-align: left; width: 100%; }
+  .vbtn .ic { font-size: 1.25rem; width: 1.4em; text-align: center; font-weight: 700; }
+  .vbtn .k { margin-left: auto; font-size: .7rem; color: var(--muted); }
+  .vbtn[aria-pressed="true"] { outline: 3px solid var(--focus); }
+  .v-same { border-color: var(--accent); } .v-same .ic { color: var(--accent); }
+  .v-shifted { border-color: var(--warn); } .v-shifted .ic { color: var(--warn); }
+  .v-different { border-color: var(--bad); } .v-different .ic { color: var(--bad); }
+  .dims { display: grid; gap: 6px; }
+  .dims .lbl { font-size: .8rem; color: var(--muted); }
+  .dbtn { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 5px 8px; text-align: left; font-size: .9rem; }
+  .dbtn[aria-pressed="true"] { background: var(--warn-soft); border-color: var(--warn); }
+  .link { height: 10px; border-radius: 5px; background: var(--line); }
+  .link.same { background: var(--accent); } .link.shifted { background: var(--warn); } .link.different { background: var(--bad); }
+  .linklabel { font-size: .85rem; font-weight: 600; }
+  .ex { margin: 0 0 10px; }
+  .ex .t { font-size: 1.12rem; line-height: 1.7; }
+  .ex .tr { font-size: .85rem; color: var(--muted); }
+  mark.cue { background: var(--warn-soft); color: inherit; border-bottom: 2px solid var(--warn); padding: 0 1px; }
+  mark.form { background: var(--accent-soft); color: inherit; padding: 0 1px; }
+  .locked { color: var(--muted); font-size: .92rem; display: grid; place-items: center; min-height: 90px; text-align: center; }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .native { display: grid; gap: 4px; font-size: .95rem; border-left: 4px solid var(--line); padding: 4px 10px; }
+  .opts { display: grid; gap: 8px; }
+  .opt { border: 1px solid var(--line); background: var(--panel); border-radius: var(--radius); padding: 8px 12px; text-align: left; font-size: 1.05rem; width: 100%; }
+  .opt .why { display: block; font-size: .85rem; color: var(--muted); margin-top: 4px; }
+  .opt.right { background: var(--accent-soft); border-color: var(--accent); }
+  .opt.wrongpick { background: var(--bad-soft); border-color: var(--bad); }
+  .own textarea { min-height: 60px; width: 100%; border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 8px; padding: 8px; font-size: 1.05rem; }
+  .tbl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  @media (max-width: 820px) { .tbl { grid-template-columns: minmax(0, 1fr); } }
+  .tcol { border: 1px solid var(--line); border-radius: var(--radius); padding: 10px; background: var(--panel); min-width: 0; }
+  .tcol h3 { margin: 0 0 4px; font-size: 1rem; }
+  .tcol.same { border-top: 5px solid var(--accent); } .tcol.shifted { border-top: 5px solid var(--warn); } .tcol.different { border-top: 5px solid var(--bad); }
+  .trow { border-top: 1px solid var(--line); padding: 6px 0; font-size: .9rem; }
+  .trow .w { font-weight: 700; font-size: 1.05rem; }
+  .trow .g { color: var(--muted); }
+  .badge { font-size: .72rem; border-radius: 999px; padding: 1px 7px; border: 1px solid var(--line); margin-left: 4px; }
+  .badge.ok { background: var(--accent-soft); border-color: var(--accent); }
+  .badge.no { background: var(--bad-soft); border-color: var(--bad); }
+  .badge.ast { background: var(--warn-soft); border-color: var(--warn); }
+  .done { font-size: 2.4rem; }
+  [data-variant="child"] .ff-form { font-size: 2.6rem; }
+  [data-variant="child"] .vbtn { padding: 12px; font-size: 1.15rem; }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function () {
+  'use strict';
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t;
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'false-friend-check-ja';
+  var reg = (window.KT_REGISTRY && window.KT_REGISTRY.packs) || {};
+  // while the registry does not list this block's packs yet, fall back to the block's own data file
+  var entry = reg[setId] || (/^false-friend-check-/.test(setId) ? { file: 'data/false-friend-check.js', block: 'false-friend-check' } : {});
+  var app = document.getElementById('app');
+  if (entry.file && entry.block !== 'false-friend-check') { app.textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  if (!entry.file) { app.textContent = L('未知的数据包：', 'Unknown data pack: ') + setId; return; }
+  var sc = document.createElement('script');
+  sc.src = entry.file;
+  sc.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else app.textContent = L('数据包里没有 ' + setId, 'The data pack file does not contain ' + setId); };
+  sc.onerror = function () { app.textContent = L('数据包加载失败：', 'Could not load the data pack: ') + entry.file; };
+  document.head.appendChild(sc);
+
+  function start(pack) {
+    var title = T(pack, 'title');
+    var B = KTBlock.init({ id: 'false-friend-check', primitive: 'prim:false-friend-check', title: title, set: pack.id });
+    document.title = title + ' · False-friend check';
+    var EN = KTBlock.lang === 'en';
+    var CHILD = function () { return B.variant === 'child'; };
+    var kcFocus = params.get('kc');
+    var VERDICTS = ['same', 'shifted', 'different'];
+    var VIC = { same: '＝', shifted: '≈', different: '≠' };
+    function vName(v) {
+      if (CHILD()) return { same: L('一样 😀', 'The same 😀'), shifted: L('有点不一样 🤔', 'A bit different 🤔'), different: L('完全不一样 😲', 'Totally different 😲') }[v];
+      return { same: L('相同', 'Same'), shifted: L('偏移', 'Shifted'), different: L('完全不同', 'Completely different') }[v];
+    }
+    var DIMKEYS = Object.keys(pack.dims);
+    // the learner's own false-friend table, kept in this browser (per pack)
+    var TKEY = 'kt-false-friend-table-' + pack.id;
+    var table = B.store(TKEY) || {};
+    function saveTable() { B.store(TKEY, table); }
+
+    var modes = [{ id: 'check', label: L('① 先猜再对照', '① Guess, then check') }, { id: 'use', label: L('② 自己用', '② Use it') }, { id: 'table', label: L('③ 我的假朋友表', '③ My false-friend table') }];
+    var st = { mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : 'check', queue: [], idx: 0, item: null, streak: 0, overDefense: 0, filter: 'all' };
+
+    var ui = KTBlock.chrome(B, { title: title, subtitle: T(pack, 'subtitle'), modes: modes, mode: st.mode,
+      onMode: function (m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m }); newRound(); },
+      onVariant: function () { newRound(); } });
+    var bar = h('div', { class: 'kb-bar' });
+    var stage = h('div', { class: 'kb-card ff-wrap' });
+    app.append(ui.header, h('main', { class: 'kb-main' }, [bar, stage]), ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id });
+
+    function feedback(t, tone) { var f = stage.querySelector('.kb-feedback.main'); if (f) { f.textContent = t; f.className = 'kb-feedback main ' + (tone || ''); f.hidden = !t; } }
+    function kcOk(x) { return !kcFocus || (x.kcs || []).indexOf(kcFocus) >= 0; }
+    function pool() { var p = pack.items.filter(kcOk); return p.length ? p : pack.items; }
+    function speak(text) { if (!B.speak(text, pack.speech)) feedback(L('这个浏览器不能播放语音。', 'This browser cannot play speech.'), 'warn'); }
+    // glosses of English example sentences are Chinese; the interface rule is not to show them in English mode
+    function gloss(ex) { if (pack.lang === 'en') return EN ? null : ex.zh; return T(ex, 'zh'); }
+    function highlight(text, cue, form, showCue) {
+      var parts = [{ s: text }];
+      function split(needle, cls) {
+        if (!needle) return;
+        var out = [];
+        parts.forEach(function (p) {
+          if (p.cls) { out.push(p); return; }
+          var i = p.s.indexOf(needle);
+          if (i < 0) { out.push(p); return; }
+          if (i > 0) out.push({ s: p.s.slice(0, i) });
+          out.push({ s: needle, cls: cls });
+          if (i + needle.length < p.s.length) out.push({ s: p.s.slice(i + needle.length) });
+        });
+        parts = out;
+      }
+      if (showCue) split(cue, 'cue');
+      split(form, 'form');
+      return parts.map(function (p) { return p.cls ? h('mark', { class: p.cls, text: p.s }) : p.s; });
+    }
+    function formIn(it) { return it.hl || it.form; }
+
+    /* ---- rounds ---- */
+    function newRound() {
+      var p = pool();
+      if (st.mode === 'check') {
+        var n = CHILD() ? 3 : 9;
+        var by = {}; VERDICTS.forEach(function (v) { by[v] = KTBlock.shuffle(p.filter(function (x) { return x.verdict === v; })); });
+        // at least a third of every round are words that really are the same (reverse half)
+        var nSame = Math.min(by.same.length, Math.ceil(n / 3));
+        var picked = by.same.slice(0, nSame);
+        var rest = KTBlock.shuffle(by.shifted).slice(0, Math.ceil((n - nSame) / 2)).concat(by.different.slice(0, Math.floor((n - nSame) / 2)));
+        if (picked.length + rest.length < n) rest = rest.concat(KTBlock.shuffle(by.shifted.concat(by.different)).filter(function (x) { return rest.indexOf(x) < 0; }).slice(0, n - picked.length - rest.length));
+        st.queue = KTBlock.shuffle(picked.concat(rest)).map(function (x) { return { kind: 'check', x: x, id: 'judge:' + x.id }; });
+      } else if (st.mode === 'use') {
+        st.queue = KTBlock.shuffle(p.filter(function (x) { return x.use; })).slice(0, CHILD() ? 3 : 6).map(function (x) { return { kind: 'use', x: x, id: 'use:' + x.id }; });
+      } else st.queue = [];
+      st.idx = 0; st.overDefense = 0; begin();
+    }
+    function begin() {
+      var it = st.queue[st.idx];
+      if (it && it.kind === 'check') Object.assign(it, { guess: '', locked: false, trans: false, hint: 0, pick: null, dim: null, judged: null, cueShown: false });
+      if (it && it.kind === 'use') Object.assign(it, { opts: KTBlock.shuffle(it.x.use), picked: null, text: '', checked: null, self: null });
+      st.item = it || null;
+      if (it) B.emit('view', { item: it.id, mode: st.mode });
+      else if (st.mode !== 'table' && st.queue.length) B.emit('complete', { mode: st.mode, items: st.queue.length, overDefense: st.overDefense });
+      render();
+      var f = stage.querySelector('input[type=text]'); if (f) f.focus();
+    }
+    function next() { st.idx++; begin(); }
+
+    /* ---- ① guess, then judge ---- */
+    var EMPTY = /^(不知道|不知|不懂|不清楚|没见过|\?+|？+|-+|idk|i don'?t know|no idea|dunno|n\/?a|\.+)$/i;
+    function lockGuess() {
+      var it = st.item, g = (it.guess || '').trim();
+      if (!g || EMPTY.test(g)) { feedback(L('一定要写出一个猜测，猜错完全没关系：只看字形，你会怎么理解？', 'You must write a guess, and a wrong guess is fine: from the form alone, what would you take it to mean?'), 'warn'); return; }
+      it.locked = true;
+      // the first guess is evidence of the starting point, never scored
+      B.emit('explain', { item: it.id, step: 'guess', guess: g, scored: false });
+      render();
+      var b = stage.querySelector('.vbtn'); if (b) b.focus();
+    }
+    function choose(v) {
+      var it = st.item; if (!it || !it.locked || (it.judged && it.judged.right)) return;
+      it.pick = v; if (v !== 'shifted') it.dim = null;
+      B.emit('select', { item: it.id, verdict: v });
+      render();
+    }
+    function chooseDim(d) { var it = st.item; if (!it || it.pick !== 'shifted' || (it.judged && it.judged.right)) return; it.dim = d; B.emit('select', { item: it.id, dim: d }); render(); }
+    function judge() {
+      var it = st.item, x = it.x; if (!it.pick) return;
+      if (it.pick === 'shifted' && !it.dim && !CHILD()) { feedback(L('标为“偏移”时要选出偏在哪儿，才算判完。', 'When you mark it “shifted”, pick where it shifts; only then is the judgement complete.'), 'warn'); return; }
+      var okVerdicts = [x.verdict].concat(x.alsoOk || []);
+      var vRight = okVerdicts.indexOf(it.pick) >= 0;
+      var dRight = it.pick !== 'shifted' || CHILD() || x.verdict !== 'shifted' || (x.dims || []).indexOf(it.dim) >= 0;
+      var right = vRight && dRight;
+      var first = !it.judged;
+      if (!first) B.emit('revise', { item: it.id, from: it.judged.pick, to: it.pick });
+      B.attempt(it.id, { correct: right, response: { verdict: it.pick, dim: it.dim, expected: x.verdict, expectedDims: x.dims || null, guess: it.guess } });
+      it.judged = { pick: it.pick, dim: it.dim, right: right, vRight: vRight };
+      it.cueShown = true;
+      if (first) {
+        st.streak = right && !it.hint ? st.streak + 1 : 0;
+        var over = x.verdict === 'same' && it.pick === 'different';
+        if (over) st.overDefense++;
+        table[x.id] = { form: x.form, guess: it.guess, first: it.pick, firstDim: it.dim, real: x.verdict, right: right, assisted: !!it.hint, t: Date.now() };
+        saveTable();
+      }
+      render();
+      var msg;
+      if (right) msg = L('对。', 'Right. ');
+      else if (vRight) msg = L('档判对了，但偏移的地方不是这个。', 'Right level, but it does not shift in that way. ');
+      else msg = L('不对。', 'Not right. ');
+      msg += L('这个词：', 'This word: ') + vName(x.verdict) + (x.verdict === 'shifted' ? L('（', ' (') + (x.dims || []).map(function (d) { return T(pack.dims[d], 'label'); }).join(L('；', '; ')) + L('）', ')') : '') + L('。', '. ') + T(x, 'meaning');
+      if (x.verdict === 'same' && it.pick === 'different') msg += ' ' + L('你可能过度防备了：这个词按母语理解是对的，这是母语带来的便利。', 'You may be over-cautious: reading this word through your first language works here; that is a real advantage.');
+      if (!right) msg += ' ' + L('可以改判再交一次（记为重试）。', 'You can change your judgement and submit again (recorded as a retry).');
+      feedback(msg, right ? '' : 'bad');
+    }
+    function hint(level) {
+      var it = st.item; if (it.hint >= level) return;
+      it.hint = level; B.hint(it.id, level);
+      if (level === 2) it.cueShown = true;
+      render();
+    }
+    function renderCheck() {
+      var it = st.item, x = it.x;
+      stage.append(head(x));
+      var fromWhat = T(x, 'guessFrom') || T(pack, 'guessFrom');
+      // left: my first guess (locked once written)
+      var left = h('div', { class: 'col' }, [h('h3', { text: L('我原来以为', 'What I thought') })]);
+      if (!it.locked) {
+        var inp = h('input', { type: 'text', 'aria-label': L('我的猜测', 'My guess'), value: it.guess, placeholder: L('写下你的猜测', 'Write your guess'),
+          oninput: function (e) { it.guess = e.target.value; }, onkeydown: function (e) { if (e.key === 'Enter') { e.preventDefault(); lockGuess(); } } });
+        left.append(h('p', { class: 'kb-note', text: fromWhat }), inp, h('div', { class: 'tools', style: 'margin-top:8px' }, [h('button', { class: 'kb-btn primary', onclick: lockGuess }, L('锁定猜测，看例句', 'Lock my guess and see the examples'))]));
+      } else {
+        left.append(h('div', { class: 'guess-locked', text: it.guess }), h('span', { class: 'lockmark', text: L('🔒 第一次猜测，不会被改写', '🔒 First guess, kept as written') }));
+      }
+      // middle: three levels + shift dimension
+      var mid = h('div', { class: 'col mid' }, [h('h3', { text: L('标记', 'Mark') })]);
+      if (it.judged) mid.append(h('div', { class: 'link ' + x.verdict, role: 'img', 'aria-label': vName(x.verdict) }), h('div', { class: 'linklabel', text: VIC[x.verdict] + ' ' + vName(x.verdict) }));
+      VERDICTS.forEach(function (v, i) {
+        mid.append(h('button', { class: 'vbtn v-' + v, disabled: !it.locked || (it.judged && it.judged.right), 'aria-pressed': it.pick === v ? 'true' : 'false', onclick: function () { choose(v); } },
+          [h('span', { class: 'ic', 'aria-hidden': 'true', text: VIC[v] }), h('span', { text: vName(v) }), h('span', { class: 'k', text: String(i + 1) })]));
+      });
+      if (it.pick === 'shifted' && !CHILD()) {
+        mid.append(h('div', { class: 'dims' }, [h('span', { class: 'lbl', text: L('偏在哪儿？', 'Where does it shift?') })].concat(DIMKEYS.map(function (d, i) {
+          return h('button', { class: 'dbtn', disabled: it.judged && it.judged.right, 'aria-pressed': it.dim === d ? 'true' : 'false', onclick: function () { chooseDim(d); } }, String.fromCharCode(97 + i) + ' · ' + T(pack.dims[d], 'label'));
+        }))));
+      }
+      if (it.locked && !(it.judged && it.judged.right)) mid.append(h('button', { class: 'kb-btn primary', disabled: !it.pick, onclick: judge }, it.judged ? L('改判', 'Change judgement') : L('确定（Enter）', 'Confirm (Enter)')));
+      // right: real examples, closed until the guess is locked
+      var right = h('div', { class: 'col' }, [h('h3', { text: L('真实例句', 'Real examples') })]);
+      if (!it.locked) right.append(h('div', { class: 'locked', text: L('🔒 先在左边写下猜测，例句才会打开。', '🔒 Write your guess on the left first; then the examples open.') }));
+      else {
+        x.ex.forEach(function (ex) {
+          var g = gloss(ex);
+          right.append(h('div', { class: 'ex' }, [h('div', { class: 't', lang: pack.lang }, highlight(ex.t, ex.cue, formIn(x), it.cueShown)),
+            it.trans && g ? h('div', { class: 'tr', text: g }) : null]));
+        });
+        right.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () { speak(x.ex.map(function (e) { return e.t; }).join(pack.lang === 'en' ? ' ' : '')); } }, L('▶ 听例句', '▶ Hear the examples'))]));
+      }
+      stage.append(h('div', { class: 'ff-card' }, [left, mid, right]));
+      // hints
+      if (it.locked && !it.judged) {
+        var hs = [];
+        if (it.hint < 1) hs.push(h('button', { class: 'kb-btn', onclick: function () { hint(1); } }, L('提示 1：问自己一个问题', 'Hint 1: a question to ask')));
+        if (it.hint < 2) {
+          if (st.streak >= 4) hs.push(h('span', { class: 'kb-note', text: L('你已经连续 4 个第一次就判对，不再提供例句高亮。', 'You judged 4 in a row right the first time, so the example highlighting is no longer offered.') }));
+          else hs.push(h('button', { class: 'kb-btn', onclick: function () { hint(2); } }, L('提示 2：标出决定意思的上下文', 'Hint 2: mark the context that decides')));
+        }
+        if (it.hint < 3 && x.native) hs.push(h('button', { class: 'kb-btn', onclick: function () { hint(3); } }, L('提示 3：母语和目标语各一句', 'Hint 3: one sentence in each language')));
+        if (!it.trans && x.ex.some(gloss)) hs.push(h('button', { class: 'kb-btn', onclick: function () { it.trans = true; B.hint(it.id, 'translation'); render(); } }, L('看例句译文（算提示）', 'Show translations (counts as a hint)')));
+        stage.append(h('div', { class: 'tools' }, hs));
+        if (hs.length) stage.append(h('p', { class: 'kb-note', text: L('用过任何提示，这一题记为“提示后完成”。', 'Using any hint records this item as completed with help.') }));
+      }
+      if (it.hint >= 1 && !it.judged) stage.append(h('p', { class: 'kb-note', text: L('问自己：例句里的这个词，能换成你猜的那个意思吗？换了以后句子还通吗？', 'Ask yourself: in the examples, can the word be replaced by the meaning you guessed? Does the sentence still make sense?') }));
+      if ((it.hint >= 3 || it.judged) && x.native) {
+        stage.append(h('div', { class: 'native' }, [h('span', { class: 'kb-note', text: L('母语里的用法：', 'How it is used in the first language:') }),
+          h('span', { lang: pack.nativeLang || 'zh', text: x.native.t }), EN && x.native.en ? h('span', { class: 'kb-note', text: x.native.en }) : null,
+          h('span', { class: 'kb-note', text: L('目标语里的用法：', 'How it is used in the target language:') }), h('span', { lang: pack.lang, text: x.ex[0].t })]));
+      }
+    }
+    function head(x) {
+      return h('div', { class: 'ff-head' }, [h('span', { class: 'ff-form', lang: pack.lang, text: x.form }), x.reading ? h('span', { class: 'ff-reading', lang: pack.lang, text: x.reading }) : null,
+        x.pair ? h('span', { class: 'ff-pair' }, [L('常见对译：', 'Usual pairing: '), h('b', { lang: 'zh', text: x.pair })]) : null]);
+    }
+
+    /* ---- ② use it: a sentence only the real meaning makes sense of ---- */
+    function pickUse(o) {
+      var it = st.item; if (it.picked) return;
+      var ok = o.kind === 'real';
+      B.attempt(it.id, { correct: ok, response: { picked: o.t, kind: o.kind } });
+      it.picked = o;
+      render();
+      feedback(ok ? L('对。这句只有按真实意思理解才说得通。', 'Right. Only the real meaning makes sense of this sentence.')
+        : o.kind === 'both' ? L('这句按字面义理解也说得通，所以不能证明你懂了真实意思。', 'This sentence also makes sense with the literal reading, so it does not show you know the real meaning.')
+        : L('这句是按字面义用的，在目标语里不对。', 'This sentence uses the literal meaning; it is wrong in the target language.'), ok ? '' : 'bad');
+    }
+    function checkOwn() {
+      var it = st.item, x = it.x, text = (it.text || '').trim();
+      if (!text) { feedback(L('先写一句。', 'Write a sentence first.'), 'warn'); return; }
+      var re = x.match ? new RegExp(x.match, 'i') : null;
+      var has = re ? re.test(text) : text.indexOf(x.form) >= 0;
+      var cues = (x.cues || []).filter(function (c) { return text.toLowerCase().indexOf(c.toLowerCase()) >= 0; });
+      it.checked = { has: has, cues: cues };
+      B.emit('submit', { item: 'own:' + x.id, step: 'check-form', text: text, hasForm: has, cues: cues });
+      render();
+    }
+    function selfJudge(literalFails) {
+      var it = st.item, x = it.x;
+      it.self = literalFails;
+      B.attempt('own:' + x.id, { correct: literalFails, selfReport: true, response: { text: it.text, literalStillWorks: !literalFails, cuesFound: it.checked.cues } });
+      render();
+      feedback(literalFails ? L('记下了（自评）。请老师或同伴也看一眼。', 'Recorded (self-report). Ask a teacher or partner to look too.')
+        : L('那这句还不能证明真实意思。加一个只有真实意思才对得上的细节再试。', 'Then the sentence does not yet show the real meaning. Add a detail that only fits the real meaning and try again.'), literalFails ? '' : 'warn');
+    }
+    function renderUse() {
+      var it = st.item, x = it.x, mine = table[x.id];
+      stage.append(head(x));
+      stage.append(h('p', { class: 'kb-note' }, [L('真实意思：', 'Real meaning: '), T(x, 'meaning')]));
+      if (mine) stage.append(h('p', { class: 'kb-note', text: L('我原来以为：', 'What I thought: ') + mine.guess }));
+      stage.append(h('p', { class: 'kb-prompt', text: L('哪一句只有按真实意思理解才说得通？（按字面义也通的不算）', 'Which sentence makes sense only with the real meaning? (One that also works with the literal reading does not count.)') }));
+      stage.append(h('div', { class: 'opts' }, it.opts.map(function (o, i) {
+        var cl = 'opt' + (it.picked && o.kind === 'real' ? ' right' : '') + (it.picked === o && o.kind !== 'real' ? ' wrongpick' : '');
+        return h('button', { class: cl, disabled: !!it.picked, onclick: function () { pickUse(o); } }, [h('span', { class: 'kb-note', text: (i + 1) + '  ' }), h('span', { lang: pack.lang, text: o.t }),
+          it.picked ? h('span', { class: 'why', text: T(o, 'note') }) : null]);
+      })));
+      if (it.picked) {
+        stage.append(h('p', { class: 'kb-prompt', text: L('现在自己写一句：用「' + x.form + '」，而且只有按真实意思才说得通。（不显示例句）', 'Now write your own sentence with “' + x.form + '” that makes sense only with the real meaning. (Examples are hidden.)') }));
+        var ta = h('textarea', { lang: pack.lang, 'aria-label': L('我的句子', 'My sentence'), oninput: function (e) { it.text = e.target.value; it.checked = null; it.self = null; } });
+        ta.value = it.text;
+        stage.append(h('div', { class: 'own' }, ta));
+        stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: checkOwn }, L('检查', 'Check'))]));
+        if (it.checked) {
+          if (!it.checked.has) stage.append(h('p', { class: 'kb-feedback warn', text: L('句子里没找到「' + x.form + '」。', 'The sentence does not contain “' + x.form + '”.') }));
+          else {
+            stage.append(h('p', { class: 'kb-note', text: L('页面只能核对你用了这个词' + (it.checked.cues.length ? '，以及句子里有和真实意思配套的词：' + it.checked.cues.join('、') : '；没找到它认识的配套词（不代表句子错）') + '。句子是不是只有真实意思才说得通，页面判断不了，请你自己判断：',
+              'The page can only check that you used the word' + (it.checked.cues.length ? ' and that the sentence has words that go with the real meaning: ' + it.checked.cues.join(', ') : '; it found none of the words it knows that go with the real meaning (this does not mean the sentence is wrong)') + '. Whether only the real meaning makes sense, the page cannot judge; judge it yourself:') }));
+            stage.append(h('div', { class: 'tools' }, [
+              h('button', { class: 'kb-btn' + (it.self === true ? ' primary' : ''), onclick: function () { selfJudge(true); } }, L('按我原来以为的意思读，这句说不通', 'Read with what I first thought, it makes no sense')),
+              h('button', { class: 'kb-btn' + (it.self === false ? ' primary' : ''), onclick: function () { selfJudge(false); } }, L('按原来的意思读，也说得通', 'It also makes sense with what I first thought'))]));
+          }
+        }
+      }
+    }
+
+    /* ---- ③ my false-friend table ---- */
+    function renderTable() {
+      var ids = Object.keys(table).filter(function (id) { return pack.items.some(function (x) { return x.id === id; }); });
+      stage.append(h('p', { class: 'kb-prompt', text: L('做过的词按真实的三档归类。“相同”一档也留着：这些是母语帮你的地方。', 'Words you have judged, sorted by their real level. The “same” column stays too: these are where your first language helps you.') }));
+      var filters = [['all', L('全部', 'All')], ['wrong', L('只看我判错的', 'Only the ones I got wrong')]].concat(VERDICTS.map(function (v) { return [v, vName(v)]; }));
+      stage.append(h('div', { class: 'tools' }, filters.map(function (f) {
+        return h('button', { class: 'kb-btn' + (st.filter === f[0] ? ' primary' : ''), 'aria-pressed': st.filter === f[0] ? 'true' : 'false', onclick: function () { st.filter = f[0]; B.emit('view', { mode: 'table', filter: f[0] }); render(); } }, f[1]);
+      })));
+      if (!ids.length) { stage.append(h('p', { class: 'kb-note', text: L('还没有记录。先去“先猜再对照”做几个词。', 'Nothing yet. Do a few words in “Guess, then check” first.') })); return; }
+      var over = ids.filter(function (id) { return table[id].real === 'same' && table[id].first === 'different'; }).length;
+      if (over) stage.append(h('p', { class: 'kb-feedback warn', text: L('有 ' + over + ' 个其实相同的词，你第一次判成了“完全不同”。别把所有同形词都当陷阱。', over + ' word(s) that are really the same were first judged “completely different”. Not every look-alike is a trap.') }));
+      var cols = (st.filter === 'all' || st.filter === 'wrong') ? VERDICTS : [st.filter];
+      stage.append(h('div', { class: 'tbl' }, cols.map(function (v) {
+        var rows = ids.filter(function (id) { return table[id].real === v && (st.filter !== 'wrong' || !table[id].right); });
+        return h('div', { class: 'tcol ' + v }, [h('h3', { text: VIC[v] + ' ' + vName(v) + ' (' + rows.length + ')' }),
+          v === 'same' ? h('p', { class: 'kb-note', text: L('正迁移：按母语理解就对。', 'Positive transfer: the first-language reading works.') }) : null].concat(rows.map(function (id) {
+          var r = table[id], x = pack.items.filter(function (y) { return y.id === id; })[0];
+          return h('div', { class: 'trow' }, [h('span', { class: 'w', lang: pack.lang, text: r.form }),
+            h('span', { class: 'badge ' + (r.right ? (r.assisted ? 'ast' : 'ok') : 'no'), text: r.right ? (r.assisted ? L('提示后判对', 'right with help') : L('第一次判对', 'right first time')) : L('第一次判成：', 'first judged: ') + vName(r.first) }),
+            h('div', { class: 'g', text: L('我原来以为：', 'I thought: ') + r.guess }), h('div', { text: T(x, 'meaning') })]);
+        })));
+      })));
+      stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () { table = {}; saveTable(); B.emit('revise', { item: 'table', action: 'clear' }); render(); } }, L('清空这张表', 'Clear this table'))]));
+      stage.append(h('p', { class: 'kb-note', text: L('这张表只存在这个浏览器里。', 'This table is stored only in this browser.') }));
+    }
+
+    function renderBar() {
+      bar.innerHTML = '';
+      if (st.mode !== 'table' && st.item) bar.append(h('span', { class: 'kb-note', text: L('第 ' + (st.idx + 1) + ' / ' + st.queue.length + ' 个', 'Word ' + (st.idx + 1) + ' / ' + st.queue.length) }));
+      if (st.mode !== 'table') bar.append(h('button', { class: 'kb-btn', onclick: newRound }, L('换一组', 'New set')));
+      if (kcFocus) bar.append(h('span', { class: 'kb-note', text: L('知识点：', 'Knowledge point: ') + kcFocus }));
+    }
+    function render() {
+      renderBar(); stage.innerHTML = '';
+      if (st.mode === 'table') { renderTable(); return; }
+      var it = st.item;
+      if (!it) {
+        var msg = st.queue.length ? L('这一组做完了。', 'Set finished.') : L('这个数据包没有这一步的题。', 'This pack has no items for this step.');
+        stage.append(h('div', { class: 'done', text: '✓' }), h('p', { class: 'kb-prompt', text: msg }));
+        if (st.overDefense) stage.append(h('p', { class: 'kb-feedback warn', text: L('这一组里有 ' + st.overDefense + ' 个其实相同的词被你判成了“完全不同”：你可能过度防备了，这几个不算通过。', st.overDefense + ' word(s) in this set that are really the same were judged “completely different”: you may be over-cautious, and these do not count as passed.') }));
+        stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: newRound }, L('再来一组', 'Another set')),
+          h('button', { class: 'kb-btn', onclick: function () { st.mode = 'table'; ui.setMode('table'); render(); } }, L('看我的假朋友表', 'See my false-friend table'))]));
+        return;
+      }
+      if (it.kind === 'check') renderCheck(); else renderUse();
+      stage.append(h('div', { class: 'kb-feedback main', hidden: true, 'aria-live': 'polite' }));
+      var done = it.kind === 'check' ? !!it.judged : !!it.picked;
+      stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn' + (done ? ' primary' : ''), onclick: next }, done ? L('下一个 →', 'Next →') : L('跳过', 'Skip'))]));
+    }
+
+    document.addEventListener('keydown', function (e) {
+      var tag = e.target.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || e.metaKey || e.ctrlKey || e.altKey) return;
+      var it = st.item; if (!it) return;
+      if (it.kind === 'check' && it.locked) {
+        var n = parseInt(e.key, 10);
+        if (n >= 1 && n <= 3) choose(VERDICTS[n - 1]);
+        else if (/^[a-d]$/.test(e.key) && DIMKEYS[e.key.charCodeAt(0) - 97]) chooseDim(DIMKEYS[e.key.charCodeAt(0) - 97]);
+        else if (e.key === 'Enter' && it.pick && e.target.tagName !== 'BUTTON') judge();
+      } else if (it.kind === 'use' && !it.picked) {
+        var k = parseInt(e.key, 10); if (k >= 1 && k <= it.opts.length) pickUse(it.opts[k - 1]);
+      }
+    });
+
+    newRound();
+  }
+})();
+</script>
+</body>
+</html>

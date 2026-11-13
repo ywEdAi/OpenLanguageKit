@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cross-language align</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .cl-layout { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 16px; align-items: start; }
+  @media (max-width: 900px) { .cl-layout { grid-template-columns: 1fr; } }
+  .cl-side { display: grid; gap: 12px; }
+  .cl-stage { display: grid; gap: 14px; }
+  .cl-stage .kb-prompt { margin: 0; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; color: var(--muted); font-size: .85rem; }
+  .rows { display: grid; gap: 10px; }
+  .row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 10px; align-items: start; padding: 10px; border: 1px solid var(--line); border-radius: var(--radius); }
+  @media (max-width: 640px) { .row { grid-template-columns: 1fr; } }
+  .row.active { border-color: var(--accent); }
+  .src { display: flex; gap: 8px; align-items: flex-start; border-left: 6px solid var(--line); padding-left: 8px; }
+  .src .tx { font-size: 1.05rem; }
+  .src.grey { color: var(--muted); }
+  .no { display: inline-flex; align-items: center; justify-content: center; min-width: 1.6em; height: 1.6em; border-radius: 999px; color: var(--panel); font-size: .8rem; font-weight: 600; flex: none; }
+  .k0 { --k: var(--t1); } .k1 { --k: var(--t2); } .k2 { --k: var(--t3); } .k3 { --k: var(--t4); } .k4 { --k: var(--accent); } .k5 { --k: var(--warn); } .k6 { --k: var(--bad); } .k7 { --k: var(--t0); }
+  .src.on { border-left-color: var(--k); }
+  .no { background: var(--k, var(--muted)); }
+  .src.grey .no { background: var(--line); color: var(--muted); }
+  .flag { display: inline-block; font-size: .72rem; padding: 0 7px; border-radius: 999px; background: var(--warn-soft); color: var(--warn); margin-left: 4px; white-space: nowrap; }
+  .flag.key { background: var(--bad-soft); color: var(--bad); }
+  .opts { display: grid; gap: 6px; }
+  .opts.labels { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+  .opt { border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 6px 10px; display: flex; gap: 8px; align-items: flex-start; min-height: 40px; text-align: left; }
+  .opt .num { font-size: .72rem; color: var(--muted); min-width: 1em; padding-top: 3px; }
+  .opt .tag { font-size: .72rem; color: var(--muted); border: 1px dashed var(--line); border-radius: 6px; padding: 0 5px; margin-right: 4px; white-space: nowrap; }
+  .opt.right { border-color: var(--t2); box-shadow: inset 0 0 0 1px var(--t2); }
+  .opt.wrongpick { border-color: var(--bad); background: var(--bad-soft); }
+  .opt.rev { border-left: 4px solid var(--warn); }
+  .opt:disabled { cursor: default; }
+  .tgt { border-left: 6px solid var(--k, var(--line)); padding: 6px 10px; border-radius: 6px; background: var(--accent-soft); font-size: 1.05rem; }
+  .tgt.empty { background: transparent; color: var(--muted); font-style: italic; border-left-style: dashed; }
+  .err { font-size: .85rem; color: var(--bad); }
+  .why { font-size: .85rem; color: var(--muted); }
+  .assembled { line-height: 2; font-size: 1.08rem; }
+  .assembled .piece { border-bottom: 3px solid var(--k); padding: 0 2px; }
+  .assembled .no { font-size: .65rem; min-width: 1.3em; height: 1.3em; vertical-align: super; margin: 0 2px; }
+  .listeners { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; }
+  .lcard { border: 1px solid var(--line); background: var(--panel); border-radius: var(--radius); padding: 8px 12px; text-align: left; display: grid; gap: 2px; }
+  .lcard[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+  .lcard .nm { font-weight: 600; }
+  .lcard .nd { font-size: .85rem; color: var(--muted); }
+  .srcbox { display: grid; gap: 4px; }
+  .srcbox .src { padding: 4px 8px; border-radius: 6px; }
+  .srcbox .src.missing { background: var(--bad-soft); outline: 2px dashed var(--bad); animation: flash 1s 2; }
+  .srcbox .src.covered { background: var(--accent-soft); }
+  @keyframes flash { 50% { background: transparent; } }
+  textarea { width: 100%; min-height: 110px; font-size: 1.05rem; padding: 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); }
+  .checks { display: grid; gap: 4px; margin: 0; padding-left: 0; list-style: none; font-size: .92rem; }
+  .checks li::before { content: attr(data-mark) " "; font-weight: 700; }
+  .checks li.ck-ok::before { color: var(--t2); }
+  .checks li.ck-no::before { color: var(--bad); }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .ref { border-left: 4px solid var(--accent); padding: 8px 12px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; }
+  .chip { font-size: .78rem; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); }
+  .chip.ind { background: var(--accent-soft); border-color: var(--accent); }
+  .chip.ast { background: var(--warn-soft); border-color: var(--warn); }
+  .chip.bad { background: var(--bad-soft); border-color: var(--bad); }
+  .done { font-size: 2.2rem; text-align: center; }
+  .kb-bar select { max-width: 100%; }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* Cross-language align (prim:cross-language-align). Packs: data/cross-language-align.js (format in its header).
+ * Modes:
+ *   align — step 1: each source chunk has a word-for-word draft placed beside it; for each chunk choose the draft or
+ *           one of two other versions. Unnatural drafts and versions that change a number, deadline, negative or
+ *           condition are wrong; for names, numbers and plain chunks the draft IS right (reverse half). Solved chunks
+ *           get the same colour and number on both sides; the assembled translation shows the target-language order.
+ *   label — step 2: someone's relay is shown aligned row by row; label each row: same / rephrased / added implicit
+ *           information / dropped redundancy / dropped something that must stay / added content or opinion.
+ *           Marking a key chunk (deadline, number, negative, exception, request) as "dropped redundancy" is refused.
+ *   relay — step 3: write a relay for a named listener. Checked deterministically: every key chunk for that listener
+ *           (pack keyword lists), no opinion markers, not ≥80% word-for-word drafts, not identical to the draft for the
+ *           other listener. Missing key chunks flash on the source. Register is self-rated. The sample relay can be
+ *           opened only after a first submission and marks the item assisted.
+ * Evidence: align:<text>:<chunk>, label:<text>:<row>, relay:<text>:<listener>, reg:<text>:<listener> (self-report). */
+(function () {
+  'use strict';
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t;
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'cross-language-align-en';
+  var entry = (window.KT_REGISTRY && KT_REGISTRY.packs && KT_REGISTRY.packs[setId]) || { file: 'data/cross-language-align.js', block: 'cross-language-align' };
+  var app = document.getElementById('app');
+  if (entry.block !== 'cross-language-align') { app.textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  var s = document.createElement('script');
+  s.src = entry.file;
+  s.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else app.textContent = L('数据包里没有 ' + setId, 'The data pack file does not contain ' + setId); };
+  s.onerror = function () { app.textContent = L('数据包加载失败：', 'Could not load the data pack: ') + entry.file; };
+  document.head.appendChild(s);
+
+  var SPEECH = { en: 'en-US', ja: 'ja-JP', zh: 'zh-CN' };
+  var LANGNAME = { en: ['英语', 'English'], ja: ['日语', 'Japanese'], zh: ['中文', 'Chinese'] };
+  var LABELS = [
+    { id: 'same', zh: '直接对应', en: 'Direct match' },
+    { id: 'rephrase', zh: '换了说法', en: 'Rephrased' },
+    { id: 'add', zh: '增补了隐含信息', en: 'Added implicit information' },
+    { id: 'drop', zh: '删去了冗余', en: 'Dropped something unneeded' },
+    { id: 'dropbad', zh: '删去了不该删的内容', en: 'Dropped something that must stay' },
+    { id: 'extra', zh: '加了原文没有的内容或意见', en: 'Added content or opinion not in the source' }
+  ];
+  var ROLE = { time: ['期限/时间', 'deadline/time'], num: ['数字', 'number'], neg: ['否定', 'negative'], cond: ['条件/例外', 'condition/exception'], name: ['专名', 'name'], req: ['请求', 'request'], polite: ['礼貌缓冲', 'politeness'] };
+  function roleLabel(r) { return ROLE[r] ? L(ROLE[r][0], ROLE[r][1]) : ''; }
+  function norm(t) { return String(t || '').normalize('NFKC').toLowerCase().replace(/\s+/g, ''); }
+
+  function start(pack) {
+    var title = T(pack, 'title');
+    var B = KTBlock.init({ id: 'cross-language-align', primitive: 'prim:cross-language-align', title: title, set: pack.id });
+    document.title = title + ' · Cross-language align';
+    var modes = [{ id: 'align', label: L('1 对齐与改写', '1 Align and fix') }, { id: 'label', label: L('2 标注处理方式', '2 Label the changes') }, { id: 'relay', label: L('3 为听者转述', '3 Relay for a listener') }];
+    var pm = params.get('mode');
+    var st = {
+      mode: modes.some(function (m) { return m.id === pm; }) ? pm : 'align',
+      ti: Math.max(0, pack.texts.findIndex(function (t) { return t.id === params.get('text'); })),
+      msg: null, al: {}, lb: {}, rl: {}, hint: {}
+    };
+    var ui = KTBlock.chrome(B, { title: title, subtitle: T(pack, 'subtitle'), modes: modes, mode: st.mode,
+      onMode: function (m) { st.mode = m; st.msg = null; ui.setMode(m); B.emit('view', { mode: m, text: text().id }); render(); },
+      onVariant: function () { render(); } });
+    var bar = h('div', { class: 'kb-bar' });
+    var stage = h('div', { class: 'kb-card cl-stage', 'aria-live': 'polite' });
+    var side = h('aside', { class: 'cl-side' });
+    app.append(ui.header, h('main', { class: 'kb-main' }, [bar, h('div', { class: 'cl-layout' }, [stage, side])]), ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id });
+
+    function text() { return pack.texts[st.ti]; }
+    function chunk(t, id) { return t.chunks.filter(function (c) { return c.id === id; })[0]; }
+    function kIdx(t, id) { return t.chunks.findIndex(function (c) { return c.id === id; }); }
+    function item(id) { return B.items().filter(function (x) { return x.id === id; })[0]; }
+    function statusCls(id) { var s = B.status(id); return s === 'independent' || s === 'self-yes' ? 'ind' : s === 'assisted' || s === 'revealed' ? 'ast' : s === 'wrong' || s === 'self-no' ? 'bad' : ''; }
+    var warned = false;
+    function say(txt, lang) { if (B.speak(txt, SPEECH[lang] || lang) === false && !warned) { warned = true; st.msg = { t: L('这个浏览器不能播放语音。', 'This browser cannot play speech.'), tone: 'warn' }; render(); } }
+    function lname(code) { var n = LANGNAME[code]; return n ? L(n[0], n[1]) : code; }
+    function hintLvl() { return st.hint[st.mode + ':' + text().id] || 0; }
+    function noBadge(i) { return h('span', { class: 'no', text: String(i + 1) }); }
+
+    /* ---------- bar ---------- */
+    function renderBar() {
+      bar.innerHTML = '';
+      var sel = h('select', { 'aria-label': L('选择材料', 'Choose a text'), onchange: function (e) { st.ti = +e.target.value; st.msg = null; B.emit('view', { text: text().id, mode: st.mode }); render(); } },
+        pack.texts.map(function (t, i) { return h('option', { value: i, text: (i + 1) + '. ' + T(t.title, 'zh') }); }));
+      sel.value = String(st.ti);
+      var t = text();
+      bar.append(sel, h('span', { class: 'kb-note', text: T(t.genre, 'zh') + ' · ' + lname(t.src) + ' → ' + lname(t.tgt) }));
+    }
+    function srcCell(t, c, i, on, extra) {
+      return h('div', { class: 'src k' + (i % 8) + (on ? ' on' : ' grey') }, [noBadge(i), h('div', {}, [h('span', { class: 'tx', text: c.s }), extra || null])]);
+    }
+    function hintBar(levels) {
+      var lv = hintLvl(), key = st.mode + ':' + text().id;
+      var parts = [h('button', { class: 'kb-btn', disabled: lv >= levels.length, onclick: function () {
+        st.hint[key] = lv + 1;
+        unsolvedIds().forEach(function (id) { B.hint(id, lv + 1); });
+        render();
+      } }, lv >= levels.length ? L('没有更多提示', 'No more hints') : L('提示 ' + (lv + 1), 'Hint ' + (lv + 1)))];
+      for (var i = 0; i < lv; i++) if (levels[i]) parts.push(h('p', { class: 'kb-note', text: levels[i] }));
+      return h('div', { class: 'tools' }, parts);
+    }
+    function exampleHint(t) {
+      var rows = t.label.rows, re = rows.filter(function (r) { return r.ans.indexOf('rephrase') >= 0 && r.c; })[0], ad = rows.filter(function (r) { return r.ans.indexOf('add') >= 0; })[0];
+      var out = [];
+      if (re) out.push(L('换说法的例子：', 'A rephrase: ') + chunk(t, re.c).s + ' → ' + re.t);
+      if (ad) out.push(L('增补的例子：', 'An addition: ') + ad.t + L('（', ' (') + T(ad.why, 'zh') + L('）', ')'));
+      return out.join(L('；', '; '));
+    }
+    function unsolvedIds() {
+      var t = text();
+      if (st.mode === 'align') return t.chunks.filter(function (c) { return !(item('align:' + t.id + ':' + c.id) || {}).correct; }).map(function (c) { return 'align:' + t.id + ':' + c.id; });
+      if (st.mode === 'label') return t.label.rows.map(function (r, i) { return 'label:' + t.id + ':' + i; }).filter(function (id) { return !(item(id) || {}).correct; });
+      var r = rl(t); return r.passed ? [] : ['relay:' + t.id + ':' + r.lis];
+    }
+
+    /* ---------- align ---------- */
+    function al(t) {
+      if (!st.al[t.id]) {
+        var o = {};
+        t.chunks.forEach(function (c) { o[c.id] = { order: KTBlock.shuffle(c.opts.map(function (x, i) { return i; })), picked: [], solved: false, err: null }; });
+        st.al[t.id] = o;
+      }
+      return st.al[t.id];
+    }
+    function renderAlign() {
+      var t = text(), A = al(t), lv = hintLvl();
+      stage.append(h('p', { class: 'kb-prompt', text: L('第 1 步 对齐：左边是原文的意义块，右边先放着一份逐词直译稿。逐块决定：保留逐词稿，还是换成另一种说法？', 'Step 1 Align: the source is cut into meaning chunks on the left; a word-for-word draft sits on the right. For each chunk, keep the draft or choose another version.') }));
+      stage.append(h('div', { class: 'rows' }, t.chunks.map(function (c, i) {
+        var r = A[c.id], id = 'align:' + t.id + ':' + c.id;
+        var flags = [];
+        if (lv >= 1 && c.role) flags.push(h('span', { class: 'flag', text: roleLabel(c.role) }));
+        if (lv >= 2 && c.key) flags.push(h('span', { class: 'flag key', text: L('关键', 'key') }));
+        var right;
+        if (r.solved) {
+          var ok = c.opts.filter(function (o) { return o.ok; })[0];
+          right = h('div', {}, [h('div', { class: 'tgt k' + (i % 8) }, ok.t), h('div', { class: 'why', text: ok.draft ? L('逐词稿本来就对，不用改。', 'The draft was already right; no change needed.') : L('改掉了逐词稿。', 'The draft was replaced.') })]);
+        } else {
+          right = h('div', { class: 'opts', role: 'group', 'aria-label': L('第 ' + (i + 1) + ' 块的译法', 'Versions for chunk ' + (i + 1)) }, r.order.map(function (oi) {
+            var o = c.opts[oi], cls = 'opt' + (r.picked.indexOf(oi) >= 0 ? ' wrongpick' : '');
+            return h('button', { class: cls, disabled: r.picked.indexOf(oi) >= 0, onclick: function () { alignPick(t, c, oi); } },
+              [o.draft ? h('span', { class: 'tag', text: L('逐词稿', 'draft') }) : null, h('span', { text: o.t })]);
+          }).concat(r.err ? [h('div', { class: 'err', text: r.err })] : []));
+        }
+        return h('div', { class: 'row' }, [h('div', {}, [srcCell(t, c, i, r.solved, h('span', {}, flags)), h('button', { class: 'kb-btn', style: 'margin-top:6px;font-size:.8rem', onclick: function () { say(c.s, t.src); } }, L('🔊 听原文', '🔊 Listen'))]), right]);
+      })));
+      var all = t.chunks.every(function (c) { return A[c.id].solved; });
+      if (all) {
+        var changed = t.chunks.filter(function (c) { return !c.opts.filter(function (o) { return o.draft; })[0].ok; }).length;
+        stage.append(h('div', { class: 'kb-card' }, [
+          h('strong', { text: L('合起来（按' + lname(t.tgt) + '的语序）：', 'Put together (in ' + lname(t.tgt) + ' order):') }),
+          h('div', { class: 'assembled' }, t.order.map(function (id) { var i = kIdx(t, id), c = chunk(t, id); return h('span', { class: 'k' + (i % 8) }, [h('span', { class: 'piece', text: c.opts.filter(function (o) { return o.ok; })[0].t }), noBadge(i)]); })),
+          h('p', { class: 'kb-note', text: L('改掉了 ' + changed + ' 块逐词稿，保留了 ' + (t.chunks.length - changed) + ' 块（人名、数字或本来就自然的块，换说法反而错）。', changed + ' draft chunks replaced, ' + (t.chunks.length - changed) + ' kept (names, numbers or chunks that were already natural, where rephrasing would be wrong).') }),
+          h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: function () { st.mode = 'label'; ui.setMode('label'); st.msg = null; B.emit('view', { mode: 'label', text: t.id }); render(); } }, L('下一步：标注处理方式 →', 'Next: label the changes →'))])
+        ]));
+      }
+      if (!all) stage.append(hintBar([L('先看每一块是什么：谁、做什么、条件、期限、语气。', 'First see what each chunk is: who, what, condition, deadline, tone.'), L('标着“关键”的块（数字、期限、否定、条件、请求）一个字都不能改错。', 'Chunks marked "key" (numbers, deadlines, negatives, conditions, requests) must not change at all.'), exampleHint(t)]));
+      var f = feedback(); if (f) stage.append(f);
+    }
+    function alignPick(t, c, oi) {
+      var A = al(t), r = A[c.id], o = c.opts[oi], id = 'align:' + t.id + ':' + c.id;
+      B.attempt(id, { correct: !!o.ok, response: { pick: oi, draft: !!o.draft } });
+      if (o.ok) { r.solved = true; r.err = null; B.emit('connect', { item: id, from: c.id, to: o.draft ? 'draft' : 'rewrite' }); }
+      else { r.picked.push(oi); r.err = o.draft ? L('这里还是一一对应：', 'Still one-to-one here: ') + T(o.err, 'zh') : T(o.err, 'zh'); }
+      if (t.chunks.every(function (x) { return A[x.id].solved; })) B.emit('complete', { mode: 'align', text: t.id });
+      render();
+    }
+
+    /* ---------- label ---------- */
+    function lb(t) { return st.lb[t.id] || (st.lb[t.id] = { picked: {}, solved: {}, err: {} }); }
+    function renderLabel() {
+      var t = text(), S = lb(t), rows = t.label.rows;
+      var active = rows.findIndex(function (r, i) { return !S.solved[i]; });
+      stage.append(h('p', { class: 'kb-prompt' }, [L('第 2 步 标注：', 'Step 2 Label: '), h('strong', { text: T(t.label.by, 'zh') }), L('。逐行判断这一块是怎么处理的（数字键 1–6 作用于当前行）。', '. For each row, decide how the chunk was handled (keys 1–6 answer the current row).')]));
+      stage.append(h('div', { class: 'rows' }, rows.map(function (r, i) {
+        var c = r.c ? chunk(t, r.c) : null, ci = r.c ? kIdx(t, r.c) : -1, id = 'label:' + t.id + ':' + i;
+        var flags = c && S.err[i] === 'key' ? h('span', { class: 'flag key', text: L('关键信息', 'key information') + (c.role ? ' · ' + roleLabel(c.role) : '') }) : null;
+        var left = c ? srcCell(t, c, ci, true, flags) : h('div', { class: 'src grey' }, [h('span', { class: 'tx', text: L('—（原文没有）', '— (not in the source)') })]);
+        var right = h('div', { class: 'tgt' + (ci >= 0 ? ' k' + (ci % 8) : '') + (r.t ? '' : ' empty') }, r.t || L('—（删掉了）', '— (dropped)'));
+        var body = [right];
+        if (S.solved[i]) body.push(h('div', { class: 'why', text: '✓ ' + LABELS.filter(function (x) { return x.id === S.solved[i]; }).map(function (x) { return L(x.zh, x.en); })[0] + L('：', ': ') + T(r.why, 'zh') }));
+        else if (i === active) {
+          body.push(h('div', { class: 'opts labels', role: 'group' }, LABELS.map(function (lab, n) {
+            var p = (S.picked[i] || []).indexOf(lab.id) >= 0;
+            return h('button', { class: 'opt' + (lab.id === 'dropbad' ? ' rev' : '') + (p ? ' wrongpick' : ''), disabled: p, onclick: function () { labelPick(t, i, lab.id); } }, [h('span', { class: 'num', text: String(n + 1) }), h('span', { text: L(lab.zh, lab.en) })]);
+          })));
+          if (S.err[i]) body.push(h('div', { class: 'err', text: S.err[i] === 'key' ? L('这是关键信息（' + roleLabel(c.role) + '），删了就不是“冗余”。', 'This is key information (' + roleLabel(c.role) + '): dropping it is not removing something unneeded.') : S.err[i] }));
+        }
+        return h('div', { class: 'row' + (i === active ? ' active' : '') }, [left, h('div', { class: 'opts' }, body)]);
+      })));
+      if (active < 0) {
+        stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: function () { st.mode = 'relay'; ui.setMode('relay'); st.msg = null; B.emit('view', { mode: 'relay', text: t.id }); render(); } }, L('下一步：为听者转述 →', 'Next: relay for a listener →'))]));
+      } else stage.append(hintBar([L('先问自己：这一行在原文里有没有对应？有的话，意思变了没有？', 'Ask: does this row have a source chunk? If so, did the meaning change?'), L('期限、数字、否定、例外条件、请求对象是关键信息；客套话和重复的内容多半可以删。', 'Deadlines, numbers, negatives, exceptions and who is asked are key; courtesies and repeats can usually go.'), L('“增补”要能在原文里找到依据；找不到依据的，是加了原文没有的内容。', 'An "addition" must be grounded in the source; if it is not, it is added content.')]));
+      var f = feedback(); if (f) stage.append(f);
+    }
+    function labelPick(t, i, lab) {
+      var S = lb(t), r = t.label.rows[i], ok = r.ans.indexOf(lab) >= 0, c = r.c ? chunk(t, r.c) : null;
+      B.attempt('label:' + t.id + ':' + i, { correct: ok, response: { label: lab } });
+      if (ok) { S.solved[i] = lab; S.err[i] = null; st.msg = null; }
+      else {
+        (S.picked[i] = S.picked[i] || []).push(lab);
+        if (lab === 'drop' && c && c.key) S.err[i] = 'key';
+        else if (lab === 'add' && r.ans.indexOf('extra') >= 0) S.err[i] = L('原文里找不到依据，不能算“增补隐含信息”。', 'Nothing in the source supports it, so it is not "added implicit information".');
+        else if (lab === 'extra' && r.ans.indexOf('add') >= 0) S.err[i] = L('这一句在原文里有依据，是把隐含的信息说明白了。', 'The source does support this: it spells out something implicit.');
+        else if (lab === 'dropbad' && r.ans.indexOf('drop') >= 0) S.err[i] = L('对这位听者来说，这一块不是必须的。', 'For this listener the chunk is not needed.');
+        else S.err[i] = L('不是这样处理的，再对照一下两边。', 'That is not how it was handled. Compare the two sides again.');
+      }
+      if (t.label.rows.every(function (x, n) { return S.solved[n]; })) B.emit('complete', { mode: 'label', text: t.id });
+      render();
+    }
+
+    /* ---------- relay ---------- */
+    function rl(t) { return st.rl[t.id] || (st.rl[t.id] = { lis: t.listeners[0].id, drafts: {}, result: null, passed: false, refShown: false, done: {} }); }
+    function listener(t, id) { return t.listeners.filter(function (x) { return x.id === id; })[0]; }
+    function checkRelay(t, lis, txt) {
+      var n = norm(txt), res = { keys: [], opinion: [], verbatim: [], same: false };
+      lis.keys.forEach(function (ck) {
+        var ok = t.match[ck].every(function (grp) { return grp.some(function (a) { return n.indexOf(norm(a)) >= 0; }); });
+        res.keys.push({ c: ck, ok: ok });
+      });
+      ((pack.opinion || {})[t.tgt] || []).forEach(function (m) { if (n.indexOf(norm(m)) >= 0) res.opinion.push(m); });
+      t.chunks.forEach(function (c) { var d = c.opts.filter(function (o) { return o.draft; })[0]; var dn = norm(d.t).replace(/[，。,.、：:]+$/, ''); if (dn.length >= 2 && n.indexOf(dn) >= 0) res.verbatim.push({ c: c.id, ok: !!d.ok }); });
+      res.ratio = res.verbatim.length / t.chunks.length;
+      var R = rl(t);
+      Object.keys(R.drafts).forEach(function (other) { if (other !== lis.id && R.done[other] && norm(R.drafts[other]) === n) res.same = true; });
+      res.pass = n.length > 0 && res.keys.every(function (k) { return k.ok; }) && !res.opinion.length && res.ratio < 0.8 && !res.same;
+      return res;
+    }
+    function renderRelay() {
+      var t = text(), R = rl(t), lis = listener(t, R.lis), res = R.result, lv = hintLvl();
+      var id = 'relay:' + t.id + ':' + lis.id;
+      stage.append(h('p', { class: 'kb-prompt', text: L('第 3 步 转述：你在对谁说？选一位听者，用' + lname(t.tgt) + '把原文转述给他。', 'Step 3 Relay: who are you talking to? Pick a listener and pass the text on in ' + lname(t.tgt) + '.') }));
+      stage.append(h('div', { class: 'listeners' }, t.listeners.map(function (x) {
+        return h('button', { class: 'lcard', 'aria-pressed': String(x.id === R.lis), onclick: function () { if (R.lis !== x.id) { R.lis = x.id; R.result = null; R.passed = !!R.done[x.id]; R.refShown = false; st.msg = null; B.emit('select', { text: t.id, listener: x.id }); render(); } } },
+          [h('span', { class: 'nm', text: T(x.name, 'zh') + (R.done[x.id] ? ' ✓' : '') }), h('span', { class: 'nd', text: T(x.need, 'zh') })]);
+      })));
+      var missing = {}, covered = {};
+      if (res) res.keys.forEach(function (k) { (k.ok ? covered : missing)[k.c] = true; });
+      stage.append(h('div', { class: 'srcbox', 'aria-label': L('原文', 'Source') }, t.chunks.map(function (c, i) {
+        var flags = [];
+        if (lv >= 2 && lis.keys.indexOf(c.id) >= 0) flags.push(h('span', { class: 'flag key', text: L('关键', 'key') + (c.role ? ' · ' + roleLabel(c.role) : '') }));
+        if (missing[c.id]) flags.push(h('span', { class: 'flag key', text: L('漏了', 'missing') }));
+        var el = srcCell(t, c, i, true, h('span', {}, flags));
+        if (missing[c.id]) el.classList.add('missing'); else if (covered[c.id]) el.classList.add('covered');
+        return el;
+      })));
+      stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () { say(t.chunks.map(function (c) { return c.s; }).join(' '), t.src); } }, L('🔊 听原文', '🔊 Listen to the source'))]));
+      var ta = h('textarea', { 'aria-label': L('你的转述', 'Your relay'), placeholder: L('用' + lname(t.tgt) + '写给' + T(lis.name, 'zh') + '……', 'Write it in ' + lname(t.tgt) + ' for ' + T(lis.name, 'zh') + '…'), oninput: function (e) { R.drafts[lis.id] = e.target.value; } }, R.drafts[lis.id] || '');
+      stage.append(ta);
+      stage.append(h('p', { class: 'kb-note', text: L('页面只按关键词核对：关键信息有没有保留、有没有加“我觉得”之类的意见、是不是几乎照搬逐词稿。语体合不合适、读起来自不自然，页面判断不了，请你自己对照参考转述。', 'The page checks keywords only: whether key information is kept, whether opinions like "I think" were added, and whether it is almost the word-for-word draft. It cannot judge register or naturalness; compare with the sample relay yourself.') }));
+      stage.append(h('div', { class: 'tools' }, [
+        h('button', { class: 'kb-btn primary', onclick: function () { submitRelay(t, lis, ta.value); } }, item(id) && item(id).first ? L('修改后再提交', 'Resubmit') : L('提交转述', 'Submit relay')),
+        item(id) && item(id).first ? h('button', { class: 'kb-btn', disabled: R.refShown, onclick: function () { R.refShown = true; B.reveal(id); B.emit('compare', { item: id, with: 'sample' }); render(); } }, L('看参考转述', 'See the sample relay')) : null
+      ]));
+      if (res) {
+        stage.append(h('ul', { class: 'checks' }, res.keys.map(function (k) {
+          var c = chunk(t, k.c);
+          return h('li', { class: k.ok ? 'ck-ok' : 'ck-no', 'data-mark': k.ok ? '✓' : '✗', text: (k.ok ? L('保住了：', 'Kept: ') : L('漏了或改了：', 'Missing or changed: ') ) + c.s + (c.role ? ' (' + roleLabel(c.role) + ')' : '') });
+        }).concat([
+          h('li', { class: res.opinion.length ? 'ck-no' : 'ck-ok', 'data-mark': res.opinion.length ? '✗' : '✓', text: res.opinion.length ? L('添加了原文没有的意见：', 'Added an opinion not in the source: ') + res.opinion.join(L('、', ', ')) : L('没有发现添加的意见（只认常见说法）', 'No added opinion found (common phrases only)') }),
+          h('li', { class: res.ratio >= 0.8 ? 'ck-no' : 'ck-ok', 'data-mark': res.ratio >= 0.8 ? '✗' : '✓', text: res.ratio >= 0.8 ? L('还是一一对应：大部分块和逐词稿一模一样。', 'Still one-to-one: most chunks are the word-for-word draft.') : L('没有大段照搬逐词稿', 'Not mostly the word-for-word draft') }),
+          res.same ? h('li', { class: 'ck-no', 'data-mark': '✗', text: L('和给另一位听者的转述一字不差：这两位听的人一样吗？', 'Word for word the same as your relay for the other listener: are these two listeners the same?') }) : null
+        ])));
+        var vb = res.verbatim.filter(function (v) { return !v.ok; });
+        if (vb.length && res.ratio < 0.8) stage.append(h('p', { class: 'kb-note', text: L('这里还是一一对应：', 'Still one-to-one here: ') + vb.map(function (v) { return chunk(t, v.c).opts.filter(function (o) { return o.draft; })[0].t; }).join(' / ') }));
+      }
+      if (R.refShown) stage.append(h('div', { class: 'ref' }, [h('strong', { text: L('参考转述（不是唯一答案）：', 'Sample relay (not the only answer): ') }), lis.ref]));
+      if (R.passed && !item('reg:' + t.id + ':' + lis.id)) {
+        stage.append(h('div', { class: 'kb-card' }, [
+          h('p', { class: 'kb-prompt', text: L('最后自己判断：我按这位听者调整了说法（语体、详略、先说什么）吗？', 'Finally, judge for yourself: did I adjust the wording (register, detail, what comes first) for this listener?') }),
+          h('div', { class: 'tools' }, [
+            h('button', { class: 'kb-btn', onclick: function () { B.attempt('reg:' + t.id + ':' + lis.id, { correct: true, selfReport: true, response: { listener: lis.id } }); render(); } }, L('调整了', 'Yes, I did')),
+            h('button', { class: 'kb-btn', onclick: function () { B.attempt('reg:' + t.id + ':' + lis.id, { correct: false, selfReport: true, response: { listener: lis.id } }); render(); } }, L('还没有', 'Not really'))
+          ])
+        ]));
+      }
+      if (R.passed) {
+        var other = t.listeners.filter(function (x) { return !R.done[x.id]; })[0];
+        stage.append(h('div', { class: 'tools' }, [
+          other ? h('button', { class: 'kb-btn', onclick: function () { R.lis = other.id; R.result = null; R.passed = false; R.refShown = false; st.msg = null; render(); } }, L('换一位听者再说一次 →', 'Now relay it for the other listener →')) : null,
+          st.ti < pack.texts.length - 1 ? h('button', { class: 'kb-btn primary', onclick: function () { st.ti++; st.mode = 'align'; ui.setMode('align'); st.msg = null; B.emit('view', { text: text().id, mode: 'align' }); render(); } }, L('下一份材料 →', 'Next text →')) : null
+        ]));
+      }
+      if (!R.passed) stage.append(hintBar([L('听的人必须知道的是哪几件事？', 'What are the things the listener must know?'), L('原文上已经标出了这位听者的关键块。', 'The key chunks for this listener are now marked on the source.'), exampleHint(t)]));
+      var f = feedback(); if (f) stage.append(f);
+    }
+    function submitRelay(t, lis, txt) {
+      var R = rl(t), id = 'relay:' + t.id + ':' + lis.id;
+      R.drafts[lis.id] = txt;
+      if (!norm(txt)) { st.msg = { t: L('先写一段转述。', 'Write a relay first.'), tone: 'bad' }; render(); return; }
+      var had = item(id) && item(id).first;
+      var res = checkRelay(t, lis, txt);
+      if (had) B.emit('revise', { item: id, afterSample: R.refShown });
+      B.attempt(id, { correct: res.pass, response: { text: txt, missing: res.keys.filter(function (k) { return !k.ok; }).map(function (k) { return k.c; }), opinion: res.opinion, verbatimRatio: Math.round(res.ratio * 100) / 100, sameAsOther: res.same } });
+      R.result = res;
+      if (res.pass) { R.passed = true; R.done[lis.id] = true; st.msg = { t: L('关键信息都在，没有加意见，也没有照搬逐词稿。', 'All key information is there, no opinion added, and it is not the word-for-word draft.') }; B.emit('complete', { mode: 'relay', text: t.id, listener: lis.id }); }
+      else st.msg = { t: L('还没通过：看下面的清单，漏掉的块已在原文上闪出。补上后再提交（会记为修订）。', 'Not yet: see the list below; missing chunks flash on the source. Add them and resubmit (recorded as a revision).'), tone: 'bad' };
+      render();
+    }
+
+    /* ---------- side and shell ---------- */
+    function feedback() { return st.msg ? h('div', { class: 'kb-feedback ' + (st.msg.tone || '') }, st.msg.t) : null; }
+    function renderSide() {
+      side.innerHTML = '';
+      var t = text();
+      var keys = t.chunks.filter(function (c) { return c.key; });
+      side.append(h('div', { class: 'kb-card' }, [
+        h('strong', { text: L('这份材料的进度', 'Progress on this text') }),
+        h('div', { class: 'chips' }, t.chunks.map(function (c, i) { return h('span', { class: 'chip ' + statusCls('align:' + t.id + ':' + c.id), title: c.s, text: L('对齐 ', 'align ') + (i + 1) }); })),
+        h('div', { class: 'chips' }, t.label.rows.map(function (r, i) { return h('span', { class: 'chip ' + statusCls('label:' + t.id + ':' + i), text: L('标注 ', 'label ') + (i + 1) }); })),
+        h('div', { class: 'chips' }, t.listeners.map(function (x) { return h('span', { class: 'chip ' + statusCls('relay:' + t.id + ':' + x.id), text: T(x.name, 'zh') }); }))
+      ]));
+      if (st.mode === 'relay' && hintLvl() >= 2) side.append(h('div', { class: 'kb-card' }, [h('strong', { text: L('关键块清单', 'Key chunks') }), h('ul', { class: 'checks' }, keys.map(function (c) {
+        var R = rl(t), k = R.result && R.result.keys.filter(function (x) { return x.c === c.id; })[0];
+        return h('li', { class: k && k.ok ? 'ck-ok' : '', 'data-mark': k && k.ok ? '✓' : '·', text: c.s });
+      }))]));
+      side.append(h('div', { class: 'kb-card' }, [h('strong', { text: L('怎么算通过', 'What counts') }), h('ul', { class: 'kb-note' }, [
+        L('逐词稿有时就是对的：人名、数字、本来就自然的块，换说法反而错。', 'Sometimes the draft is right: names, numbers and already-natural chunks must not be rephrased.'),
+        L('关键块（期限、数字、否定、例外条件、请求）删了不能算“删去冗余”。', 'Dropping a key chunk (deadline, number, negative, exception, request) is never "dropping something unneeded".'),
+        L('礼貌缓冲删不删，看对谁说。', 'Whether a polite softener can go depends on who is listening.'),
+        L('转述要保住所有关键块，不能加意见，也不能几乎照搬逐词稿。', 'A relay must keep every key chunk, add no opinion, and not be almost the word-for-word draft.')
+      ].map(function (x) { return h('li', { text: x }); }))]));
+    }
+    function render() {
+      stage.innerHTML = '';
+      renderBar();
+      if (st.mode === 'align') renderAlign(); else if (st.mode === 'label') renderLabel(); else renderRelay();
+      renderSide();
+    }
+    document.addEventListener('keydown', function (e) {
+      if (/^(INPUT|TEXTAREA|SELECT)$/.test((e.target && e.target.tagName) || '')) return;
+      var n = parseInt(e.key, 10);
+      if (st.mode !== 'label' || isNaN(n) || n < 1 || n > 6) return;
+      var t = text(), S = lb(t), i = t.label.rows.findIndex(function (r, k) { return !S.solved[k]; });
+      if (i >= 0 && (S.picked[i] || []).indexOf(LABELS[n - 1].id) < 0) labelPick(t, i, LABELS[n - 1].id);
+    });
+    render();
+  }
+})();
+</script>
+</body>
+</html>

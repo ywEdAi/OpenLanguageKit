@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reading-aid fading</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .ra-layout { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .ra-layout { grid-template-columns: 1fr; } }
+  .ra-side { display: grid; gap: 12px; }
+  .ra-stage { display: grid; gap: 12px; }
+  .ra-stage .kb-prompt { margin: 0; }
+  .passage { font-size: calc(var(--glyph) * 1.05); line-height: 2.6; padding: 6px 4px; overflow-wrap: anywhere; }
+  [data-variant="child"] .passage { font-size: calc(var(--glyph) * 1.1); line-height: 2.9; }
+  .passage ruby { ruby-position: over; }
+  .passage rt { font-size: .5em; color: var(--accent); letter-spacing: 0; }
+  .passage ruby.fixed rt { color: var(--muted); }
+  .u { border: 0; background: transparent; padding: 0 1px; margin: 0; font: inherit; line-height: inherit; color: inherit; border-radius: 6px; position: relative; }
+  .u:hover { background: var(--accent-soft); }
+  .u.st-hide rt { visibility: hidden; }
+  .u.st-tap::after { content: ""; position: absolute; left: 50%; bottom: .15em; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--line); }
+  [data-theme="dark"] .u.st-tap::after { background: var(--muted); }
+  .u.peeked { box-shadow: inset 0 -3px 0 var(--warn); }
+  .u.peeked::before { content: "👁"; position: absolute; top: -.2em; right: -.35em; font-size: .38em; line-height: 1; }
+  .u.miss { text-decoration: underline wavy var(--bad); text-underline-offset: .35em; }
+  .u.miss:has(.dots) { box-shadow: inset 0 -3px 0 var(--bad); }
+  .u.keep rt { color: var(--muted); }
+  .u.keep::before { content: "★"; position: absolute; top: -.1em; left: -.3em; font-size: .3em; line-height: 1; color: var(--muted); }
+  .u .snd { font-size: .45em; vertical-align: super; color: var(--accent); }
+  .dots { display: inline-flex; align-items: flex-start; }
+  .dots .g { display: inline-flex; flex-direction: column; align-items: center; line-height: 1.2; }
+  .dots .g i { display: block; height: 6px; margin-top: 2px; }
+  .dots .g i.dot { width: 6px; border-radius: 50%; background: var(--accent); }
+  .dots .g i.line { width: 80%; height: 3px; margin-top: 4px; border-radius: 2px; background: var(--accent); }
+  .u.st-hide .dots .g i { visibility: hidden; }
+  .count { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; }
+  .count b { font-size: 1.4rem; }
+  .iso { font-size: calc(var(--glyph) * 1.6); text-align: center; margin: 4px 0; }
+  .iso mark { background: var(--accent-soft); color: inherit; border-radius: 6px; padding: 0 4px; }
+  .opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
+  .opt { border: 1px solid var(--line); background: var(--panel); border-radius: var(--radius); padding: 10px 8px; display: flex; gap: 6px; align-items: center; justify-content: center; min-height: 48px; text-align: center; }
+  .opt .num { font-size: .7rem; color: var(--muted); }
+  .opt .big { font-size: 1.6rem; }
+  .opt.right { background: var(--accent-soft); border-color: var(--accent); }
+  .opt.wrongpick { background: var(--bad-soft); border-color: var(--bad); }
+  .opt.rev { border-left: 4px solid var(--warn); }
+  .opt:disabled { cursor: default; }
+  .typein { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .typein input { font-size: 1.2rem; padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); min-width: 0; width: min(260px, 100%); }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tools.c { justify-content: center; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .cols h3 { font-size: .85rem; margin: 0 0 4px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; }
+  .chip { font-size: .85rem; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); }
+  .chip.ind { background: var(--accent-soft); border-color: var(--accent); }
+  .chip.ast { background: var(--warn-soft); border-color: var(--warn); }
+  .chip.bad { background: var(--bad-soft); border-color: var(--bad); }
+  .flag { display: inline-block; font-size: .78rem; padding: 1px 8px; border-radius: 999px; background: var(--warn-soft); color: var(--warn); }
+  .reverse { border-left: 4px solid var(--warn); }
+  .steps { display: flex; gap: 6px; flex-wrap: wrap; font-size: .8rem; color: var(--muted); }
+  .steps span { padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); }
+  .steps span.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .list { margin: 4px 0 0; padding-left: 18px; font-size: .9rem; }
+  .legend { font-size: .8rem; color: var(--muted); display: grid; gap: 4px; }
+  .done { font-size: 2.4rem; text-align: center; }
+  .kb-bar .kb-variant { flex-wrap: wrap; min-width: 0; max-width: 100%; }
+  .kb-bar select { max-width: 100%; }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* Reading-aid fading (prim:reading-aid-fade). Packs: data/reading-aid-fade.js (format in its header).
+ * Modes: read (steps 1 + 3: blind read with peeking, spot checks before the aid is shown, a meaning question; the
+ * same units come back in later passages with their aid faded), sort (step 2: classify misreadings, including the
+ * reverse-half category), keep (reverse half: aids that should not fade, and reading ≠ understanding).
+ * Fade state lives in localStorage per pack (kt-raf-<set>). ?spacing=day requires the two clean reads on different days. */
+(function () {
+  'use strict';
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t;
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'reading-aid-fade-zh';
+  var entry = (window.KT_REGISTRY && KT_REGISTRY.packs && KT_REGISTRY.packs[setId]) || { file: 'data/reading-aid-fade.js', block: 'reading-aid-fade' };
+  var app = document.getElementById('app');
+  if (entry.block !== 'reading-aid-fade') { app.textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  var s = document.createElement('script');
+  s.src = entry.file;
+  s.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else app.textContent = L('数据包里没有 ' + setId, 'The data pack file does not contain ' + setId); };
+  s.onerror = function () { app.textContent = L('数据包加载失败：', 'Could not load the data pack: ') + entry.file; };
+  document.head.appendChild(s);
+
+  /* ---- reading normalisation (deterministic) ---- */
+  var KANA = { a: 'あ', i: 'い', u: 'う', e: 'え', o: 'お' };
+  (function () {
+    var rows = { k: 'かきくけこ', s: 'さしすせそ', t: 'たちつてと', n: 'なにぬねの', h: 'はひふへほ', m: 'まみむめも', r: 'らりるれろ', g: 'がぎぐげご', z: 'ざじずぜぞ', d: 'だぢづでど', b: 'ばびぶべぼ', p: 'ぱぴぷぺぽ', x: 'ぁぃぅぇぉ', l: 'ぁぃぅぇぉ' };
+    Object.keys(rows).forEach(function (c) { 'aiueo'.split('').forEach(function (v, j) { KANA[c + v] = rows[c][j]; }); });
+    Object.assign(KANA, { ya: 'や', yu: 'ゆ', yo: 'よ', ye: 'いぇ', wa: 'わ', wo: 'を', shi: 'し', chi: 'ち', tsu: 'つ', fu: 'ふ', ji: 'じ', si: 'し', ti: 'ち', tu: 'つ', hu: 'ふ', zi: 'じ', di: 'ぢ', du: 'づ',
+      fa: 'ふぁ', fi: 'ふぃ', fe: 'ふぇ', fo: 'ふぉ', she: 'しぇ', che: 'ちぇ', je: 'じぇ', xtu: 'っ', ltu: 'っ', xya: 'ゃ', xyu: 'ゅ', xyo: 'ょ', lya: 'ゃ', lyu: 'ゅ', lyo: 'ょ', xn: 'ん', thi: 'てぃ', dhi: 'でぃ' });
+    var yo = { k: 'き', g: 'ぎ', n: 'に', h: 'ひ', m: 'み', r: 'り', b: 'び', p: 'ぴ', sh: 'し', ch: 'ち', j: 'じ', sy: 'し', ty: 'ち', cy: 'ち', zy: 'じ', jy: 'じ', dy: 'ぢ' };
+    var sm = { a: 'ゃ', u: 'ゅ', o: 'ょ' };
+    Object.keys(yo).forEach(function (c) { 'auo'.split('').forEach(function (v) { var key = (c.length === 1 ? c + 'y' : c) + v; KANA[key] = yo[c] + sm[v]; }); });
+  })();
+  /** romaji → hiragana. final=false leaves an unfinished tail (e.g. "k", a lone "n") in `rest`. */
+  function romaji(str, final) {
+    var s = str.toLowerCase(), out = '', i = 0;
+    while (i < s.length) {
+      var c = s[i];
+      if (!/[a-z'\-]/.test(c)) { out += c; i++; continue; }
+      if (c === '-') { out += 'ー'; i++; continue; }
+      if (c === "'") { i++; continue; }
+      if (c === 'n') {
+        var nx = s[i + 1];
+        if (nx === 'n' || nx === "'") { out += 'ん'; i += 2; continue; }
+        if (nx === undefined) { if (final) { out += 'ん'; i++; continue; } break; }
+        if (!/[aiueoy]/.test(nx)) { out += 'ん'; i++; continue; }
+      }
+      if (c === s[i + 1] && /[bcdfghjkmpqrstvwxyz]/.test(c)) { out += 'っ'; i++; continue; }
+      var hit = null;
+      for (var n = 3; n >= 1; n--) { var k = s.substr(i, n); if (KANA[k]) { hit = k; break; } }
+      if (hit) { out += KANA[hit]; i += hit.length; continue; }
+      var tail = s.slice(i);
+      if (!final && Object.keys(KANA).some(function (k) { return k.indexOf(tail) === 0; })) break;
+      out += c; i++;
+    }
+    return { kana: out, rest: s.slice(i) };
+  }
+  function hira(s) { return s.replace(/[\u30a1-\u30f6]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 0x60); }); }
+  function normKana(s) { s = s.replace(/[\s　・]/g, ''); return hira(romaji(s, true).kana); }
+  var TM = { 'ā': 'a1', 'á': 'a2', 'ǎ': 'a3', 'à': 'a4', 'ē': 'e1', 'é': 'e2', 'ě': 'e3', 'è': 'e4', 'ī': 'i1', 'í': 'i2', 'ǐ': 'i3', 'ì': 'i4', 'ō': 'o1', 'ó': 'o2', 'ǒ': 'o3', 'ò': 'o4', 'ū': 'u1', 'ú': 'u2', 'ǔ': 'u3', 'ù': 'u4', 'ǖ': 'v1', 'ǘ': 'v2', 'ǚ': 'v3', 'ǜ': 'v4', 'ü': 'v0' };
+  /** pinyin (tone marks or numbers) → {letters, tones}. Neutral tone (5/0/unmarked) is not counted. */
+  function py(s) {
+    s = s.toLowerCase().normalize('NFC').replace(/u:/g, 'v');
+    var letters = '', tones = '';
+    for (var i = 0; i < s.length; i++) {
+      var ch = s[i];
+      if (TM[ch]) { letters += TM[ch][0]; if (TM[ch][1] !== '0') tones += TM[ch][1]; }
+      else if (/[a-z]/.test(ch)) letters += ch;
+      else if (/[1-4]/.test(ch)) tones += ch;
+    }
+    return { letters: letters, tones: tones };
+  }
+
+  function start(pack) {
+    var title = T(pack, 'title');
+    var B = KTBlock.init({ id: 'reading-aid-fade', primitive: 'prim:reading-aid-fade', title: title, set: pack.id });
+    document.title = title + ' · Reading-aid fading';
+    var U = pack.units, kinds = pack.kinds, groups = pack.groups || {};
+    var EN = KTBlock.lang === 'en';
+    var spacingDay = params.get('spacing') === 'day';
+    function child() { return B.variant === 'child'; }
+    var modes = [{ id: 'read', label: L('读一段', 'Read a passage') }, { id: 'sort', label: L('归类读错', 'Sort the misreadings') }, { id: 'keep', label: L('不该撤的', 'When not to fade') }];
+    var groupIds = Object.keys(groups);
+    var st = {
+      mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : 'read',
+      group: groups[params.get('focus')] ? params.get('focus') : (groupIds[0] || null),
+      phase: 'read', passage: null, round: 0, peeked: {}, allShown: false, checks: [], cIdx: 0, typed: true,
+      missed: {}, roundWrong: {}, ownErrors: [], queue: [], qIdx: 0, answered: null, msg: null, changes: null, meaning: null
+    };
+
+    /* ---- persistent fade state ---- */
+    var KEY = 'kt-raf-' + pack.id;
+    var mem = B.store(KEY) || {};
+    mem.units = mem.units || {}; mem.withAid = mem.withAid || {}; mem.noAid = mem.noAid || {}; mem.next = mem.next || {}; mem.round = mem.round || 0; mem.history = mem.history || [];
+    function save() { B.store(KEY, mem); }
+    function us(id) { return mem.units[id] || (mem.units[id] = { state: 'tap', clean: [] }); }
+    function today() { var d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate(); }
+
+    var ui = KTBlock.chrome(B, { title: title, subtitle: T(pack, 'subtitle'), modes: modes, mode: st.mode,
+      onMode: function (m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m }); enterMode(); },
+      onVariant: function () { render(); } });
+    var bar = h('div', { class: 'kb-bar' });
+    var stage = h('div', { class: 'kb-card ra-stage' });
+    var side = h('aside', { class: 'ra-side' });
+    app.append(ui.header, h('main', { class: 'kb-main' }, [bar, h('div', { class: 'ra-layout' }, [stage, side])]), ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id });
+
+    var warned = false;
+    function speak(text) {
+      if (!B.speak(text, pack.speech) && !warned) { warned = true; st.msg = { t: L('这个浏览器不能播放语音：请大人读出来。', 'This browser cannot play speech: ask an adult to read it aloud.'), tone: 'warn' }; render(); }
+    }
+
+    /* ---- passages and rounds ---- */
+    function groupPassages() { return pack.passages.filter(function (p) { return !st.group || p.tag === st.group; }); }
+    function unitsIn(p) { var seen = {}, out = []; p.tokens.forEach(function (t) { if (t && t.u && !seen[t.u]) { seen[t.u] = 1; out.push(t.u); } }); return out; }
+    function fadeTargets(p) { return unitsIn(p).filter(function (id) { return !U[id].keep; }); }
+    function withAidCount(p) { return fadeTargets(p).filter(function (id) { return us(id).state !== 'removed'; }).length; }
+    function checkId(u) { return 'chk:' + st.passage.id + '#' + st.round + ':' + u; }
+    function startPassage() {
+      var list = groupPassages();
+      if (!list.length) { st.passage = null; render(); return; }
+      var gk = st.group || '_';
+      var i = (mem.next[gk] || 0) % list.length;
+      mem.next[gk] = i + 1; mem.round += 1; save();
+      st.passage = list[i]; st.round = mem.round; st.phase = 'read'; st.peeked = {}; st.allShown = false; st.checks = []; st.cIdx = 0; st.roundWrong = {}; st.missed = {}; st.msg = null; st.changes = null; st.meaning = null; st.answered = null;
+      st.startCount = withAidCount(st.passage);
+      B.emit('view', { passage: st.passage.id, round: st.round, withAid: st.startCount, targets: fadeTargets(st.passage).length });
+      render();
+    }
+    function visible(id) {
+      if (st.allShown || st.peeked[id]) return true;
+      return us(id).state === 'shown';
+    }
+    function peek(id) {
+      var u = U[id];
+      if (st.mode !== 'read' || !st.passage) return;
+      if (st.phase === 'done') { if (pack.aid !== 'pinyin') speak(u.say || (pack.aid === 'kana' ? u.aid : u.text)); return; }
+      if (!visible(id) || u.aid === null) {
+        if (!st.peeked[id]) { st.peeked[id] = true; B.reveal(checkId(id)); }
+        if (u.aid === null || pack.aid === 'ipa') speak(u.say || u.text);
+        else if (pack.aid === 'kana') speak(u.aid);
+        render();
+      }
+    }
+    function showAll() {
+      if (!st.allShown) {
+        st.allShown = true;
+        if (st.phase !== 'done') {
+          unitsIn(st.passage).forEach(function (id) { B.hint(checkId(id), 'all-shown'); });
+          st.msg = { t: L('全段注音已打开：这一段后面的作答都不算独立。', 'All readings are now shown: no answer in this passage counts as independent from here on.'), tone: 'warn' };
+        }
+        B.emit('request_hint', { passage: st.passage.id, round: st.round, all: true, beforeDone: st.phase !== 'done' });
+      }
+      render();
+    }
+    function startChecks() {
+      var ids = fadeTargets(st.passage);
+      var peeked = KTBlock.shuffle(ids.filter(function (id) { return st.peeked[id]; }));
+      var rest = KTBlock.shuffle(ids.filter(function (id) { return !st.peeked[id]; }));
+      var n = Math.min(ids.length, child() ? 2 : 4);
+      var pick = peeked.slice(0, Math.floor(n / 2)).concat(rest).slice(0, n);
+      if (pick.length < n) pick = pick.concat(peeked.slice(Math.floor(n / 2))).slice(0, n);
+      st.checks = KTBlock.shuffle(pick).map(function (id) {
+        var u = U[id];
+        var aidState = st.allShown ? 'all-shown' : st.peeked[id] ? 'peeked' : us(id).state === 'shown' ? 'shown' : 'hidden';
+        if (aidState === 'shown') B.hint(checkId(id), 'aid-shown');
+        var right = u.ans != null ? u.ans : u.aid;
+        var opts = KTBlock.shuffle([{ show: right, ok: true }].concat(u.opts.map(function (o) { return { show: o[0], kind: o[1] }; })));
+        if (child()) opts = KTBlock.shuffle([opts.find(function (o) { return o.ok; })].concat(opts.filter(function (o) { return !o.ok; }).slice(0, 1)));
+        return { id: id, aidState: aidState, opts: opts, done: false, picked: null };
+      });
+      st.typed = !!pack.input && !child();
+      st.phase = 'check'; st.cIdx = 0; st.msg = null;
+      B.emit('view', { passage: st.passage.id, phase: 'check', items: st.checks.map(function (c) { return c.id; }) });
+      render();
+      focusInput();
+    }
+    function focusInput() { setTimeout(function () { var i = stage.querySelector('.typein input'); if (i) i.focus(); }, 0); }
+    function judgeTyped(u, val) {
+      var right = u.ans != null ? u.ans : u.aid;
+      if (pack.input === 'pinyin') {
+        var a = py(val), b = py(right);
+        if (!a.letters) return null;
+        if (a.letters === b.letters && a.tones === b.tones) return { ok: true };
+        for (var i = 0; i < u.opts.length; i++) { var o = py(u.opts[i][0]); if (o.letters === a.letters && o.tones === a.tones) return { ok: false, kind: u.opts[i][1], said: u.opts[i][0] }; }
+        if (a.letters === b.letters) return { ok: false, kind: 'tone', said: val, toneMissing: !a.tones };
+        return { ok: false, kind: null, said: val };
+      }
+      var k = normKana(val);
+      if (!k) return null;
+      if (k === normKana(right)) return { ok: true };
+      for (var j = 0; j < u.opts.length; j++) if (normKana(u.opts[j][0]) === k) return { ok: false, kind: u.opts[j][1], said: u.opts[j][0] };
+      return { ok: false, kind: null, said: k };
+    }
+    function answerCheck(c, res, format) {
+      if (c.done) return;
+      var u = U[c.id], right = u.ans != null ? u.ans : u.aid;
+      var rec = B.attempt(checkId(c.id), { correct: res.ok, response: { unit: c.id, answer: res.said || res.answer || right, format: format, aidState: c.aidState, peeked: !!st.peeked[c.id] } });
+      c.done = true; c.ok = res.ok; c.independent = res.ok && !rec.first.assisted && c.aidState === 'hidden';
+      if (res.ok) {
+        if (c.independent) { mem.noAid[c.id] = true; delete mem.withAid[c.id]; }
+        else if (!mem.noAid[c.id]) mem.withAid[c.id] = true;
+        save();
+        st.msg = { t: (c.independent ? L('对，而且没看注音。', 'Right, and without the reading aid.') : L('对。不过这一次', 'Right. But this time ') + aidStateText(c.aidState) + L('，记为“带注音读对”。', ', so it counts as “right with the aid”.')), tone: '' };
+      } else {
+        st.roundWrong[c.id] = true; st.missed[c.id] = true;
+        st.ownErrors.push({ id: 'own:' + st.round + ':' + c.id, u: c.id, said: res.said, kind: res.kind || null });
+        var ref = sameCharKnown(c.id);
+        if (ref) B.emit('compare', { item: checkId(c.id), with: ref });
+        st.msg = { t: (pack.aid === 'dots' ? L('这个词是 ', 'The word is ') + u.text + (u.aid === null ? '' : ' ' + right) : L('正确读法：', 'The right reading: ') + right) + (res.toneMissing ? L('（没有写声调。用调号或数字 1–4 写上声调）', ' (no tone given: add tone marks or the numbers 1–4)') : '') +
+          (ref ? L('。对照你读对过的：', '. Compare with one you have read right: ') + U[ref].text + ' ' + (U[ref].ans || U[ref].aid) : '') + L('。它在原文里已经划了波浪线。', '. It is now underlined in the passage.'), tone: 'bad' };
+      }
+      render();
+    }
+    function aidStateText(a) { return a === 'shown' ? L('注音是显示着的', 'the aid was showing') : a === 'peeked' ? L('你偷看过注音', 'you peeked at the aid') : a === 'all-shown' ? L('全段注音打开过', 'all readings had been shown') : L('看过提示', 'a hint was used'); }
+    function sameCharKnown(id) {
+      var t = U[id].text;
+      return Object.keys(U).find(function (k) { return k !== id && (mem.noAid[k] || mem.withAid[k]) && U[k].text.split('').some(function (ch) { return /[\u3400-\u9fff]/.test(ch) && t.indexOf(ch) >= 0; }); }) || null;
+    }
+    function nextCheck() {
+      st.cIdx++; st.msg = null;
+      if (st.cIdx >= st.checks.length) {
+        if (st.passage.q) { st.phase = 'question'; st.meaning = { picked: null, opts: st.passage.q.opts.map(function (o, i) { return { o: o, ok: i === st.passage.q.ok }; }) }; st.meaning.opts = KTBlock.shuffle(st.meaning.opts); }
+        else finishRound();
+      }
+      render(); focusInput();
+    }
+    function answerMeaning(i) {
+      var m = st.meaning, o = m.opts[i];
+      if (m.picked !== null) return;
+      m.picked = i;
+      var q = st.passage.q, wrongNeeded = q.needs.filter(function (id) { return st.roundWrong[id]; });
+      if (st.allShown) B.hint('mean:' + st.passage.id + '#' + st.round, 'all-shown');
+      B.attempt('mean:' + st.passage.id + '#' + st.round, { correct: o.ok, response: { pick: T(o.o, 't'), needs: q.needs, readingWrongOn: wrongNeeded, allShown: st.allShown } });
+      st.msg = o.ok ? { t: L('意思对了。', 'The meaning is right.') + (wrongNeeded.length ? L('不过 ' + wrongNeeded.map(function (id) { return U[id].text; }).join('、') + ' 的读音刚才没读对：意思和读音分开记。', ' But the reading of ' + wrongNeeded.map(function (id) { return U[id].text; }).join(', ') + ' was wrong just now: meaning and reading are recorded separately.') : ''), tone: wrongNeeded.length ? 'warn' : '' }
+        : { t: L('不对。正确的是：', 'Not quite. The answer is: ') + T(m.opts.find(function (x) { return x.ok; }).o, 't') + L('。要读懂 ', '. You need ') + q.needs.map(function (id) { return U[id].text; }).join(L('、', ', ')) + L(' 才答得对。', ' to answer it.'), tone: 'bad' };
+      render();
+    }
+    function finishRound() {
+      var removed = [], restored = [], back = [];
+      var checked = {};
+      st.checks.forEach(function (c) { checked[c.id] = c; });
+      unitsIn(st.passage).forEach(function (id) {
+        var s0 = us(id), before = s0.state, c = checked[id];
+        if (U[id].keep) { if (st.peeked[id]) s0.peeks = (s0.peeks || 0) + 1; return; }
+        if ((c && c.done && !c.ok) || st.peeked[id]) { s0.state = 'shown'; s0.clean = []; }
+        else if (c && c.done && c.ok && c.independent) {
+          var key = spacingDay ? today() : st.passage.id;
+          if (!s0.clean.some(function (x) { return x.key === key; })) s0.clean.push({ key: key, p: st.passage.id, day: today() });
+          if (s0.clean.length >= 2) s0.state = 'removed';
+        } else if (c && c.done && c.ok && before === 'shown') s0.state = 'tap';
+        if (s0.state !== before) {
+          (s0.state === 'removed' ? removed : s0.state === 'shown' ? restored : back).push(id);
+          mem.history.push({ u: id, from: before, to: s0.state, round: st.round, t: Date.now() });
+        }
+      });
+      if (mem.history.length > 400) mem.history = mem.history.slice(-400);
+      save();
+      st.changes = { removed: removed, restored: restored, back: back }; st.msg = null;
+      st.phase = 'done';
+      B.emit('complete', { passage: st.passage.id, round: st.round, removed: removed, restored: restored, hiddenAgain: back, withAidBefore: st.startCount, withAidAfter: withAidCount(st.passage) });
+      render();
+    }
+
+    /* ---- sort (step 2) and keep (reverse half) ---- */
+    function enterMode() {
+      st.msg = null; st.answered = null;
+      if (st.mode === 'read') { if (!st.passage) startPassage(); else render(); return; }
+      if (st.mode === 'sort') {
+        var own = st.ownErrors.slice(-6);
+        var prep = KTBlock.shuffle(pack.errors).slice(0, Math.max(0, (child() ? 4 : 8) - own.length));
+        st.queue = own.concat(prep).map(function (e) { return { kind: 'sort', e: e, id: e.id.indexOf('own:') === 0 ? 'sort:' + e.id : 'sort:' + e.id + '#' + Date.now() % 100000, own: e.id.indexOf('own:') === 0 }; });
+      } else {
+        st.queue = KTBlock.shuffle(pack.reverse).map(function (r) { return { kind: 'keep', r: r, id: 'keep:' + r.id, opts: KTBlock.shuffle(r.opts.map(function (o, i) { return { o: o, ok: i === r.ok }; })) }; });
+      }
+      st.qIdx = 0;
+      if (st.queue[0]) B.emit('view', { item: st.queue[0].id, mode: st.mode });
+      render();
+    }
+    function kindIds() { return Object.keys(kinds); }
+    function answerSort(k) {
+      var it = st.queue[st.qIdx];
+      if (st.answered) return;
+      st.answered = { pick: k };
+      var e = it.e;
+      if (!e.kind) {
+        B.emit('explain', { item: it.id, unit: e.u, said: e.said, kind: k, judged: 'self' });
+        st.msg = { t: L('这个读法页面没法自动归类，只记下你的判断，不算作答。正确读法是 ', 'The page cannot classify this reading itself, so your choice is only noted and not scored. The right reading is ') + (U[e.u].ans || U[e.u].aid) + L('。', '.'), tone: 'warn' };
+      } else {
+        var ok = k === e.kind;
+        B.attempt(it.id, { correct: ok, response: { unit: e.u, said: e.said, picked: k, kind: e.kind, own: it.own, reverse: !!kinds[e.kind].reverse } });
+        st.msg = { t: (ok ? L('对。', 'Right. ') : L('应该是“', 'It is “') + T(kinds[e.kind], 'label') + L('”。', '”. ')) + (e.why ? T(e, 'why') : ownWhy(e)), tone: ok ? (kinds[e.kind].reverse ? 'warn' : '') : 'bad' };
+      }
+      render();
+    }
+    function ownWhy(e) {
+      var right = U[e.u].ans || U[e.u].aid;
+      return L('你读的是 ' + e.said + '，正确的是 ' + right + '。', 'You read ' + e.said + '; the right reading is ' + right + '.');
+    }
+    function answerKeep(i) {
+      var it = st.queue[st.qIdx];
+      if (st.answered) return;
+      var o = it.opts[i];
+      st.answered = { pick: i };
+      B.attempt(it.id, { correct: o.ok, response: { pick: T(o.o, 't') } });
+      st.msg = { t: (o.ok ? L('对。', 'Right. ') : L('不对。', 'Not quite. ')) + T(it.r, 'why'), tone: o.ok ? 'warn' : 'bad' };
+      render();
+    }
+    function nextQ() { st.qIdx++; st.answered = null; st.msg = null; if (st.queue[st.qIdx]) B.emit('view', { item: st.queue[st.qIdx].id, mode: st.mode }); else B.emit('complete', { mode: st.mode, items: st.queue.length }); render(); }
+
+    /* ---- render ---- */
+    function tokenEl(t, interactive) {
+      if (typeof t === 'string') return document.createTextNode(t);
+      if (t.t) return h('ruby', { class: 'fixed' }, [t.t, h('rt', { text: t.r })]);
+      var id = t.u, u = U[id], state = us(id).state, vis = interactive ? visible(id) : true;
+      var cls = ['u', vis ? 'st-show' : 'st-hide'];
+      if (!vis && state !== 'removed') cls.push('st-tap');
+      if (st.peeked[id] && interactive) cls.push('peeked');
+      if (st.missed[id] && interactive) cls.push('miss');
+      if (u.keep) cls.push('keep');
+      var inner;
+      if (pack.aid === 'dots' && Array.isArray(u.aid)) inner = h('span', { class: 'dots' }, u.aid.map(function (g) { return h('span', { class: 'g' }, [g, h('i', { class: g.length > 1 ? 'line' : 'dot' })]); }));
+      else if (u.aid === null) inner = h('span', {}, [u.text, vis ? h('span', { class: 'snd', 'aria-hidden': 'true', text: '🔊' }) : null]);
+      else inner = h('ruby', {}, [u.text, h('rt', { text: u.aid })]);
+      var label = u.text + (vis ? (u.aid && !Array.isArray(u.aid) ? ' ' + u.aid : '') : L('（注音隐藏，点一下看）', ' (reading hidden; click to see it)'));
+      return h('button', { class: cls.join(' '), 'aria-label': label, onclick: interactive ? function () { peek(id); } : null, tabindex: interactive ? null : '-1' }, inner);
+    }
+    function passageEl(tokens, interactive) { return h('div', { class: 'passage', lang: pack.lang === 'zh' ? 'zh-CN' : pack.lang }, tokens.map(function (t) { return tokenEl(t, interactive); })); }
+    function feedbackEl() { return st.msg ? h('div', { class: 'kb-feedback ' + (st.msg.tone || ''), role: 'status', text: st.msg.t }) : document.createTextNode(''); }
+    function stepsEl() {
+      var on = st.phase === 'read' ? 0 : st.phase === 'check' ? 1 : st.phase === 'question' ? 2 : 3;
+      return h('div', { class: 'steps' }, [L('读', 'Read'), L('抽查读音', 'Reading check'), L('意思题', 'Meaning'), L('注音更新', 'Aid update')].map(function (s, i) { return h('span', { class: i === on ? 'on' : '', text: (i + 1) + ' ' + s }); }));
+    }
+    function renderBar() {
+      bar.innerHTML = '';
+      if (st.mode === 'read' && groupIds.length > 1) {
+        bar.append(h('label', { class: 'kb-variant' }, [L('材料 ', 'Material '), h('select', { onchange: function (e) { st.group = e.target.value; B.emit('highlight', { focus: st.group }); startPassage(); } },
+          groupIds.map(function (g) { return h('option', { value: g, text: T(groups[g], 'label'), selected: st.group === g }); }))]));
+      }
+      if (st.mode === 'read') {
+        bar.append(h('button', { class: 'kb-btn', onclick: startPassage }, L('换下一段', 'Next passage')));
+        bar.append(h('button', { class: 'kb-btn', onclick: function () {
+          if (!confirm(L('清空这个数据包的注音记录（哪些字撤了、两栏字表）？', 'Clear the aid record for this pack (which readings were removed, both word lists)?'))) return;
+          mem = { units: {}, withAid: {}, noAid: {}, next: {}, round: 0, history: [] }; save(); B.emit('revise', { reset: true }); startPassage();
+        } }, L('清空注音记录', 'Reset aid record')));
+      } else {
+        if (st.queue.length) bar.append(h('span', { class: 'kb-note', text: L('第 ' + Math.min(st.qIdx + 1, st.queue.length) + ' / ' + st.queue.length + ' 题', 'Item ' + Math.min(st.qIdx + 1, st.queue.length) + ' / ' + st.queue.length) }));
+        bar.append(h('button', { class: 'kb-btn', onclick: enterMode }, L('换一轮', 'New round')));
+      }
+    }
+    function optButton(label, i, cls, onclick, disabled) {
+      return h('button', { class: 'opt ' + (cls || ''), disabled: disabled, onclick: onclick }, [h('span', { class: 'num', text: String(i + 1) }), label]);
+    }
+    function renderRead() {
+      var p = st.passage;
+      if (!p) { stage.append(h('p', { class: 'kb-prompt', text: L('这组没有材料。', 'There is no material in this group.') })); return; }
+      var targets = fadeTargets(p).length, now = withAidCount(p);
+      stage.append(stepsEl(), h('div', { class: 'count' }, [h('b', { text: T(p, 'title') }),
+        h('span', { class: 'kb-note', text: L('这段带注音的词：' + st.startCount + ' → ' + now + '（共 ' + targets + ' 个目标词）', 'Words in this passage that still have an aid: ' + st.startCount + ' → ' + now + ' (of ' + targets + ' target words)') })]));
+      stage.append(passageEl(p.tokens, true));
+      if (st.phase === 'read') {
+        stage.append(h('p', { class: 'kb-note', text: pack.aid === 'dots'
+          ? L('先自己读整页（读给大人听）。读不出的词点一下：拼读词会出现点线，认读词会读出来。点过的词会记下来。', 'Read the whole page yourself first (to an adult). Click a word you cannot read: decodable words show their sound dots, sight words are read aloud. Every click is recorded.')
+          : L('先自己读整段（出声读，或读给搭档听）。读不出的词点一下就能看注音，点过的会记下来。读完后页面会挑几个词单独抽查。', 'Read the whole passage yourself first (aloud, or to a partner). Click a word to see its reading if you are stuck; every click is recorded. Afterwards the page picks a few words to check on their own.') }));
+        stage.append(h('div', { class: 'tools' }, [
+          h('button', { class: 'kb-btn primary', onclick: startChecks }, L('读完了，开始抽查', 'Done reading: start the check')),
+          h('button', { class: 'kb-btn', disabled: st.allShown, onclick: showAll }, L('全段注音（这段不再计独立）', 'Show all readings (nothing here counts as independent)'))]));
+      } else if (st.phase === 'check') {
+        var c = st.checks[st.cIdx], u = U[c.id];
+        stage.append(h('p', { class: 'kb-prompt', text: L('抽查 ' + (st.cIdx + 1) + ' / ' + st.checks.length + '：', 'Check ' + (st.cIdx + 1) + ' / ' + st.checks.length + ': ') + (u.aid === null
+          ? L('听一听，是哪个词？', 'Listen. Which word is it?')
+          : pack.aid === 'dots' ? L('这个词是哪张图？', 'Which picture is this word?')
+          : st.typed ? (pack.input === 'pinyin' ? L('写出拼音（调号或数字 1–4 都行，如 hai2）', 'Type the pinyin (tone marks or numbers 1–4, e.g. hai2)') : L('写出读音（假名，或用罗马字打，如 gakkou）', 'Type the reading (kana, or romaji such as gakkou)'))
+          : L('选出它的读音', 'Choose its reading')) }));
+        if (c.aidState !== 'hidden' && !c.done) stage.append(h('p', { class: 'kb-note', text: L('这一题', 'For this item ') + aidStateText(c.aidState) + L('，答对也记为“带注音读对”。', '; a right answer counts as “right with the aid”.') }));
+        if (u.aid === null) {
+          stage.append(h('div', { class: 'tools c' }, [h('button', { class: 'kb-btn', onclick: function () { speak(u.say || u.text); B.emit('select', { item: checkId(c.id), play: true }); } }, L('▶ 听', '▶ Listen'))]));
+          if (!c.played) { c.played = true; setTimeout(function () { speak(u.say || u.text); }, 250); }
+        } else {
+          var cue = u.cue || ['', ''];
+          stage.append(h('div', { class: 'iso', lang: pack.lang === 'zh' ? 'zh-CN' : pack.lang }, [cue[0], h('mark', { text: u.text }), cue[1]]));
+        }
+        if (st.typed && u.aid !== null && pack.aid !== 'dots') {
+          var inp = h('input', { type: 'text', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', 'aria-label': L('读音', 'Reading'), disabled: c.done,
+            onkeydown: function (e) { if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); if (c.done) nextCheck(); else submitTyped(); } } });
+          var submitTyped = function () {
+            var r = judgeTyped(u, inp.value.trim());
+            if (!r) { st.msg = { t: L('先写出读音。', 'Type a reading first.'), tone: 'warn' }; render(); focusInput(); return; }
+            r.answer = inp.value.trim(); answerCheck(c, r, 'typed');
+          };
+          stage.append(h('div', { class: 'typein' }, [inp, h('button', { class: 'kb-btn primary', disabled: c.done, onclick: submitTyped }, L('确定', 'Check'))]));
+          if (c.done) inp.value = c.typedValue || '';
+          inp.addEventListener('input', function () { c.typedValue = inp.value; });
+          if (!c.done) stage.append(h('div', { class: 'tools c' }, [h('button', { class: 'kb-btn', onclick: function () { st.typed = false; B.emit('select', { item: checkId(c.id), format: 'choice' }); render(); } }, L('改成三选一', 'Switch to three options'))]));
+        } else {
+          stage.append(h('div', { class: 'opts' }, c.opts.map(function (o, i) {
+            var cls = c.done ? (o.ok ? 'right' : (c.picked === i ? 'wrongpick' : '')) : '';
+            return optButton(h('span', { class: pack.aid === 'dots' && u.aid !== null ? 'big' : '', lang: pack.aid === 'kana' ? 'ja' : null, text: o.show }), i, cls, function () { c.picked = i; answerCheck(c, { ok: !!o.ok, kind: o.kind, said: o.show }, 'choice'); }, c.done);
+          })));
+        }
+        stage.append(feedbackEl());
+        if (c.done) stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: nextCheck }, st.cIdx + 1 < st.checks.length ? L('下一个 →', 'Next →') : L('继续 →', 'Continue →'))]));
+      } else if (st.phase === 'question') {
+        var q = st.passage.q, m = st.meaning;
+        stage.append(h('p', { class: 'kb-prompt', text: L('意思题：', 'Meaning: ') + T(q, 'q') }));
+        stage.append(h('div', { class: 'opts' }, m.opts.map(function (x, i) {
+          var cls = m.picked !== null ? (x.ok ? 'right' : (m.picked === i ? 'wrongpick' : '')) : '';
+          return optButton(h('span', { text: T(x.o, 't') }), i, cls, function () { answerMeaning(i); }, m.picked !== null);
+        })));
+        stage.append(feedbackEl());
+        if (m.picked !== null) stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: finishRound }, L('看注音怎么变 →', 'See how the aids change →'))]));
+      } else {
+        var ch = st.changes;
+        var names = function (ids) { return ids.map(function (id) { return U[id].text; }).join(L('、', ', ')); };
+        stage.append(h('div', { class: 'kb-feedback' }, [
+          h('div', { text: ch.removed.length ? L('撤掉注音：', 'Aid removed: ') + names(ch.removed) + L('（两段不同材料里没偷看就读对）', ' (right without peeking in two different passages)') : L('这一段没有新撤掉的注音。撤除要在两段不同的材料里都不偷看读对。', 'No aid was removed this time. Removal needs a right reading without peeking in two different passages.') + (spacingDay ? L('（当前设置：两次要在不同的日子）', ' (Current setting: the two must be on different days.)') : '') }),
+          ch.restored.length ? h('div', { text: L('恢复注音：', 'Aid back on: ') + names(ch.restored) + L('（偷看过或读错了，要重新两次读对）', ' (peeked or misread: two new right readings needed)') }) : null,
+          ch.back.length ? h('div', { text: L('改成点开才显示：', 'Now hidden until clicked: ') + names(ch.back) }) : null]));
+        stage.append(h('p', { class: 'kb-note', text: L('可以打开全段注音核对自己刚才的朗读（不影响记录）。点有波浪线的词看正确读音。', 'You can show all readings now to check your reading aloud (this does not change the record). Click an underlined word to hear or see it.') }));
+        stage.append(h('div', { class: 'tools' }, [
+          h('button', { class: 'kb-btn', disabled: st.allShown, onclick: showAll }, L('全段注音，核对朗读', 'Show all readings to check')),
+          h('button', { class: 'kb-btn primary', onclick: startPassage }, L('下一段 →', 'Next passage →'))]));
+      }
+      if (st.phase !== 'check' && st.phase !== 'question' && st.msg) stage.append(feedbackEl());
+    }
+    function renderQueue() {
+      var it = st.queue[st.qIdx];
+      if (!it) {
+        stage.append(h('div', { class: 'done', text: st.queue.length ? '✔' : '📭' }), h('p', { class: 'kb-prompt', text: st.queue.length ? L('这一轮做完了。', 'Round finished.') : L('没有题。', 'Nothing here.') }),
+          h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: enterMode }, L('再来一轮', 'Another round'))]));
+        return;
+      }
+      if (it.kind === 'sort') {
+        var e = it.e, u = U[e.u], right = u.ans || u.aid, cue = u.cue || ['', ''];
+        stage.append(h('p', { class: 'kb-prompt', text: it.own ? L('你刚才读错的地方：是哪一类错？', 'One of your own misreadings: what kind of mistake was it?') : L('有人这样读错了：是哪一类错？', 'Someone misread this: what kind of mistake was it?') }));
+        stage.append(h('div', { class: 'iso', lang: pack.lang === 'zh' ? 'zh-CN' : pack.lang }, [cue[0], h('mark', { text: u.text }), cue[1]]));
+        stage.append(h('p', { style: 'text-align:center' }, [L('读成了 ', 'Read as ') , h('b', { text: e.said }), L('，正确是 ', '; the right reading is '), h('b', { text: Array.isArray(right) ? u.text : right })]));
+        stage.append(h('div', { class: 'opts' }, kindIds().map(function (k, i) {
+          var cls = (kinds[k].reverse ? 'rev ' : '') + (st.answered ? (k === e.kind ? 'right' : (st.answered.pick === k ? 'wrongpick' : '')) : '');
+          return optButton(h('span', { text: T(kinds[k], 'label') }), i, cls, function () { answerSort(k); }, !!st.answered);
+        })));
+      } else {
+        var r = it.r;
+        stage.append(h('div', { class: 'kb-note' }, [h('span', { class: 'flag', text: L('反向那一半', 'The reverse half') }), ' ', L('注音不是都该撤；读得出也不等于读得懂。', 'Not every aid should fade, and reading a word is not the same as understanding it.')]));
+        stage.append(passageEl(r.show, false));
+        stage.append(h('p', { class: 'kb-prompt', text: T(r, 'q') }));
+        stage.append(h('div', { class: 'opts' }, it.opts.map(function (x, i) {
+          var cls = st.answered ? (x.ok ? 'right' : (st.answered.pick === i ? 'wrongpick' : '')) : '';
+          return optButton(h('span', { text: T(x.o, 't') }), i, cls, function () { answerKeep(i); }, !!st.answered);
+        })));
+      }
+      stage.append(feedbackEl());
+      stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn' + (st.answered ? ' primary' : ''), onclick: nextQ }, st.answered ? L('下一题 →', 'Next →') : L('跳过', 'Skip'))]));
+    }
+    function renderSide() {
+      side.innerHTML = '';
+      var all = Object.keys(U).filter(function (id) { return !U[id].keep && (!st.group || pack.passages.some(function (p) { return p.tag === st.group && unitsIn(p).indexOf(id) >= 0; })); });
+      var removed = all.filter(function (id) { return us(id).state === 'removed'; }).length;
+      function chipList(obj) {
+        var ids = all.filter(function (id) { return obj[id]; });
+        return ids.length ? h('div', { class: 'chips' }, ids.map(function (id) { return h('span', { class: 'chip ' + (obj === mem.noAid ? 'ind' : 'ast'), lang: pack.lang === 'zh' ? 'zh-CN' : pack.lang, text: U[id].text + (U[id].cue && pack.lang === 'zh' ? '（' + U[id].aid + '）' : '') }); })) : h('span', { class: 'kb-note', text: L('还没有', 'None yet') });
+      }
+      side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('我的字表', 'My word list') }),
+        h('p', { class: 'kb-note', text: L('这组 ' + all.length + ' 个目标词，已撤掉注音 ' + removed + ' 个。', 'This group has ' + all.length + ' target words; ' + removed + ' have lost their aid.') }),
+        h('div', { class: 'cols' }, [h('div', {}, [h('h3', { text: L('带注音读对', 'Right with the aid') }), chipList(mem.withAid)]), h('div', {}, [h('h3', { text: L('无注音读对', 'Right without the aid') }), chipList(mem.noAid)])]),
+        h('p', { class: 'kb-note', text: L('只有注音藏着、没偷看、也没开全段注音时读对，才进“无注音读对”。', 'Only a right answer with the aid hidden, no peeking and “show all” off moves a word to “right without the aid”.') })]));
+      side.append(h('div', { class: 'kb-card legend' }, [
+        h('b', { text: L('注音的三种状态', 'Three states of an aid') }),
+        h('span', { text: L('显示：上方直接有注音（偷看过或读错过）', 'Shown: the aid is visible (after a peek or a misreading)') }),
+        h('span', { text: L('点开：字下有一个小点，点一下才显示', 'Click to show: a small dot under the word') }),
+        h('span', { text: L('撤除：没有小点。仍然可以点，但点了会恢复注音', 'Removed: no dot. You can still click, but that brings the aid back') }),
+        h('span', { text: L('👁 = 这一段偷看过；波浪线 = 抽查读错；★ = 一直可以点看（人名等）', '👁 = peeked in this passage; wavy line = misread in a check; ★ = always clickable (names etc.)') })]));
+      if (st.mode === 'sort' || st.mode === 'keep') side.append(h('div', { class: 'kb-card reverse' }, [h('b', { text: L('反向那一半', 'The reverse half') }),
+        h('p', { class: 'kb-note', text: L('多音字换了词、熟字训、人名地名，注音可以一直保留可点；读音对了，意思仍可能错，所以每段都有意思题。', 'A polyphone in a new word, jukujikun and names can keep a clickable aid; a right reading can still go with a wrong meaning, which is why every passage has a meaning question.') })]));
+    }
+    function render() {
+      renderBar(); stage.innerHTML = '';
+      if (st.mode === 'read') renderRead(); else renderQueue();
+      renderSide();
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.metaKey || e.ctrlKey || e.altKey) return;
+      var n = parseInt(e.key, 10);
+      var btns = [].slice.call(stage.querySelectorAll('.opts .opt:not(:disabled)'));
+      if (n >= 1 && n <= 9 && btns.length && !stage.querySelector('.opt.right')) { var b = stage.querySelectorAll('.opts .opt')[n - 1]; if (b && !b.disabled) { e.preventDefault(); b.click(); } }
+      else if (e.key === 'Enter' && e.target === document.body) { var p = stage.querySelector('.tools .kb-btn.primary'); if (p) { e.preventDefault(); p.click(); } }
+    });
+
+    if (st.mode === 'read') startPassage(); else enterMode();
+  }
+})();
+</script>
+</body>
+</html>

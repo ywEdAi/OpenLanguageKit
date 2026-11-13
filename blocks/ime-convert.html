@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Input-method conversion</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .im-layout { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .im-layout { grid-template-columns: 1fr; } }
+  .im-side { display: grid; gap: 12px; }
+  .im-stage { display: grid; gap: 12px; }
+  .im-stage .kb-prompt { margin: 0; }
+  .read { font-size: 1.15rem; letter-spacing: .02em; }
+  .bar { min-height: 56px; border: 2px solid var(--accent); border-radius: 10px; background: var(--panel); padding: 8px 12px; font-size: 1.5rem; line-height: 1.5; display: flex; flex-wrap: wrap; align-items: center; overflow-wrap: anywhere; }
+  .bar .out { white-space: pre-wrap; }
+  .bar .comp { text-decoration: underline; text-underline-offset: 4px; color: var(--accent); }
+  .bar .comp .seg { background: var(--accent-soft); text-decoration: underline 3px; }
+  .bar .caret { display: inline-block; width: 2px; height: 1.2em; background: var(--ink); margin-left: 1px; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .bar .ph { color: var(--muted); font-size: 1rem; }
+  .cands { display: flex; flex-wrap: wrap; gap: 6px; min-height: 44px; }
+  .cand { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 4px 10px; font-size: 1.25rem; display: inline-flex; gap: 6px; align-items: baseline; }
+  .cand .num { font-size: .75rem; color: var(--muted); }
+  .cand .ex { font-size: .78rem; color: var(--muted); }
+  .cand.hi { border-color: var(--accent); background: var(--accent-soft); }
+  .typein { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .typein input { font: inherit; font-size: 1.1rem; padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); width: min(300px, 100%); font-family: ui-monospace, Menlo, monospace; }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; }
+  .trace { margin: 0; padding-left: 20px; font-size: .9rem; display: grid; gap: 2px; }
+  .trace .skip { color: var(--muted); }
+  .trace .pk { font-weight: 700; color: var(--accent); }
+  .trace .first0 { font-size: .75rem; color: var(--warn); }
+  .linkbox { position: relative; padding-top: 34px; }
+  .linkbox svg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+  .linkbox svg path { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 5 4; }
+  .sent { font-size: 1.5rem; line-height: 1.8; }
+  .sent .ch { border: 0; background: transparent; padding: 0 1px; font: inherit; color: inherit; border-radius: 4px; }
+  .sent .ch.mark { box-shadow: inset 0 -3px 0 var(--bad); background: var(--bad-soft); }
+  .sent .ch.mark.okm { box-shadow: inset 0 -3px 0 var(--t2); background: transparent; }
+  .sent .ch.ctx { background: var(--accent-soft); box-shadow: inset 0 -3px 0 var(--accent); }
+  .sent .ch.sel { outline: 2px solid var(--accent); }
+  .sent .ch.miss { color: var(--bad); text-decoration: underline wavy var(--bad); }
+  .opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; }
+  .opt { border: 1px solid var(--line); background: var(--panel); border-radius: var(--radius); padding: 8px 10px; display: flex; gap: 6px; align-items: center; text-align: left; min-height: 44px; }
+  .opt .num { font-size: .72rem; color: var(--muted); }
+  .opt[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+  .opt.right { border-color: var(--t2); background: var(--accent-soft); }
+  .opt.wrongpick { border-color: var(--bad); background: var(--bad-soft); }
+  .opt.rev { border-left: 4px solid var(--warn); }
+  .opt:disabled { cursor: default; }
+  .flag { display: inline-block; font-size: .78rem; padding: 1px 8px; border-radius: 999px; background: var(--warn-soft); color: var(--warn); }
+  .reverse { border-left: 4px solid var(--warn); }
+  .stat { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; font-size: .92rem; }
+  .stat b { text-align: right; }
+  .cmp { font-size: .95rem; }
+  .done { font-size: 2.4rem; text-align: center; }
+  .kb-note code { font-size: .85rem; }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* Input-method conversion (prim:ime-convert). Packs: data/ime-convert.js (format in its header).
+ * The page simulates an IME from the pack dictionary (no real IME, no network):
+ *   ja: romaji → kana live; Space converts (longest known reading), Space/arrows move, digits pick, Enter commits;
+ *       a lone n before a vowel stays な-row (gennin → げんいん, genin → げにん); wo → を, o → お.
+ *   zh: letters; candidates for the longest known pinyin prefix; Space commits the highlighted one, digits pick,
+ *       Enter commits the letters; ü is typed v.
+ * Modes: type (step 1, with a key → candidates → choice trace), judge (step 2: classify marked spots and click the
+ * deciding context word; the reverse half is "both are fine"), blind (step 3: shuffled candidates, no trace until
+ * submitted, compared with step 1). The final text must match the target exactly (alt lists accepted variants). */
+(function () {
+  'use strict';
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t;
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'ime-convert-zh';
+  var entry = (window.KT_REGISTRY && KT_REGISTRY.packs && KT_REGISTRY.packs[setId]) || { file: 'data/ime-convert.js', block: 'ime-convert' };
+  var app = document.getElementById('app');
+  if (entry.block !== 'ime-convert') { app.textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  var s = document.createElement('script');
+  s.src = entry.file;
+  s.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else app.textContent = L('数据包里没有 ' + setId, 'The data pack file does not contain ' + setId); };
+  s.onerror = function () { app.textContent = L('数据包加载失败：', 'Could not load the data pack: ') + entry.file; };
+  document.head.appendChild(s);
+
+  /* ---- romaji → kana (same rules as reading-aid-fade) ---- */
+  var KANA = { a: 'あ', i: 'い', u: 'う', e: 'え', o: 'お' };
+  (function () {
+    var rows = { k: 'かきくけこ', s: 'さしすせそ', t: 'たちつてと', n: 'なにぬねの', h: 'はひふへほ', m: 'まみむめも', r: 'らりるれろ', g: 'がぎぐげご', z: 'ざじずぜぞ', d: 'だぢづでど', b: 'ばびぶべぼ', p: 'ぱぴぷぺぽ', x: 'ぁぃぅぇぉ', l: 'ぁぃぅぇぉ' };
+    Object.keys(rows).forEach(function (c) { 'aiueo'.split('').forEach(function (v, j) { KANA[c + v] = rows[c][j]; }); });
+    Object.assign(KANA, { ya: 'や', yu: 'ゆ', yo: 'よ', ye: 'いぇ', wa: 'わ', wo: 'を', shi: 'し', chi: 'ち', tsu: 'つ', fu: 'ふ', ji: 'じ', si: 'し', ti: 'ち', tu: 'つ', hu: 'ふ', zi: 'じ', di: 'ぢ', du: 'づ',
+      fa: 'ふぁ', fi: 'ふぃ', fe: 'ふぇ', fo: 'ふぉ', she: 'しぇ', che: 'ちぇ', je: 'じぇ', xtu: 'っ', ltu: 'っ', xya: 'ゃ', xyu: 'ゅ', xyo: 'ょ', lya: 'ゃ', lyu: 'ゅ', lyo: 'ょ', xn: 'ん', thi: 'てぃ', dhi: 'でぃ' });
+    var yo = { k: 'き', g: 'ぎ', n: 'に', h: 'ひ', m: 'み', r: 'り', b: 'び', p: 'ぴ', sh: 'し', ch: 'ち', j: 'じ', sy: 'し', ty: 'ち', cy: 'ち', zy: 'じ', jy: 'じ', dy: 'ぢ' };
+    var sm = { a: 'ゃ', u: 'ゅ', o: 'ょ' };
+    Object.keys(yo).forEach(function (c) { 'auo'.split('').forEach(function (v) { KANA[(c.length === 1 ? c + 'y' : c) + v] = yo[c] + sm[v]; }); });
+  })();
+  function romaji(str, final) {
+    var s = str.toLowerCase(), out = '', i = 0;
+    while (i < s.length) {
+      var c = s[i];
+      if (!/[a-z'\-]/.test(c)) { out += c; i++; continue; }
+      if (c === '-') { out += 'ー'; i++; continue; }
+      if (c === "'") { i++; continue; }
+      if (c === 'n') {
+        var nx = s[i + 1];
+        if (nx === 'n' || nx === "'") { out += 'ん'; i += 2; continue; }
+        if (nx === undefined) { if (final) { out += 'ん'; i++; continue; } break; }
+        if (!/[a-z]/.test(nx)) { out += 'ん'; i++; continue; }
+        if (!/[aiueoy]/.test(nx)) { out += 'ん'; i++; continue; }
+      }
+      if (c === s[i + 1] && /[bcdfghjkmpqrstvwxyz]/.test(c)) { out += 'っ'; i++; continue; }
+      var hit = null;
+      for (var n = 3; n >= 1; n--) { var k = s.substr(i, n); if (KANA[k]) { hit = k; break; } }
+      if (hit) { out += KANA[hit]; i += hit.length; continue; }
+      var tail = s.slice(i).replace(/[^a-z].*$/, '');
+      if (!final && tail === s.slice(i) && Object.keys(KANA).some(function (k) { return k.indexOf(tail) === 0; })) break;
+      out += c; i++;
+    }
+    return { kana: out, rest: s.slice(i) };
+  }
+  function kata(s) { return s.replace(/[ぁ-ゖ]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) + 0x60); }); }
+  /** Levenshtein alignment (as in blend.html): ops ok / sub / del (in a only) / ins (in b only). */
+  function align(a, b) {
+    var n = a.length, m = b.length, d = [], i, j;
+    for (i = 0; i <= n; i++) { d[i] = []; for (j = 0; j <= m; j++) d[i][j] = i === 0 ? j : (j === 0 ? i : 0); }
+    for (i = 1; i <= n; i++) for (j = 1; j <= m; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    var ops = []; i = n; j = m;
+    while (i > 0 || j > 0) {
+      if (i > 0 && j > 0 && d[i][j] === d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)) { ops.unshift({ op: a[i - 1] === b[j - 1] ? 'ok' : 'sub', a: i - 1, b: j - 1 }); i--; j--; }
+      else if (i > 0 && d[i][j] === d[i - 1][j] + 1) { ops.unshift({ op: 'del', a: i - 1 }); i--; }
+      else { ops.unshift({ op: 'ins', b: j - 1 }); j--; }
+    }
+    return ops;
+  }
+
+  function start(pack) {
+    var title = T(pack, 'title');
+    var B = KTBlock.init({ id: 'ime-convert', primitive: 'prim:ime-convert', title: title, set: pack.id });
+    document.title = title + ' · IME';
+    var JA = pack.ime === 'romaji', tlang = pack.lang === 'zh' ? 'zh-CN' : pack.lang;
+    var kinds = pack.kinds, kindIds = Object.keys(kinds);
+    var PUNCT = JA ? { '.': '。', ',': '、', '?': '？', '!': '！' } : { '.': '。', ',': '，', '?': '？', '!': '！' };
+    function child() { return B.variant === 'child'; }
+    var modes = [{ id: 'type', label: L('打出来', 'Type it') }, { id: 'judge', label: L('找同音错', 'Spot the mistakes') }, { id: 'blind', label: L('不看排序再打', 'Type with shuffled candidates') }];
+    var st = {
+      mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : 'type',
+      queue: [], qIdx: 0, item: null, msg: null, own: [], groupLog: {}, counts: { homophone: 0, keys: 0 }, newGroup: { n: 0, ok: 0 }
+    };
+    var ime;
+    function resetIme() { ime = { comp: '', cands: null, hi: 0, conv: false, seg: '', commits: [], order: {} }; }
+    resetIme();
+    var ui = KTBlock.chrome(B, { title: title, subtitle: T(pack, 'subtitle'), modes: modes, mode: st.mode,
+      onMode: function (m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m }); enterMode(); },
+      onVariant: function () { render(); } });
+    var bar = h('div', { class: 'kb-bar' });
+    var stage = h('div', { class: 'kb-card im-stage' });
+    var side = h('aside', { class: 'im-side' });
+    app.append(ui.header, h('main', { class: 'kb-main' }, [bar, h('div', { class: 'im-layout' }, [stage, side])]), ui.drawer);
+    B.emit('view', { mode: st.mode, set: pack.id });
+
+    /* ---- simulated IME ---- */
+    function output() { return ime.commits.map(function (c) { return c.text; }).join(''); }
+    function itemKey() { return (st.mode === 'blind' ? 'blind:' : 'type:') + st.item.id; }
+    function lookup(comp) {
+      var key = JA ? romaji(comp, true).kana : comp.replace(/'/g, '');
+      if (!key) return null;
+      for (var n = key.length; n >= 1; n--) {
+        var k = key.slice(0, n);
+        if (pack.dict[k]) {
+          var list = pack.dict[k].slice();
+          if (JA) [k, kata(k)].forEach(function (x) { if (list.indexOf(x) < 0) list.push(x); });
+          return { key: k, list: shuffled(k, list), rest: key.slice(n) };
+        }
+      }
+      return JA ? { key: key, list: shuffled(key, [key, kata(key)]), rest: '' } : { key: key, list: [], rest: '' };
+    }
+    function shuffled(k, list) {
+      if (st.mode !== 'blind') return list;
+      if (!ime.order[k]) ime.order[k] = KTBlock.shuffle(list);
+      return ime.order[k];
+    }
+    function refreshZh() { var r = lookup(ime.comp); ime.cands = r && r.list.length ? r : null; ime.hi = 0; }
+    function commit(text, info) {
+      var c = { text: text, keys: info.keys, reading: info.reading, cands: info.cands || null, idx: info.idx == null ? -1 : info.idx, raw: !!info.raw, at: output().length };
+      ime.commits.push(c);
+      B.emit('select', { item: itemKey(), keys: c.keys, candidates: c.cands, picked: text, index: c.idx, raw: c.raw });
+    }
+    function pick(i) {
+      var r = ime.cands; if (!r || !r.list[i]) return;
+      if (JA) {
+        commit(r.list[i], { keys: ime.keysTyped || ime.comp, reading: r.key, cands: r.list.slice(), idx: i });
+        ime.comp = r.rest; ime.conv = false; ime.cands = null; ime.keysTyped = '';
+      } else {
+        var consumed = consumeZh(r.key);
+        commit(r.list[i], { keys: consumed, reading: r.key, cands: r.list.slice(), idx: i });
+        refreshZh();
+      }
+      sync();
+    }
+    function consumeZh(key) {
+      var out = '', n = 0, i = 0;
+      while (i < ime.comp.length && n < key.length) { var ch = ime.comp[i]; out += ch; if (ch !== "'") n++; i++; }
+      ime.comp = ime.comp.slice(i).replace(/^'+/, '');
+      return out;
+    }
+    function convertJa() {
+      if (!ime.conv) {
+        var r = lookup(ime.comp); if (!r) return;
+        ime.keysTyped = ime.comp; ime.cands = r; ime.conv = true; ime.hi = 0;
+        B.emit('highlight', { item: itemKey(), convert: r.key, candidates: r.list });
+      } else ime.hi = (ime.hi + 1) % ime.cands.list.length;
+      sync();
+    }
+    function enter() {
+      if (JA) {
+        if (ime.conv) { pick(ime.hi); return; }
+        if (!ime.comp) return;
+        var k = romaji(ime.comp, true).kana;
+        commit(k, { keys: ime.comp, reading: k, raw: true }); ime.comp = '';
+      } else {
+        if (!ime.comp) return;
+        commit(ime.comp.replace(/'/g, ''), { keys: ime.comp, raw: true }); ime.comp = ''; ime.cands = null;
+      }
+      sync();
+    }
+    function punct(ch) {
+      if (JA) { if (ime.conv) pick(ime.hi); else if (ime.comp) enter(); }
+      else if (ime.comp) { if (ime.cands) pick(ime.hi); else enter(); }
+      commit(PUNCT[ch], { keys: ch, raw: true }); sync();
+    }
+    function backspaceOut() {
+      var c = ime.commits[ime.commits.length - 1]; if (!c) return;
+      var removed = c.text.slice(-1);
+      c.text = c.text.slice(0, -1); c.edited = true;
+      if (!c.text) ime.commits.pop();
+      B.emit('revise', { item: itemKey(), removed: removed, from: c.cands ? c.cands[c.idx] : c.keys });
+      sync();
+    }
+    var input;
+    function sync() {
+      if (input) input.value = ime.comp;
+      if (!JA && !ime.conv) refreshZh();
+      renderIme();
+    }
+    function onKey(e) {
+      if (e.isComposing) return;
+      var k = e.key;
+      if ((k === 'Enter' && (e.ctrlKey || e.metaKey))) { e.preventDefault(); submit(); return; }
+      if (k === ' ') { e.preventDefault(); if (JA) { if (ime.comp || ime.conv) convertJa(); } else if (ime.cands) pick(ime.hi); else if (ime.comp) enter(); return; }
+      if (k === 'Enter') { e.preventDefault(); if (!ime.comp && !ime.conv) submit(); else enter(); return; }
+      if (/^[1-9]$/.test(k) && ime.cands && (JA ? ime.conv : true)) { e.preventDefault(); pick(+k - 1); return; }
+      if (PUNCT[k]) { e.preventDefault(); punct(k); return; }
+      if ((k === 'ArrowDown' || k === 'ArrowRight') && ime.cands && (!JA || ime.conv)) { e.preventDefault(); ime.hi = (ime.hi + 1) % ime.cands.list.length; renderIme(); return; }
+      if ((k === 'ArrowUp' || k === 'ArrowLeft') && ime.cands && (!JA || ime.conv)) { e.preventDefault(); ime.hi = (ime.hi - 1 + ime.cands.list.length) % ime.cands.list.length; renderIme(); return; }
+      if (k === 'Escape') { e.preventDefault(); if (ime.conv) { ime.conv = false; ime.cands = null; } else { ime.comp = ''; ime.cands = null; } sync(); return; }
+      if (k === 'Backspace') {
+        if (ime.conv) { e.preventDefault(); ime.conv = false; ime.cands = null; sync(); return; }
+        if (!ime.comp) { e.preventDefault(); backspaceOut(); return; }
+      }
+    }
+    function onInput(e) {
+      var v = e.target.value, clean = '';
+      for (var i = 0; i < v.length; i++) {
+        var ch = v[i];
+        if (/[a-zA-Z'\-]/.test(ch) || (JA && /[ぁ-ヿ]/.test(ch))) { clean += ch.toLowerCase(); continue; }
+        ime.comp = clean;
+        if (ch === ' ') { if (JA) { if (ime.comp) convertJa(); } else { refreshZh(); if (ime.cands) pick(0); } clean = ime.comp; }
+        else if (/[1-9]/.test(ch)) { if (!JA) refreshZh(); if (ime.cands) pick(+ch - 1); clean = ime.comp; }
+        else if (PUNCT[ch]) { punct(ch); clean = ime.comp; }
+        else if (/[㐀-鿿]/.test(ch)) { st.msg = { t: L('看起来系统输入法开着。请切换到英文键盘，在这里打拼音或罗马字。', 'It looks like your system input method is on. Switch to an English keyboard and type pinyin or romaji here.'), tone: 'warn' }; }
+      }
+      if (ime.conv && clean !== ime.comp) { ime.conv = false; ime.cands = null; }
+      ime.comp = clean;
+      if (!JA) refreshZh();
+      if (st.msg && st.msg.tone === 'warn' && !/[㐀-鿿]/.test(v)) { /* keep */ }
+      input.value = ime.comp;
+      renderIme();
+    }
+
+    /* ---- items and checking ---- */
+    function enterMode() {
+      st.msg = null;
+      if (st.mode === 'judge') { buildJudge(); return; }
+      var src = st.mode === 'blind' ? pack.blind : pack.items;
+      st.queue = KTBlock.shuffle(src).slice(0, child() ? 4 : src.length); st.qIdx = 0;
+      loadItem();
+    }
+    function loadItem() {
+      st.item = st.queue[st.qIdx] || null; st.msg = null; st.result = null; st.hints = {}; resetIme();
+      if (st.item) B.emit('view', { item: itemKey(), mode: st.mode, group: st.item.group, newGroup: !!st.item.new });
+      else B.emit('complete', { mode: st.mode, items: st.queue.length });
+      render();
+      setTimeout(function () { if (input) input.focus(); }, 0);
+    }
+    function hint(n) {
+      if (st.hints[n] || st.mode === 'blind') return;
+      st.hints[n] = true; B.hint(itemKey(), n);
+      var tr = st.item.traps.filter(function (t) { return t.kind === 'homophone'; })[0] || st.item.traps[0];
+      if (n === 1) st.msg = { t: tr && tr.q ? T(tr, 'q') : L('想一想每个词在句子里是什么意思。', 'Think about what each word means in the sentence.'), tone: 'warn' };
+      if (n === 2) st.msg = { t: tr ? L('决定用哪个字的是“' + tr.ctx + '”。', 'The word that decides the character is “' + tr.ctx + '”.') : L('这一句没有特别要注意的地方。', 'Nothing special to watch in this sentence.'), tone: 'warn' };
+      if (n === 3) st.msg = { t: L('现在候选旁边会出现例词，对照例词选。', 'Example words now appear next to the candidates; compare them before choosing.'), tone: 'warn' };
+      render();
+    }
+    function trapHits(out, item) {
+      var tgt = item.target, ops = align(tgt.split(''), out.split('')), map = {};
+      ops.forEach(function (o) { if (o.op === 'ok' || o.op === 'sub') map[o.a] = o.b; });
+      var hits = [];
+      item.traps.forEach(function (t) {
+        var i = tgt.indexOf(t.at); if (i < 0) return;
+        var bs = []; for (var k = i; k < i + t.at.length; k++) if (map[k] != null) bs.push(map[k]);
+        var got = bs.length ? out.slice(Math.min.apply(null, bs), Math.max.apply(null, bs) + 1) : '';
+        var w = t.wrong.find(function (x) { return x === got || (x.length > 1 && out.indexOf(x) >= 0); });
+        if (w) hits.push({ t: t, got: w, pos: out.indexOf(w, bs.length ? Math.max(0, Math.min.apply(null, bs) - 2) : 0) });
+      });
+      return hits;
+    }
+    function commitAt(pos) { return ime.commits.find(function (c) { return pos >= c.at && pos < c.at + c.text.length; }); }
+    function submit() {
+      var it = st.item; if (!it || st.result && st.result.ok) return;
+      if (ime.comp || ime.conv) { st.msg = { t: L('输入条里还有没确定的字，先按 Enter 或选一个候选。', 'There is still unconfirmed input in the bar: press Enter or choose a candidate first.'), tone: 'warn' }; render(); return; }
+      var out = output(); if (!out) return;
+      var ok = out === it.target || (it.alt || []).indexOf(out) >= 0;
+      if (st.result && !st.result.ok) { B.hint(itemKey(), 'context-link'); B.emit('retry', { item: itemKey() }); }
+      var hits = ok ? [] : trapHits(out, it);
+      var firstPicks = hits.filter(function (x) { var c = commitAt(x.pos); return x.t.kind === 'homophone' && c && c.idx === 0; }).length;
+      var rec = B.attempt(itemKey(), { correct: ok, response: { output: out, target: it.target, traps: hits.map(function (x) { return { at: x.t.at, got: x.got, kind: x.t.kind }; }), commits: ime.commits.map(function (c) { return { keys: c.keys, picked: c.text, index: c.idx, raw: c.raw }; }), shuffled: st.mode === 'blind' } });
+      var firstTry = rec.attempts === 1;
+      if (firstTry) {
+        hits.forEach(function (x) { st.counts[x.t.kind] = (st.counts[x.t.kind] || 0) + 1; });
+        var g = st.groupLog[it.group] || (st.groupLog[it.group] = {});
+        var tr = it.traps.filter(function (t) { return t.kind === 'homophone'; })[0];
+        var chosen = tr ? (hits.find(function (x) { return x.t === tr; }) || { got: ok || out.indexOf(tr.at) >= 0 ? tr.at : '?' }).got : null;
+        g[st.mode] = { ok: ok, chosen: chosen, at: tr ? tr.at : null, item: it.id };
+        if (st.mode === 'blind' && it.new) { st.newGroup.n++; if (ok) st.newGroup.ok++; }
+        // keep the learner's own sentence for step 2
+        if (!ok) hits.forEach(function (x) { if (x.pos >= 0) st.own.push({ id: 'own:' + it.id + ':' + x.t.at, text: out, ms: x.pos, ml: x.got.length, kind: x.t.kind, cs: x.t.kind === 'homophone' ? out.indexOf(x.t.ctx) : -1, cl: x.t.ctx.length, fix: x.t.at, why: x.t.why, whyEn: x.t.whyEn }); });
+        else if (it.target === out) it.traps.filter(function (t) { return t.kind === 'homophone'; }).slice(0, 1).forEach(function (t) { st.own.push({ id: 'own:' + it.id + ':ok', text: out, ms: out.indexOf(t.at), ml: t.at.length, kind: 'ok', cs: -1, cl: 0, why: '这是你自己打对的句子。', whyEn: 'This is a sentence you typed correctly yourself.' }); });
+      }
+      st.result = { ok: ok, out: out, hits: hits, firstPicks: firstPicks };
+      if (st.mode === 'blind' && firstTry) { var gl = st.groupLog[it.group] || {}; B.emit('compare', { item: itemKey(), group: it.group, blind: gl.blind || null, type: gl.type || null }); }
+      if (ok) st.msg = { t: L('完全一致。', 'Exact match.') + ((it.alt || []).indexOf(out) >= 0 ? L('（这是另一种也可以的写法。）', ' (This is another accepted spelling.)') : '') + (rec.first.correct && !rec.first.assisted ? '' : L('（不是第一次就独立打对，已记录。）', ' (Not right independently the first time; that is on record.)')), tone: '' };
+      else {
+        var parts = [L('和目标不一致。', 'It does not match the target.')];
+        hits.forEach(function (x) { parts.push((x.t.kind === 'keys' ? L('读音打错：', 'Mistyped reading: ') : L('同音字选错：', 'Wrong homophone: ')) + x.got + ' → ' + x.t.at + L('。', '. ') + T(x.t, 'why') + (x.t.kind === 'keys' ? L('正确按键：', ' Right keys: ') + it.keys : '')); });
+        if (!hits.length) parts.push(L('红色波浪线是不一样的地方。', 'The red wavy lines show what differs.'));
+        if (firstPicks && firstPicks === hits.filter(function (x) { return x.t.kind === 'homophone'; }).length) parts.push(L('出错的地方你都选了第一个候选：你可能在按顺序选。', 'Where it went wrong you took the first candidate each time: you may be picking by position.'));
+        parts.push(st.mode === 'blind' || !hits.some(function (x) { return x.t.kind === 'homophone'; }) ? L('可以改了再提交，改对记为提示后完成。', 'You can fix it and submit again; a fix counts as assisted.') : L('看了连线以后改对，记为提示后完成。', 'A fix after seeing the link counts as assisted.'));
+        st.msg = { t: parts.join(L('', ' ')), tone: 'bad' };
+      }
+      render();
+    }
+
+    /* ---- judge (step 2) ---- */
+    function buildJudge() {
+      var own = st.own.slice(-4).map(function (o) { return { id: o.id, own: true, text: o.text, ms: o.ms, ml: o.ml, kind: o.kind, cs: o.cs, cl: o.cl, fix: o.fix, why: o.why, whyEn: o.whyEn }; });
+      var prep = KTBlock.shuffle(pack.judge).slice(0, Math.max(0, (child() ? 5 : 10) - own.length)).map(function (j) {
+        var ms = j.text.indexOf(j.mark), cs = j.ctx ? j.text.indexOf(j.ctx) : -1;
+        return { id: j.id, own: false, text: j.text, ms: ms, ml: j.mark.length, kind: j.kind, cs: cs, cl: j.ctx ? j.ctx.length : 0, fix: j.fix, why: j.why, whyEn: j.whyEn };
+      });
+      st.queue = KTBlock.shuffle(own.concat(prep)); st.qIdx = 0;
+      loadJudge();
+    }
+    function loadJudge() {
+      st.item = st.queue[st.qIdx] || null; st.msg = null; st.j = { kind: null, ctx: {}, done: false };
+      if (st.item) B.emit('view', { item: 'judge:' + st.item.id, mode: 'judge', own: st.item.own }); else B.emit('complete', { mode: 'judge', items: st.queue.length });
+      render();
+    }
+    function judgeSubmit() {
+      var it = st.item, j = st.j; if (!j.kind || j.done) return;
+      var clicked = Object.keys(j.ctx).map(Number);
+      if (j.kind === 'homophone' && !clicked.length) { st.msg = { t: L('判断为同音字选错时，要在句子里点出决定用字的那个词。', 'If it is a wrong homophone, click the word in the sentence that decides the character.'), tone: 'warn' }; render(); return; }
+      var kindOk = j.kind === it.kind;
+      var ctxOk = it.kind !== 'homophone' || it.cs < 0 || clicked.some(function (i) { return i >= it.cs && i < it.cs + it.cl; });
+      var ok = kindOk && ctxOk;
+      B.attempt('judge:' + it.id, { correct: ok, response: { kind: j.kind, expected: it.kind, ctxClicked: clicked, ctxOk: ctxOk, own: it.own, reverse: !!kinds[it.kind].reverse } });
+      j.done = true;
+      var expl = T(it, 'why');
+      st.msg = { t: (ok ? L('对。', 'Right. ') : !kindOk ? L('应该是“' + T(kinds[it.kind], 'label') + '”。', 'It is “' + T(kinds[it.kind], 'label') + '”. ') : L('类别对了，但决定用字的词是“' + it.text.substr(it.cs, it.cl) + '”。', 'The category is right, but the deciding word is “' + it.text.substr(it.cs, it.cl) + '”. ')) + expl + (it.fix ? L('改成：', ' Fix: ') + it.fix : ''), tone: ok ? (kinds[it.kind].reverse ? 'warn' : '') : 'bad' };
+      render();
+    }
+
+    /* ---- render ---- */
+    function renderIme() {
+      var box = stage.querySelector('.bar'); if (!box) return;
+      box.innerHTML = '';
+      var out = output();
+      if (!out && !ime.comp) box.append(h('span', { class: 'ph', text: L('打好的字会出现在这里', 'Your text appears here') }));
+      box.append(h('span', { class: 'out', lang: tlang, text: out }));
+      if (ime.comp) {
+        var compEl = h('span', { class: 'comp', lang: tlang });
+        if (JA) {
+          var r = romaji(ime.comp, false);
+          if (ime.conv && ime.cands) { compEl.append(h('span', { class: 'seg', text: ime.cands.list[ime.hi] }), ime.cands.rest); }
+          else compEl.append(r.kana + r.rest);
+        } else compEl.append(ime.comp);
+        box.append(compEl);
+      }
+      box.append(h('span', { class: 'caret', 'aria-hidden': 'true' }));
+      var cw = stage.querySelector('.cands'); if (!cw) return;
+      cw.innerHTML = '';
+      var show = ime.cands && (JA ? ime.conv : true);
+      if (show) {
+        var list = ime.cands.list.slice(0, 9);
+        list.forEach(function (c, i) {
+          cw.append(h('button', { class: 'cand' + (i === ime.hi ? ' hi' : ''), lang: tlang, 'aria-label': (i + 1) + ' ' + c + (pack.ex[c] ? '：' + pack.ex[c] : ''), onclick: function () { pick(i); input.focus(); } },
+            [h('span', { class: 'num', text: String(i + 1) }), c, st.hints[3] && pack.ex[c] ? h('span', { class: 'ex', text: pack.ex[c] }) : null]));
+        });
+      } else if (!JA && ime.comp) cw.append(h('span', { class: 'kb-note', text: L('没有候选：检查拼音（ü 打 v）。按 Enter 会直接上屏字母。', 'No candidates: check the pinyin (type ü as v). Enter puts the letters in as they are.') }));
+      else cw.append(h('span', { class: 'kb-note', text: JA ? L('空格：变换　数字：选候选　Enter：确定　Esc：取消变换　Ctrl+Enter：提交', 'Space: convert · digits: choose · Enter: confirm · Esc: cancel conversion · Ctrl+Enter: submit') : L('空格：选第一个（高亮的）候选　数字：选候选　Enter：上屏字母　Ctrl+Enter：提交', 'Space: take the highlighted candidate · digits: choose · Enter: letters as typed · Ctrl+Enter: submit') }));
+      var tr = stage.querySelector('.trace-wrap'); if (tr) { tr.innerHTML = ''; tr.append(traceEl(false)); }
+    }
+    function traceEl(force) {
+      var hidden = st.mode === 'blind' && !(st.result || force);
+      if (hidden) return h('p', { class: 'kb-note', text: L('这一步提交前不显示轨迹，候选顺序是打乱的。', 'In this step the trace stays hidden until you submit, and the candidates are shuffled.') });
+      var rows = ime.commits.filter(function (c) { return !c.raw || /[a-z]/i.test(c.keys); });
+      if (!rows.length) return h('p', { class: 'kb-note', text: L('轨迹：键入 → 候选 → 选定，会一行一行留在这里。', 'Trace: keys → candidates → choice, one line per conversion, kept here.') });
+      return h('ol', { class: 'trace', lang: tlang }, rows.map(function (c) {
+        var parts = [h('code', { text: c.keys }), ' → '];
+        if (c.cands) c.cands.slice(0, 9).forEach(function (x, i) { parts.push(h('span', { class: i === c.idx ? 'pk' : 'skip', text: x }), ' '); });
+        else parts.push(h('span', { class: 'skip', text: L('（没变换，直接上屏）', '(not converted, entered as typed)') }), ' ');
+        parts.push('→ ', h('b', { text: c.text }));
+        if (c.cands && c.cands.length > 1) parts.push(' ', h('span', { class: 'first0', text: c.idx === 0 ? L('第 1 个', '1st') : L('第 ' + (c.idx + 1) + ' 个', 'no. ' + (c.idx + 1)) }));
+        return h('li', {}, parts);
+      }));
+    }
+    function sentenceEl(text, marks) {
+      var box = h('div', { class: 'linkbox' });
+      var sent = h('div', { class: 'sent', lang: tlang }, text.split('').map(function (ch, i) {
+        var cls = 'ch' + (marks.cls[i] ? ' ' + marks.cls[i] : '');
+        return h('button', { class: cls, dataset: { i: i }, tabindex: marks.click ? null : '-1', 'aria-label': ch + (marks.cls[i] && marks.cls[i].indexOf('mark') >= 0 ? L('（标出处）', ' (marked)') : ''), onclick: marks.click ? function () { marks.click(i); } : null }, ch);
+      }));
+      box.append(sent);
+      if (marks.links && marks.links.length) requestAnimationFrame(function () { drawLinks(box, marks.links); });
+      return box;
+    }
+    function drawLinks(box, links) {
+      var r0 = box.getBoundingClientRect();
+      var NS = 'http://www.w3.org/2000/svg', svg = document.createElementNS(NS, 'svg');
+      links.forEach(function (l) {
+        var a = box.querySelector('[data-i="' + l[0] + '"]'), b = box.querySelector('[data-i="' + l[1] + '"]'); if (!a || !b) return;
+        var ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
+        var x1 = ra.left + ra.width / 2 - r0.left, y1 = ra.top - r0.top, x2 = rb.left + rb.width / 2 - r0.left, y2 = rb.top - r0.top;
+        var top = Math.min(y1, y2) - 26;
+        var p = document.createElementNS(NS, 'path');
+        p.setAttribute('d', 'M' + x1 + ' ' + y1 + ' C' + x1 + ' ' + top + ' ' + x2 + ' ' + top + ' ' + x2 + ' ' + y2);
+        svg.appendChild(p);
+      });
+      svg.setAttribute('aria-hidden', 'true');
+      box.appendChild(svg);
+    }
+    function renderBar() {
+      bar.innerHTML = '';
+      if (st.queue.length) bar.append(h('span', { class: 'kb-note', text: L('第 ' + Math.min(st.qIdx + 1, st.queue.length) + ' / ' + st.queue.length + ' 题', 'Item ' + Math.min(st.qIdx + 1, st.queue.length) + ' / ' + st.queue.length) }));
+      bar.append(h('button', { class: 'kb-btn', onclick: enterMode }, L('换一轮', 'New round')));
+    }
+    function nextItem() { st.qIdx++; if (st.mode === 'judge') loadJudge(); else loadItem(); }
+    function renderType() {
+      var it = st.item;
+      stage.append(h('p', { class: 'kb-prompt' }, [st.mode === 'blind' && it.new ? h('span', { class: 'flag', text: L('没练过的同音组', 'New homophone group') }) : null, st.mode === 'blind' && it.new ? ' ' : null, T(it, 'prompt')]));
+      stage.append(h('div', { class: 'tools' }, [h('span', { class: 'read', lang: tlang, text: it.read }),
+        h('button', { class: 'kb-btn', onclick: function () { if (!B.speak(it.target, pack.speech)) { st.msg = { t: L('这个浏览器不能播放语音。', 'This browser cannot play speech.'), tone: 'warn' }; render(); } B.emit('select', { item: itemKey(), listen: true }); } }, L('▶ 听句子', '▶ Listen'))]));
+      if (JA) stage.append(h('p', { class: 'kb-note', text: L('［］里的部分要变换成汉字或片假名，其余用平假名。', 'Convert the parts in ［］ to kanji or katakana; leave the rest in hiragana.') }));
+      stage.append(h('div', { class: 'bar', role: 'textbox', 'aria-readonly': 'true', 'aria-label': L('输入条', 'Input bar') }));
+      stage.append(h('div', { class: 'cands', role: 'listbox', 'aria-label': L('候选', 'Candidates') }));
+      input = h('input', { type: 'text', autocomplete: 'off', autocapitalize: 'off', autocorrect: 'off', spellcheck: 'false', inputmode: 'latin', 'aria-label': JA ? L('在这里用罗马字打', 'Type romaji here') : L('在这里打拼音', 'Type pinyin here'), onkeydown: onKey, oninput: onInput });
+      input.value = ime.comp;
+      stage.append(h('div', { class: 'typein' }, [h('label', { class: 'kb-note', text: JA ? L('罗马字：', 'Romaji:') : L('拼音：', 'Pinyin:') }), input,
+        h('button', { class: 'kb-btn primary', disabled: st.result && st.result.ok, onclick: submit }, L('提交', 'Submit')),
+        h('button', { class: 'kb-btn', onclick: function () { ime.commits.length && B.emit('revise', { item: itemKey(), cleared: true }); resetIme(); render(); input.focus(); } }, L('清空', 'Clear'))]));
+      if (st.mode !== 'blind' && !(st.result && st.result.ok)) stage.append(h('div', { class: 'tools' }, [
+        h('button', { class: 'kb-btn', disabled: !!st.hints[1], onclick: function () { hint(1); } }, L('提示 1：问一个问题', 'Hint 1: a question')),
+        h('button', { class: 'kb-btn', disabled: !!st.hints[2], onclick: function () { hint(2); } }, L('提示 2：决定用字的词', 'Hint 2: the deciding word')),
+        h('button', { class: 'kb-btn', disabled: !!st.hints[3], onclick: function () { hint(3); } }, L('提示 3：候选旁边放例词', 'Hint 3: example words by the candidates'))]));
+      if (st.result && !st.result.ok) {
+        var out = st.result.out, ops = align(it.target.split(''), out.split('')), cls = {}, links = [];
+        ops.forEach(function (o) { if (o.op === 'sub' || o.op === 'ins') cls[o.b] = 'miss'; });
+        st.result.hits.forEach(function (x) {
+          if (x.pos < 0) return;
+          for (var i = x.pos; i < x.pos + x.got.length; i++) cls[i] = 'mark';
+          var cpos = out.indexOf(x.t.ctx);
+          if (x.t.kind === 'homophone' && cpos >= 0 && cpos !== x.pos) { for (var k = cpos; k < cpos + x.t.ctx.length; k++) cls[k] = 'ctx'; links.push([x.pos, cpos]); }
+        });
+        stage.append(h('div', {}, [h('span', { class: 'kb-note', text: L('你打的：', 'What you typed:') }), sentenceEl(out, { cls: cls, links: links })]));
+      }
+      stage.append(st.msg ? h('div', { class: 'kb-feedback ' + (st.msg.tone || ''), role: 'status', text: st.msg.t }) : document.createTextNode(''));
+      if (st.mode === 'blind' && st.result) stage.append(compareEl());
+      stage.append(h('div', { class: 'trace-wrap' }));
+      stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn' + (st.result && st.result.ok ? ' primary' : ''), onclick: nextItem }, st.result && st.result.ok ? L('下一题 →', 'Next →') : L('跳过', 'Skip'))]));
+      renderIme();
+    }
+    function compareEl() {
+      var it = st.item, g = st.groupLog[it.group] || {}, b = g.blind, t = g.type;
+      if (!b || !b.at) return document.createTextNode('');
+      var line = L('没有频率排序时，你在「' + b.at + '」这里选的是「' + b.chosen + '」。', 'Without frequency order, where 「' + b.at + '」 belongs you chose 「' + b.chosen + '」. ') +
+        (t ? L('第 1 步同一组（' + it.group + '）有频率排序时，你选的是「' + t.chosen + '」（应为「' + t.at + '」）。', 'In step 1, same group (' + it.group + '), with frequency order you chose 「' + t.chosen + '」 (right: 「' + t.at + '」).') : (it.new ? L('这一组第 1 步没有练过。', 'This group was not practised in step 1.') : L('第 1 步还没有做这一组。', 'You have not done this group in step 1 yet.')));
+      return h('p', { class: 'cmp', lang: tlang, text: line });
+    }
+    function renderJudge() {
+      var it = st.item, j = st.j;
+      stage.append(h('p', { class: 'kb-prompt', text: it.own ? L('这是你在第 1 步打的句子。标出的地方是哪一类？', 'This is a sentence you typed in step 1. What kind is the marked spot?') : L('标出的地方是哪一类？', 'What kind is the marked spot?') }));
+      var cls = {}, links = [];
+      for (var i = it.ms; i < it.ms + it.ml; i++) cls[i] = 'mark' + (j.done && it.kind !== 'homophone' && it.kind !== 'keys' && it.kind !== 'script' ? ' okm' : '');
+      Object.keys(j.ctx).forEach(function (k) { if (!cls[k]) cls[k] = 'sel'; });
+      if (j.done && it.kind === 'homophone' && it.cs >= 0) { for (var c = it.cs; c < it.cs + it.cl; c++) cls[c] = 'ctx'; links.push([it.ms, it.cs]); }
+      stage.append(sentenceEl(it.text, { cls: cls, links: links, click: j.done ? null : function (i) { if (i >= it.ms && i < it.ms + it.ml) return; if (j.ctx[i]) delete j.ctx[i]; else j.ctx[i] = true; B.emit(j.ctx[i] ? 'connect' : 'disconnect', { item: 'judge:' + it.id, char: i }); render(); } }));
+      stage.append(h('div', { class: 'opts' }, kindIds.map(function (k, n) {
+        var c = 'opt' + (kinds[k].reverse ? ' rev' : '') + (j.done ? (k === it.kind ? ' right' : (j.kind === k ? ' wrongpick' : '')) : '');
+        return h('button', { class: c, 'aria-pressed': j.kind === k ? 'true' : 'false', disabled: j.done, onclick: function () { j.kind = k; B.emit('select', { item: 'judge:' + it.id, kind: k }); if (k !== 'homophone') judgeSubmit(); else { st.msg = { t: L('现在在句子里点出决定用字的那个词，再按“确定”。', 'Now click the word in the sentence that decides the character, then press Check.'), tone: 'warn' }; render(); } } },
+          [h('span', { class: 'num', text: String(n + 1) }), T(kinds[k], 'label')]);
+      })));
+      if (!j.done && j.kind === 'homophone') stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: judgeSubmit }, L('确定', 'Check'))]));
+      stage.append(st.msg ? h('div', { class: 'kb-feedback ' + (st.msg.tone || ''), role: 'status', text: st.msg.t }) : document.createTextNode(''));
+      stage.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn' + (j.done ? ' primary' : ''), onclick: nextItem }, j.done ? L('下一句 →', 'Next →') : L('跳过', 'Skip'))]));
+    }
+    function renderSide() {
+      side.innerHTML = '';
+      side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('出错的地方（第一次提交）', 'Mistakes (first submissions)') }),
+        h('div', { class: 'stat' }, [h('span', { text: L('同音字选错', 'Wrong homophone') }), h('b', { text: String(st.counts.homophone || 0) }), h('span', { text: L('读音打错', 'Mistyped reading') }), h('b', { text: String(st.counts.keys || 0) }),
+          h('span', { text: L('新同音组首次打对', 'New group, right first time') }), h('b', { text: st.newGroup.ok + ' / ' + st.newGroup.n })]),
+        h('p', { class: 'kb-note', text: L('这里只计数，不打分。', 'Counts only, no score.') })]));
+      side.append(h('div', { class: 'kb-card reverse' }, [h('b', { text: L('反向那一半', 'The reverse half') }),
+        h('p', { class: 'kb-note', text: L('第一个候选常常就是对的，有的地方两种写法都可以。不要养成“首选一定错、一定要改”的习惯。', 'The first candidate is often right, and sometimes both spellings are fine. Do not get into the habit of “the first one is always wrong, always change it”.') })]));
+      side.append(h('div', { class: 'kb-card' }, [h('p', { class: 'kb-note', text: L('这是模拟的输入法，候选来自数据包，不是真的输入法。按键规则尽量和常用输入法一致：', 'This is a simulated IME; the candidates come from the data pack, not a real input method. The keys follow common IMEs as closely as possible: ') + (JA ? L('ん 在元音和 y 前打 nn，を 打 wo，长音打 -。', 'ん before a vowel or y is nn, を is wo, the long-vowel mark is -.') : L('ü 打 v，空格选高亮的候选，数字键选其他候选。', 'ü is v, Space takes the highlighted candidate, number keys pick another.')) })]));
+    }
+    function render() {
+      renderBar(); stage.innerHTML = ''; input = null;
+      if (!st.item) {
+        stage.append(h('div', { class: 'done', text: st.queue.length ? '✔' : '📭' }), h('p', { class: 'kb-prompt', text: st.queue.length ? L('这一轮做完了。', 'Round finished.') : L('没有题。', 'Nothing here.') }),
+          h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: enterMode }, L('再来一轮', 'Another round'))]));
+      } else if (st.mode === 'judge') renderJudge(); else renderType();
+      renderSide();
+    }
+    document.addEventListener('keydown', function (e) {
+      if (st.mode !== 'judge' || !st.item || e.target.tagName === 'INPUT' || e.metaKey || e.ctrlKey || e.altKey) return;
+      var n = parseInt(e.key, 10);
+      if (n >= 1 && n <= kindIds.length && !st.j.done) { e.preventDefault(); stage.querySelectorAll('.opts .opt')[n - 1].click(); }
+      else if (e.key === 'Enter' && e.target === document.body) { var b = stage.querySelector('.tools .kb-btn.primary'); if (b) { e.preventDefault(); b.click(); } }
+    });
+
+    enterMode();
+  }
+})();
+</script>
+</body>
+</html>

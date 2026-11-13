@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Critical incident</title>
+<link rel="stylesheet" href="runtime/block.css">
+<style>
+  .ci-layout { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 16px; align-items: start; }
+  @media (max-width: 860px) { .ci-layout { grid-template-columns: 1fr; } }
+  .ci-main { display: grid; gap: 12px; min-width: 0; }
+  .ci-side { display: grid; gap: 12px; }
+  .kb-bar select { max-width: min(62vw, 340px); }
+  .rel { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px 14px; font-size: .92rem; }
+  .rel b { display: block; font-size: .75rem; color: var(--muted); }
+  .scale3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin-top: 4px; }
+  .scale3 span { height: 8px; border-radius: 4px; background: var(--line); }
+  .scale3 span.on { background: var(--accent); }
+  .scale3 + small { font-size: .75rem; color: var(--muted); }
+  .story { display: flex; flex-direction: column; gap: 8px; }
+  .ln { display: grid; gap: 4px; }
+  .ln.b { justify-items: end; }
+  .say { max-width: 88%; text-align: left; padding: 8px 12px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); font: inherit; }
+  .ln.a .say { border-bottom-left-radius: 4px; }
+  .ln.b .say { border-bottom-right-radius: 4px; background: var(--accent-soft); }
+  button.say:hover { border-color: var(--accent); }
+  .say .who { display: block; font-size: .72rem; color: var(--muted); }
+  .say .tl { font-size: 1.05rem; }
+  .say.picked { box-shadow: 0 0 0 3px var(--warn); }
+  .say.isprob { box-shadow: 0 0 0 3px var(--accent); }
+  .say.wrongpick { box-shadow: 0 0 0 3px var(--bad); }
+  .say.reactln { outline: 2px dashed var(--warn); outline-offset: 2px; }
+  .narr { align-self: center; color: var(--muted); font-size: .9rem; border: 1px dashed var(--line); border-radius: 10px; padding: 4px 10px; }
+  .inner { max-width: 88%; font-size: .88rem; padding: 6px 10px; border-radius: 10px; background: var(--warn-soft); }
+  .link { font-size: .8rem; color: var(--warn); }
+  .cats { display: grid; gap: 6px; }
+  .cats button { text-align: left; border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 7px 10px; }
+  .cats button .k { color: var(--muted); font-size: .75rem; margin-right: 6px; }
+  .cats button.right { background: var(--accent-soft); border-color: var(--accent); }
+  .cats button.wrongpick { background: var(--bad-soft); border-color: var(--bad); }
+  textarea { width: 100%; min-height: 64px; border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 8px; }
+  textarea:disabled { opacity: .8; }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; }
+  .two > div { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; }
+  .two b { display: block; font-size: .75rem; color: var(--muted); }
+  .opts { display: grid; gap: 8px; }
+  .opts button { text-align: left; border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 9px 12px; }
+  .opts button.right { background: var(--accent-soft); border-color: var(--accent); }
+  .opts button.wrongpick { background: var(--bad-soft); border-color: var(--bad); }
+  .flag { display: inline-block; font-size: .78rem; padding: 1px 8px; border-radius: 999px; background: var(--warn-soft); color: var(--warn); }
+  .dist { display: grid; gap: 4px; font-size: .85rem; }
+  .dist div { display: grid; grid-template-columns: 1fr auto; gap: 6px; }
+  .steps { display: flex; gap: 6px; flex-wrap: wrap; font-size: .8rem; }
+  .steps span { padding: 1px 8px; border-radius: 999px; border: 1px solid var(--line); }
+  .steps span.done { background: var(--accent-soft); border-color: var(--accent); }
+  .feat li { margin: 2px 0; }
+</style>
+<script src="runtime/block.js"></script>
+<script src="registry.js"></script>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function () {
+  'use strict';
+  var h = KTBlock.h, L = KTBlock.L, T = KTBlock.t;
+  var params = new URLSearchParams(location.search);
+  var setId = params.get('set') || 'culture-incident-en';
+  var reg = (window.KT_REGISTRY && KT_REGISTRY.packs) || {};
+  var entry = reg[setId] || {};
+  if (entry.block && entry.block !== 'culture-incident') { document.getElementById('app').textContent = L('数据包 ' + setId + ' 属于积木 ' + entry.block + '，不能在这里打开。', 'Data pack ' + setId + ' belongs to the block ' + entry.block + ' and cannot be opened here.'); return; }
+  var file = entry.file || 'data/culture-incident.js';   // fallback while the registry does not list the pack yet
+  var s = document.createElement('script');
+  s.src = file;
+  s.onload = function () { if (KT_DATA[setId]) start(KT_DATA[setId]); else document.getElementById('app').textContent = L('未知的数据包：', 'Unknown data pack: ') + setId; };
+  s.onerror = function () { document.getElementById('app').textContent = L('数据包加载失败：', 'Could not load the data pack: ') + file; };
+  document.head.appendChild(s);
+
+  var CATS = [
+    { id: 'wording', zh: '说法本身（用词、语法、直译）', en: 'The words themselves (word choice, grammar, literal translation)' },
+    { id: 'register', zh: '礼貌程度或称呼', en: 'Level of politeness or form of address' },
+    { id: 'topic', zh: '话题或时机（说了不合适的内容、在不合适的时候说）', en: 'Topic or timing (the wrong thing to bring up, or the wrong moment)' },
+    { id: 'implicature', zh: '没听出客套话或言外之意', en: 'Missing a ritual phrase or an unspoken meaning' },
+    { id: 'none', zh: '其实没有文化误会（个人情况、当天心情）', en: 'No cultural misunderstanding at all (personal reasons, a bad day)' }
+  ];
+  var CHILD_CATS = [
+    { id: 'wording', zh: '说的话', en: 'What was said' },
+    { id: 'register', zh: '说话的样子', en: 'How it was said' },
+    { id: 'none', zh: '其实没问题', en: 'Nothing was wrong' }
+  ];
+  function catName(id) { var c = (child() ? CHILD_CATS : CATS).filter(function (x) { return x.id === id; })[0] || CATS.filter(function (x) { return x.id === id; })[0]; return c ? L(c.zh, c.en) : id; }
+  var B = null;
+  function child() { return B && B.variant === 'child'; }
+
+  function start(pack) {
+    B = KTBlock.init({ id: 'culture-incident', primitive: 'prim:culture-incident', title: T(pack, 'title'), set: pack.id });
+    document.title = T(pack, 'title') + ' · Incident';
+    var modes = [{ id: 'spot', label: L('1 找问题点', '1 Find the moment') }, { id: 'why', label: L('2 判读原因', '2 Work out why') }, { id: 'rewrite', label: L('3 改写', '3 Rewrite') }];
+    function list() {
+      var l = pack.incidents.filter(function (x) { return child() ? x.child : !x.child; });
+      if (B.kc) { var k = l.filter(function (x) { return (x.kcs || []).indexOf(B.kc) >= 0; }); if (k.length) l = k; }
+      return l;
+    }
+    var st = { mode: modes.some(function (m) { return m.id === params.get('mode'); }) ? params.get('mode') : 'spot', idx: 0, rec: {}, hint: {} };
+    var focus = params.get('focus');
+    var fi = list().map(function (x) { return x.id; }).indexOf(focus); if (fi >= 0) st.idx = fi;
+    function rec(id) { return st.rec[id] || (st.rec[id] = { pick: null, expl: '', locked: false, now: '', cat: null, revealed: false, rw: '', rwPick: null, featSeen: false }); }
+    var ui = KTBlock.chrome(B, { title: T(pack, 'title'), subtitle: T(pack, 'subtitle'), modes: modes, mode: st.mode,
+      onMode: function (m) { st.mode = m; ui.setMode(m); B.emit('view', { mode: m, incident: cur().id }); render(); },
+      onVariant: function () { st.idx = 0; render(); } });
+    var bar = h('div', { class: 'kb-bar' });
+    var mainCol = h('div', { class: 'ci-main' });
+    var side = h('aside', { class: 'ci-side' });
+    document.getElementById('app').append(ui.header, h('main', { class: 'kb-main' }, [bar, h('div', { class: 'ci-layout' }, [mainCol, side])]), ui.drawer);
+    function cur() { var l = list(); if (st.idx >= l.length) st.idx = 0; return l[st.idx]; }
+    B.emit('view', { mode: st.mode, set: pack.id, incident: cur().id });
+    function speak(t) { if (t) B.speak(t, pack.speech); }
+    function probOk(inc, i) { return inc.problem.indexOf(i) >= 0; }
+
+    /* ---- relationship card ---- */
+    function relCard(inc, showScales) {
+      var r = inc.rel || {};
+      function scale(v, lo, hi) { return [h('div', { class: 'scale3', role: 'img', 'aria-label': (v + 1) + '/3' }, [0, 1, 2].map(function (i) { return h('span', { class: i <= v ? 'on' : '' }); })), h('small', { text: lo + ' → ' + hi })]; }
+      var p = inc.people;
+      var kids = [
+        h('div', {}, [h('b', { text: p.a.name, lang: pack.lang }), T(p.a, 'role')]),
+        h('div', {}, [h('b', { text: p.b.name, lang: pack.lang }), T(p.b, 'role')]),
+        h('div', {}, [h('b', { text: L('场合', 'Setting') }), T(r, 'setting')])
+      ];
+      if (showScales) {
+        kids.push(h('div', {}, [h('b', { text: L('上下', 'Status') })].concat(scale(r.up, L('平级', 'equal'), L('对方高很多', 'they are much senior')))));
+        kids.push(h('div', {}, [h('b', { text: L('亲疏', 'Closeness') })].concat(scale(r.close, L('陌生', 'strangers'), L('很熟', 'close')))));
+        kids.push(h('div', {}, [h('b', { text: L('场合', 'Formality') })].concat(scale(r.formal, L('随便', 'casual'), L('正式', 'formal')))));
+      }
+      return h('div', { class: 'kb-card rel' }, kids);
+    }
+
+    /* ---- the incident as speech bubbles ---- */
+    function story(inc, opts) {
+      opts = opts || {};
+      var R = rec(inc.id);
+      var box = h('div', { class: 'kb-card story' });
+      var upto = opts.replace ? opts.replace.line : inc.lines.length - 1;
+      inc.lines.forEach(function (ln, i) {
+        if (i > upto) return;   // a rewrite replays the incident only up to the rewritten line, then the new reply
+        if (ln.who === 'n') { box.append(h('div', { class: 'narr', text: T(ln, 'narr') })); return; }
+        var p = inc.people[ln.who];
+        var cls = 'say';
+        var rewritten = opts.replace && opts.replace.line === i;
+        if (rewritten) cls += ' isprob';
+        else if (opts.marks && R.pick === i) cls += probOk(inc, i) ? ' isprob' : ' wrongpick';
+        else if (opts.marks && opts.showProb && probOk(inc, i)) cls += ' isprob';
+        else if (opts.pickable && R.pick === i) cls += ' picked';
+        if (opts.marks && opts.showProb && !opts.replace && i === inc.react && !probOk(inc, i)) cls += ' reactln';
+        var text = rewritten ? opts.replace.text : ln.text;
+        var inner = [h('span', { class: 'who' }, [h('span', { lang: pack.lang, text: p.name }), rewritten ? L('（改写后）', ' (rewritten)') : null]), h('span', { class: 'tl', lang: pack.lang, text: text })];
+        var el = opts.pickable ? h('button', { class: cls, 'aria-pressed': R.pick === i ? 'true' : 'false', onclick: function () { R.pick = i; B.emit('highlight', { incident: inc.id, line: i }); render(); } }, inner)
+          : h('div', { class: cls }, inner);
+        var wrap = h('div', { class: 'ln ' + ln.who }, [el]);
+        if (opts.marks && opts.showProb && !opts.replace && inc.problem[0] === i && inc.react !== undefined) wrap.append(h('span', { class: 'link', text: L('↳ 对方的反应在第 ', '↳ the other person reacts in line ') + (inc.react + 1) + L(' 句', '') }));
+        if (opts.inner && opts.inner[ln.who] === i) wrap.append(h('div', { class: 'inner', text: T(inc.inner, ln.who) }));
+        box.append(wrap);
+        if (rewritten && opts.replace.reply) {
+          var other = ln.who === 'a' ? 'b' : 'a';
+          box.append(h('div', { class: 'ln ' + other }, [h('div', { class: 'say' }, [h('span', { class: 'who', lang: pack.lang, text: inc.people[other].name }), h('span', { class: 'tl', lang: pack.lang, text: opts.replace.reply })])]));
+        }
+      });
+      return box;
+    }
+    function lastLineOf(inc, who) { var k = -1; inc.lines.forEach(function (l, i) { if (l.who === who) k = i; }); return k; }
+    function stepsBar(inc) {
+      var R = rec(inc.id), sid = inc.id;
+      return h('div', { class: 'steps' }, [
+        h('span', { class: R.locked ? 'done' : '', text: L('1 问题点', '1 Moment') }),
+        h('span', { class: B.status('c:' + sid) && B.status('c:' + sid) !== 'revealed' ? 'done' : '', text: L('2 原因', '2 Why') }),
+        h('span', { class: B.status('r:' + sid) && B.status('r:' + sid) !== 'revealed' ? 'done' : '', text: L('3 改写', '3 Rewrite') })]);
+    }
+    function hintTools(inc, id) {
+      var Hs = st.hint[inc.id] || (st.hint[inc.id] = 0);
+      var row = h('div', { class: 'tools' });
+      if (Hs < 1) row.append(h('button', { class: 'kb-btn', onclick: function () { st.hint[inc.id] = 1; B.hint(id, 1); render(); } }, L('提示 1', 'Hint 1')));
+      else if (Hs < 2) row.append(h('button', { class: 'kb-btn', onclick: function () { st.hint[inc.id] = 2; B.hint(id, 2); render(); } }, L('提示 2：关系刻度', 'Hint 2: relationship scales')));
+      else if (Hs < 3 && st.mode === 'why') row.append(h('button', { class: 'kb-btn', onclick: function () { st.hint[inc.id] = 3; B.hint(id, 3); render(); } }, L('提示 3：先看一方的想法', 'Hint 3: one side’s thoughts')));
+      return row;
+    }
+    function hintText(inc) {
+      var Hs = st.hint[inc.id] || 0, out = [];
+      if (Hs >= 1) out.push(h('p', { class: 'kb-feedback warn', text: L('想一想：对方听到这句时，以为你想做什么？', 'Think: when they heard this, what did they think you were trying to do?') }));
+      if (Hs >= 3) out.push(h('p', { class: 'kb-feedback warn', text: L('', '') + inc.people.b.name + L('：', ': ') + T(inc.inner, 'b') }));
+      return out;
+    }
+
+    /* ---- step 1 ---- */
+    function renderSpot(inc) {
+      var R = rec(inc.id), id = 'p:' + inc.id;
+      mainCol.append(relCard(inc, (st.hint[inc.id] || 0) >= 2));
+      mainCol.append(h('p', { class: 'kb-prompt', text: child() ? L('读一读。从哪一句开始，有人不太舒服了？点那一句。', 'Read it. From which line does someone start to feel uncomfortable? Click that line.') : L('读这段事件。从哪一句开始不对劲？点那一句，再写一句你的解释。解释提交后锁定。', 'Read the incident. From which line does it start to go wrong? Click that line, then write one sentence explaining it. Your explanation is locked once you submit it.') }));
+      mainCol.append(story(inc, { pickable: !R.locked, marks: R.locked, showProb: R.locked }));
+      mainCol.append.apply(mainCol, hintText(inc));
+      var ta = h('textarea', { disabled: R.locked, 'aria-label': L('我的解释', 'My explanation'), placeholder: L('我觉得问题是……', 'I think the problem is…'), oninput: function (e) { R.expl = e.target.value; btn.disabled = R.pick === null || !R.expl.trim(); } });
+      ta.value = R.expl;
+      var btn = h('button', { class: 'kb-btn primary', disabled: R.locked || R.pick === null || !R.expl.trim(), onclick: function () {
+        R.locked = true;
+        B.emit('explain', { incident: inc.id, explanation: R.expl, line: R.pick });
+        B.attempt(id, { correct: probOk(inc, R.pick), response: { line: R.pick, explanation: R.expl } });
+        render();
+      } }, L('提交（锁定）', 'Submit (locks)'));
+      mainCol.append(h('div', { class: 'kb-card' }, [h('b', { text: L('我的解释（第一次判断）', 'My explanation (first judgement)') }), ta, h('div', { class: 'tools' }, [btn, R.pick === null && !R.locked ? h('span', { class: 'kb-note', text: L('先点一句。', 'Click a line first.') }) : null]), R.locked ? null : hintTools(inc, id)]));
+      if (R.locked) {
+        var ok = probOk(inc, R.pick);
+        mainCol.append(h('p', { class: 'kb-feedback' + (B.status(id) === 'wrong' ? ' bad' : ''), text: (ok ? L('对，问题从这一句开始。', 'Yes, the trouble starts with this line.') : L('问题点其实是蓝框的那一句。', 'The trouble actually starts with the line in the blue frame.')) + L('原因先不揭晓，去第 2 步判断。', ' The reason is not revealed yet; work it out in step 2.') }));
+        mainCol.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: function () { st.mode = 'why'; ui.setMode('why'); B.emit('view', { mode: 'why', incident: inc.id }); render(); } }, L('去第 2 步 →', 'On to step 2 →'))]));
+      }
+    }
+
+    /* ---- step 2 ---- */
+    function renderWhy(inc) {
+      var R = rec(inc.id), id = 'c:' + inc.id;
+      if (!R.locked) { mainCol.append(h('div', { class: 'kb-card' }, [h('p', { class: 'kb-prompt', text: L('先在第 1 步点出问题点，写下你的解释。', 'First find the moment and write your explanation in step 1.') }), h('button', { class: 'kb-btn primary', onclick: function () { st.mode = 'spot'; ui.setMode('spot'); render(); } }, L('去第 1 步', 'Go to step 1'))])); return; }
+      mainCol.append(relCard(inc, (st.hint[inc.id] || 0) >= 2));
+      var innerAt = R.revealed ? { a: lastLineOf(inc, 'a'), b: lastLineOf(inc, 'b') } : null;
+      mainCol.append(story(inc, { marks: true, showProb: true, inner: innerAt }));
+      mainCol.append.apply(mainCol, hintText(inc));
+      var stt = B.status(id), answered = stt && stt !== 'revealed';
+      var cats = child() ? CHILD_CATS : CATS;
+      mainCol.append(h('p', { class: 'kb-prompt', text: L('问题出在哪一类？', 'What kind of problem is it?') }));
+      mainCol.append(h('div', { class: 'cats', role: 'group' }, cats.map(function (c, k) {
+        var cls = answered && c.id === inc.cat ? 'right' : (answered && R.cat === c.id ? 'wrongpick' : '');
+        return h('button', { class: cls, disabled: answered, onclick: function () { pickCat(inc, c.id); } }, [h('span', { class: 'k', text: String(k + 1) }), L(c.zh, c.en)]);
+      })));
+      if (answered) {
+        var lineOk = probOk(inc, R.pick);
+        mainCol.append(h('p', { class: 'kb-feedback' + (B.status(id) === 'wrong' ? ' bad' : ''), text: L('这一题的归类：', 'This one: ') + catName(inc.cat) + L('。', '. ') + T(inc, 'why') + (R.cat === inc.cat && !lineOk ? L('（类别对了，但第 1 步点的句子不对，所以这一题不算对。）', ' (The kind is right, but the line you picked in step 1 was not, so this does not count as right.)') : '') }));
+        if (inc.cat === 'none') mainCol.append(h('p', {}, [h('span', { class: 'flag', text: L('反向那一半', 'The other half') }), ' ', L('不是每次别扭都是文化差异：这次是个人情况。一次经历说明不了“他们都这样”。', 'Not every awkward moment is cultural: this one was personal. One experience does not show that “they are all like that”.')]));
+        if (T(inc, 'variant')) mainCol.append(h('p', { class: 'kb-note', text: L('也有人会这样：', 'Others might respond like this: ') + T(inc, 'variant') }));
+      } else mainCol.append(hintTools(inc, id));
+      // reveal the two inner monologues (only after the first explanation is locked, which it is here)
+      if (!R.revealed) mainCol.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () {
+        R.revealed = true;
+        if (!B.status(id)) B.hint(id, 'reveal-before-category');
+        B.emit('reveal', { incident: inc.id, inner: true });
+        render();
+      } }, L('揭示两个人心里的想法', 'Reveal what both people were thinking')), !answered ? h('span', { class: 'kb-note', text: L('先选类别再揭示，才算独立判断。', 'Choose a kind before revealing for it to count as independent.') }) : null]));
+      if (R.revealed) {
+        var now = h('textarea', { 'aria-label': L('现在的解释', 'My explanation now'), oninput: function (e) { R.now = e.target.value; } }); now.value = R.now;
+        mainCol.append(h('div', { class: 'two' }, [
+          h('div', {}, [h('b', { text: L('第一次的解释（已锁定）', 'First explanation (locked)') }), R.expl]),
+          h('div', {}, [h('b', { text: L('现在的解释', 'My explanation now') }), now, h('button', { class: 'kb-btn', onclick: function () { B.emit('revise', { incident: inc.id, explanation: R.now }); now.blur(); } }, L('保存', 'Save'))])]));
+      }
+      if (answered) mainCol.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: function () { st.mode = 'rewrite'; ui.setMode('rewrite'); B.emit('view', { mode: 'rewrite', incident: inc.id }); render(); } }, L('去第 3 步：改写 →', 'On to step 3: rewrite →'))]));
+    }
+    function pickCat(inc, cid) {
+      var R = rec(inc.id), id = 'c:' + inc.id, stt = B.status(id);
+      if (stt && stt !== 'revealed') return;
+      R.cat = cid;
+      if (child()) { B.attempt(id, { correct: cid === inc.cat, selfReport: true, response: { cat: cid, actual: inc.cat, discussion: true } }); render(); return; }
+      B.attempt(id, { correct: cid === inc.cat && probOk(inc, R.pick), response: { cat: cid, actual: inc.cat, lineRight: probOk(inc, R.pick) } });
+      render();
+    }
+
+    /* ---- step 3 ---- */
+    function renderRewrite(inc) {
+      var R = rec(inc.id), id = 'r:' + inc.id, rw = inc.rewrite;
+      var c2 = B.status('c:' + inc.id);
+      if (!c2 || c2 === 'revealed') { mainCol.append(h('div', { class: 'kb-card' }, [h('p', { class: 'kb-prompt', text: L('先在第 2 步判断原因。', 'First work out why in step 2.') }), h('button', { class: 'kb-btn primary', onclick: function () { st.mode = R.locked ? 'why' : 'spot'; ui.setMode(st.mode); render(); } }, L('去前一步', 'Go back a step'))])); return; }
+      mainCol.append(relCard(inc, false));
+      var target = inc.lines[rw.line];
+      var stt = B.status(id), answered = stt && stt !== 'revealed';
+      var chosen = R.rwPick !== null ? rw.options[R.rwPick] : null;
+      mainCol.append(story(inc, { marks: true, showProb: true, replace: answered && chosen && !chosen.act ? { line: rw.line, text: chosen.text, reply: chosen.reply } : null }));
+      mainCol.append(h('div', { class: 'kb-card' }, [h('b', { text: L('要改的是这一句：', 'The line to rewrite: ') }), h('span', { lang: pack.lang, text: target.text }),
+        h('p', { class: 'kb-note', text: L('原来想做到的事：', 'What it was meant to do: ') + T(rw, 'purpose') + L('。改写要保留这个目的，改动要落在第 2 步的那一类上。', '. Keep that purpose, and make the change in the kind of problem from step 2.') })]));
+      // 1) the learner's own rewrite (optional, never scored)
+      var ta = h('textarea', { lang: pack.lang, disabled: answered, 'aria-label': L('我的改写', 'My rewrite'), oninput: function (e) { R.rw = e.target.value; } }); ta.value = R.rw;
+      mainCol.append(h('div', { class: 'kb-card' }, [h('b', { text: L('先自己改一句（可以不写）', 'First rewrite it yourself (optional)') }), ta,
+        h('p', { class: 'kb-note', text: L('页面不评判你写的句子，只在你选完下面的候选以后，帮你对照可以接受的改写有什么特点。', 'The page does not judge your sentence; after you choose among the options below, it helps you compare it with what an acceptable rewrite has.') })]));
+      // 2) choose among pre-written rewrites (scored, deterministic)
+      mainCol.append(h('p', { class: 'kb-prompt', text: inc.cat === 'none' ? L('这里需要改吗？选最合适的做法：', 'Does anything need changing? Choose the best option:') : L('选一个最合适的改写：', 'Choose the best rewrite:') }));
+      var order = R.order || (R.order = KTBlock.shuffle(rw.options.map(function (o, i) { return i; })));
+      mainCol.append(h('div', { class: 'opts', role: 'group' }, order.map(function (i, k) {
+        var o = rw.options[i], cls = answered && o.kind === 'good' ? 'right' : (answered && R.rwPick === i ? 'wrongpick' : '');
+        return h('button', { class: cls, disabled: answered, lang: o.act ? null : pack.lang, onclick: function () {
+          R.rwPick = i;
+          if (R.rw.trim()) B.emit('submit', { incident: inc.id, ownRewrite: R.rw, selfReport: true });
+          B.attempt(id, { correct: o.kind === 'good', response: { option: i, kind: o.kind, own: R.rw || null, featuresSeenFirst: R.featSeen } });
+          render();
+        } }, (k + 1) + '. ' + (o.act ? T(o, 'act') : o.text));
+      })));
+      if (answered && chosen) {
+        var kindNote = { good: inc.cat === 'none' ? L('可以接受：这里本来就没有误会，不需要大改。', 'Acceptable: there was no misunderstanding here, so nothing big needs changing.') : L('可以接受：保留了目的，改动落在了这一类上。', 'Acceptable: it keeps the purpose and changes the right thing.'),
+          politeOnly: L('只加了礼貌词，问题本身没改。', 'It only adds polite words; the problem itself is unchanged.'),
+          avoid: L('回避了：不说这件事，原来的目的没有了。', 'It dodges: by not saying it, the original purpose is lost.'),
+          other: L('改动没有落在这一类上。', 'The change is not in the kind of problem from step 2.'),
+          over: L('改过头了：这里本来不需要改。', 'Overdone: nothing needed changing here.') }[chosen.kind] || '';
+        mainCol.append(h('p', { class: 'kb-feedback' + (chosen.kind === 'good' ? '' : ' bad'), text: kindNote + ' ' + (T(chosen, 'why') || '') }));
+        if (chosen.kind !== 'good') {
+          var good = rw.options.filter(function (o) { return o.kind === 'good'; });
+          mainCol.append(h('div', { class: 'kb-card' }, [h('b', { text: L('可以接受的改写：', 'Acceptable rewrites:') }), h('ul', {}, good.map(function (o) { return h('li', { lang: o.act ? null : pack.lang, text: o.act ? T(o, 'act') : o.text }); }))]));
+        }
+      }
+      // 3) features of an acceptable rewrite, to check the learner's own sentence
+      var feats = T(rw, 'features') || [];
+      var showFeat = answered || R.featSeen;
+      if (!showFeat) mainCol.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn', onclick: function () { R.featSeen = true; if (!answered) B.hint(id, 'features'); render(); } }, L('看可接受改写的特点（算辅助）', 'See what an acceptable rewrite has (counts as help)'))]));
+      else if (feats.length) {
+        mainCol.append(h('div', { class: 'kb-card' }, [h('b', { text: R.rw.trim() ? L('拿你自己写的那句对照：', 'Check your own sentence against this:') : L('可以接受的改写有这些特点：', 'An acceptable rewrite has these features:') }),
+          h('ul', { class: 'feat' }, feats.map(function (f) { return h('li', { text: f }); })),
+          R.rw.trim() && answered ? h('div', { class: 'tools' }, [
+            h('button', { class: 'kb-btn', onclick: function () { B.attempt('o:' + inc.id, { correct: true, selfReport: true, response: { own: R.rw } }); render(); } }, L('我的改写都做到了', 'My rewrite does all of this')),
+            h('button', { class: 'kb-btn', onclick: function () { B.attempt('o:' + inc.id, { correct: false, selfReport: true, response: { own: R.rw } }); render(); } }, L('还差一点', 'Not quite yet'))]) : null,
+          R.rw.trim() && B.status('o:' + inc.id) ? h('p', { class: 'kb-note', text: L('已记为自评。', 'Recorded as a self-rating.') }) : null]));
+      }
+      if (answered) mainCol.append(h('div', { class: 'tools' }, [h('button', { class: 'kb-btn primary', onclick: function () { st.idx = (st.idx + 1) % list().length; st.mode = 'spot'; ui.setMode('spot'); B.emit('view', { mode: 'spot', incident: cur().id }); render(); } }, L('下一个事件 →', 'Next incident →'))]));
+    }
+
+    /* ---- bar and side ---- */
+    function renderBar() {
+      bar.innerHTML = '';
+      var l = list();
+      bar.append(h('label', { class: 'kb-variant' }, [L('事件 ', 'Incident '), h('select', { onchange: function (e) { st.idx = +e.target.value; B.emit('highlight', { incident: cur().id }); render(); } },
+        l.map(function (x, i) { return h('option', { value: i, text: (i + 1) + '. ' + T(x, 'title'), selected: i === st.idx }); }))]));
+      bar.append(stepsBar(cur()));
+    }
+    function renderSide() {
+      side.innerHTML = '';
+      var l = list();
+      var picks = l.map(function (x) { return rec(x.id).cat; }).filter(Boolean);
+      var counts = {}; picks.forEach(function (c) { counts[c] = (counts[c] || 0) + 1; });
+      var cats = child() ? CHILD_CATS : CATS;
+      var same = picks.length >= 4 && Object.keys(counts).length === 1;
+      side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('你选过的类别', 'Kinds you have chosen') }),
+        h('div', { class: 'dist' }, cats.map(function (c) { return h('div', {}, [h('span', { text: L(c.zh, c.en) }), h('span', { text: String(counts[c.id] || 0) })]); })),
+        same ? h('p', { class: 'kb-feedback warn', text: L('你每一题都选了同一类。这一组里各类都有，至少有一题其实没有文化误会。', 'You have chosen the same kind every time. This set has every kind, and at least one has no cultural misunderstanding at all.') }) : null,
+        h('p', { class: 'kb-note', text: B.kc && l.length < pack.incidents.filter(function (x) { return !!x.child === child(); }).length ? L('按知识点筛选后剩 ' + l.length + ' 个事件，类别不一定齐全。', 'Filtered by knowledge point: ' + l.length + ' incidents, which may not cover every kind.') : (child() ? L('儿童版以讨论为主：类别记为自评。', 'The child version is for discussion: the kind is recorded as a self-rating.') : L('这一组 ' + l.length + ' 个事件，各类都有，其中有的其实没有文化误会。', 'This set has ' + l.length + ' incidents covering every kind; some involve no cultural misunderstanding.')) })]));
+      side.append(h('div', { class: 'kb-card' }, [h('b', { text: L('读的时候记住', 'Keep in mind') }), h('p', { class: 'kb-note', text: L('每个事件只讲这两个人、这个场合。同一种语言的人之间，年龄、地区、关系不同，说法也不同；事件里的人不代表他们的整个文化。', 'Each incident is about these two people in this setting. Speakers of the same language differ by age, region and relationship; nobody here stands for a whole culture.') }),
+        h('p', { class: 'kb-note', text: (cur().kcs || []).join(' · ') })]));
+    }
+    function render() {
+      renderBar();
+      mainCol.innerHTML = '';
+      var inc = cur();
+      mainCol.append(h('h2', { class: 'kb-prompt', text: T(inc, 'title') }));
+      if (st.mode === 'spot') renderSpot(inc); else if (st.mode === 'why') renderWhy(inc); else renderRewrite(inc);
+      renderSide();
+    }
+    document.addEventListener('keydown', function (e) {
+      if (/^(SELECT|INPUT|TEXTAREA)$/.test(e.target.tagName) || e.metaKey || e.ctrlKey || e.altKey) return;
+      var k = parseInt(e.key, 10); if (!(k >= 1)) return;
+      if (st.mode === 'why') { var cats = child() ? CHILD_CATS : CATS; if (k <= cats.length && rec(cur().id).locked) pickCat(cur(), cats[k - 1].id); }
+    });
+    render();
+  }
+})();
+</script>
+</body>
+</html>

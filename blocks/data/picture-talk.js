@@ -95,7 +95,9 @@ KT_SCENES["park"] = (function () {
     '</svg>';
   return {
     id: 'park', viewBox: [800, 520], svg: svg,
+    svgTitleEn: 'Park scene',   // English text for the <title> inside the SVG (the Chinese one is authored in the markup)
     alt: '公园：左边一棵大树，树上有鸟，树下睡着一只狗，树旁边停着自行车；左下角的桌子上有一杯咖啡，桌子下面有一只猫；中间长椅上坐着一位女士；右边是湖，湖上两只鸭子；远处三个孩子踢足球；前面一个男孩坐着看书，一个戴帽子的女孩在打电话。',
+    altEn: 'A park. On the left is a big tree, with a bird in it, a dog asleep under it and a bike parked next to it. On the table at the bottom left there is a cup of coffee, and under the table there is a cat. A woman is sitting on the bench in the middle. On the right is a lake with two ducks on it. In the distance three children are playing football. At the front a boy sits reading a book, and a girl in a hat is talking on the phone.',
     childEls: ['dog', 'cat', 'ducks', 'kids', 'boy', 'tree'],
     els: {
       tree: { kind: 'thing', count: 1, hit: [68, 66, 234, 290], anchor: { on: [182, 96], 'in': [140, 236], under: [140, 398], next_to: [300, 384] } },
@@ -122,11 +124,11 @@ KT_DATA["picture-en"] = {
     "机器语音读整句的停顿和连读不一定自然；任何一句都可以加 audio 换成真人录音"
   ],
   id: 'picture-en', lang: 'en', speech: 'en-US', scene: 'park',
-  title: '看图说话：公园',
-  subtitle: '一幅图，四件事：听句子指图、先自己说或写再对图核对、判断别人说得对不对、对着图提问。页面听不到你的声音，口头说的部分由你自己或搭档判断。',
+  title: '看图说话：公园', titleEn: 'Picture talk: the park',
+  subtitle: '一幅图，四件事：听句子指图、先自己说或写再对图核对、判断别人说得对不对、对着图提问。页面听不到你的声音，口头说的部分由你自己或搭档判断。', subtitleEn: 'One picture, four things to do: hear a sentence and point to it, say or write first and then check against the picture, judge whether someone else\'s description is right, and ask questions about the picture. The page cannot hear your voice; the spoken parts are judged by you or a partner.',
   kcs: ['kt:en-skill-describe-picture', 'kt:en-there-is-are'],
-  sourceNote: '标 ★ 的句子取自课程知识点 kt:en-skill-describe-picture 的例句或形式。',
-  readingLabel: null, glossLabel: '中文',
+  sourceNote: '标 ★ 的句子取自课程知识点 kt:en-skill-describe-picture 的例句或形式。', sourceNoteEn: 'Sentences marked ★ come from the examples or forms of the curriculum knowledge point kt:en-skill-describe-picture.',
+  readingLabel: null, glossLabel: '中文', glossLabelEn: 'Chinese',
   els: {
     tree: { name: 'tree', names: ['tree'], say: 'the tree', models: [{ t: "There's a big tree in the park.", s: 'there', g: '公园里有一棵大树。', src: 'kc', x: ['has'] }] },
     bird: { name: 'bird', names: ['bird'], say: 'the bird', models: [{ t: 'There is a bird in the tree.', s: 'there', g: '树上有一只鸟。', x: ['are', 'under'] }, { t: 'A bird is sitting in the tree.', s: 'prog', g: '一只鸟停在树上。', x: ['sit'] }] },
@@ -146,35 +148,35 @@ KT_DATA["picture-en"] = {
   modelOrder: ['tree', 'dog', 'bird', 'bike', 'table', 'cup', 'cat', 'bench', 'woman', 'lake', 'ducks', 'kids', 'boy', 'girl'],
   /* 指认：图上没有的东西（反向那一半：听到的不一定都在图上） */
   absent: [
-    { id: 'horse', t: 'There is a horse next to the lake.', g: '湖边有一匹马。', why: '图上没有马。' },
-    { id: 'man', t: 'A man is riding a bike.', g: '一个男人在骑自行车。', why: '图上有自行车，但没有人在骑，它停在树旁边。' }
+    { id: 'horse', t: 'There is a horse next to the lake.', g: '湖边有一匹马。', why: '图上没有马。', whyEn: 'There is no horse in the picture.' },
+    { id: 'man', t: 'A man is riding a bike.', g: '一个男人在骑自行车。', why: '图上有自行车，但没有人在骑，它停在树旁边。', whyEn: 'There is a bike in the picture, but nobody is riding it; it is parked next to the tree.' }
   ],
   judgeCats: [
-    { id: 'ok', label: '说得对' }, { id: 'place', label: '位置不对' }, { id: 'count', label: '数量不对' },
-    { id: 'state', label: '动作和状态弄混了' }, { id: 'infer', label: '图上看不出来（没有，或只是推断）' }
+    { id: 'ok', label: '说得对', labelEn: 'Correct' }, { id: 'place', label: '位置不对', labelEn: 'Wrong position' }, { id: 'count', label: '数量不对', labelEn: 'Wrong number' },
+    { id: 'state', label: '动作和状态弄混了', labelEn: 'Action and state mixed up' }, { id: 'infer', label: '图上看不出来（没有，或只是推断）', labelEn: 'Cannot be seen in the picture (not there, or only an inference)' }
   ],
   judge: [
-    { id: 'j1', t: 'There are two ducks on the lake.', el: 'ducks', v: 'ok', why: '两只鸭子，在湖上，都对得上。', child: true },
-    { id: 'j2', t: 'The cat is on the table.', el: 'cat', v: 'place', claim: { prep: 'on', ref: 'table' }, why: '猫在桌子下面。半透明的那只是“按这句话它应该在的地方”。', fix: 'The cat is under the table.', child: true },
-    { id: 'j3', t: 'There are four children.', el: 'kids', v: 'count', why: '数一数：三个，不是四个。', fix: 'There are three children.', child: true },
-    { id: 'j4', t: 'The girl is putting on a hat.', el: 'girl', v: 'state', why: 'putting on 是“正在把帽子戴上”这个动作；图上帽子已经在头上了，是状态，用 wearing。', fix: 'The girl is wearing a hat.' },
-    { id: 'j5', t: 'The woman is tired.', el: 'woman', v: 'infer', why: '累不累从图上看不出来，这是推断。要说就用 maybe 标出来，不能当事实说。', fix: 'Maybe the woman is tired.' },
-    { id: 'j6', t: 'A dog is sleeping under the tree.', el: 'dog', v: 'ok', why: '狗、在睡觉、在树下，都对得上。', child: true },
-    { id: 'j7', t: 'A man is riding the bike.', el: 'bike', v: 'infer', why: '图上没有男人，也没有人在骑车。图上没有的不能当事实说。', fix: 'There is a bike next to the tree.' }
+    { id: 'j1', t: 'There are two ducks on the lake.', el: 'ducks', v: 'ok', why: '两只鸭子，在湖上，都对得上。', whyEn: 'Two ducks, on the lake: it all matches.', child: true },
+    { id: 'j2', t: 'The cat is on the table.', el: 'cat', v: 'place', claim: { prep: 'on', ref: 'table' }, why: '猫在桌子下面。半透明的那只是“按这句话它应该在的地方”。', whyEn: 'The cat is under the table. The see-through one shows where it would be if this sentence were true.', fix: 'The cat is under the table.', child: true },
+    { id: 'j3', t: 'There are four children.', el: 'kids', v: 'count', why: '数一数：三个，不是四个。', whyEn: 'Count them: three, not four.', fix: 'There are three children.', child: true },
+    { id: 'j4', t: 'The girl is putting on a hat.', el: 'girl', v: 'state', why: 'putting on 是“正在把帽子戴上”这个动作；图上帽子已经在头上了，是状态，用 wearing。', whyEn: 'putting on is the action of getting the hat onto her head; in the picture the hat is already on her head, which is a state, so use wearing.', fix: 'The girl is wearing a hat.' },
+    { id: 'j5', t: 'The woman is tired.', el: 'woman', v: 'infer', why: '累不累从图上看不出来，这是推断。要说就用 maybe 标出来，不能当事实说。', whyEn: 'You cannot tell from the picture whether she is tired; this is an inference. If you say it, mark it with maybe; do not state it as fact.', fix: 'Maybe the woman is tired.' },
+    { id: 'j6', t: 'A dog is sleeping under the tree.', el: 'dog', v: 'ok', why: '狗、在睡觉、在树下，都对得上。', whyEn: 'A dog, sleeping, under the tree: it all matches.', child: true },
+    { id: 'j7', t: 'A man is riding the bike.', el: 'bike', v: 'infer', why: '图上没有男人，也没有人在骑车。图上没有的不能当事实说。', whyEn: 'There is no man in the picture, and nobody is riding the bike. What is not in the picture cannot be stated as fact.', fix: 'There is a bike next to the tree.' }
   ],
   /* 提问：每个问题带一条场景事实；页面先拿它和图的元素清单核对，对不上的问题不会出现 */
   questions: [
-    { id: 'q1', el: 'dog', intent: '问狗在哪儿', k: ['Where', 'is', 'the dog', '?'], a: "It's under the tree.", ag: '在树下。', fact: { type: 'where', el: 'dog', prep: 'under', ref: 'tree' }, child: true },
-    { id: 'q2', el: 'cat', intent: '问猫在哪儿', k: ['Where', 'is', 'the cat', '?'], a: "It's under the table.", ag: '在桌子下面。', fact: { type: 'where', el: 'cat', prep: 'under', ref: 'table' }, child: true },
-    { id: 'q3', el: 'ducks', intent: '问有几只鸭子', k: ['How many', 'ducks', 'are', 'there', '?'], a: 'There are two.', ag: '有两只。', fact: { type: 'count', el: 'ducks', n: 2 }, child: true },
-    { id: 'q4', el: 'kids', intent: '问有几个孩子', k: ['How many', 'children', 'are', 'there', '?'], a: 'There are three.', ag: '有三个。', fact: { type: 'count', el: 'kids', n: 3 } },
-    { id: 'q5', el: 'boy', intent: '问男孩在做什么', k: ['What', 'is', 'the boy', 'doing', '?'], a: "He's reading a book.", ag: '他在看书。', fact: { type: 'doing', el: 'boy', act: 'read' }, child: true },
-    { id: 'q6', el: 'kids', intent: '问孩子们在做什么', k: ['What', 'are', 'the children', 'doing', '?'], a: "They're playing football.", ag: '他们在踢足球。', fact: { type: 'doing', el: 'kids', act: 'play-football' } },
-    { id: 'q7', el: 'bird', intent: '问树上有没有鸟', k: ['Is', 'there', 'a bird', 'in the tree', '?'], a: 'Yes, there is.', ag: '有。', fact: { type: 'exists', el: 'bird', prep: 'in', ref: 'tree', value: true } },
-    { id: 'q8', el: 'dog', intent: '问长椅上有没有狗', k: ['Is', 'there', 'a dog', 'on the bench', '?'], a: "No, there isn't. The dog is under the tree.", ag: '没有。狗在树下。', fact: { type: 'exists', el: 'dog', prep: 'on', ref: 'bench', value: false } },
-    { id: 'q9', el: 'cup', intent: '问杯子在哪儿', k: ['Where', 'is', 'the cup', '?'], a: "It's on the table.", ag: '在桌子上。', fact: { type: 'where', el: 'cup', prep: 'on', ref: 'table' } }
+    { id: 'q1', el: 'dog', intent: '问狗在哪儿', intentEn: 'Ask where the dog is', k: ['Where', 'is', 'the dog', '?'], a: "It's under the tree.", ag: '在树下。', fact: { type: 'where', el: 'dog', prep: 'under', ref: 'tree' }, child: true },
+    { id: 'q2', el: 'cat', intent: '问猫在哪儿', intentEn: 'Ask where the cat is', k: ['Where', 'is', 'the cat', '?'], a: "It's under the table.", ag: '在桌子下面。', fact: { type: 'where', el: 'cat', prep: 'under', ref: 'table' }, child: true },
+    { id: 'q3', el: 'ducks', intent: '问有几只鸭子', intentEn: 'Ask how many ducks there are', k: ['How many', 'ducks', 'are', 'there', '?'], a: 'There are two.', ag: '有两只。', fact: { type: 'count', el: 'ducks', n: 2 }, child: true },
+    { id: 'q4', el: 'kids', intent: '问有几个孩子', intentEn: 'Ask how many children there are', k: ['How many', 'children', 'are', 'there', '?'], a: 'There are three.', ag: '有三个。', fact: { type: 'count', el: 'kids', n: 3 } },
+    { id: 'q5', el: 'boy', intent: '问男孩在做什么', intentEn: 'Ask what the boy is doing', k: ['What', 'is', 'the boy', 'doing', '?'], a: "He's reading a book.", ag: '他在看书。', fact: { type: 'doing', el: 'boy', act: 'read' }, child: true },
+    { id: 'q6', el: 'kids', intent: '问孩子们在做什么', intentEn: 'Ask what the children are doing', k: ['What', 'are', 'the children', 'doing', '?'], a: "They're playing football.", ag: '他们在踢足球。', fact: { type: 'doing', el: 'kids', act: 'play-football' } },
+    { id: 'q7', el: 'bird', intent: '问树上有没有鸟', intentEn: 'Ask whether there is a bird in the tree', k: ['Is', 'there', 'a bird', 'in the tree', '?'], a: 'Yes, there is.', ag: '有。', fact: { type: 'exists', el: 'bird', prep: 'in', ref: 'tree', value: true } },
+    { id: 'q8', el: 'dog', intent: '问长椅上有没有狗', intentEn: 'Ask whether there is a dog on the bench', k: ['Is', 'there', 'a dog', 'on the bench', '?'], a: "No, there isn't. The dog is under the tree.", ag: '没有。狗在树下。', fact: { type: 'exists', el: 'dog', prep: 'on', ref: 'bench', value: false } },
+    { id: 'q9', el: 'cup', intent: '问杯子在哪儿', intentEn: 'Ask where the cup is', k: ['Where', 'is', 'the cup', '?'], a: "It's on the table.", ag: '在桌子上。', fact: { type: 'where', el: 'cup', prep: 'on', ref: 'table' } }
   ],
-  askTip: '英语问句里 is / are 要放到主语前面：Where is the dog?，不是 Where the dog is?',
+  askTip: '英语问句里 is / are 要放到主语前面：Where is the dog?，不是 Where the dog is?', askTipEn: 'In an English question, is / are goes before the subject: Where is the dog?, not Where the dog is?',
   /* 受控词表：只用这些词做确定性核对 */
   parse: {
     order: 'prep-ref', det: '(?:the|a|an)\\s+',
@@ -190,14 +192,15 @@ KT_DATA["picture-en"] = {
   isPosition: '\\b(on|under|below|in|inside|next to|beside|by|near|behind|in front of|between|left|right)\\b',
   isAction: '\\b\\w+ing\\b',
   traps: [
-    { re: '\\b(park|picture|lake|tree|table|bench)\\s+(has|have)\\b', msg: '说“某处有某物”用 There is / are …，不用 has（*The park has a dog）。have 只表示“谁拥有”。' },
-    { re: '\\bthere\\s+(is|\'s|’s)\\s+(two|three|four|five|some|many)\\b', msg: 'there is 后面是复数：两个以上用 There are …（*There is two cats）。' },
-    { re: '^(?!.*\\b(is|are|am|was|were|\'s|’s|\'re|’re)\\b).*\\b(?!morning|evening|something|nothing|anything|building)\\w{3,}ing\\b', msg: '进行时漏了 be：A boy is running，不是 *A boy running。' },
-    { re: '\\bin\\s+the\\s+(table|bench)\\b', msg: '在表面上用 on：on the table / on the bench。' }
+    { re: '\\b(park|picture|lake|tree|table|bench)\\s+(has|have)\\b', msg: '说“某处有某物”用 There is / are …，不用 has（*The park has a dog）。have 只表示“谁拥有”。', msgEn: 'To say that something is in a place, use There is / are …, not has (*The park has a dog). have only says who owns something.' },
+    { re: '\\bthere\\s+(is|\'s|’s)\\s+(two|three|four|five|some|many)\\b', msg: 'there is 后面是复数：两个以上用 There are …（*There is two cats）。', msgEn: 'A plural follows there is here: for two or more, use There are … (*There is two cats).' },
+    { re: '^(?!.*\\b(is|are|am|was|were|\'s|’s|\'re|’re)\\b).*\\b(?!morning|evening|something|nothing|anything|building)\\w{3,}ing\\b', msg: '进行时漏了 be：A boy is running，不是 *A boy running。', msgEn: 'The progressive is missing be: A boy is running, not *A boy running.' },
+    { re: '\\bin\\s+the\\s+(table|bench)\\b', msg: '在表面上用 on：on the table / on the bench。', msgEn: 'For something on a surface, use on: on the table / on the bench.' }
   ],
   frames: ['There is a … on / under / next to the …', 'There are two / three …', 'A … is …ing …'],
   areaHint: ['左边还有什么？', '上面还有什么？', '右边的水上呢？', '最前面的人在做什么？'],
-  partner: '和搭档玩：一个人看着图问，另一个人回答；或者一个人描述，另一个人不看图，照着画或摆。口头说的页面听不到，不记分。'
+  areaHintEn: ['What else is on the left?', 'What else is at the top?', 'What about on the water on the right?', 'What are the people at the very front doing?'],
+  partner: '和搭档玩：一个人看着图问，另一个人回答；或者一个人描述，另一个人不看图，照着画或摆。口头说的页面听不到，不记分。', partnerEn: 'Play with a partner: one looks at the picture and asks, the other answers; or one describes while the other, without looking at the picture, draws or arranges it from the description. The page cannot hear what is said aloud and keeps no score for it.'
 };
 
 KT_DATA["picture-zh"] = {
@@ -208,11 +211,11 @@ KT_DATA["picture-zh"] = {
     "机器语音可能读错轻声和儿化；任何一句都可以加 audio 换成真人录音"
   ],
   id: 'picture-zh', lang: 'zh', speech: 'zh-CN', scene: 'park',
-  title: '看图说话：公园（中文）',
-  subtitle: '一幅图，四件事：听句子指图、先自己说或写再对图核对、判断别人说得对不对、对着图提问。页面听不到你的声音，口头说的部分由你自己或搭档判断。',
+  title: '看图说话：公园（中文）', titleEn: 'Picture talk: the park (Chinese)',
+  subtitle: '一幅图，四件事：听句子指图、先自己说或写再对图核对、判断别人说得对不对、对着图提问。页面听不到你的声音，口头说的部分由你自己或搭档判断。', subtitleEn: 'One picture, four things to do: hear a sentence and point to it, say or write first and then check against the picture, judge whether someone else\'s description is right, and ask questions about the picture. The page cannot hear your voice; the spoken parts are judged by you or a partner.',
   kcs: ['kt:zh-skill-describe-picture', 'kt:zh-existential-sentences'],
-  sourceNote: '标 ★ 的句子取自课程知识点 kt:zh-skill-describe-picture、kt:zh-existential-sentences 的例句或形式。',
-  readingLabel: '拼音', glossLabel: 'English',
+  sourceNote: '标 ★ 的句子取自课程知识点 kt:zh-skill-describe-picture、kt:zh-existential-sentences 的例句或形式。', sourceNoteEn: 'Sentences marked ★ come from the examples or forms of the curriculum knowledge points kt:zh-skill-describe-picture and kt:zh-existential-sentences.',
+  readingLabel: '拼音', readingLabelEn: 'pinyin', glossLabel: 'English',
   els: {
     tree: { name: '树', names: ['大树', '树'], say: '树', r: 'shù', models: [{ t: '公园里有一棵大树。', r: 'Gōngyuán li yǒu yì kē dà shù.', s: 'you', g: 'There is a big tree in the park.', k: ['公园里', '有', '一棵', '大树'], x: ['在'], alt: ['大树在公园里'] }] },
     bird: { name: '鸟', names: ['小鸟', '鸟'], say: '鸟', r: 'niǎo', models: [{ t: '树上有一只鸟。', r: 'Shù shang yǒu yì zhī niǎo.', s: 'you', g: 'There is a bird in the tree.', k: ['树上', '有', '一只', '鸟'], x: ['在', '树'], alt: ['鸟在树上', '一只鸟在树上'] }] },
@@ -231,21 +234,21 @@ KT_DATA["picture-zh"] = {
   },
   modelOrder: ['tree', 'bird', 'dog', 'bike', 'table', 'cup', 'cat', 'bench', 'woman', 'lake', 'ducks', 'kids', 'boy', 'girl'],
   absent: [
-    { id: 'horse', t: '湖边有一匹马。', r: 'Hú biān yǒu yì pǐ mǎ.', g: 'There is a horse by the lake.', why: '图上没有马。' },
-    { id: 'man', t: '一个男人在骑自行车。', r: 'Yí ge nánrén zài qí zìxíngchē.', g: 'A man is riding a bike.', why: '图上有自行车，但没有人在骑，它停在树旁边。' }
+    { id: 'horse', t: '湖边有一匹马。', r: 'Hú biān yǒu yì pǐ mǎ.', g: 'There is a horse by the lake.', why: '图上没有马。', whyEn: 'There is no horse in the picture.' },
+    { id: 'man', t: '一个男人在骑自行车。', r: 'Yí ge nánrén zài qí zìxíngchē.', g: 'A man is riding a bike.', why: '图上有自行车，但没有人在骑，它停在树旁边。', whyEn: 'There is a bike in the picture, but nobody is riding it; it is parked next to the tree.' }
   ],
   judgeCats: [
-    { id: 'ok', label: '说得对' }, { id: 'place', label: '位置不对' }, { id: 'count', label: '数量不对' },
-    { id: 'state', label: '动作和状态弄混了' }, { id: 'infer', label: '图上看不出来（没有，或只是推断）' }
+    { id: 'ok', label: '说得对', labelEn: 'Correct' }, { id: 'place', label: '位置不对', labelEn: 'Wrong position' }, { id: 'count', label: '数量不对', labelEn: 'Wrong number' },
+    { id: 'state', label: '动作和状态弄混了', labelEn: 'Action and state mixed up' }, { id: 'infer', label: '图上看不出来（没有，或只是推断）', labelEn: 'Cannot be seen in the picture (not there, or only an inference)' }
   ],
   judge: [
-    { id: 'j1', t: '湖里有两只鸭子。', r: 'Hú li yǒu liǎng zhī yāzi.', el: 'ducks', v: 'ok', why: '两只鸭子，在湖里，都对得上。', child: true },
-    { id: 'j2', t: '猫在桌子上边。', r: 'Māo zài zhuōzi shàngbian.', el: 'cat', v: 'place', claim: { prep: 'on', ref: 'table' }, why: '猫在桌子下边。半透明的那只是“按这句话它应该在的地方”。', fix: '猫在桌子下边。', child: true },
-    { id: 'j3', t: '图上有四个孩子。', r: 'Tú shang yǒu sì ge háizi.', el: 'kids', v: 'count', why: '数一数：三个，不是四个。', fix: '图上有三个孩子。', child: true },
-    { id: 'j4', t: '女孩正在戴帽子。', r: 'Nǚhái zhèngzài dài màozi.', el: 'girl', v: 'state', why: '“正在戴”是把帽子往头上戴的动作；图上帽子已经在头上了，是状态，用“戴着”。', fix: '女孩戴着帽子。' },
-    { id: 'j5', t: '那位女士很累。', r: 'Nà wèi nǚshì hěn lèi.', el: 'woman', v: 'infer', why: '累不累从图上看不出来，这是推断。要说就用“好像”标出来，不能当事实说。', fix: '那位女士好像很累。' },
-    { id: 'j6', t: '狗在树下睡觉。', r: 'Gǒu zài shù xià shuìjiào.', el: 'dog', v: 'ok', why: '狗、在睡觉、在树下，都对得上。', child: true },
-    { id: 'j7', t: '一个男人在骑自行车。', r: 'Yí ge nánrén zài qí zìxíngchē.', el: 'bike', v: 'infer', why: '图上没有男人，也没有人在骑车。图上没有的不能当事实说。', fix: '树旁边停着一辆自行车。' }
+    { id: 'j1', t: '湖里有两只鸭子。', r: 'Hú li yǒu liǎng zhī yāzi.', el: 'ducks', v: 'ok', why: '两只鸭子，在湖里，都对得上。', whyEn: 'Two ducks, in the lake: it all matches.', child: true },
+    { id: 'j2', t: '猫在桌子上边。', r: 'Māo zài zhuōzi shàngbian.', el: 'cat', v: 'place', claim: { prep: 'on', ref: 'table' }, why: '猫在桌子下边。半透明的那只是“按这句话它应该在的地方”。', whyEn: 'The cat is under the table (桌子下边). The see-through one shows where it would be if this sentence were true.', fix: '猫在桌子下边。', child: true },
+    { id: 'j3', t: '图上有四个孩子。', r: 'Tú shang yǒu sì ge háizi.', el: 'kids', v: 'count', why: '数一数：三个，不是四个。', whyEn: 'Count them: three, not four.', fix: '图上有三个孩子。', child: true },
+    { id: 'j4', t: '女孩正在戴帽子。', r: 'Nǚhái zhèngzài dài màozi.', el: 'girl', v: 'state', why: '“正在戴”是把帽子往头上戴的动作；图上帽子已经在头上了，是状态，用“戴着”。', whyEn: '“正在戴” is the action of putting the hat on; in the picture the hat is already on her head, which is a state, so use “戴着”.', fix: '女孩戴着帽子。' },
+    { id: 'j5', t: '那位女士很累。', r: 'Nà wèi nǚshì hěn lèi.', el: 'woman', v: 'infer', why: '累不累从图上看不出来，这是推断。要说就用“好像”标出来，不能当事实说。', whyEn: 'You cannot tell from the picture whether she is tired; this is an inference. If you say it, mark it with “好像”; do not state it as fact.', fix: '那位女士好像很累。' },
+    { id: 'j6', t: '狗在树下睡觉。', r: 'Gǒu zài shù xià shuìjiào.', el: 'dog', v: 'ok', why: '狗、在睡觉、在树下，都对得上。', whyEn: 'A dog, sleeping, under the tree: it all matches.', child: true },
+    { id: 'j7', t: '一个男人在骑自行车。', r: 'Yí ge nánrén zài qí zìxíngchē.', el: 'bike', v: 'infer', why: '图上没有男人，也没有人在骑车。图上没有的不能当事实说。', whyEn: 'There is no man in the picture, and nobody is riding the bike. What is not in the picture cannot be stated as fact.', fix: '树旁边停着一辆自行车。' }
   ],
   questions: [
     { id: 'q1', el: 'dog', intent: 'Ask where the dog is', k: ['狗', '在', '哪儿', '？'], r: 'Gǒu zài nǎr?', a: '在树下。', ar: 'Zài shù xià.', ag: 'Under the tree.', fact: { type: 'where', el: 'dog', prep: 'under', ref: 'tree' }, child: true },
@@ -258,7 +261,7 @@ KT_DATA["picture-zh"] = {
     { id: 'q8', el: 'dog', intent: 'Ask whether there is a dog on the bench', k: ['长椅上', '有', '狗', '吗', '？'], r: 'Chángyǐ shang yǒu gǒu ma?', a: '没有。狗在树下。', ar: 'Méiyǒu. Gǒu zài shù xià.', ag: 'No. The dog is under the tree.', fact: { type: 'exists', el: 'dog', prep: 'on', ref: 'bench', value: false } },
     { id: 'q9', el: 'cup', intent: 'Ask what is on the table', k: ['桌子上', '有', '什么', '？'], r: 'Zhuōzi shang yǒu shénme?', a: '桌子上有一杯咖啡。', ar: 'Zhuōzi shang yǒu yì bēi kāfēi.', ag: 'There is a cup of coffee on the table.', fact: { type: 'where', el: 'cup', prep: 'on', ref: 'table' } }
   ],
-  askTip: '中文问句不用换语序：把要问的那一部分换成“哪儿／几／什么”，或者句末加“吗”。',
+  askTip: '中文问句不用换语序：把要问的那一部分换成“哪儿／几／什么”，或者句末加“吗”。', askTipEn: 'A Chinese question keeps the word order of the statement: replace the part you are asking about with “哪儿／几／什么”, or add “吗” at the end of the sentence.',
   parse: {
     order: 'ref-prep', det: '',
     preps: { on: ['上边', '上面', '上'], under: ['下边', '下面', '底下', '下'], 'in': ['里边', '里面', '里'], next_to: ['旁边', '边上', '边'] },
@@ -267,21 +270,23 @@ KT_DATA["picture-zh"] = {
     inferMark: '(好像|可能|也许|看起来|大概|我觉得|应该)'
   },
   structures: [
-    { id: 'zhe', label: '处所＋V着＋数量＋名词', re: '[放坐停挂戴站躺拿穿]着' },
-    { id: 'you', label: '处所＋有＋数量＋名词', re: '(上|下|里|边|旁边|上边|下边|里边|上面|下面|里面)有' },
-    { id: 'prog', label: '（正）在＋动词', re: '(正在|在)(看|打|踢|睡|玩|做|跑|吃|喝|读|说|走|游)' },
-    { id: 'zai', label: '名词＋在＋处所', re: '在.{1,5}(上|下|里|旁边|边)' }
+    { id: 'zhe', label: '处所＋V着＋数量＋名词', labelEn: 'place + V着 + number + noun', re: '[放坐停挂戴站躺拿穿]着' },
+    { id: 'you', label: '处所＋有＋数量＋名词', labelEn: 'place + 有 + number + noun', re: '(上|下|里|边|旁边|上边|下边|里边|上面|下面|里面)有' },
+    { id: 'prog', label: '（正）在＋动词', labelEn: '(正)在 + verb', re: '(正在|在)(看|打|踢|睡|玩|做|跑|吃|喝|读|说|走|游)' },
+    { id: 'zai', label: '名词＋在＋处所', labelEn: 'noun + 在 + place', re: '在.{1,5}(上|下|里|旁边|边)' }
   ],
   isPosition: '(上|下|里|旁边|左边|右边|中间|前边|后边|前面|后面|边)',
   isAction: '(正在|在(看|打|踢|睡|玩|做|跑|吃|喝|读)|着)',
   traps: [
-    { re: '(桌子|长椅|树|椅子)有', msg: '处所后面要加方位词：桌子上有……，不说 *桌子有一本书。' },
-    { re: '^有.+在.+(上|下|里|旁边|边)', msg: '这是英语 There is … on … 的语序。中文把处所放前面：桌子上有一杯咖啡，不说 *有一杯咖啡在桌子上。' },
-    { re: '正在(戴|穿)', msg: '“正在戴”是把它戴上去的动作。已经戴在头上是状态，用“戴着”。' },
-    { re: '^在.+[放挂坐停]着', msg: '存现句句首的处所不加“在”：桌子上放着一本书，不说 *在桌子上放着一本书。' },
-    { re: '在(桌子|长椅|树|湖|草地)[，。！]?$', msg: '“在”后面的处所要带方位词：书在桌子上，不说 *书在桌子。' }
+    { re: '(桌子|长椅|树|椅子)有', msg: '处所后面要加方位词：桌子上有……，不说 *桌子有一本书。', msgEn: 'A place needs a location word after it: 桌子上有……, not *桌子有一本书.' },
+    { re: '^有.+在.+(上|下|里|旁边|边)', msg: '这是英语 There is … on … 的语序。中文把处所放前面：桌子上有一杯咖啡，不说 *有一杯咖啡在桌子上。', msgEn: 'This is the word order of English There is … on …. Chinese puts the place first: 桌子上有一杯咖啡, not *有一杯咖啡在桌子上.' },
+    { re: '正在(戴|穿)', msg: '“正在戴”是把它戴上去的动作。已经戴在头上是状态，用“戴着”。', msgEn: '“正在戴” is the action of putting it on. Already having it on the head is a state: use “戴着”.' },
+    { re: '^在.+[放挂坐停]着', msg: '存现句句首的处所不加“在”：桌子上放着一本书，不说 *在桌子上放着一本书。', msgEn: 'The place at the start of an existential sentence takes no “在”: 桌子上放着一本书, not *在桌子上放着一本书.' },
+    { re: '在(桌子|长椅|树|湖|草地)[，。！]?$', msg: '“在”后面的处所要带方位词：书在桌子上，不说 *书在桌子。', msgEn: 'The place after “在” needs a location word: 书在桌子上, not *书在桌子.' }
   ],
   frames: ['（处所）上／下／里／旁边 有 一＋量词＋……', '（处所）上 放着／坐着／停着 一＋量词＋……', '…… 在 （处所）上／下／里', '…… 正在／在 ……'],
+  framesEn: ['(place) 上／下／里／旁边 有 一 + measure word + ……', '(place) 上 放着／坐着／停着 一 + measure word + ……', '…… 在 (place) 上／下／里', null],
   areaHint: ['左边还有什么？', '上面还有什么？', '右边的水里呢？', '最前面的人在做什么？'],
-  partner: '和搭档玩：一个人看着图问，另一个人回答；或者一个人描述，另一个人不看图，照着画或摆。口头说的页面听不到，不记分。'
+  areaHintEn: ['What else is on the left?', 'What else is at the top?', 'What about in the water on the right?', 'What are the people at the very front doing?'],
+  partner: '和搭档玩：一个人看着图问，另一个人回答；或者一个人描述，另一个人不看图，照着画或摆。口头说的页面听不到，不记分。', partnerEn: 'Play with a partner: one looks at the picture and asks, the other answers; or one describes while the other, without looking at the picture, draws or arranges it from the description. The page cannot hear what is said aloud and keeps no score for it.'
 };

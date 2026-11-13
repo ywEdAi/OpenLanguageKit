@@ -6,6 +6,16 @@
  *   B.hint('ka'); B.reveal('ka')                 // marks the item as assisted
  *   B.attempt('ka', { correct: true, response }) // keeps the FIRST attempt; later ones are retries
  *   B.speak('か', 'ja-JP')                       // browser speech synthesis (playback only, never scoring)
+ *   B.lang                                       // interface language: 'zh' | 'en'
+ *   B.L('再听', 'Listen again')                  // pick an interface string
+ *   B.t(cell, 'note')                            // pick a data-pack field: cell.noteEn in English if present, else cell.note
+ *
+ * Interface language (the language of instructions, not the language being taught):
+ *   ?lang=en|zh in the block URL → localStorage 'atlas-lang' (set by the OpenLangKit site switch; read only, in
+ *   try/catch) → navigator.language (zh* → zh, anything else → en). <html lang> is set to match.
+ * Data packs carry English next to the Chinese as parallel fields: "<field>En" beside "<field>" (titleEn, noteEn,
+ * reviewEn …; arrays and maps are parallel too), and "en" beside a gloss stored under "zh". Missing English falls
+ * back to the Chinese. Text in the language being taught is never translated.
  *
  * Every event is also posted to the parent window as {source: 'kt-block', kind, ...} so a host page
  * (the workspace, or your own app) can show evidence live without reaching into the block.
@@ -15,6 +25,34 @@
   var EVENTS = ['view', 'select', 'highlight', 'drag', 'drop', 'connect', 'disconnect', 'reorder', 'submit',
     'revise', 'request_hint', 'reveal', 'compare', 'explain', 'retry', 'complete'];
   var allowed = new Set(EVENTS);
+
+  /* ---- interface language ---- */
+  function detectLang() {
+    var m = /[?&]lang=(en|zh)(?:&|#|$)/.exec((global.location && global.location.search) || '');
+    if (m) return m[1];
+    try { var s = global.localStorage.getItem('atlas-lang'); if (s === 'en' || s === 'zh') return s; } catch (e) { /* storage blocked */ }
+    return /^zh/i.test((global.navigator && global.navigator.language) || '') ? 'zh' : 'en';
+  }
+  var LANG = detectLang(), EN = LANG === 'en';
+  try { global.document.documentElement.lang = EN ? 'en' : 'zh-CN'; } catch (e) { /* no document */ }
+  /** Interface string: L('中文', 'English'). A missing English text falls back to the Chinese. */
+  function L(zh, en) { return EN && en != null ? en : zh; }
+  /** Data-pack field in the interface language: obj[key + 'En'] (or obj.en when key is 'zh') in English mode,
+   *  falling back to obj[key]. Parallel arrays and maps fall back item by item. */
+  function t(obj, key) {
+    if (!obj) return undefined;
+    var zh = obj[key];
+    if (!EN) return zh;
+    var en = obj[key === 'zh' ? 'en' : key + 'En'];
+    if (en === null || en === undefined) return zh;
+    if (Array.isArray(zh) && Array.isArray(en)) return zh.map(function (v, i) { return en[i] === null || en[i] === undefined ? v : en[i]; });
+    if (zh && typeof zh === 'object' && typeof en === 'object') {
+      var out = {};
+      Object.keys(zh).forEach(function (k) { out[k] = en[k] === null || en[k] === undefined ? zh[k] : en[k]; });
+      return out;
+    }
+    return en;
+  }
 
   function post(msg) {
     msg.source = 'kt-block';
@@ -45,6 +83,9 @@
       params: params,
       variant: variant,
       kc: params.get('kc'),
+      lang: LANG,
+      L: L,
+      t: t,
       emit: function (type, payload) {
         if (!allowed.has(type)) throw new Error('Unsupported evidence event: ' + type);
         var ev = { block: meta.id, primitive: meta.primitive, kc: api.kc, event_type: type, t: Date.now(), payload: payload || {} };
@@ -113,7 +154,7 @@
       canSpeak: function (lang) { if (!('speechSynthesis' in global)) return false; loadVoices(); return !!pickVoice(lang); },
       store: storage
     };
-    post({ kind: 'ready', meta: meta, params: Object.fromEntries(params) });
+    post({ kind: 'ready', meta: meta, params: Object.fromEntries(params), lang: LANG });
     return api;
   }
 
@@ -199,17 +240,20 @@
         })) : null,
         h('label', { class: 'kb-variant' }, [
           h('input', { type: 'checkbox', checked: B.variant === 'child', onchange: function (e) { B.setVariant(e.target.checked ? 'child' : 'adult'); if (opts.onVariant) opts.onVariant(); } }),
-          ' 儿童版'
+          L(' 儿童版', ' Child version')
         ])
       ])
     ]);
     var log = h('ol', { class: 'kb-log' });
     var sum = h('p', { class: 'kb-sum' });
-    var drawer = h('details', { class: 'kb-evidence' }, [h('summary', { text: '学习证据' }), sum, log]);
+    var drawer = h('details', { class: 'kb-evidence' }, [h('summary', { text: L('学习证据', 'Learning evidence') }), sum, log]);
     function render() {
       var s = B.summary();
-      sum.textContent = '第一次作答 ' + s.attempted + ' 题：独立答对 ' + s.independentCorrect + '，提示后答对 ' + s.assistedCorrect + '，第一次答错 ' + s.firstWrong + '。' +
-        (s.selfReported ? '自评 ' + s.selfReported + ' 题（自认为想对 ' + s.selfYes + '），不算作答。' : '') + (s.revealedOnly ? '没作答直接看答案 ' + s.revealedOnly + ' 题。' : '');
+      sum.textContent = EN
+        ? 'First attempts: ' + s.attempted + ' (independent correct ' + s.independentCorrect + ', assisted correct ' + s.assistedCorrect + ', wrong ' + s.firstWrong + '). ' +
+          (s.selfReported ? 'Self-rated: ' + s.selfReported + ' (rated as right: ' + s.selfYes + '), not counted as attempts. ' : '') + (s.revealedOnly ? 'Answer shown without an attempt: ' + s.revealedOnly + '.' : '')
+        : '第一次作答 ' + s.attempted + ' 题：独立答对 ' + s.independentCorrect + '，提示后答对 ' + s.assistedCorrect + '，第一次答错 ' + s.firstWrong + '。' +
+          (s.selfReported ? '自评 ' + s.selfReported + ' 题（自认为想对 ' + s.selfYes + '），不算作答。' : '') + (s.revealedOnly ? '没作答直接看答案 ' + s.revealedOnly + ' 题。' : '');
     }
     B.on(function (ev) {
       log.insertBefore(h('li', {}, [h('code', { text: ev.event_type }), ' ', JSON.stringify(ev.payload)]), log.firstChild);
@@ -222,6 +266,6 @@
     } };
   }
 
-  global.KTBlock = { init: init, events: EVENTS, h: h, shuffle: shuffle, chrome: chrome, speak: speak, speakSequence: speakSequence };
+  global.KTBlock = { init: init, events: EVENTS, lang: LANG, L: L, t: t, h: h, shuffle: shuffle, chrome: chrome, speak: speak, speakSequence: speakSequence };
   global.KT_DATA = global.KT_DATA || {};
 })(typeof window !== 'undefined' ? window : globalThis);
